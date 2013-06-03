@@ -28,7 +28,7 @@ function supports_localstorage() {
 }
 
 function read_stars() {
-	var ls_stars = localStorage.getItem("c7.stars");
+	var ls_stars = localStorage.getItem("ko.stars");
 	return ls_stars ? JSON.parse(ls_stars) : [];
 }
 
@@ -42,22 +42,22 @@ function toggle_star(el, id) {
 		el.classList.add("has_star");
 	}
 	stars.sort();
-	localStorage.setItem("c7.stars", JSON.stringify(stars));
+	localStorage.setItem("ko.stars", JSON.stringify(stars));
 }
 
 function set_page_style() {
 	if (!supports_localstorage()) return;
-	var style = localStorage.getItem("c7.style");
+	var style = localStorage.getItem("ko.style");
 	if (style) document.body.classList.add(style);
 }
 
 function toggle_page_style() {
 	if (document.body.classList.contains("black")) {
 		document.body.classList.remove("black");
-		if (supports_localstorage()) localStorage.setItem("c7.style", "");
+		if (supports_localstorage()) localStorage.setItem("ko.style", "");
 	} else {
 		document.body.classList.add("black");
-		if (supports_localstorage()) localStorage.setItem("c7.style", "black");
+		if (supports_localstorage()) localStorage.setItem("ko.style", "black");
 	}
 }
 
@@ -164,7 +164,7 @@ function show_what_view() {
 
 	document.getElementById("prog_ls").innerHTML = '';
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "what");
+	if (supports_localstorage()) localStorage.setItem("ko.page", "what");
 }
 
 
@@ -274,7 +274,7 @@ function update_next_filters(next_type) {
 		else ul[i].classList.remove("selected");
 	}
 
-	if (supports_localstorage()) localStorage.setItem("c7.next_filter", JSON.stringify([
+	if (supports_localstorage()) localStorage.setItem("ko.next_filter", JSON.stringify([
 		["next_type", next_type]
 	]));
 }
@@ -300,7 +300,7 @@ function show_next_view() {
 	document.body.classList.remove("maps");
 	document.body.classList.add("next");
 
-	var f0s = supports_localstorage() ? localStorage.getItem("c7.next_filter") : '';
+	var f0s = supports_localstorage() ? localStorage.getItem("ko.next_filter") : '';
 	var f0 = f0s ? JSON.parse(f0s) : [];
 	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
 		case "next_type":    next_type = f0[i][1]; break;
@@ -309,7 +309,7 @@ function show_next_view() {
 	update_next_list(next_type);
 	update_next_filters(next_type);
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "next");
+	if (supports_localstorage()) localStorage.setItem("ko.page", "next");
 }
 
 
@@ -380,7 +380,7 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 		}
 	}
 
-	if (supports_localstorage()) localStorage.setItem("c7.prog_filter", JSON.stringify([
+	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
 		["day", day], ["floor", floor], ["type", type], ["stars_only", stars_only], ["freetext", freetext]
 	]));
 }
@@ -490,7 +490,7 @@ function show_prog_view(opt) {
 		document.body.classList.remove("maps");
 		document.body.classList.add("prog");
 
-		var f0s = supports_localstorage() ? localStorage.getItem("c7.prog_filter") : '';
+		var f0s = supports_localstorage() ? localStorage.getItem("ko.prog_filter") : '';
 		var f0 = f0s ? JSON.parse(f0s) : [];
 		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
 			case "day": day = f0[i][1]; break;
@@ -503,7 +503,7 @@ function show_prog_view(opt) {
 
 	update_prog(day, floor, type, stars_only, freetext);
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "prog");
+	if (supports_localstorage()) localStorage.setItem("ko.page", "prog");
 }
 
 
@@ -552,7 +552,7 @@ function update_part_view(name_sort, first_letter, participant) {
 	}
 
 
-	if (supports_localstorage()) localStorage.setItem("c7.part_filter", JSON.stringify([
+	if (supports_localstorage()) localStorage.setItem("ko.part_filter", JSON.stringify([
 		["name_sort", name_sort], ["first_letter", first_letter], ["participant", participant]
 	]));
 }
@@ -580,7 +580,7 @@ function show_part_view(opt) {
 		document.body.classList.remove("maps");
 		document.body.classList.add("part");
 
-		var f0s = supports_localstorage() ? localStorage.getItem("c7.part_filter") : '';
+		var f0s = supports_localstorage() ? localStorage.getItem("ko.part_filter") : '';
 		var f0 = f0s ? JSON.parse(f0s) : [];
 		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
 			case "name_sort":    name_sort = f0[i][1]; break;
@@ -599,7 +599,7 @@ function show_part_view(opt) {
 
 	update_part_view(name_sort, first_letter, participant);
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "part");
+	if (supports_localstorage()) localStorage.setItem("ko.page", "part");
 }
 
 
@@ -615,7 +615,7 @@ function show_maps_view() {
 
 	document.getElementById("prog_ls").innerHTML = "";
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "maps");
+	if (supports_localstorage()) localStorage.setItem("ko.page", "maps");
 }
 
 
@@ -689,7 +689,7 @@ if (full_version) { window.onscroll = function() {
 
 function set_page() {
 	var opt = window.location.hash.substr(1);
-	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("c7.page") : '';
+	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("ko.page") : '';
 	if (!opt) opt = 'what';
 	switch (opt.substr(0,4)) {
 		case 'what': show_what_view(); break;
