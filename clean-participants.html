@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Refactored participants.js</title>
+
+  <script src="raw/participants.js"></script>
+  <script src="program-data.js"></script>
+</head>
+
+<body>
+
+<div id="src">empty</div>
+
+<script>
+	var p = conferenceParticipants;
+	var people = [];
+
+	p.sort(function(a, b) {
+		var an = (a.last_name + '  ' + a.first_name).toLowerCase();
+		var bn = (b.last_name + '  ' + b.first_name).toLowerCase();
+		     if (an < bn) return -1;
+		else if (an > bn) return 1;
+		else              return 0;
+	});
+
+	for (var i = 0; i < p.length; ++i) {
+		var o = {
+			id: p[i].id,
+			first: p[i].first_name,
+			last: p[i].last_name,
+			bio: p[i].bio,
+			program: []
+		};
+
+		o.bio = o.bio
+			.replace(/(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+(aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal|[a-z]{2}))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)(?![a-z0-9])/gi, function(m, url, protocol) {
+				return '<a href="' + (protocol ? '' : 'http://') + url + '">' + url + '</a>';
+			})
+			.replace(/`/g, "'").replace(/&quot;/g, '"').replace(/\</g, '&lt;').replace(/^'|'$/g, '');
+
+
+		o.program = prog
+			.filter(function(prog_it) { return prog_it.people.map(function(prog_part) { return prog_part.id; }).indexOf(o.id) >= 0; })
+			.map(function(prog_it) { return prog_it.id; });
+		if (!o.program.length && !o.bio) continue;
+		//console.log(o.name + "\t" + JSON.stringify(o.program));
+
+		people[people.length] = o;
+	}
+
+	document.getElementById("src").innerHTML = "people = " + JSON.stringify(people) + ";";
+</script>
+
+</body>
+</html>

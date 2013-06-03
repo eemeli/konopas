@@ -2,11 +2,22 @@
 <html manifest="cache.manifest">
 <head>
 <meta charset="utf-8" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Program - Chicon 7</title>
 <link rel="stylesheet" href="skin.css" />
 </head>
 
 <body>
+
+<!--
+<div id="top_wrap"><div id="top">
+<div id="top_info">XX:00 Someday</div>
+</div></div>
+-->
+
+<div id="banner">
+<h1>Chicon 7</h1>
 
 <div id="filters">
 <ul id="day">
@@ -16,6 +27,16 @@
 <li id="d2012-09-01">Saturday</li>
 <li id="d2012-09-02">Sunday</li>
 <li id="d2012-09-03">Monday</li>
+</ul>
+
+<ul id="type">
+<li id="all_types" class="selected">All item types</li>
+<li id="ChiKidz">ChiKidz</li>
+<li id="kk">Kaffeeklatches</li>
+<li id="Reading">Readings</li>
+<li id="Autograph">Autographs</li>
+<li id="filk">Filk</li>
+<li id="other_types">All others</li>
 </ul>
 
 <ul id="floor">
@@ -30,22 +51,20 @@
 <li id="other_floors">Other</li>
 </ul>
 
-<ul id="type">
-<li id="all_types" class="selected">All items</li>
-<li id="ChiKidz">ChiKidz</li>
-<li id="kk">Kaffeeklatches</li>
-<li id="Reading">Readings</li>
-<li id="Autograph">Autograph sessions</li>
-<li id="filk">Filk</li>
-<li id="other_types">All others</li>
+<ul id="stars">
+<li id="all_stars" class="selected">All items</li>
+<li id="only_stars">Only starred</li>
 </ul>
 
 <form name="search" id="search">
-<input type="text" id="q" />
-<input type="submit" value="Search" />
-<input type="reset" value="Clear" />
+<input type="text" id="q" placeholder="Search" />
+<div id="q_ctrl">
+<input type="submit" id="q_submit" value="Go" />
+<input type="reset" id="q_clear" value="Clear" />
+</div>
+<div id="q_hint"></div>
 </form>
-
+</div>
 </div>
 
 <div id="ls">Loading program data...</div>
