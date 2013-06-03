@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# r1
+
+CACHE:
+clean-program.js
+app.js
+skin.css
+
+NETWORK:
+*

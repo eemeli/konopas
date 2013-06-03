@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>Chicom Program Changes</title>
+<link href="http://www.chicom.org" ></link>
+<id>urn:uuid:3f019a7b-bc58-04fc-b208-8c8f084eac8f</id>
+<updated>2012-08-15T22:02:12+01:00</updated>
+<author><name>Tony</name>
+</author>
+<entry>
+<title>Old Space vs. New Space</title>
+<summary type="html" ><![CDATA[Differentish location<br />3108 10:30]]></summary>
+</entry>
+<entry>
+<title>Interstellar Trade in an STL Universe</title>
+<summary type="html" ><![CDATA[Crystal C<br />3108 0920]]></summary>
+</entry>
+</feed>

@@ -1,0 +1,19 @@
+#filters ul { float: left; list-style-type: none; padding-left: 20px; }
+
+.selected { font-weight: bold; }
+
+#ls { clear: both; }
+
+.item { clear: both; display: block; overflow: auto; border: 1px solid white; padding-left: 10px; }
+.item div { float:left; padding-right: 10px; }
+
+.day { min-width: 30px; }
+.time { min-width: 50px; }
+.floor { min-width: 100px; }
+.room { min-width: 120px; }
+
+.extra { display: none; clear: left; padding-top: 10px; }
+
+.expanded { border-left-color: black; border-top-color: black; margin-bottom: 10px; }
+.expanded .title { font-weight: bold; }
+.expanded .extra { display: block; }
