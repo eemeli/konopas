@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Eemeli Aro <eemeli@gmail.com>
+/* Copyright (c) 2013, Eemeli Aro <eemeli@gmail.com>
 
 Permission to use, copy, modify, and/or distribute this software for any 
 purpose with or without fee is hereby granted, provided that the above 
@@ -16,8 +16,18 @@ PERFORMANCE OF THIS SOFTWARE.
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
 
+var tag_regexps = {
+	"ChiKidz":     /^ChiKidz/,
+	"Reading":     /Reading/,
+	"Autograph":   /^Autograph/,
+	"kk":          /^(Kaffeeklatsch|Literary Bh?eer)/,
+	"filk":        /\bFilk\b/,
+	"other_types": /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./
+};
 
 // ------------------------------------------------------------------------------------------------ utilities
+
+function EL(id) { return document.getElementById(id); }
 
 function supports_localstorage() {
 	try {
@@ -45,22 +55,6 @@ function toggle_star(el, id) {
 	localStorage.setItem("ko.stars", JSON.stringify(stars));
 }
 
-function set_page_style() {
-	if (!supports_localstorage()) return;
-	var style = localStorage.getItem("ko.style");
-	if (style) document.body.classList.add(style);
-}
-
-function toggle_page_style() {
-	if (document.body.classList.contains("black")) {
-		document.body.classList.remove("black");
-		if (supports_localstorage()) localStorage.setItem("ko.style", "");
-	} else {
-		document.body.classList.add("black");
-		if (supports_localstorage()) localStorage.setItem("ko.style", "black");
-	}
-}
-
 function GlobToRE(pat) {
 	var re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
 	pat = pat.replace(re_re, '\\$&').replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
@@ -73,12 +67,18 @@ function GlobToRE(pat) {
 	return new RegExp(terms.join('|'), 'i');
 }
 
+var views = [ "what", "next", "prog", "part", "maps" ];
+function set_view(new_view) {
+	for (var i in views) { document.body.classList.remove(views[i]); }
+	document.body.classList.add(new_view);
+	if (supports_localstorage()) localStorage.setItem("ko.view", new_view);
+}
 
 
 // ------------------------------------------------------------------------------------------------ items
 
 function show_info(item, id) {
-	if (document.getElementById("e" + id)) return;
+	if (EL("e" + id)) return;
 
 	var html = "";
 	var a = prog.filter(function(el) { return el.id == id; });
@@ -99,14 +99,8 @@ function show_prog_list(ls) {
 			prev_day = ls[i].day;
 			prev_time = "";
 
-			switch (ls[i].day) {
-				case "2012-08-30": day_str = "Thursday"; break;
-				case "2012-08-31": day_str = "Friday"; break;
-				case "2012-09-01": day_str = "Saturday"; break;
-				case "2012-09-02": day_str = "Sunday"; break;
-				case "2012-09-03": day_str = "Monday"; break;
-			}
-
+			var t = new Date(ls[i].day);
+			day_str = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
@@ -123,9 +117,9 @@ function show_prog_list(ls) {
 			+ '<div class="room">' + ls[i].room + ' (' + ls[i].floor + ')</div>'
 			+ '</div></div>';
 	}
-	document.getElementById("prog_ls").innerHTML = list.join('');
+	EL("prog_ls").innerHTML = list.join('');
 
-	var items = document.getElementById("prog_ls").getElementsByClassName("item");
+	var items = EL("prog_ls").getElementsByClassName("item");
 	for (var i = 0; i < items.length; ++i) {
 		items[i].onclick = function() {
 			if (this.classList.contains("expanded")) {
@@ -139,13 +133,13 @@ function show_prog_list(ls) {
 	}
 
 	if (supports_localstorage()) {
-		var star_els = document.getElementById("prog_ls").getElementsByClassName("star");
+		var star_els = EL("prog_ls").getElementsByClassName("star");
 		for (var i = 0; i < star_els.length; ++i) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
 
 		read_stars().forEach(function(s) {
-			var el = document.getElementById('s' + s);
+			var el = EL('s' + s);
 			if (el) el.classList.add("has_star");
 		});
 	}
@@ -156,15 +150,9 @@ function show_prog_list(ls) {
 // ------------------------------------------------------------------------------------------------ what view
 
 function show_what_view() {
-	document.body.classList.remove("next");
-	document.body.classList.remove("prog");
-	document.body.classList.remove("part");
-	document.body.classList.remove("maps");
-	document.body.classList.add("what");
+	set_view("what");
 
-	document.getElementById("prog_ls").innerHTML = '';
-
-	if (supports_localstorage()) localStorage.setItem("ko.page", "what");
+	EL("prog_ls").innerHTML = '';
 }
 
 
@@ -198,13 +186,13 @@ function update_next_select(t_off) {
 		lt[lt.length] = '<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + pretty_time(t) + '</option>';
 		t.setHours(t.getHours() + 1);
 	}
-	var ts = document.getElementById("next_time");
+	var ts = EL("next_time");
 	ts.innerHTML = lt.join("\n");
 	ts.onchange = update_next_list;
 }
 
 function update_next_list(next_type) {
-	var ls = document.getElementById("next_time");
+	var ls = EL("next_time");
 	var t_off = (ls.selectedIndex >= 0) ? parseInt(ls[ls.selectedIndex].value) : 0;
 	if (!t_off) t_off = 0;
 	update_next_select(t_off);
@@ -259,16 +247,16 @@ function update_next_list(next_type) {
 		}
 	}
 
-	document.getElementById("next_start_note").innerHTML = start_str
+	EL("next_start_note").innerHTML = start_str
 		? 'The next program item starts ' + start_str + '.'
-		: 'There are no more Chicon program items scheduled.';
+		: 'There are no more program items scheduled.';
 
 	show_prog_list(next_prog);
 }
 
 function update_next_filters(next_type) {
 	if (next_type != "next_by_room") next_type = "next_by_hour";
-	var ul = document.getElementById("next_type").getElementsByTagName("li");
+	var ul = EL("next_type").getElementsByTagName("li");
 	for (var i = 0; i < ul.length; ++i) {
 		if (ul[i].id == next_type) ul[i].classList.add("selected");
 		else ul[i].classList.remove("selected");
@@ -280,7 +268,7 @@ function update_next_filters(next_type) {
 }
 
 function next_filter(ctrl, item) {
-	var next_type = document.getElementById("next_type").getElementsByClassName("selected")[0].id;
+	var next_type = EL("next_type").getElementsByClassName("selected")[0].id;
 
 	switch (ctrl) {
 		case "next_type": next_type = item; break;
@@ -292,13 +280,9 @@ function next_filter(ctrl, item) {
 
 
 function show_next_view() {
-	var next_type = "next_by_hour";
+	set_view("next");
 
-	document.body.classList.remove("what");
-	document.body.classList.remove("prog");
-	document.body.classList.remove("part");
-	document.body.classList.remove("maps");
-	document.body.classList.add("next");
+	var next_type = "next_by_hour";
 
 	var f0s = supports_localstorage() ? localStorage.getItem("ko.next_filter") : '';
 	var f0 = f0s ? JSON.parse(f0s) : [];
@@ -308,8 +292,6 @@ function show_next_view() {
 
 	update_next_list(next_type);
 	update_next_filters(next_type);
-
-	if (supports_localstorage()) localStorage.setItem("ko.page", "next");
 }
 
 
@@ -318,16 +300,9 @@ function show_next_view() {
 
 function update_prog_list(day, floor, type, stars_only, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
-	switch (type) {
-		case "ChiKidz":     re_t = /^ChiKidz/; break;
-		case "Reading":     re_t = /Reading/; break;
-		case "Autograph":   re_t = /^Autograph/; break;
-		case "kk":          re_t = /^(Kaffeeklatsch|Literary Bh?eer)/; break;
-		case "filk":        re_t = /\bFilk\b/; break;
-		case "other_types": re_t = /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./; break;
-	}
+	if (type in tag_regexps) re_t = tag_regexps[type];
 	if (freetext) {
-		re_q = GlobToRE(freetext); // new RegExp(freetext, "i");
+		re_q = GlobToRE(freetext);
 		if (!freetext.match(/[?*"]/)) {
 			glob_hint = freetext + '*';
 			re_hint = GlobToRE(glob_hint);
@@ -368,12 +343,12 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 
 	show_prog_list(ls);
 
-	var dh = document.getElementById("q_hint");
+	var dh = EL("q_hint");
 	if (dh) {
 		if (re_hint) {
 			dh.innerHTML = "<b>Hint:</b> search is for full words, but you may also use * and ? as wildcards or \"quoted words\" for exact phrases.";
 			if (hint) dh.innerHTML += " For example, "
-				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"document.getElementById('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
+				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"EL('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
 				+ "searching for <b>" + glob_hint + "</b> would also match <b>" + hint + "</b></span>";
 		} else {
 			dh.innerHTML = "";
@@ -387,39 +362,39 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 
 function update_prog_filters(day, floor, type, stars_only, freetext) {
 	var dt = "d" + day;
-	var dc = document.getElementById("day").getElementsByTagName("li");
+	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
 	if (!full_version && (floor == "all floors") && type.match(/types$/) && !stars_only && !freetext) {
-		document.getElementById("d").classList.add("disabled");
+		EL("d").classList.add("disabled");
 	} else {
-		document.getElementById("d").classList.remove("disabled");
+		EL("d").classList.remove("disabled");
 	}
 
 	var ft = floor ? floor.replace(/ /g, "_") : "all_floors";
-	var fc = document.getElementById("floor").getElementsByTagName("li");
+	var fc = EL("floor").getElementsByTagName("li");
 	for (var i = 0; i < fc.length; ++i) {
 		if (fc[i].id == ft) fc[i].classList.add("selected");
 		else fc[i].classList.remove("selected");
 	}
 
 	var tt = type || "all_types";
-	var tc = document.getElementById("type").getElementsByTagName("li");
+	var tc = EL("type").getElementsByTagName("li");
 	for (var i = 0; i < tc.length; ++i) {
 		if (tc[i].id == tt) tc[i].classList.add("selected");
 		else tc[i].classList.remove("selected");
 	}
 
 	var st = stars_only ? "only_stars" : "all_stars";
-	var sc = document.getElementById("stars").getElementsByTagName("li");
+	var sc = EL("stars").getElementsByTagName("li");
 	for (var i = 0; i < sc.length; ++i) {
 		if (sc[i].id == st) sc[i].classList.add("selected");
 		else sc[i].classList.remove("selected");
 	}
 
-	var qc = document.getElementById("q");
+	var qc = EL("q");
 	if (qc) {
 		qc.value = freetext;
 		if (qc.value) qc.classList.add("selected");
@@ -428,16 +403,14 @@ function update_prog_filters(day, floor, type, stars_only, freetext) {
 }
 
 function default_prog_day() {
-	var day = "2012-08-30";
-	
-	var d_now = new Date();
-	switch (d_now.getDate()) {
-		case 30: day = "2012-08-30"; break;
-		case 31: day = "2012-08-31"; break;
-		case  1: day = "2012-09-01"; break;
-		case  2: day = "2012-09-02"; break;
-		case  3: day = "2012-09-03"; break;
-	}
+	var day_start = prog[0].day;
+	var day_end = prog[prog.length-1].day;
+	var day_now = new Date().toISOString().substr(0, 10);
+
+	var day = (day_now <= day_start) ? day_start
+	        : (day_now >= day_end) ? day_end
+	        : day_now;
+	//console.log(day_now + "->" + day);
 
 	return day;
 }
@@ -452,13 +425,13 @@ function update_prog(day, floor, type, stars_only, freetext) {
 }
 
 function prog_filter(ctrl, item) {
-	var day = document.getElementById("day").getElementsByClassName("selected")[0].id;
-	var floor = document.getElementById("floor").getElementsByClassName("selected")[0].id;
-	var type = document.getElementById("type").getElementsByClassName("selected")[0].id;
-	var stars_only = document.getElementById("stars").getElementsByClassName("selected")[0].id;
-	var freetext = document.getElementById("q").value;
+	var day = EL("day").getElementsByClassName("selected")[0].id;
+	var floor = EL("floor").getElementsByClassName("selected")[0].id;
+	var type = EL("type").getElementsByClassName("selected")[0].id;
+	var stars_only = EL("stars").getElementsByClassName("selected")[0].id;
+	var freetext = EL("q").value;
 
-	if (item && !document.getElementById(item).classList.contains("disabled")) switch (ctrl) {
+	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
 		case "day":   day = item; break;
 		case "floor": floor = item; break;
 		case "type":  type = item; break;
@@ -468,7 +441,7 @@ function prog_filter(ctrl, item) {
 				day = "d";
 				floor = "all_floors";
 				type = "all_types";
-				freetext = document.getElementById("q").value = "";
+				freetext = EL("q").value = "";
 			}
 			break;
 	}
@@ -484,11 +457,7 @@ function show_prog_view(opt) {
 	var day = default_prog_day(), floor = "all floors", type = "all_types", stars_only = false, freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
-		document.body.classList.remove("what");
-		document.body.classList.remove("next");
-		document.body.classList.remove("part");
-		document.body.classList.remove("maps");
-		document.body.classList.add("prog");
+		set_view("prog");
 
 		var f0s = supports_localstorage() ? localStorage.getItem("ko.prog_filter") : '';
 		var f0 = f0s ? JSON.parse(f0s) : [];
@@ -502,8 +471,6 @@ function show_prog_view(opt) {
 	}
 
 	update_prog(day, floor, type, stars_only, freetext);
-
-	if (supports_localstorage()) localStorage.setItem("ko.page", "prog");
 }
 
 
@@ -512,14 +479,14 @@ function show_prog_view(opt) {
 
 function update_part_view(name_sort, first_letter, participant) {
 	if (name_sort == "sort_first") {
-		document.getElementById("sort_first").classList.add("selected");
-		document.getElementById("sort_last").classList.remove("selected");
+		EL("sort_first").classList.add("selected");
+		EL("sort_last").classList.remove("selected");
 	} else {
-		document.getElementById("sort_first").classList.remove("selected");
-		document.getElementById("sort_last").classList.add("selected");
+		EL("sort_first").classList.remove("selected");
+		EL("sort_last").classList.add("selected");
 	}
 
-	var ll = document.getElementById("first_letter").getElementsByTagName("li");
+	var ll = EL("first_letter").getElementsByTagName("li");
 	for (var i = 0; i < ll.length; ++i) {
 		if (ll[i].innerHTML == first_letter) ll[i].classList.add("selected");
 		else ll[i].classList.remove("selected");
@@ -540,14 +507,14 @@ function update_part_view(name_sort, first_letter, participant) {
 			else              return 0;
 		});
 
-		document.getElementById("part_names").innerHTML = lp.map(function(p) {
+		EL("part_names").innerHTML = lp.map(function(p) {
 			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.first + '</span> ' + p.last + '</a></li>';
 		}).join('');
-		document.getElementById("part_info").innerHTML = "";
-		document.getElementById("prog_ls").innerHTML = "";
+		EL("part_info").innerHTML = "";
+		EL("prog_ls").innerHTML = "";
 	} else {
-		document.getElementById("part_names").innerHTML = "";
-		document.getElementById("part_info").innerHTML = '<h2 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h2><p>' + pa[0].bio + '</p>';
+		EL("part_names").innerHTML = "";
+		EL("part_info").innerHTML = '<h2 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h2><p>' + pa[0].bio + '</p>';
 		show_prog_list(prog.filter(function(it) { return pa[0].program.indexOf(it.id) >= 0; }));
 	}
 
@@ -558,8 +525,8 @@ function update_part_view(name_sort, first_letter, participant) {
 }
 
 function part_filter(ctrl, el) {
-	var name_sort = document.getElementById("name_sort").getElementsByClassName("selected")[0].id;
-	var first_letter = document.getElementById("first_letter").getElementsByClassName("selected")[0].innerHTML;
+	var name_sort = EL("name_sort").getElementsByClassName("selected")[0].id;
+	var first_letter = EL("first_letter").getElementsByClassName("selected")[0].innerHTML;
 	var participant = "";
 
 	switch (ctrl) {
@@ -574,11 +541,7 @@ function show_part_view(opt) {
 	var name_sort = "sort_last", first_letter = "A", participant = "";
 
 	if (!document.body.classList.contains("part")) {
-		document.body.classList.remove("what");
-		document.body.classList.remove("next");
-		document.body.classList.remove("prog");
-		document.body.classList.remove("maps");
-		document.body.classList.add("part");
+		set_view("part");
 
 		var f0s = supports_localstorage() ? localStorage.getItem("ko.part_filter") : '';
 		var f0 = f0s ? JSON.parse(f0s) : [];
@@ -598,8 +561,6 @@ function show_part_view(opt) {
 	}
 
 	update_part_view(name_sort, first_letter, participant);
-
-	if (supports_localstorage()) localStorage.setItem("ko.page", "part");
 }
 
 
@@ -607,15 +568,9 @@ function show_part_view(opt) {
 // ------------------------------------------------------------------------------------------------ maps view
 
 function show_maps_view() {
-	document.body.classList.remove("what");
-	document.body.classList.remove("next");
-	document.body.classList.remove("prog");
-	document.body.classList.remove("part");
-	document.body.classList.add("maps");
+	set_view("maps");
 
-	document.getElementById("prog_ls").innerHTML = "";
-
-	if (supports_localstorage()) localStorage.setItem("ko.page", "maps");
+	EL("prog_ls").innerHTML = "";
 }
 
 
@@ -623,49 +578,60 @@ function show_maps_view() {
 // ------------------------------------------------------------------------------------------------ init
 
 // page style
-set_page_style();
-var os = document.getElementById("opt_style");
-if (os) os.onclick = toggle_page_style;
+if (supports_localstorage()) {
+	var style = localStorage.getItem("ko.style");
+	if (style) document.body.classList.add(style);
+}
+var os = EL("opt_style");
+if (os) os.onclick = function() {
+	if (document.body.classList.contains("black")) {
+		document.body.classList.remove("black");
+		if (supports_localstorage()) localStorage.setItem("ko.style", "");
+	} else {
+		document.body.classList.add("black");
+		if (supports_localstorage()) localStorage.setItem("ko.style", "black");
+	}
+};
 
 
 // init next view
-var ul = document.getElementById("next_filters").getElementsByTagName("li");
+var ul = EL("next_filters").getElementsByTagName("li");
 for (var i = 0; i < ul.length; ++i) {
 	ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
 }
 
 
 // init prog view
-var dc = document.getElementById("prog_filters").getElementsByTagName("li");
+var dc = EL("prog_filters").getElementsByTagName("li");
 for (var i = 0; i < dc.length; ++i) {
 	dc[i].onclick = function() { prog_filter(this.parentNode.id, this.id); return true; };
 }
-var sf = document.getElementById("search");
+var sf = EL("search");
 if (sf) {
 	sf.onsubmit = function() { prog_filter(); return false; };
-	sf.onreset = function() { document.getElementById("q").value = ""; prog_filter(); return true; };
+	sf.onreset = function() { EL("q").value = ""; prog_filter(); return true; };
 }
-document.getElementById("q").onblur = prog_filter;
+EL("q").onblur = prog_filter;
 
 
 // init part view
-var pc = document.getElementById("part_filters").getElementsByTagName("li");
+var pc = EL("part_filters").getElementsByTagName("li");
 for (var i = 0; i < pc.length; ++i) {
 	pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
 }
 
 
 // set up fixed time display
-document.getElementById("scroll_link").onclick = function() { document.getElementById("top").scrollIntoView(); return false; };
+EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
 var prev_scroll = { "i": 0, "top": 0 };
 var n = 0;
 if (full_version) { window.onscroll = function() {
 	var st = document.body.scrollTop || document.documentElement.scrollTop;
 
-	document.getElementById("scroll").style.display = (st > 0) ? 'block' : 'none';
+	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 
 	st += 20; // to have more time for change behind new_time
-	var te = document.getElementById("time"); if (!te) return;
+	var te = EL("time"); if (!te) return;
 	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
 	//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
 	var i = prev_scroll.top ? prev_scroll.i : 1;
@@ -682,14 +648,14 @@ if (full_version) { window.onscroll = function() {
 	prev_scroll.top = tl[i].offsetTop;
 	te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
 };} else {
-	document.getElementById("time").style.display = "none";
-	document.getElementById("scroll").style.display = "none";
+	EL("time").style.display = "none";
+	EL("scroll").style.display = "none";
 }
 
 
-function set_page() {
+function init_view() {
 	var opt = window.location.hash.substr(1);
-	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("ko.page") : '';
+	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("ko.view") : '';
 	if (!opt) opt = 'what';
 	switch (opt.substr(0,4)) {
 		case 'what': show_what_view(); break;
@@ -700,9 +666,9 @@ function set_page() {
 		default:     show_what_view(); break;
 	}
 
-	document.getElementById("top").scrollIntoView();
-	document.getElementById("load_disable").style.display = "none";
+	EL("top").scrollIntoView();
+	EL("load_disable").style.display = "none";
 }
 
-set_page();
-window.onhashchange = set_page;
+init_view();
+window.onhashchange = init_view;
