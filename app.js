@@ -1,3 +1,21 @@
+/* Copyright (c) 2012, Eemeli Aro <eemeli@gmail.com>
+
+Permission to use, copy, modify, and/or distribute this software for any 
+purpose with or without fee is hereby granted, provided that the above 
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH 
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND 
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, 
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM 
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR 
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR 
+PERFORMANCE OF THIS SOFTWARE.
+*/
+
+
+var full_version = !navigator.userAgent.match(/Android [12]/);
+
 
 // ------------------------------------------------------------------------------------------------ utilities
 
@@ -135,6 +153,23 @@ function show_prog_list(ls) {
 
 
 
+// ------------------------------------------------------------------------------------------------ what view
+
+function show_what_view() {
+	document.body.classList.remove("next");
+	document.body.classList.remove("prog");
+	document.body.classList.remove("part");
+	document.body.classList.remove("maps");
+	document.body.classList.add("what");
+
+	document.getElementById("prog_ls").innerHTML = '';
+
+	if (supports_localstorage()) localStorage.setItem("c7.page", "what");
+}
+
+
+
+
 // ------------------------------------------------------------------------------------------------ next view
 
 function pre0(n) { return (n < 10 ? '0' : '') + n; }
@@ -203,7 +238,6 @@ function update_next_list(next_type) {
 			if (ms_it <= ms_max) next['n' + (++n)] = it;
 		}
 	});
-	console.log(ms_next + ' ' + ms_max);
 
 	var next_prog = [];
 	for (var k in next) {
@@ -260,6 +294,7 @@ function next_filter(ctrl, item) {
 function show_next_view() {
 	var next_type = "next_by_hour";
 
+	document.body.classList.remove("what");
 	document.body.classList.remove("prog");
 	document.body.classList.remove("part");
 	document.body.classList.remove("maps");
@@ -289,7 +324,7 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 		case "Autograph":   re_t = /^Autograph/; break;
 		case "kk":          re_t = /^(Kaffeeklatsch|Literary Bh?eer)/; break;
 		case "filk":        re_t = /\bFilk\b/; break;
-		case "other_types": re_t = /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|Themed Filk|Open Filk)./; break;
+		case "other_types": re_t = /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./; break;
 	}
 	if (freetext) {
 		re_q = GlobToRE(freetext); // new RegExp(freetext, "i");
@@ -357,6 +392,11 @@ function update_prog_filters(day, floor, type, stars_only, freetext) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
+	if (!full_version && (floor == "all floors") && type.match(/types$/) && !stars_only && !freetext) {
+		document.getElementById("d").classList.add("disabled");
+	} else {
+		document.getElementById("d").classList.remove("disabled");
+	}
 
 	var ft = floor ? floor.replace(/ /g, "_") : "all_floors";
 	var fc = document.getElementById("floor").getElementsByTagName("li");
@@ -387,6 +427,30 @@ function update_prog_filters(day, floor, type, stars_only, freetext) {
 	}
 }
 
+function default_prog_day() {
+	var day = "2012-08-30";
+	
+	var d_now = new Date();
+	switch (d_now.getDate()) {
+		case 30: day = "2012-08-30"; break;
+		case 31: day = "2012-08-31"; break;
+		case  1: day = "2012-09-01"; break;
+		case  2: day = "2012-09-02"; break;
+		case  3: day = "2012-09-03"; break;
+	}
+
+	return day;
+}
+
+function update_prog(day, floor, type, stars_only, freetext) {
+	if (!full_version && !day && (floor == "all floors") && type.match(/types$/) && !stars_only && !freetext) {
+		day = default_prog_day();
+	}
+
+	update_prog_list(day, floor, type, stars_only, freetext);
+	update_prog_filters(day, floor, type, stars_only, freetext);
+}
+
 function prog_filter(ctrl, item) {
 	var day = document.getElementById("day").getElementsByClassName("selected")[0].id;
 	var floor = document.getElementById("floor").getElementsByClassName("selected")[0].id;
@@ -394,7 +458,7 @@ function prog_filter(ctrl, item) {
 	var stars_only = document.getElementById("stars").getElementsByClassName("selected")[0].id;
 	var freetext = document.getElementById("q").value;
 
-	switch (ctrl) {
+	if (item && !document.getElementById(item).classList.contains("disabled")) switch (ctrl) {
 		case "day":   day = item; break;
 		case "floor": floor = item; break;
 		case "type":  type = item; break;
@@ -413,14 +477,14 @@ function prog_filter(ctrl, item) {
 	floor = floor.replace(/_/g, " ");
 	stars_only = (stars_only == "only_stars");
 
-	update_prog_list(day, floor, type, stars_only, freetext);
-	update_prog_filters(day, floor, type, stars_only, freetext);
+	update_prog(day, floor, type, stars_only, freetext);
 }
 
 function show_prog_view(opt) {
-	var day = "", floor = "all floors", type = "all_types", stars_only = false, freetext = "";
+	var day = default_prog_day(), floor = "all floors", type = "all_types", stars_only = false, freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
+		document.body.classList.remove("what");
 		document.body.classList.remove("next");
 		document.body.classList.remove("part");
 		document.body.classList.remove("maps");
@@ -437,8 +501,7 @@ function show_prog_view(opt) {
 		}
 	}
 
-	update_prog_list(day, floor, type, stars_only, freetext);
-	update_prog_filters(day, floor, type, stars_only, freetext);
+	update_prog(day, floor, type, stars_only, freetext);
 
 	if (supports_localstorage()) localStorage.setItem("c7.page", "prog");
 }
@@ -511,6 +574,7 @@ function show_part_view(opt) {
 	var name_sort = "sort_last", first_letter = "A", participant = "";
 
 	if (!document.body.classList.contains("part")) {
+		document.body.classList.remove("what");
 		document.body.classList.remove("next");
 		document.body.classList.remove("prog");
 		document.body.classList.remove("maps");
@@ -543,6 +607,7 @@ function show_part_view(opt) {
 // ------------------------------------------------------------------------------------------------ maps view
 
 function show_maps_view() {
+	document.body.classList.remove("what");
 	document.body.classList.remove("next");
 	document.body.classList.remove("prog");
 	document.body.classList.remove("part");
@@ -594,7 +659,7 @@ for (var i = 0; i < pc.length; ++i) {
 document.getElementById("scroll_link").onclick = function() { document.getElementById("top").scrollIntoView(); return false; };
 var prev_scroll = { "i": 0, "top": 0 };
 var n = 0;
-window.onscroll = function() {
+if (full_version) { window.onscroll = function() {
 	var st = document.body.scrollTop || document.documentElement.scrollTop;
 
 	document.getElementById("scroll").style.display = (st > 0) ? 'block' : 'none';
@@ -616,23 +681,28 @@ window.onscroll = function() {
 	prev_scroll.i = i;
 	prev_scroll.top = tl[i].offsetTop;
 	te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
-};
+};} else {
+	document.getElementById("time").style.display = "none";
+	document.getElementById("scroll").style.display = "none";
+}
 
 
 function set_page() {
 	var opt = window.location.hash.substr(1);
 	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("c7.page") : '';
-	if (!opt) opt = 'prog';
+	if (!opt) opt = 'what';
 	switch (opt.substr(0,4)) {
+		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'maps': show_maps_view(); break;
-		case 'prog':
-		default:     show_prog_view(opt.substr(4));
+		case 'prog': show_prog_view(opt.substr(4)); break;
+		default:     show_what_view(); break;
 	}
 
 	document.getElementById("top").scrollIntoView();
+	document.getElementById("load_disable").style.display = "none";
 }
 
-window.onhashchange = set_page;
 set_page();
+window.onhashchange = set_page;

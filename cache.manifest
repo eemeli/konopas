@@ -1,9 +1,10 @@
 CACHE MANIFEST
-# r1
+# r7
 
 CACHE:
 participant-data.js
 program-data.js
+classList.js
 app.js
 skin.css
 favicon.ico

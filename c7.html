@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html><!-- manifest="/ea/c7/cache.manifest">-->
+<html manifest="/ea/c7/cache.manifest">
 <head>
 <meta charset="utf-8" />
 <meta name="HandheldFriendly" content="true" />
@@ -10,14 +10,16 @@
 </head>
 
 <body><div id="top"></div>
+<div id="load_disable"></div>
 
 <div id="time"></div>
 <div id="scroll"><a href="#top" id="scroll_link">Scroll up</a></div>
 
+<a href="#what" id="opt_what">?</a>
 <div id="opt_style">A</div>
 
 <div id="banner">
-<h1>Chicon 7</h1>
+<h1><a href="#what">Chicon 7</a></h1>
 
 <ul id="tabs">
 <li id="tab_next"><a href="#next">Next</a></li>
@@ -26,6 +28,33 @@
 <li id="tab_maps"><a href="#maps">Maps</a></li>
 </ul>
 </div>
+
+<div id="what_page" class="page">
+<p>This is the officially unofficial mobile guide to <a href="http://chicon.org/">Chicon 7</a>.</p>
+
+<p>The program and participant databases were last updated on August 30, 2012.</p>
+
+<h3>What?</h3>
+<p>It's a web page that works like a mobile app, so your browser should cache all of it and make it <b>work when you're offline</b> as well. This is not in any way an official Chicon production, and it's not in any way associated with <a href="http://www.viafo.com">Viafo</a>'s official <a href="http://chicon.org/mobile.php">Chicon app</a>&mdash;except I'm using some of their back-end work to help. So if it displeases you, telling them won't help you any.</p>
+
+<p>To start using the guide, <b>click on one of the above tabs</b>. (If they're gray and don't react, the page is still loading data.)</a>
+
+<p>The guide seems to work on most sort-of modern phones. On older Androids, I've disabled some of the nice-to-have things and prevented listing all of the program items at once to make them not slow down horribly. And I'm somewhat surprised to find it working on Windows phones as well, though the "Next" view may be buggy.</p>
+
+<h3>Why?</h3>
+<p>I put this together as I couldn't get the official app to work well enough on the phone I'll have on me at Chicon. Also, because I had other things I should've been doing and it was easier to actually work on something New and Shiny. And because I've never done any kind of mobile web or app development before.</p>
+
+<p>In other words, this site doesn't have a support team; it's just me (Eemeli Aro). I'm just a fan, and I'll be at Chicon as well (and busy doing all the stuff I should've been doing instead of working on this until then...) so my ability to fix things will be limited. But I'd still appreciate being informed about things breaking, even if only in order to fix them later.</p>
+
+<p>I'm releasing this work under the <a href="http://en.wikipedia.org/wiki/ISC_license">ISC license</a>, so if you want to use it for your con or some other purpose, you can.</p>
+
+<h3>How?</h3>
+<p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In other words, magic. In order to make said magic work, about 1MB of your phone memory is being used (probably without your phone telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > aut-web.hut.fi > Clear stored data</tt> (depends on your browser, OS, etc.)</p>
+
+<h3>Who?</h3>
+<p>My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I'm being paid to work on my dissertation on an autonomous group of <a href="http://autsys.tkk.fi/en/SWARM">underwater robots</a> by Aalto University in Helsinki, Finland, but I seem to end up doing quite a few other things as well. Like chair a bid for a <a href="http://mariehamnin2016.org/">W&aring;rldcon</a>! Come to the party on Friday (hosted by <a href="http://www.kcin2016.org/">Kansas City</a>), and Mariehamn in 2016!</p>
+</div>
+
 
 <div id="next_page" class="page">
 	<div id="next_filters" class="filters">
@@ -116,10 +145,11 @@
 <a href="/ea/c7/hotel-hyatt-map.png">Hotel services <img src="/ea/c7/hotel-hyatt-map.thumb.png" /></a>
 </div>
 
-<div id="prog_ls" class="ls">Loading program & participant data...</div>
+<div id="prog_ls" class="ls"><br />Loading ...</div>
 
 <script src="/ea/c7/program-data.js"></script>
 <script src="/ea/c7/participant-data.js"></script>
+<script src="/ea/c7/classList.js"></script>
 <script src="/ea/c7/app.js"></script>
 </body>
 </html>
