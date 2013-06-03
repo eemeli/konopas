@@ -2,9 +2,15 @@ CACHE MANIFEST
 # r1
 
 CACHE:
-clean-program.js
+participant-data.js
+program-data.js
 app.js
 skin.css
+favicon.ico
+chicon-hyatt-map.thumb.png
+hotel-hyatt-map.thumb.png
+chicon-hyatt-map.png
+hotel-hyatt-map.png
 
 NETWORK:
 *

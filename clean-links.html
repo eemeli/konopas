@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>database entries for program-data.js & participant-data.js</title>
+
+  <script src="program-data.js"></script>
+  <script src="participant-data.js"></script>
+</head>
+
+<body>
+
+<div id="src">empty</div>
+
+<script>
+	var prog_list = prog.map(function(it) { return 'http://chicon.org/program/publicface.php?Type=ListPanelDetail&ID=' + it.id; });
+	prog_list.sort();
+
+	var part_list = people.map(function(it) { return 'http://chicon.org/program/publicface.php?Type=ListPanelistDetail&ID=' + it.id; });
+	part_list.sort();
+
+	document.getElementById("src").innerHTML = prog_list.join('<br />') + '<br />' + part_list.join('<br />');
+</script>
+
+</body>
+</html>

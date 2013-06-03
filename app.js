@@ -137,11 +137,142 @@ function show_prog_list(ls) {
 
 // ------------------------------------------------------------------------------------------------ next view
 
+function pre0(n) { return (n < 10 ? '0' : '') + n; }
+function string_time(t) {
+	return t.getFullYear()
+		+ '-' + pre0(t.getMonth() + 1)
+		+ '-' + pre0(t.getDate())
+		+ ' ' + pre0(t.getHours())
+		+ ':' + pre0(t.getMinutes());
+}
+
+function pretty_time(t) {
+	var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
+	return [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()]
+		+ ', ' + h12
+		+ ':' + pre0(t.getMinutes())
+		+ (t.getHours() < 12 ? ' am' : ' pm');
+}
+
+function update_next_select(t_off) {
+	var t = new Date();
+	var h_now = t.getHours();
+	var lt = [];
+	t.setHours(h_now - 12);
+	for (var i = -12; i <= 12; ++i) {
+		lt[lt.length] = '<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + pretty_time(t) + '</option>';
+		t.setHours(t.getHours() + 1);
+	}
+	var ts = document.getElementById("next_time");
+	ts.innerHTML = lt.join("\n");
+	ts.onchange = update_next_list;
+}
+
+function update_next_list(next_type) {
+	var ls = document.getElementById("next_time");
+	var t_off = (ls.selectedIndex >= 0) ? parseInt(ls[ls.selectedIndex].value) : 0;
+	if (!t_off) t_off = 0;
+	update_next_select(t_off);
+
+	var t = new Date();
+	t.setHours(t.getHours() + t_off);
+	//t.setDate(t.getDate() + 7);
+	var now_day = t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
+	var now_time = pre0(t.getHours()) + ':' + pre0(t.getMinutes());
+
+	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
+
+	var next = {};
+	var ms_next = 0;
+	var ms_max = t.valueOf() + 60 * 60 * 1000;
+	var n = 0;
+	prog.forEach(function(it) {
+		if (it.day < now_day) return;
+		if ((it.day == now_day) && (it.time < now_time)) return;
+
+		var ms_it = Date.parse(it.day + 'T' + it.time);
+		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
+
+		if (next_type == "next_by_room") {
+			if (next[it.room]) {
+				if (next[it.room].day < it.day) return;
+				if ((next[it.room].day == it.day) && (next[it.room].time < it.room)) return;
+			}
+			next[it.room] = it;
+		} else {
+			if (ms_it <= ms_max) next['n' + (++n)] = it;
+		}
+	});
+	console.log(ms_next + ' ' + ms_max);
+
+	var next_prog = [];
+	for (var k in next) {
+		next_prog[next_prog.length] = next[k];
+	}
+
+	var start_str = '';
+	if (ms_next) {
+		var min_next = Math.floor((ms_next - t) / 60000);
+		if (min_next < 1) start_str = 'right now';
+		else {
+			start_str = 'in ';
+			var h_next = Math.floor(min_next / 60);
+			if (h_next >= 1) {
+				min_next -= h_next * 60;
+				start_str += h_next + ' hour' + ((h_next == 1) ? '' : 's') + ' and ';
+			}
+			start_str += min_next + ' minute' + ((min_next == 1) ? '' : 's');
+		}
+	}
+
+	document.getElementById("next_start_note").innerHTML = start_str
+		? 'The next program item starts ' + start_str + '.'
+		: 'There are no more Chicon program items scheduled.';
+
+	show_prog_list(next_prog);
+}
+
+function update_next_filters(next_type) {
+	if (next_type != "next_by_room") next_type = "next_by_hour";
+	var ul = document.getElementById("next_type").getElementsByTagName("li");
+	for (var i = 0; i < ul.length; ++i) {
+		if (ul[i].id == next_type) ul[i].classList.add("selected");
+		else ul[i].classList.remove("selected");
+	}
+
+	if (supports_localstorage()) localStorage.setItem("c7.next_filter", JSON.stringify([
+		["next_type", next_type]
+	]));
+}
+
+function next_filter(ctrl, item) {
+	var next_type = document.getElementById("next_type").getElementsByClassName("selected")[0].id;
+
+	switch (ctrl) {
+		case "next_type": next_type = item; break;
+	}
+
+	update_next_list(next_type);
+	update_next_filters(next_type);
+}
+
+
 function show_next_view() {
+	var next_type = "next_by_hour";
+
 	document.body.classList.remove("prog");
 	document.body.classList.remove("part");
-	document.body.classList.remove("about");
+	document.body.classList.remove("maps");
 	document.body.classList.add("next");
+
+	var f0s = supports_localstorage() ? localStorage.getItem("c7.next_filter") : '';
+	var f0 = f0s ? JSON.parse(f0s) : [];
+	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
+		case "next_type":    next_type = f0[i][1]; break;
+	}
+
+	update_next_list(next_type);
+	update_next_filters(next_type);
 
 	if (supports_localstorage()) localStorage.setItem("c7.page", "next");
 }
@@ -156,9 +287,9 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 		case "ChiKidz":     re_t = /^ChiKidz/; break;
 		case "Reading":     re_t = /Reading/; break;
 		case "Autograph":   re_t = /^Autograph/; break;
-		case "kk":          re_t = /^(Kaffeeklatsch|Literary Beer)/; break;
+		case "kk":          re_t = /^(Kaffeeklatsch|Literary Bh?eer)/; break;
 		case "filk":        re_t = /\bFilk\b/; break;
-		case "other_types": re_t = /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Beer|Themed Filk|Open Filk)./; break;
+		case "other_types": re_t = /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|Themed Filk|Open Filk)./; break;
 	}
 	if (freetext) {
 		re_q = GlobToRE(freetext); // new RegExp(freetext, "i");
@@ -219,7 +350,7 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 	]));
 }
 
-function update_prog_filters(day, floor, type, stars_only) {
+function update_prog_filters(day, floor, type, stars_only, freetext) {
 	var dt = "d" + day;
 	var dc = document.getElementById("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
@@ -250,6 +381,7 @@ function update_prog_filters(day, floor, type, stars_only) {
 
 	var qc = document.getElementById("q");
 	if (qc) {
+		qc.value = freetext;
 		if (qc.value) qc.classList.add("selected");
 		else qc.classList.remove("selected");
 	}
@@ -282,28 +414,31 @@ function prog_filter(ctrl, item) {
 	stars_only = (stars_only == "only_stars");
 
 	update_prog_list(day, floor, type, stars_only, freetext);
-	update_prog_filters(day, floor, type, stars_only);
+	update_prog_filters(day, floor, type, stars_only, freetext);
 }
 
-function show_prog_view() {
-	document.body.classList.remove("next");
-	document.body.classList.remove("part");
-	document.body.classList.remove("about");
-	document.body.classList.add("prog");
-
+function show_prog_view(opt) {
 	var day = "", floor = "all floors", type = "all_types", stars_only = false, freetext = "";
-	var f0s = supports_localstorage() ? localStorage.getItem("c7.prog_filter") : '';
-	var f0 = f0s ? JSON.parse(f0s) : [];
-	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-		case "day": day = f0[i][1]; break;
-		case "floor": floor = f0[i][1]; break;
-		case "type": type = f0[i][1]; break;
-		case "stars_only": stars_only = f0[i][1]; break;
-		case "freetext": freetext = document.getElementById("q").value = f0[i][1]; break;
+
+	if (!document.body.classList.contains("prog")) {
+		document.body.classList.remove("next");
+		document.body.classList.remove("part");
+		document.body.classList.remove("maps");
+		document.body.classList.add("prog");
+
+		var f0s = supports_localstorage() ? localStorage.getItem("c7.prog_filter") : '';
+		var f0 = f0s ? JSON.parse(f0s) : [];
+		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
+			case "day": day = f0[i][1]; break;
+			case "floor": floor = f0[i][1]; break;
+			case "type": type = f0[i][1]; break;
+			case "stars_only": stars_only = f0[i][1]; break;
+			case "freetext": freetext = f0[i][1]; break;
+		}
 	}
 
 	update_prog_list(day, floor, type, stars_only, freetext);
-	update_prog_filters(day, floor, type, stars_only);
+	update_prog_filters(day, floor, type, stars_only, freetext);
 
 	if (supports_localstorage()) localStorage.setItem("c7.page", "prog");
 }
@@ -343,21 +478,14 @@ function update_part_view(name_sort, first_letter, participant) {
 		});
 
 		document.getElementById("part_names").innerHTML = lp.map(function(p) {
-			return '<li id="p' + p.id + '"><span class="fn">' + p.first + '</span> ' + p.last + '</li>';
+			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.first + '</span> ' + p.last + '</a></li>';
 		}).join('');
 		document.getElementById("part_info").innerHTML = "";
 		document.getElementById("prog_ls").innerHTML = "";
-
-		var pc = document.getElementById("part_names").getElementsByTagName("li");
-		for (var i = 0; i < pc.length; ++i) {
-			pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
-		}
 	} else {
 		document.getElementById("part_names").innerHTML = "";
-		document.getElementById("part_info").innerHTML = '<h1 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h1><p>' + pa[0].bio + '</p>';
+		document.getElementById("part_info").innerHTML = '<h2 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h2><p>' + pa[0].bio + '</p>';
 		show_prog_list(prog.filter(function(it) { return pa[0].program.indexOf(it.id) >= 0; }));
-
-		document.getElementById("part_title").scrollIntoView();
 	}
 
 
@@ -374,25 +502,35 @@ function part_filter(ctrl, el) {
 	switch (ctrl) {
 		case "name_sort":    name_sort = el.id; break;
 		case "first_letter": first_letter = el.innerHTML; break;
-		case "part_names":   participant = el.id; break;
 	}
 
 	update_part_view(name_sort, first_letter, participant);
 }
 
-function show_part_view() {
-	document.body.classList.remove("next");
-	document.body.classList.remove("prog");
-	document.body.classList.remove("about");
-	document.body.classList.add("part");
-
+function show_part_view(opt) {
 	var name_sort = "sort_last", first_letter = "A", participant = "";
-	var f0s = supports_localstorage() ? localStorage.getItem("c7.part_filter") : '';
-	var f0 = f0s ? JSON.parse(f0s) : [];
-	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-		case "name_sort":    name_sort = f0[i][1]; break;
-		case "first_letter": first_letter = f0[i][1]; break;
-		case "participant":  participant = f0[i][1]; break;
+
+	if (!document.body.classList.contains("part")) {
+		document.body.classList.remove("next");
+		document.body.classList.remove("prog");
+		document.body.classList.remove("maps");
+		document.body.classList.add("part");
+
+		var f0s = supports_localstorage() ? localStorage.getItem("c7.part_filter") : '';
+		var f0 = f0s ? JSON.parse(f0s) : [];
+		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
+			case "name_sort":    name_sort = f0[i][1]; break;
+			case "first_letter": first_letter = f0[i][1]; break;
+			case "participant":  participant = f0[i][1]; break;
+		}
+	}
+
+	if (opt) {
+		var pa = people.filter(function(p) { return p.id == opt; });
+		if (pa.length) {
+			participant = 'p' + pa[0].id;
+			first_letter = (name_sort == 'sort_first') ? pa[0].first[0] : pa[0].last[0];
+		}
 	}
 
 	update_part_view(name_sort, first_letter, participant);
@@ -402,17 +540,17 @@ function show_part_view() {
 
 
 
-// ------------------------------------------------------------------------------------------------ about view
+// ------------------------------------------------------------------------------------------------ maps view
 
-function show_about_view() {
+function show_maps_view() {
 	document.body.classList.remove("next");
 	document.body.classList.remove("prog");
 	document.body.classList.remove("part");
-	document.body.classList.add("about");
+	document.body.classList.add("maps");
 
 	document.getElementById("prog_ls").innerHTML = "";
 
-	if (supports_localstorage()) localStorage.setItem("c7.page", "about");
+	if (supports_localstorage()) localStorage.setItem("c7.page", "maps");
 }
 
 
@@ -425,11 +563,11 @@ var os = document.getElementById("opt_style");
 if (os) os.onclick = toggle_page_style;
 
 
-// init tab menu
-document.getElementById("tab_next").onclick = show_next_view;
-document.getElementById("tab_prog").onclick = show_prog_view;
-document.getElementById("tab_part").onclick = show_part_view;
-document.getElementById("tab_about").onclick = show_about_view;
+// init next view
+var ul = document.getElementById("next_filters").getElementsByTagName("li");
+for (var i = 0; i < ul.length; ++i) {
+	ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
+}
 
 
 // init prog view
@@ -453,12 +591,17 @@ for (var i = 0; i < pc.length; ++i) {
 
 
 // set up fixed time display
+document.getElementById("scroll_link").onclick = function() { document.getElementById("top").scrollIntoView(); return false; };
 var prev_scroll = { "i": 0, "top": 0 };
 var n = 0;
 window.onscroll = function() {
-	var st = (document.body.scrollTop || document.documentElement.scrollTop) + 20;
-	var te = document.getElementById("top"); if (!te) return;
-	var tl = document.getElementsByClassName("new_time"); if (!tl) return;
+	var st = document.body.scrollTop || document.documentElement.scrollTop;
+
+	document.getElementById("scroll").style.display = (st > 0) ? 'block' : 'none';
+
+	st += 20; // to have more time for change behind new_time
+	var te = document.getElementById("time"); if (!te) return;
+	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
 	//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
 	var i = prev_scroll.top ? prev_scroll.i : 1;
 	if (i >= tl.length) i = tl.length - 1;
@@ -476,11 +619,20 @@ window.onscroll = function() {
 };
 
 
-var init_page = supports_localstorage() ? localStorage.getItem("c7.page") : '';
-switch (init_page) {
-	case 'next':   show_next_view(); break;
-	case 'part':  show_part_view(); break;
-	case 'about': show_about_view(); break;
-	case 'prog':
-	default:      show_prog_view();
+function set_page() {
+	var opt = window.location.hash.substr(1);
+	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("c7.page") : '';
+	if (!opt) opt = 'prog';
+	switch (opt.substr(0,4)) {
+		case 'next': show_next_view(); break;
+		case 'part': show_part_view(opt.substr(4)); break;
+		case 'maps': show_maps_view(); break;
+		case 'prog':
+		default:     show_prog_view(opt.substr(4));
+	}
+
+	document.getElementById("top").scrollIntoView();
 }
+
+window.onhashchange = set_page;
+set_page();

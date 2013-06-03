@@ -4,7 +4,8 @@
 <meta charset="utf-8" />
 <meta name="HandheldFriendly" content="true" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Program - Chicon 7</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<title>Chicon 7 - Mobile guide</title>
 <link rel="stylesheet" href="skin.css" />
 </head>
 
@@ -19,77 +20,94 @@
 <h1>Chicon 7</h1>
 
 <ul id="tabs">
-<li id="tab_next">Next</li>
-<li id="tab_prog">Program</li>
-<li id="tab_part">Participants</li>
-<li id="tab_about">About</li>
+<li id="tab_next"><a href="#next">Next</a></li>
+<li id="tab_prog"><a href="#prog">Program</a></li>
+<li id="tab_part"><a href="#part">Participants</a></li>
+<li id="tab_maps"><a href="#maps">Maps</a></li>
 </ul>
 </div>
+
+<div id="next_page" class="page">
+	<div id="next_filters" class="filters">
+	It is now
+	<div id="next_form"><select id="next_time"></select>
+	<label id="next_remember" class="hint"><input type="checkbox" id="next_remember_cb" /> Remember this offset</label>
+	</div>
+	</div>
+</div>
+
 
 <div id="prog_page" class="page">
-<div id="prog_filters" class="filters">
-<ul id="day">
-<li id="d">All days</li>
-<li id="d2012-08-30">Thursday</li>
-<li id="d2012-08-31">Friday</li>
-<li id="d2012-09-01">Saturday</li>
-<li id="d2012-09-02">Sunday</li>
-<li id="d2012-09-03">Monday</li>
-</ul>
+	<div id="prog_filters" class="filters">
+	<ul id="day">
+	<li id="d">All days</li>
+	<li id="d2012-08-30">Thursday</li>
+	<li id="d2012-08-31">Friday</li>
+	<li id="d2012-09-01">Saturday</li>
+	<li id="d2012-09-02">Sunday</li>
+	<li id="d2012-09-03">Monday</li>
+	</ul>
 
-<ul id="type">
-<li id="all_types">All item types</li>
-<li id="ChiKidz">ChiKidz</li>
-<li id="kk">Kaffeeklatches</li>
-<li id="Reading">Readings</li>
-<li id="Autograph">Autographs</li>
-<li id="filk">Filk</li>
-<li id="other_types">All others</li>
-</ul>
+	<ul id="type">
+	<li id="all_types">All item types</li>
+	<li id="ChiKidz">ChiKidz</li>
+	<li id="kk">Kaffeeklatches</li>
+	<li id="Reading">Readings</li>
+	<li id="Autograph">Autographs</li>
+	<li id="filk">Filk</li>
+	<li id="other_types">All others</li>
+	</ul>
 
-<ul id="floor">
-<li id="all_floors">All floors</li>
-<li id="Silver_West">Silver W</li>
-<li id="Green_East">Green E</li>
-<li id="Green_West">Green W</li>
-<li id="Bronze_West">Bronze W</li>
-<li id="Gold_East">Gold E</li>
-<li id="Gold_West">Gold W</li>
-<li id="Purple_East">Purple E</li>
-<li id="other_floors">Other</li>
-</ul>
+	<ul id="floor">
+	<li id="all_floors">All floors</li>
+	<li id="Silver_West">Silver W</li>
+	<li id="Green_East">Green E</li>
+	<li id="Green_West">Green W</li>
+	<li id="Bronze_West">Bronze W</li>
+	<li id="Gold_East">Gold E</li>
+	<li id="Gold_West">Gold W</li>
+	<li id="Purple_East">Purple E</li>
+	<li id="other_floors">Other</li>
+	</ul>
 
-<ul id="stars">
-<li id="all_stars">All items</li>
-<li id="only_stars">Only starred</li>
-</ul>
+	<ul id="stars">
+	<li id="all_stars">All items</li>
+	<li id="only_stars">Only starred</li>
+	</ul>
 
-<form name="search" id="search">
-<input type="text" id="q" placeholder="Search" />
-<div id="q_ctrl">
-<input type="submit" id="q_submit" value="Go" />
-<input type="reset" id="q_clear" value="Clear" />
+	<form name="search" id="search">
+	<input type="text" id="q" placeholder="Search" />
+	<div id="q_ctrl">
+	<input type="submit" id="q_submit" value="Go" />
+	<input type="reset" id="q_clear" value="Clear" />
+	</div>
+	<div id="q_hint" class="hint"></div>
+	</form>
+	</div>
 </div>
-<div id="q_hint"></div>
-</form>
-</div>
-</div>
+
 
 <div id="part_page" class="page">
-<div id="part_filters" class="filters">
-<ul id="name_sort">
-<li id="sort_first">By first name</li>
-<li id="sort_last">By last name</li>
-</ul>
+	<div id="part_filters" class="filters">
+	<ul id="name_sort">
+	<li id="sort_first">By first name</li>
+	<li id="sort_last">By last name</li>
+	</ul>
 
-<ul id="first_letter">
-<li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li>
-</ul>
+	<ul id="first_letter">
+	<li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li><li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li><li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li>
+	</ul>
 
-<ul id="part_names"></ul>
+	<ul id="part_names"></ul>
+	</div>
+
+	<div id="part_info"></div>
 </div>
 
-<div id="part_info"></div>
+
+<div id="maps_page" class="page">
+<a href="chicon-hyatt-map.png">Convention areas <img src="chicon-hyatt-map.thumb.png" /></a>
+<a href="hotel-hyatt-map.png">Hotel services <img src="hotel-hyatt-map.thumb.png" /></a>
 </div>
 
 <div id="prog_ls" class="ls">Loading program & participant data...</div>
