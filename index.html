@@ -85,12 +85,12 @@
 
 	<ul id="tag">
 	<li id="all_tags">All item types
-	<li id="ChiKidz">ChiKidz
-	<li id="kk">Kaffeeklatches
-	<li id="Reading">Readings
-	<li id="Autograph">Autographs
-	<li id="filk">Filk
-	<li id="other_tags">All others
+	<li id="ChiKidz" data-regexp="^ChiKidz">ChiKidz
+	<li id="kk" data-regexp="^(Kaffeeklatsch|Literary Bh?eer)">Kaffeeklatches
+	<li id="Reading" data-regexp="Reading">Readings
+	<li id="Autograph" data-regexp="^Autograph">Autographs
+	<li id="filk" data-regexp="\bFilk\b">Filk
+	<li id="other_tags" data-regexp="^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk).">All others
 	</ul>
 
 	<ul id="floor">

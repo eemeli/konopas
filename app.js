@@ -16,15 +16,6 @@ PERFORMANCE OF THIS SOFTWARE.
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
 
-var tag_regexps = {
-	"ChiKidz":    /^ChiKidz/,
-	"Reading":    /Reading/,
-	"Autograph":  /^Autograph/,
-	"kk":         /^(Kaffeeklatsch|Literary Bh?eer)/,
-	"filk":       /\bFilk\b/,
-	"other_tags": /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./
-};
-
 // ------------------------------------------------------------------------------------------------ utilities
 
 function EL(id) { return document.getElementById(id); }
@@ -306,7 +297,10 @@ function show_next_view() {
 
 function update_prog_list(day, floor, tag, stars_only, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
-	if (tag in tag_regexps) re_t = tag_regexps[tag];
+	if (tag) {
+		var t = EL(tag).getAttribute("data-regexp");
+		if (t) re_t = new RegExp(t);
+	}
 	if (freetext) {
 		re_q = GlobToRE(freetext);
 		if (!freetext.match(/[?*"]/)) {
