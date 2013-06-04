@@ -29,6 +29,12 @@ var tag_regexps = {
 
 function EL(id) { return document.getElementById(id); }
 
+function selected_id(parent_id) {
+	var par = EL(parent_id); if (!par) return "";
+	var sel = par.getElementsByClassName("selected"); if (!sel.length) return "";
+	return sel[0].id;
+}
+
 function supports_localstorage() {
 	try {
 		return 'localStorage' in window && window['localStorage'] !== null;
@@ -268,7 +274,7 @@ function update_next_filters(next_type) {
 }
 
 function next_filter(ctrl, item) {
-	var next_type = EL("next_type").getElementsByClassName("selected")[0].id;
+	var next_type = selected_id("next_type");
 
 	switch (ctrl) {
 		case "next_type": next_type = item; break;
@@ -425,10 +431,10 @@ function update_prog(day, floor, tag, stars_only, freetext) {
 }
 
 function prog_filter(ctrl, item) {
-	var day = EL("day").getElementsByClassName("selected")[0].id;
-	var floor = EL("floor").getElementsByClassName("selected")[0].id;
-	var tag = EL("tag").getElementsByClassName("selected")[0].id;
-	var stars_only = EL("stars").getElementsByClassName("selected")[0].id;
+	var day = selected_id("day");
+	var floor = selected_id("floor");
+	var tag = selected_id("tag");
+	var stars_only = selected_id("stars");
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
@@ -525,8 +531,8 @@ function update_part_view(name_sort, first_letter, participant) {
 }
 
 function part_filter(ctrl, el) {
-	var name_sort = EL("name_sort").getElementsByClassName("selected")[0].id;
-	var first_letter = EL("first_letter").getElementsByClassName("selected")[0].innerHTML;
+	var name_sort = selected_id("name_sort");
+	var first_letter = selected_id("first_letter");
 	var participant = "";
 
 	switch (ctrl) {
