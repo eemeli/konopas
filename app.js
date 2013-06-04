@@ -319,7 +319,7 @@ function update_prog_list(day, floor, tag, stars_only, freetext) {
 	if (stars_only && supports_localstorage()) star_ids = read_stars();
 
 	var ls = prog.filter(function(it) {
-		if (star_ids.length && (star_ids.indexOf(it.id) < 0)) return false;
+		if (stars_only && (star_ids.indexOf(it.id) < 0)) return false;
 
 		if (day && it.day != day) return false;
 
@@ -360,6 +360,10 @@ function update_prog_list(day, floor, tag, stars_only, freetext) {
 			dh.innerHTML = "";
 		}
 	}
+
+	var sh = EL("star_hint");
+	if (sh) sh.innerHTML = (!stars_only || star_ids.length) ? ""
+	                     : "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered.";
 
 	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
 		["day", day], ["floor", floor], ["tag", tag], ["stars_only", stars_only], ["freetext", freetext]
