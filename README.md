@@ -1,10 +1,10 @@
-KoniOpas
-========
+KonOpas
+=======
 
 A mobile guide for conventions, with all sorts of spiffy features.
 
 
-**KoniOpas** is free, open-source software distributed under the terms of the ISC license:
+**KonOpas** is free, open-source software distributed under the terms of the ISC license:
 
 	Copyright (c) 2013, Eemeli Aro <eemeli@gmail.com>
 
