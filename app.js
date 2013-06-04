@@ -17,12 +17,12 @@ PERFORMANCE OF THIS SOFTWARE.
 var full_version = !navigator.userAgent.match(/Android [12]/);
 
 var tag_regexps = {
-	"ChiKidz":     /^ChiKidz/,
-	"Reading":     /Reading/,
-	"Autograph":   /^Autograph/,
-	"kk":          /^(Kaffeeklatsch|Literary Bh?eer)/,
-	"filk":        /\bFilk\b/,
-	"other_types": /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./
+	"ChiKidz":    /^ChiKidz/,
+	"Reading":    /Reading/,
+	"Autograph":  /^Autograph/,
+	"kk":         /^(Kaffeeklatsch|Literary Bh?eer)/,
+	"filk":       /\bFilk\b/,
+	"other_tags": /^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk)./
 };
 
 // ------------------------------------------------------------------------------------------------ utilities
@@ -298,9 +298,9 @@ function show_next_view() {
 
 // ------------------------------------------------------------------------------------------------ program view
 
-function update_prog_list(day, floor, type, stars_only, freetext) {
+function update_prog_list(day, floor, tag, stars_only, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
-	if (type in tag_regexps) re_t = tag_regexps[type];
+	if (tag in tag_regexps) re_t = tag_regexps[tag];
 	if (freetext) {
 		re_q = GlobToRE(freetext);
 		if (!freetext.match(/[?*"]/)) {
@@ -323,7 +323,7 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 			default: if (it.floor != floor) return false;
 		}
 
-		if (type && re_t && !re_t.test(it.title)) return false;
+		if (tag && re_t && !re_t.test(it.title)) return false;
 
 		if (freetext) {
 			var sa = [ it.title, it.precis, it.room ];
@@ -356,18 +356,18 @@ function update_prog_list(day, floor, type, stars_only, freetext) {
 	}
 
 	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
-		["day", day], ["floor", floor], ["type", type], ["stars_only", stars_only], ["freetext", freetext]
+		["day", day], ["floor", floor], ["tag", tag], ["stars_only", stars_only], ["freetext", freetext]
 	]));
 }
 
-function update_prog_filters(day, floor, type, stars_only, freetext) {
+function update_prog_filters(day, floor, tag, stars_only, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
-	if (!full_version && (floor == "all floors") && type.match(/types$/) && !stars_only && !freetext) {
+	if (!full_version && (floor == "all floors") && tag.match(/tags$/) && !stars_only && !freetext) {
 		EL("d").classList.add("disabled");
 	} else {
 		EL("d").classList.remove("disabled");
@@ -380,8 +380,8 @@ function update_prog_filters(day, floor, type, stars_only, freetext) {
 		else fc[i].classList.remove("selected");
 	}
 
-	var tt = type || "all_types";
-	var tc = EL("type").getElementsByTagName("li");
+	var tt = tag || "all_tags";
+	var tc = EL("tag").getElementsByTagName("li");
 	for (var i = 0; i < tc.length; ++i) {
 		if (tc[i].id == tt) tc[i].classList.add("selected");
 		else tc[i].classList.remove("selected");
@@ -415,32 +415,32 @@ function default_prog_day() {
 	return day;
 }
 
-function update_prog(day, floor, type, stars_only, freetext) {
-	if (!full_version && !day && (floor == "all floors") && type.match(/types$/) && !stars_only && !freetext) {
+function update_prog(day, floor, tag, stars_only, freetext) {
+	if (!full_version && !day && (floor == "all floors") && tag.match(/tags$/) && !stars_only && !freetext) {
 		day = default_prog_day();
 	}
 
-	update_prog_list(day, floor, type, stars_only, freetext);
-	update_prog_filters(day, floor, type, stars_only, freetext);
+	update_prog_list(day, floor, tag, stars_only, freetext);
+	update_prog_filters(day, floor, tag, stars_only, freetext);
 }
 
 function prog_filter(ctrl, item) {
 	var day = EL("day").getElementsByClassName("selected")[0].id;
 	var floor = EL("floor").getElementsByClassName("selected")[0].id;
-	var type = EL("type").getElementsByClassName("selected")[0].id;
+	var tag = EL("tag").getElementsByClassName("selected")[0].id;
 	var stars_only = EL("stars").getElementsByClassName("selected")[0].id;
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
 		case "day":   day = item; break;
 		case "floor": floor = item; break;
-		case "type":  type = item; break;
+		case "tag":  tag = item; break;
 		case "stars": //stars_only = item; break;
 			stars_only = item;
 			if (item == "only_stars") {
 				day = "d";
 				floor = "all_floors";
-				type = "all_types";
+				tag = "all_tags";
 				freetext = EL("q").value = "";
 			}
 			break;
@@ -450,11 +450,11 @@ function prog_filter(ctrl, item) {
 	floor = floor.replace(/_/g, " ");
 	stars_only = (stars_only == "only_stars");
 
-	update_prog(day, floor, type, stars_only, freetext);
+	update_prog(day, floor, tag, stars_only, freetext);
 }
 
 function show_prog_view(opt) {
-	var day = default_prog_day(), floor = "all floors", type = "all_types", stars_only = false, freetext = "";
+	var day = default_prog_day(), floor = "all floors", tag = "all_tags", stars_only = false, freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
 		set_view("prog");
@@ -464,13 +464,13 @@ function show_prog_view(opt) {
 		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
 			case "day": day = f0[i][1]; break;
 			case "floor": floor = f0[i][1]; break;
-			case "type": type = f0[i][1]; break;
+			case "tag": tag = f0[i][1]; break;
 			case "stars_only": stars_only = f0[i][1]; break;
 			case "freetext": freetext = f0[i][1]; break;
 		}
 	}
 
-	update_prog(day, floor, type, stars_only, freetext);
+	update_prog(day, floor, tag, stars_only, freetext);
 }
 
 
