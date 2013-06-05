@@ -45,11 +45,12 @@ h1 a { text-decoration: none; }
 #tabs { list-style-type: none; border-bottom: 2px solid; padding: 5px 0 0 0; margin: 0; }
 #tabs li { display: inline-block; padding: 2px 6px; cursor: pointer; }
 #tabs a { text-decoration: none; }
-.next #tab_next, .prog #tab_prog,.part #tab_part, .maps #tab_maps { font-weight: 900; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
+.next #tab_next, .star #tab_star, .prog #tab_prog,.part #tab_part, .maps #tab_maps { font-weight: 900; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
 
 .view { display: none; }
 .what #what_view { display: block; position: relative; z-index: 6; }
 .next #next_view { display: block; }
+.star #star_view { display: block; }
 .prog #prog_view { display: block; }
 .part #part_view { display: block; }
 .maps #maps_view { display: block; }
@@ -115,8 +116,8 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 
 .item_frame { position: relative; margin-left: 45px; }
 
-.star { position: absolute; width: 20px; height: 20px; top: 10px; left: 10px; background: #ccc; cursor: pointer; }
-.star.has_star { background: #ff3; }
+.item_star { position: absolute; width: 20px; height: 20px; top: 10px; left: 10px; background: #ccc; cursor: pointer; }
+.item_star.has_star { background: #ff3; }
 
 .item { clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 10px; cursor: pointer; }
 

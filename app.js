@@ -83,7 +83,7 @@ function GlobToRE(pat) {
 	return new RegExp(terms.join('|'), 'i');
 }
 
-var views = [ "what", "next", "prog", "part", "maps" ];
+var views = [ "what", "next", "star", "prog", "part", "maps" ];
 function set_view(new_view) {
 	for (var i in views) { document.body.classList.remove(views[i]); }
 	document.body.classList.add(new_view);
@@ -127,7 +127,7 @@ function show_prog_list(ls) {
 			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + time_str + '</div>';
 		}
 
-		list[list.length] = '<div class="item_frame"><div class="star" id="s' + ls[i].id + '"></div>'
+		list[list.length] = '<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 			+ '<div class="title">' + ls[i].title + '</div>'
 			+ '<div class="room">' + ls[i].room + ' (' + ls[i].floor + ')</div>'
@@ -149,7 +149,7 @@ function show_prog_list(ls) {
 	}
 
 	if (supports_localstorage()) {
-		var star_els = EL("prog_ls").getElementsByClassName("star");
+		var star_els = EL("prog_ls").getElementsByClassName("item_star");
 		for (var i = 0; i < star_els.length; ++i) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
@@ -296,9 +296,34 @@ function show_next_view() {
 
 
 
+// ------------------------------------------------------------------------------------------------ "my con" view
+
+function show_star_view() {
+	set_view("star");
+
+	var sh = EL("star_hint");
+	if (supports_localstorage()) {
+		var star_ids = read_stars();
+		if (star_ids.length) {
+			sh.innerHTML = '';
+			var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
+			show_prog_list(ls);
+		} else {
+			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
+			EL("prog_ls").innerHTML = '';
+		}
+	} else {
+		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
+		EL("prog_ls").innerHTML = '';
+	}
+}
+
+
+
+
 // ------------------------------------------------------------------------------------------------ program view
 
-function update_prog_list(day, floor, tag, stars_only, freetext) {
+function update_prog_list(day, floor, tag, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
 	if (tag) {
 		var t = EL(tag).getAttribute("data-regexp");
@@ -312,12 +337,7 @@ function update_prog_list(day, floor, tag, stars_only, freetext) {
 		}
 	}
 
-	var star_ids = [];
-	if (stars_only && supports_localstorage()) star_ids = read_stars();
-
 	var ls = prog.filter(function(it) {
-		if (stars_only && (star_ids.indexOf(it.id) < 0)) return false;
-
 		if (day && it.day != day) return false;
 
 		if (floor) switch (floor) {
@@ -358,23 +378,19 @@ function update_prog_list(day, floor, tag, stars_only, freetext) {
 		}
 	}
 
-	var sh = EL("star_hint");
-	if (sh) sh.innerHTML = (!stars_only || star_ids.length) ? ""
-	                     : "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered.";
-
 	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
-		["day", day], ["floor", floor], ["tag", tag], ["stars_only", stars_only], ["freetext", freetext]
+		["day", day], ["floor", floor], ["tag", tag], ["freetext", freetext]
 	]));
 }
 
-function update_prog_filters(day, floor, tag, stars_only, freetext) {
+function update_prog_filters(day, floor, tag, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
-	if (!full_version && (floor == "all floors") && tag.match(/tags$/) && !stars_only && !freetext) {
+	if (!full_version && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
 		EL("d").classList.add("disabled");
 	} else {
 		EL("d").classList.remove("disabled");
@@ -392,13 +408,6 @@ function update_prog_filters(day, floor, tag, stars_only, freetext) {
 	for (var i = 0; i < tc.length; ++i) {
 		if (tc[i].id == tt) tc[i].classList.add("selected");
 		else tc[i].classList.remove("selected");
-	}
-
-	var st = stars_only ? "only_stars" : "all_stars";
-	var sc = EL("stars").getElementsByTagName("li");
-	for (var i = 0; i < sc.length; ++i) {
-		if (sc[i].id == st) sc[i].classList.add("selected");
-		else sc[i].classList.remove("selected");
 	}
 
 	var qc = EL("q");
@@ -421,46 +430,35 @@ function default_prog_day() {
 	return day;
 }
 
-function update_prog(day, floor, tag, stars_only, freetext) {
-	if (!full_version && !day && (floor == "all floors") && tag.match(/tags$/) && !stars_only && !freetext) {
+function update_prog(day, floor, tag, freetext) {
+	if (!full_version && !day && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
 		day = default_prog_day();
 	}
 
-	update_prog_list(day, floor, tag, stars_only, freetext);
-	update_prog_filters(day, floor, tag, stars_only, freetext);
+	update_prog_list(day, floor, tag, freetext);
+	update_prog_filters(day, floor, tag, freetext);
 }
 
 function prog_filter(ctrl, item) {
 	var day = selected_id("day");
 	var floor = selected_id("floor");
 	var tag = selected_id("tag");
-	var stars_only = selected_id("stars");
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
 		case "day":   day = item; break;
 		case "floor": floor = item; break;
 		case "tag":  tag = item; break;
-		case "stars": //stars_only = item; break;
-			stars_only = item;
-			if (item == "only_stars") {
-				day = "d";
-				floor = "all_floors";
-				tag = "all_tags";
-				freetext = EL("q").value = "";
-			}
-			break;
 	}
 
 	day = day.substr(1);
 	floor = floor.replace(/_/g, " ");
-	stars_only = (stars_only == "only_stars");
 
-	update_prog(day, floor, tag, stars_only, freetext);
+	update_prog(day, floor, tag, freetext);
 }
 
 function show_prog_view(opt) {
-	var day = default_prog_day(), floor = "all floors", tag = "all_tags", stars_only = false, freetext = "";
+	var day = default_prog_day(), floor = "all floors", tag = "all_tags", freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
 		set_view("prog");
@@ -471,12 +469,11 @@ function show_prog_view(opt) {
 			case "day": day = f0[i][1]; break;
 			case "floor": floor = f0[i][1]; break;
 			case "tag": tag = f0[i][1]; break;
-			case "stars_only": stars_only = f0[i][1]; break;
 			case "freetext": freetext = f0[i][1]; break;
 		}
 	}
 
-	update_prog(day, floor, tag, stars_only, freetext);
+	update_prog(day, floor, tag, freetext);
 }
 
 
@@ -666,6 +663,7 @@ function init_view() {
 	switch (opt.substr(0,4)) {
 		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
+		case 'star': show_star_view(); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'maps': show_maps_view(); break;
 		case 'prog': show_prog_view(opt.substr(4)); break;
