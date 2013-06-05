@@ -26,6 +26,25 @@ function selected_id(parent_id) {
 	return sel[0].id;
 }
 
+function pre0(n) { return (n < 10 ? '0' : '') + n; }
+
+function string_time(t) {
+	if (!t) t = new Date();
+	return t.getFullYear()
+		+ '-' + pre0(t.getMonth() + 1)
+		+ '-' + pre0(t.getDate())
+		+ ' ' + pre0(t.getHours())
+		+ ':' + pre0(t.getMinutes());
+}
+
+function pretty_time(t) {
+	var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
+	return [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()]
+		+ ', ' + h12
+		+ ':' + pre0(t.getMinutes())
+		+ (t.getHours() < 12 ? ' am' : ' pm');
+}
+
 function supports_localstorage() {
 	try {
 		return 'localStorage' in window && window['localStorage'] !== null;
@@ -157,23 +176,6 @@ function show_what_view() {
 
 // ------------------------------------------------------------------------------------------------ next view
 
-function pre0(n) { return (n < 10 ? '0' : '') + n; }
-function string_time(t) {
-	return t.getFullYear()
-		+ '-' + pre0(t.getMonth() + 1)
-		+ '-' + pre0(t.getDate())
-		+ ' ' + pre0(t.getHours())
-		+ ':' + pre0(t.getMinutes());
-}
-
-function pretty_time(t) {
-	var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
-	return [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()]
-		+ ', ' + h12
-		+ ':' + pre0(t.getMinutes())
-		+ (t.getHours() < 12 ? ' am' : ' pm');
-}
-
 function update_next_select(t_off) {
 	var t = new Date();
 	var h_now = t.getHours();
@@ -196,9 +198,9 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
-	//t.setDate(t.getDate() + 7);
-	var now_day = t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
-	var now_time = pre0(t.getHours()) + ':' + pre0(t.getMinutes());
+	var now_str = string_time(t);
+	var now_day = now_str.substr(0, 10);
+	var now_time = now_str.substr(11);
 
 	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
 
@@ -409,12 +411,11 @@ function update_prog_filters(day, floor, tag, stars_only, freetext) {
 function default_prog_day() {
 	var day_start = prog[0].day;
 	var day_end = prog[prog.length-1].day;
-	var day_now = new Date().toISOString().substr(0, 10);
+	var day_now = string_time().substr(0, 10);
 
 	var day = (day_now <= day_start) ? day_start
-	        : (day_now >= day_end) ? day_end
+	        : (day_now > day_end) ? day_start
 	        : day_now;
-	//console.log(day_now + "->" + day);
 
 	return day;
 }
