@@ -198,6 +198,7 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
+	t.setFullYear(2012); // DEBUG for Chicon data
 	var now_str = string_time(t);
 	var now_day = now_str.substr(0, 10);
 	var now_time = now_str.substr(11);
