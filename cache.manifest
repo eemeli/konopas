@@ -1,15 +1,14 @@
 CACHE MANIFEST
-# r7
 
 CACHE:
-participant-data.js
-program-data.js
+data/chicon7-people.js
+data/chicon7-program.js
 classList.js
 app.js
 skin.css
 favicon-simple.ico
-chicon-hyatt-map.thumb.png
-hotel-hyatt-map.thumb.png
+data/chicon7-con-map.thumb.png
+data/chicon7-hotel-map.thumb.png
 
 NETWORK:
 *
