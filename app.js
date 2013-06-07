@@ -15,6 +15,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
+var default_duration = 60;
 
 // ------------------------------------------------------------------------------------------------ utilities
 
@@ -43,6 +44,13 @@ function pretty_time(t) {
 		+ ', ' + h12
 		+ ':' + pre0(t.getMinutes())
 		+ (t.getHours() < 12 ? ' am' : ' pm');
+}
+
+function time_sum(t0_str, m_str) {
+	var t1 = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str;
+	var h = (t1 / 60) >> 0;
+	var m = t1 - 60 * h;
+	return pre0(h % 24) + ':' + pre0(m);
 }
 
 function supports_localstorage() {
@@ -102,7 +110,7 @@ function show_info(item, id) {
 	else {
 		var ap = a[0].people.map(function(p) { return "<a href=\"#part" + p.id + "\">" + p.name + "</a>"; });
 		if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
-		html += "<p>" + a[0].precis + "</p>";
+		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
 }
@@ -127,10 +135,20 @@ function show_prog_list(ls) {
 			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + time_str + '</div>';
 		}
 
+		var loc_str = '';
+		if (ls[i].loc.length) {
+			loc_str = ls[i].loc[0];
+			if (ls[i].loc.length > 1) loc_str += ' (' + ls[i].loc.slice(1).join(', ') + ')';
+		}
+		if (ls[i].mins && (ls[i].mins != default_duration)) {
+			if (loc_str) loc_str += ', ';
+			loc_str += ls[i].time + ' - ' + time_sum(ls[i].time, ls[i].mins);
+		}
+
 		list[list.length] = '<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 			+ '<div class="title">' + ls[i].title + '</div>'
-			+ '<div class="room">' + ls[i].room + ' (' + ls[i].floor + ')</div>'
+			+ '<div class="loc">' + loc_str + '</div>'
 			+ '</div></div>';
 	}
 	EL("prog_ls").innerHTML = list.join('');
@@ -198,7 +216,6 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
-	t.setFullYear(2012); // DEBUG for Chicon data
 	var now_str = string_time(t);
 	var now_day = now_str.substr(0, 10);
 	var now_time = now_str.substr(11);
@@ -217,11 +234,11 @@ function update_next_list(next_type) {
 		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
-			if (next[it.room]) {
-				if (next[it.room].day < it.day) return;
-				if ((next[it.room].day == it.day) && (next[it.room].time < it.room)) return;
+			if (next[it.loc[0]]) {
+				if (next[it.loc[0]].day < it.day) return;
+				if ((next[it.loc[0]].day == it.day) && (next[it.loc[0]].time < it.loc[0])) return;
 			}
-			next[it.room] = it;
+			next[it.loc[0]] = it;
 		} else {
 			if (ms_it <= ms_max) next['n' + (++n)] = it;
 		}
@@ -323,7 +340,7 @@ function show_star_view() {
 
 // ------------------------------------------------------------------------------------------------ program view
 
-function update_prog_list(day, floor, tag, freetext) {
+function update_prog_list(day, area, tag, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
 	if (tag) {
 		var t = EL(tag).getAttribute("data-regexp");
@@ -340,17 +357,17 @@ function update_prog_list(day, floor, tag, freetext) {
 	var ls = prog.filter(function(it) {
 		if (day && it.day != day) return false;
 
-		if (floor) switch (floor) {
-			case "all floors": break;
-			case "other floors": if (it.floor) return false; else break;
-			default: if (it.floor != floor) return false;
+		if (area) switch (area) {
+			case "everywhere": break;
+			//case "other areas": if (it.loc.length > 1) return false; else break;
+			default: if (it.loc.indexOf(area) < 0) return false;
 		}
 
 		if (tag && re_t && !re_t.test(it.title)) return false;
 
 		if (freetext) {
-			var sa = [ it.title, it.precis, it.room ];
-			for (var j = 0; j < it.people.length; ++j) sa[sa.length] = it.people[j].name;
+			var sa = [ it.title, it.desc, it.loc[0] ];
+			if (it.people) for (var j = 0; j < it.people.length; ++j) sa[sa.length] = it.people[j].name;
 			var sa_str = sa.join("\t");
 			if (!sa_str.match(re_q)) {
 				if (re_hint && !hint) {
@@ -379,25 +396,25 @@ function update_prog_list(day, floor, tag, freetext) {
 	}
 
 	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
-		["day", day], ["floor", floor], ["tag", tag], ["freetext", freetext]
+		["day", day], ["area", area], ["tag", tag], ["freetext", freetext]
 	]));
 }
 
-function update_prog_filters(day, floor, tag, freetext) {
+function update_prog_filters(day, area, tag, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
-	if (!full_version && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
+	if (!full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		EL("d").classList.add("disabled");
 	} else {
 		EL("d").classList.remove("disabled");
 	}
 
-	var ft = floor ? floor.replace(/ /g, "_") : "all_floors";
-	var fc = EL("floor").getElementsByTagName("li");
+	var ft = area ? area.replace(/ /g, "_") : "everywhere";
+	var fc = EL("area").getElementsByTagName("li");
 	for (var i = 0; i < fc.length; ++i) {
 		if (fc[i].id == ft) fc[i].classList.add("selected");
 		else fc[i].classList.remove("selected");
@@ -423,42 +440,42 @@ function default_prog_day() {
 	var day_end = prog[prog.length-1].day;
 	var day_now = string_time().substr(0, 10);
 
-	var day = (day_now <= day_start) ? day_start
-	        : (day_now > day_end) ? day_start
+	var day = (day_now <= day_start) ? ''
+	        : (day_now > day_end) ? ''
 	        : day_now;
 
 	return day;
 }
 
-function update_prog(day, floor, tag, freetext) {
-	if (!full_version && !day && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
+function update_prog(day, area, tag, freetext) {
+	if (!full_version && !day && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		day = default_prog_day();
 	}
 
-	update_prog_list(day, floor, tag, freetext);
-	update_prog_filters(day, floor, tag, freetext);
+	update_prog_list(day, area, tag, freetext);
+	update_prog_filters(day, area, tag, freetext);
 }
 
 function prog_filter(ctrl, item) {
 	var day = selected_id("day");
-	var floor = selected_id("floor");
+	var area = selected_id("area");
 	var tag = selected_id("tag");
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
 		case "day":   day = item; break;
-		case "floor": floor = item; break;
+		case "area": area = item; break;
 		case "tag":  tag = item; break;
 	}
 
 	day = day.substr(1);
-	floor = floor.replace(/_/g, " ");
+	area = area.replace(/_/g, " ");
 
-	update_prog(day, floor, tag, freetext);
+	update_prog(day, area, tag, freetext);
 }
 
 function show_prog_view(opt) {
-	var day = default_prog_day(), floor = "all floors", tag = "all_tags", freetext = "";
+	var day = default_prog_day(), area = "everywhere", tag = "all_tags", freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
 		set_view("prog");
@@ -467,13 +484,13 @@ function show_prog_view(opt) {
 		var f0 = f0s ? JSON.parse(f0s) : [];
 		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
 			case "day": day = f0[i][1]; break;
-			case "floor": floor = f0[i][1]; break;
+			case "area": area = f0[i][1]; break;
 			case "tag": tag = f0[i][1]; break;
 			case "freetext": freetext = f0[i][1]; break;
 		}
 	}
 
-	update_prog(day, floor, tag, freetext);
+	update_prog(day, area, tag, freetext);
 }
 
 
@@ -501,24 +518,27 @@ function update_part_view(name_sort, first_letter, participant) {
 	if (!pa.length) {
 		participant = '';
 
-		var lp = people.filter(function(p) { return ((name_sort == 'sort_first') ? p.first : p.last)[0] == first_letter });
+		var lp = people.filter(function(p) {
+			var n = ((name_sort != 'sort_first') && p.name[1]) ? p.name[1] : p.name[0];
+			return n[0] == first_letter;
+		});
 		if (name_sort == 'sort_first') lp.sort(function(a, b) {
-			var an = (a.first + '  ' + a.last).toLowerCase();
-			var bn = (b.first + '  ' + b.last).toLowerCase();
+			var an = (a.name[0] + '  ' + a.name[1]).toLowerCase();
+			var bn = (b.name[0] + '  ' + b.name[1]).toLowerCase();
 				 if (an < bn) return -1;
 			else if (an > bn) return 1;
 			else              return 0;
 		});
-
 		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.first + '</span> ' + p.last + '</a></li>';
+			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.name[0] + '</span> ' + p.name[1] + '</a></li>';
 		}).join('');
 		EL("part_info").innerHTML = "";
 		EL("prog_ls").innerHTML = "";
 	} else {
 		EL("part_names").innerHTML = "";
-		EL("part_info").innerHTML = '<h2 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h2><p>' + pa[0].bio + '</p>';
-		show_prog_list(prog.filter(function(it) { return pa[0].program.indexOf(it.id) >= 0; }));
+		EL("part_info").innerHTML = '<h2 id="part_title">' + pa[0].name[0] + ' ' + pa[0].name[1] + '</h2>' 
+			+ (pa[0].bio ? ('<p>' + pa[0].bio + '</p>') : '');
+		show_prog_list(prog.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
 
 
@@ -559,7 +579,7 @@ function show_part_view(opt) {
 		var pa = people.filter(function(p) { return p.id == opt; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
-			first_letter = (name_sort == 'sort_first') ? pa[0].first[0] : pa[0].last[0];
+			first_letter = (name_sort == 'sort_first') ? pa[0].name[0][0] : pa[0].name[1][0];
 		}
 	}
 
