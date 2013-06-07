@@ -187,9 +187,18 @@ function show_prog_list(ls) {
 // ------------------------------------------------------------------------------------------------ ical export
 
 function make_ical_item(p) {
-	var t_ev = 'TZID=' + ical_set.timezone + ':' + p.day.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
-	t_ev = t_ev.replace(':2012', ':2013'); // DEBUG
+	var t0 = new Date(p.day + 'T' + p.time + 'Z');
+	var t1 = new Date(p.day + 'T' + p.time + 'Z');
+	t1.setUTCMinutes(t1.getUTCMinutes() + p.mins);
+	var t_start = t0.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
+	var t_end = t1.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
 	var t_now = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}/, '');
+
+	var loc_str = '';
+	if (p.loc.length) {
+		loc_str = p.loc[0];
+		if (p.loc.length > 1) loc_str += ' (' + p.loc.slice(1).join(', ') + ')';
+	}
 
 	var desc = '', attend = '';
 	if (p.people.length) {
@@ -201,16 +210,16 @@ function make_ical_item(p) {
 		}
 		desc += pa.join(', ') + '\\n\\n';
 	}
-	desc += p.precis;
+	desc += p.desc;
 
 	var s = 'BEGIN:VEVENT\r\n'
 			//+ 'SEQUENCE:0\r\n'
 			+ 'UID:' + p.id + '@' + ical_set.domain + '\r\n'
 			+ 'LAST-MODIFIED:' + t_now + '\r\n'
-			+ 'DTSTART;' + t_ev + '\r\n'
-			+ 'DTEND;' + t_ev + '\r\n'
+			+ 'DTSTART;TZID=' + ical_set.timezone + ':' + t_start + '\r\n'
+			+ 'DTEND;TZID=' + ical_set.timezone + ':' + t_end + '\r\n'
 			+ 'SUMMARY:' + p.title + '\r\n'
-			+ 'LOCATION:' + p.room + ' (' + p.floor + ')\r\n'
+			+ 'LOCATION:' + loc_str + '\r\n'
 			+ attend
 			+ 'DESCRIPTION:' + desc + '\r\n'
 			+ 'END:VEVENT\r\n';
