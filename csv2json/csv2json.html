@@ -12,7 +12,8 @@
 <p>
 <input type="file" id="file">
 <span id="info"></span><br>
-<input type="submit" id="save" value="Save" disabled><span id="save-name"></span>
+<input type="submit" class="save" id="save-json" value="Save as JSON" disabled><br>
+<input type="submit" class="save" id="save-js" value="Save as JavaScript" disabled><span id="js-wrap"></span>
 <hr />
 <pre id="result" style="white-space: pre-wrap;"></pre>
 
@@ -52,12 +53,12 @@ reader.onload = function(event) {
     json_data = JSON.stringify(data);
     if (json_data) {
 		$('#result').html(json_data.replace(/</g, '&lt;')/*.replace(/{/g, "\n{")*/);
-		$('#save').removeAttr("disabled");
-		$('#save-name').html(filename);
+		$('.save').removeAttr("disabled");
+		$('#js-wrap').html(' <tt>var<input type="text" id="js-var" value="' + filename + '"> = <i>JSON</i>;</tt>');
 	} else {
 		$('#result').html("JSON is empty!");
-		$('#save').attr("disabled", true);
-		$('#save-name').html("");
+		$('.save').attr("disabled", true);
+		$('#js-wrap').html("");
 	}
 };
 
@@ -69,15 +70,21 @@ $('#file').on("change", function() {
 	if ($(this)[0].files.length) {
 		var f = $(this)[0].files[0];
 		$('#info').html("Type: " + f.type + ", Size: " + f.size + " bytes");
-		filename = f.name.replace(/\.[^.]*$/, "") + ".json";
-		if (!filename) filename = "data.json";
+		filename = f.name.replace(/\.[^.]*$/, "");
+		if (!filename) filename = "data";
 		reader.readAsText(f);
 	}
 });
 
-$('#save').click(function() {
+$('#save-json').click(function() {
 	var blob = new Blob([json_data], {type: "application/json;charset=utf-8"});
-	saveAs(blob, filename);
+	saveAs(blob, filename + '.json');
+});
+
+$('#save-js').click(function() {
+	var txt = 'var ' + $('#js-var').val() + ' = ' + json_data + ';'
+	var blob = new Blob([txt], {type: "text/javascript;charset=utf-8"});
+	saveAs(blob, filename + '.js');
 });
 
 </script>
