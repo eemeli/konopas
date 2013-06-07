@@ -363,7 +363,13 @@ function update_prog_list(day, area, tag, freetext) {
 			default: if (it.loc.indexOf(area) < 0) return false;
 		}
 
-		if (tag && re_t && !re_t.test(it.title)) return false;
+		if (tag && (tag != 'all_tags')) {
+			if (re_t) {
+				if (!re_t.test(it.title)) return false;
+			} else {
+				if (!it.tags || (it.tags.indexOf(tag) < 0)) return false;
+			}
+		}
 
 		if (freetext) {
 			var sa = [ it.title, it.desc, it.loc[0] ];
@@ -413,7 +419,7 @@ function update_prog_filters(day, area, tag, freetext) {
 		EL("d").classList.remove("disabled");
 	}
 
-	var ft = area ? area.replace(/ /g, "_") : "everywhere";
+	var ft = area || "everywhere";
 	var fc = EL("area").getElementsByTagName("li");
 	for (var i = 0; i < fc.length; ++i) {
 		if (fc[i].id == ft) fc[i].classList.add("selected");
@@ -469,7 +475,6 @@ function prog_filter(ctrl, item) {
 	}
 
 	day = day.substr(1);
-	area = area.replace(/_/g, " ");
 
 	update_prog(day, area, tag, freetext);
 }
