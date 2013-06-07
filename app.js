@@ -117,7 +117,8 @@ function show_info(item, id) {
 		if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
-	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
+	item.innerHTML += "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\')\">&raquo; Export as iCalendar</div>"
+		+ "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
 }
 
 function show_prog_list(ls) {
@@ -228,18 +229,29 @@ function make_ical_item(p) {
 	return s;
 }
 
-function save_ical() {
-	var star_ids = read_stars();
-	if (star_ids.length) {
-		var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
-		var ical = 'BEGIN:VCALENDAR\r\n'
-				+ 'VERSION:2.0\r\n'
-				+ 'PRODID:-//eemeli//KonOpas ' + ical_set.id + '\r\n';
-		for (var i = 0; i < ls.length; ++i) ical += make_ical_item(ls[i]);
-		ical += 'END:VCALENDAR';
-		var blob = new Blob([ical], {type: "text/calendar;charset=utf-8"});
-		saveAs(blob, ical_set.filename);
+function make_ical(ls) {
+	var ical = 'BEGIN:VCALENDAR\r\n'
+			+ 'VERSION:2.0\r\n'
+			+ 'PRODID:-//eemeli//KonOpas ' + ical_set.id + '\r\n';
+	for (var i = 0; i < ls.length; ++i) ical += make_ical_item(ls[i]);
+	ical += 'END:VCALENDAR';
+	return ical;
+}
+
+function save_ical(p) {
+	var ids;
+	var fn = ical_set.filename;
+	if (p) {
+		ids = [p];
+		fn += '-' + p;
+	} else {
+		ids = read_stars();
 	}
+
+	if (ids.length < 1) return;
+	var ls = prog.filter(function(it) { return (ids.indexOf(it.id) >= 0); });
+	var blob = new Blob([make_ical(ls)], {type: "text/calendar;charset=utf-8"});
+	saveAs(blob, fn + '.ics');
 }
 
 
