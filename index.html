@@ -68,6 +68,7 @@
 
 <div id="star_view" class="view">
 	<div id="star_hint" class="hint"></div>
+	<div id="ical_link">&raquo; Export to calendar</div>
 </div>
 
 
@@ -135,9 +136,18 @@
 
 <div id="prog_ls" class="ls"><br>Loading ...</div>
 
+<script>
+	var ical_set = {
+		'id': 'Finncon2013//EN',
+		'domain': '2013.finncon.org',
+		'timezone': 'Europe/Helsinki',
+		'filename': 'my-finncon.ics'
+	};
+</script>
 <script src="data/finncon2013/program.js"></script>
 <script src="data/finncon2013/people.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>
+<script src="FileSaver.min.js"></script>
 </body>
 </html>
