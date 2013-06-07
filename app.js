@@ -16,7 +16,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
 var default_duration = 60;
-
+var time_show_am_pm = false;
 
 
 // ------------------------------------------------------------------------------------------------ utilities
@@ -41,11 +41,13 @@ function string_time(t) {
 }
 
 function pretty_time(t) {
-	var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
-	return [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()]
-		+ ', ' + h12
-		+ ':' + pre0(t.getMinutes())
-		+ (t.getHours() < 12 ? ' am' : ' pm');
+	var d = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+	if (time_show_am_pm) {
+		var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
+		return d + ', ' + h12 + ':' + pre0(t.getMinutes()) + (t.getHours() < 12 ? ' am' : ' pm');
+	} else {
+		return d + ', ' + t.getHours() + ':' + pre0(t.getMinutes());
+	}
 }
 
 function time_sum(t0_str, m_str) {
