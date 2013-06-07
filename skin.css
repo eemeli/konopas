@@ -59,6 +59,8 @@ h1 a { text-decoration: none; }
 #what_view h3 + p { margin-top: 5px; }
 #what_view p { max-width: 600px; }
 
+#ical_link { color: #888; padding-left: 55px; cursor: pointer; }
+
 .filters { display: none; clear: both; margin-left: -20px; padding-top: 20px; background: white; }
 .filters > * { padding-left: 20px; }
 .filters ul { list-style-type: none; margin-top: 0; }

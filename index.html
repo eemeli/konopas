@@ -75,6 +75,7 @@
 
 <div id="star_view" class="view">
 	<div id="star_hint" class="hint"></div>
+	<div id="ical_link">&raquo; Export to calendar</div>
 </div>
 
 
@@ -148,9 +149,18 @@
 
 <div id="prog_ls" class="ls"><br>Loading ...</div>
 
+<script>
+	var ical_set = {
+		'id': 'Chicon7//EN',
+		'domain': 'chicon.org',
+		'timezone': 'America/Chicago',
+		'filename': 'my-chicon.ics'
+	};
+</script>
 <script src="data/chicon7-program.js"></script>
 <script src="data/chicon7-people.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>
+<script src="FileSaver.min.js"></script>
 </body>
 </html>
