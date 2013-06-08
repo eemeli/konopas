@@ -117,8 +117,8 @@ function show_info(item, id) {
 		if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
-	item.innerHTML += "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\')\">&raquo; Export as iCalendar</div>"
-		+ "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
+	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>"
+		+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\')\">iCal</div>";
 }
 
 function show_prog_list(ls) {

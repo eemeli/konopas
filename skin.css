@@ -142,8 +142,17 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .item div { float:left; padding-right: 10px; min-height: 1em; }
 .title { margin-left: 40px; }
 .loc { color: #888; font-size: 0.875em; clear: left; margin: 3px 10px 0 40px; }
-.ical_link { display: none; color: #888; font-size: 0.875em; margin: 3px 10px 0 40px; float: right !important; }
 .extra { display: none; clear: left; padding: 20px 0 0 10px; }
+.ical_link {
+	display: none;
+	color: #888;
+	font-size: 0.875em;
+	margin: -10px 10px 10px 0;
+	padding-left: 13px;
+	clear: left;
+	float: right !important;
+	background: transparent url('img/export-10px-888.png') no-repeat left 3px;
+}
 
 .expanded { background: #f3f3f3; margin-bottom: 10px; }
 .expanded .title { font-weight: bold; }
