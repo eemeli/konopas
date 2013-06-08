@@ -1,3 +1,19 @@
+@media all and (min-width: 700px) {
+	#banner { width: 200px; float: left; }
+	#opt_what { left: 8px !important; top: 50px !important; }
+	#opt_style { left: 41px !important; top: 50px !important; }
+	#tabs { border-bottom: none !important; border-right: 2px solid; margin-top: 46px !important; padding-top: 0 !important; font-size: 1.2em; }
+	#tabs li { display: block !important; text-align: right; margin: 10px 0; }
+	.next #tabs #tab_next, .star #tabs #tab_star, .prog #tabs #tab_prog,.part #tabs #tab_part, .maps #tabs #tab_maps {
+		border-bottom-color: inherit !important;
+		border-right-color: white !important;
+		margin-right: -2px;
+		margin-bottom: 0 !important;
+	}
+	#time, #scroll { left: 220px !important; }
+	#main { position: absolute; top: 0; left: 228px; right: 10px; }
+}
+
 html { font-family: sans-serif; width: 100%; }
 body { margin: 8px; }
 
