@@ -88,8 +88,7 @@
 	<li id="In_English">In English
 	<li id="På_svenska">På svenska
 	<li id="Suomeksi">Suomeksi
-	<li id="Reading" data-regexp="Reading">Readings
-	<!--<li id="other_tags" data-regexp="^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk).">All others-->
+	<li id="Palkinnot" data-regexp="^Palkintojenjako|^Julki">Palkinnot &<br>julkistamiset
 	</ul>
 
 	<ul id="area">
@@ -115,14 +114,16 @@
 
 <div id="part_view" class="view">
 	<div id="part_filters" class="filters">
+	<!--
 	<ul id="name_sort">
 	<li id="sort_first">By first name
 	<li id="sort_last">By last name
 	</ul>
 
 	<ul id="first_letter">
-	<li>A<li>B<li>C<li>D<li>E<li>F<li>G<li>H<li>I<li>J<li>K<li>L<li>M<li>N<li>O<li>P<li>Q<li>R<li>S<li>T<li>U<li>V<li>W<li>X<li>Y<li>Z
+	<li>all<li>A<li>B<li>C<li>D<li>E<li>F<li>G<li>H<li>I<li>J<li>K<li>L<li>M<li>N<li>O<li>P<li>Q<li>R<li>S<li>T<li>U<li>V<li>W<li>X<li>Y<li>Z
 	</ul>
+	-->
 
 	<ul id="part_names"></ul>
 	</div>
@@ -143,11 +144,12 @@
 </div><!-- /main -->
 
 <script>
-	var ical_set = {
-		'id': 'Finncon2013//EN',
+	var konopas_set = {
+		'id': 'ko.fc13',
 		'domain': '2013.finncon.org',
 		'timezone': 'Europe/Helsinki',
-		'filename': 'finncon'
+		'ical_id': 'Finncon2013//EN',
+		'ical_filename': 'finncon'
 	};
 </script>
 <script src="data/finncon2013/program.js"></script>
