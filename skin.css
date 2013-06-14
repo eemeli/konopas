@@ -1,3 +1,23 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(Roboto300.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Roboto Medium'), local('Roboto-Medium'), url(Roboto500.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(RobotoCondensed400.ttf) format('truetype');
+}
+
+
 @media all and (min-width: 700px) {
 	#banner { width: 200px; float: left; }
 	#opt_what { left: 8px !important; top: 50px !important; }
@@ -14,7 +34,10 @@
 	#main { position: absolute; top: 0; left: 228px; right: 10px; }
 }
 
-html { font-family: sans-serif; width: 100%; }
+strong, b { font-weight: 500; }
+h1, h2, h3, h4, h5, .new_day { font-family: 'Roboto Condensed'; font-weight: 400; }
+
+html { font-family: 'Roboto', sans-serif; font-weight: 300; width: 100%; }
 body { margin: 8px; }
 
 #top { position: absolute; top: 0; }
@@ -35,7 +58,7 @@ body { margin: 8px; }
 	width: 25px;
 	line-height: 25px;
 	text-align: center;
-	font-weight: 900;
+	font-weight: 500;
 	cursor: pointer;
 }
 #opt_what {
@@ -61,7 +84,7 @@ h1 a { text-decoration: none; }
 #tabs { list-style-type: none; border-bottom: 2px solid; padding: 5px 0 0 0; margin: 0; }
 #tabs li { display: inline-block; padding: 2px 6px; cursor: pointer; }
 #tabs a { text-decoration: none; }
-.next #tab_next, .star #tab_star, .prog #tab_prog,.part #tab_part, .maps #tab_maps { font-weight: 900; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
+.next #tab_next, .star #tab_star, .prog #tab_prog,.part #tab_part, .maps #tab_maps { font-weight: 500; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
 
 .view { display: none; }
 .what #what_view { display: block; position: relative; z-index: 6; }
@@ -98,13 +121,15 @@ h1 a { text-decoration: none; }
 #part_filters ul { clear: left; }
 #name_sort li { display: inline-block; padding: 0 10px; }
 #first_letter li { display: inline-block; width: 30px; line-height: 30px; text-align: center; }
-#part_names { margin-bottom: 0; }
+#part_names { margin-bottom: 0; -webkit-column-width: 260px; -moz-column-width: 260px; column-width: 260px; }
 #part_names li { cursor: auto; }
 #part_names a { text-decoration: none; }
-.fn { display: inline-block; min-width: 120px; text-align: right; }
+.fn, .ln { display: block; width: 128px; width: calc(50% - 2px); min-height: 1px; float: left; }
+.fn { text-align: right; vertical-align: top; clear: both; padding-right: 2px; }
+.ln { vertical-align: bottom; padding-left: 2px; }
 
 .disabled { color: #ccc !important; cursor: auto !important; }
-.selected { font-weight: 900; border-color: black !important; }
+.selected { font-weight: 500; border-color: black !important; }
 .hint { clear: left; color: #888; font-size: 0.8em; padding-top: 5px; }
 
 form { position: relative; clear: left; z-index: 1; }
@@ -116,9 +141,14 @@ input[type="text"] { border: 2px solid #ccc; }
 
 .ls { clear: both; }
 
+.part_list_link { display: block; text-decoration: none; padding-bottom: 10px; }
 #part_info { clear: both; }
 #part_info h2 { font-size: 2.0em; margin: 0 0 10px 0; border-bottom: 2px solid; }
 #part_info p { margin-bottom: 0; }
+
+.linklist dt { float: left; width: 100px; text-align: right; margin-right: 6px; }
+.linklist a { text-decoration: none; font-weight: 500; }
+.linklist a:hover { text-decoration: underline; }
 
 .new_day { padding-top: 40px; background: white; border-bottom: 2px solid; font-size: 2.0em; width: 100%; }
 .new_day, .new_time { position: relative; z-index: 2; }
@@ -155,7 +185,7 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 }
 
 .expanded { background: #f3f3f3; margin-bottom: 10px; }
-.expanded .title { font-weight: bold; }
+.expanded .title { font-weight: 500; }
 .expanded .ical_link, .expanded .extra { display: block; }
 
 a { color: black; }
