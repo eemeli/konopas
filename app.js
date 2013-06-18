@@ -622,7 +622,7 @@ function update_part_view(name_sort, first_letter, participant) {
 			else              return 0;
 		});
 		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.name[0] + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
+			return '<li><a href="#part' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
 		}).join('');
 		EL("part_info").innerHTML = "";
 		EL("prog_ls").innerHTML = "";
@@ -651,7 +651,7 @@ function update_part_view(name_sort, first_letter, participant) {
 		}
 		EL("part_names").innerHTML = "";
 		EL("part_info").innerHTML = listlink
-			+ '<h2 id="part_title">' + pa[0].name[0] + ' ' + pa[0].name[1] + '</h2>' 
+			+ '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
 			+ (pa[0].bio ? ('<p>' + pa[0].bio + '</p>') : '')
 			+ links;
 		show_prog_list(prog.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
@@ -737,14 +737,16 @@ if (os) os.onclick = function() {
 
 
 // init next view
-var ul = EL("next_filters").getElementsByTagName("li");
-for (var i = 0; i < ul.length; ++i) {
-	ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
+if (EL("next_filters")) {
+	var ul = EL("next_filters").getElementsByTagName("li");
+	for (var i = 0; i < ul.length; ++i) {
+		ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
+	}
 }
 
 
 // init star view
-EL("ical_link").onclick = function() { save_ical(); return false; };
+if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view
@@ -768,41 +770,43 @@ for (var i = 0; i < pc.length; ++i) {
 
 
 // set up fixed time display
-EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
-var prev_scroll = { "i": 0, "top": 0 };
-var n = 0;
-if (full_version) { window.onscroll = function() {
-	var st = document.body.scrollTop || document.documentElement.scrollTop;
+if (EL("scroll_link")) {
+	EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
+	var prev_scroll = { "i": 0, "top": 0 };
+	var n = 0;
+	if (full_version) { window.onscroll = function() {
+		var st = document.body.scrollTop || document.documentElement.scrollTop;
 
-	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
+		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 
-	st += 20; // to have more time for change behind new_time
-	var te = EL("time"); if (!te) return;
-	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
-	//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
-	var i = prev_scroll.top ? prev_scroll.i : 1;
-	if (i >= tl.length) i = tl.length - 1;
-	if (st > tl[i].offsetTop) {
-		while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
-		--i;
-	} else {
-		while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+		st += 20; // to have more time for change behind new_time
+		var te = EL("time"); if (!te) return;
+		var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
+		//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
+		var i = prev_scroll.top ? prev_scroll.i : 1;
+		if (i >= tl.length) i = tl.length - 1;
+		if (st > tl[i].offsetTop) {
+			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
+			--i;
+		} else {
+			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+		}
+		if (i < 0) i = 0;
+
+		prev_scroll.i = i;
+		prev_scroll.top = tl[i].offsetTop;
+		te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
+	};} else {
+		EL("time").style.display = "none";
+		EL("scroll").style.display = "none";
 	}
-	if (i < 0) i = 0;
-
-	prev_scroll.i = i;
-	prev_scroll.top = tl[i].offsetTop;
-	te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
-};} else {
-	EL("time").style.display = "none";
-	EL("scroll").style.display = "none";
 }
 
 
 function init_view() {
 	var opt = window.location.hash.substr(1);
 	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".view") : '';
-	if (!opt) opt = 'what';
+	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
 		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
@@ -813,8 +817,8 @@ function init_view() {
 		default:     show_what_view(); break;
 	}
 
-	EL("top").scrollIntoView();
-	EL("load_disable").style.display = "none";
+	if (EL("top")) EL("top").scrollIntoView();
+	if (EL("load_disable")) EL("load_disable").style.display = "none";
 }
 
 init_view();

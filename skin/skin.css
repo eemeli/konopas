@@ -76,7 +76,7 @@ body { margin: 8px; }
 }
 .black #opt_style { background: white; color: black; }
 
-#banner, .filters, #part_view { position: relative; z-index: 3; background: white; padding-top: 0; }
+#banner, .filters, #part_view, .hint, #ical_link { position: relative; z-index: 3; background: white; padding-top: 0; }
 
 h1 { font-size: 25px; margin: 0 0 8px 0; padding: 0; }
 h1 a { text-decoration: none; }
@@ -98,6 +98,7 @@ h1 a { text-decoration: none; }
 #what_view h3 + p { margin-top: 5px; }
 #what_view p { max-width: 600px; }
 
+#star_hint { padding: 20px 0; max-width: 600px; }
 #ical_link { color: #888; padding-left: 55px; cursor: pointer; }
 
 .filters { display: none; clear: both; margin-left: -20px; padding-top: 20px; background: white; }
@@ -173,6 +174,7 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .title { margin-left: 40px; }
 .loc { color: #888; font-size: 0.875em; clear: left; margin: 3px 10px 0 40px; }
 .extra { display: none; clear: left; padding: 20px 0 0 10px; }
+.extra p { max-width: 600px; }
 .ical_link {
 	display: none;
 	color: #888;
