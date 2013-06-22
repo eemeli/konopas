@@ -117,8 +117,10 @@ function show_prog_list(ls) {
 		if (ls[i].day != prev_day) {
 			prev_day = ls[i].day;
 			prev_time = "";
+			
+			var date_arr = ls[i].day.split("-");
 
-			var t = new Date(ls[i].day);
+			var t = new Date(date_arr[0], date_arr[1] - 1, date_arr[2]);
 			day_str = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
