@@ -57,6 +57,21 @@ people = [
       ]
    },
    {
+      "first" : "Christine",
+      "last" : "Doyle",
+      "id" : "0048",
+      "bio" : "Chris has been attending and running conventions for over a decade, after that pesky “delayed gratification” created by medical school and residency training.  She’s been reading SF/F as long as she can remember, with notable early works including those by Heinlein, Bradbury, McCaffrey, and Tolkein.  And she’s been making costumes for almost as long, starting with the Halloween Pumpkin in kindergarten.  Look for her running around this weekend running the Program.<br>",
+      "links" : {
+         "url" : "http://www.monty-doyle.com/"
+      },
+      "program" : [
+         "040",
+         "035",
+         "2024",
+         "937"
+      ]
+   },
+   {
       "first" : "Valerie",
       "last" : "Frankel",
       "id" : "0064",
