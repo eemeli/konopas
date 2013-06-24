@@ -11,10 +11,10 @@
   src: local('Roboto Medium'), local('Roboto-Medium'), url(Roboto500.ttf) format('truetype');
 }
 @font-face {
-  font-family: 'Roboto Condensed';
+  font-family: 'Oswald';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(RobotoCondensed400.ttf) format('truetype');
+  src: local('Oswald Regular'), local('Oswald-Regular'), url(Oswald400.ttf) format('truetype');
 }
 
 
@@ -35,7 +35,7 @@
 }
 
 strong, b { font-weight: 500; }
-h1, h2, h3, h4, h5, .new_day { font-family: 'Roboto Condensed'; font-weight: 400; }
+h1, h2, h3, h4, h5, .new_day { font-family: 'Oswald'; font-weight: 400; }
 
 html { font-family: 'Roboto', sans-serif; font-weight: 300; width: 100%; }
 body { margin: 8px; }
