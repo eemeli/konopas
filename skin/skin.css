@@ -104,7 +104,7 @@ h1 a { text-decoration: none; }
 .filters { display: none; clear: both; margin-left: -20px; padding-top: 20px; background: white; }
 .filters > * { padding-left: 20px; }
 .filters ul { list-style-type: none; margin-top: 0; }
-.filters li { cursor: pointer; }
+.filters li { cursor: pointer; line-height: 1.0; padding-bottom: 5px; }
 
 .next #next_filters { display: block; margin-left: 0; }
 .prog #prog_filters { display: block; }
@@ -114,10 +114,10 @@ h1 a { text-decoration: none; }
 #next_time { margin: -4px 0 20px 4px; border: 2px solid; padding: 2px 4px; -webkit-appearance: none; -webkit-border-radius: 0; background: white; font-size: 1em; }
 #next_start_note { margin-top: 20px; color: #ccc; }
 
-#prog_filters ul { position: relative; display: block; float: left; margin: 0; z-index: 2; }
+#prog_filters ul { position: relative; display: block; float: left; margin: 0 0 19px 0; z-index: 2; }
 /*#floor, #stars { margin-bottom: -19px !important; }
 #prog_filters input { margin: 38px 4px -33px 0; }*/
-#prog_filters input { margin: 19px 4px 0 0; }
+#prog_filters input { margin: 0 4px 0 0; }
 
 #part_filters ul { clear: left; }
 #name_sort li { display: inline-block; padding: 0 10px; }
