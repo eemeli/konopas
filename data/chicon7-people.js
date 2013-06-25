@@ -17,7 +17,7 @@ people = [
       "first" : "Unwoman",
       "last" : " ",
       "id" : "2487",
-      "bio" : "No biography on file.",
+      "bio" : "Unwoman (aka Erica Mulkey) is a San Francisco-based cellist-singer-songwriter and the recipient of the 2013 Steampunk Chronicle Reader's Choice Award for Best Solo Musician. Layered with skillful cello, rich vocals, and electronically arranged beats, her music is a futuristic homage to her classical training. Unwoman's solo performances have been featured at major steampunk, goth, and sci-fi-related events all over the United States. Extremely versatile, able to perform with no amplification, just cello and voice (\"acacella\"), on acoustic or electric cello, with or without live looping, or with full backing tracks, she also plays the piano, cello banjo, and theremin. She has gained notoriety for her collaborations as well, including Amanda Palmer, Abney Park, Stripmall Architecture, Voltaire, Rasputina, Jill Tracy, Vernian Process, Caustic, MC Frontalot, Jody Ellen, Nathaniel Johnstone Band, Black Tape for a Blue Girl, and Attrition.<br><br>Unwoman's most recent release, Lemniscate: Uncovered Volume 2, an album of looping cello-based cover songs, was the product of her seventh successful kickstarter fundraiser and has garnered praise from all corners. It was released just nine months after her fifth original self-produced solo album, The Fires I Started, which raised 306% of its kickstarter goal. Her first covers album Uncovered Volume 1 and her heartwrenching breakup album, Casualties, were also notable successes.<br><br>Unwoman performs solo and as a guest in other bands throughout the US. Unwoman's solo sets have been featured at Steamcon I - IV (Seattle), Wicked Faire and Steampunk World's Fair (New Jersey), Clockwork Alchemy/Fanime (San Jose, CA), Teslacon (Madison, WI), Her Royal Majesty's Steam Symposium (Long Beach, CA), WorldCon (Reno, NV 2011), A-Kon (Dallas, TX 2013), Steampunk Cruise (New Orleans & Caribbean), Victoria Steam Exposition (Victoria, BC), and other major events. <br>",
       "links" : {
          "url" : "www.unwoman.com"
       },
@@ -39,7 +39,7 @@ people = [
       "first" : "Kent",
       "last" : "Bloom",
       "id" : "0715",
-      "bio" : "No biography on file.",
+      "bio" : "Began reading science fiction early.  First convention in 1974. Attended lots of cons.  Worked on many of them, including Disclaves, COSines, and Worldcons.  Chaired Denvention 3.  Interests include convention management,science fiction and fantasy literature, and renaissance music and dance.",
       "links" : {},
       "program" : [
          "040",
@@ -52,7 +52,7 @@ people = [
       "first" : "Jeff",
       "last" : "Bohnhoff",
       "id" : "0015",
-      "bio" : "Jeff Bohnhoff is a Northern California songwriter/performer who has been working together with his wife Maya since 1979, when he joined Maya’s band.  In 1981 they got married, and eventually decided to perform as a duo.   They currently have three CDs available. Their latest Aliens Ate My Homework is a collection of 16 parody songs. Manhattan Sleeps consists of their haunting original songs and Retro Rocket Science was their first CD of parodies. Jeff and Maya also collaborated with ex-Duras Sisters members Chris Dickenson and Elizabeth Burnham on Harmony Heifers, which Jeff arranged and produced. Jeff also recently produced Nancy Freeman’s Stardust County, as well as two songs on Seanan McGuire’s Stars Fall Home. He will be arranging and producing Seanan’s upcoming album Red Roses and Dead Things. Jeff and Maya are currently working on a new album of original songs.<br><br>",
+      "bio" : "Jeff Bohnhoff is a Northern California songwriter/performer who has been working together with his wife Maya since 1979, when he joined Maya’s band.  In 1981 they got married, and eventually decided to perform as a duo.   They have six CDs available, featuring both original songs and parodies (filk).<br>Jeff serves as producer and engineer for Mystic Fig Studios, and has produced albums for Nancy Freeman and Seanan McGuire.  <br>",
       "links" : {
          "url" : "http://www.mysticfig.com/"
       },
@@ -82,7 +82,7 @@ people = [
       "first" : "Matt",
       "last" : "Branstad",
       "id" : "1994",
-      "bio" : "No biography on file.",
+      "bio" : "Matt Branstad has been playing and running RPGs since he was in 7th grade. He started LARPing in 1996 and quickly discovered that it was his preferred style of gaming. He has played in over a dozen LARPs since, serving as a staff member for four and a plank owner for five. Matt is the  most sadistic and devious member of the team, and as such, is the creative genius behind the web of alliances and antagonism that drives the plot of a Theatre Arcanos game.",
       "links" : {},
       "program" : [
          "040",
@@ -104,7 +104,7 @@ people = [
       "first" : "Debbie",
       "last" : "Bretschneider",
       "id" : "2267",
-      "bio" : "No biography on file.",
+      "bio" : "Debbie Bretschneider reluctantly started in fandom by attending Baycon in the 1980's, so she could spend Memorial Day weekend with her boyfriend, Ric. Shortly thereafter, she discovered the Costuming side of fandom (ooh, shiny!) and has been happily creating hall and masquerade costumes ever since. In her previous work life, she was a hairdresser and uses those talents for better costuming. ",
       "links" : {},
       "program" : [
          "040",
@@ -146,17 +146,6 @@ people = [
       ]
    },
    {
-      "first" : "Ed Wilson (Ed",
-      "last" : "Buchan)",
-      "id" : "2455",
-      "bio" : "Ed Wilson is a Mechanical Engineer who got into an online fight in 2003 about how a Yellowstone eruption would end civilization. When somebody said; \"How can an event lasting seconds end civilization?\" I replied; \"It doesn't last seconds, it lasts weeks or months and I know how to calculate that.\" <br><br>I did, then they changed the plumbing on me, so I'm doing that calculation over, and am presenting it and the first one where I haven’t gotten to yet here at WesterCon. I also write fiction; Harshest Journey, Three Highland Lads are looking for publishers this fall, and Kalag’s Pass and Dearth of Eagles are in process. <br>",
-      "links" : {},
-      "program" : [
-         "040",
-         "2034"
-      ]
-   },
-   {
       "first" : "Chris",
       "last" : "Burgess",
       "id" : "2436",
@@ -189,7 +178,7 @@ people = [
       "first" : "Cayden",
       "last" : "Coronado",
       "id" : "2480",
-      "bio" : "No biography on file.",
+      "bio" : "Cayden went to Mills college where he learned how to do feminist and queer media critique and hasn’t been able to stop since.",
       "links" : {},
       "program" : [
          "1059"
@@ -199,7 +188,7 @@ people = [
       "first" : "David",
       "last" : "Coronado",
       "id" : "2481",
-      "bio" : "No biography on file.",
+      "bio" : "David Coronado has been playing in and running LARPs for over 20 years, including acting as an assistant GM for SIL-West, and Head Storyteller for Ankh and Rose, a monthly Vampire LARP that ran for about 2 years. He’s been playing RPGs since his first D&D game at the Boy Scout Jamboree in 1981. He’s the brains behind the mechanics system that is used in Theatre Arcanos games.",
       "links" : {},
       "program" : [
          "998"
@@ -221,7 +210,7 @@ people = [
       "first" : "James Stanley",
       "last" : "Daugherty",
       "id" : "0040",
-      "bio" : "James Stanley Daugherty, runs a small coconut plantation on Maui, a tiki garden near Las Vegas, and a studio in San Francisco, three places where imagination and history have become so intermingled, that no one can no longer tell where fantasy begins and reality ends.  This is life as it should be. James has also worked as an archaeologist, postman, technical writer, lab technician, librarian, photo journalist, cat breeder, and international investor. He is best known for his fantasy photography of nudes in nudes and dancing around large flames.  As a convention runner he is currently flaking a Westercon in the Sinful City of Las Vegas.",
+      "bio" : "James Stanley Daugherty, runs a small coconut plantation on Maui, a tiki garden near Las Vegas, and a studio in San Francisco, three places where imagination and history have become so intermingled, that no one can no longer tell where fantasy begins and reality ends.  This is life as it should be. James has also worked as an archaeologist, postman, technical writer, lab technician, librarian, photo journalist, cat breeder, and international investor. He is best known for his fantasy photography of nudes in nudes and dancing around large flames.  ",
       "links" : {
          "url" : "http://www.jsd.com/"
       },
@@ -234,7 +223,7 @@ people = [
       "first" : "Grania",
       "last" : "Davis",
       "id" : "1447",
-      "bio" : "No biography on file.",
+      "bio" : "Grania Davis is an author and editor of science fiction and fantasy novels and short stories. Her short stories have appeared in various genre magazines, anthologies, and 'best of' collections.  “The Boss in the Wall” (1998, Tachyon Publications with Avram Davidson) was nominated for a Nebula Award in the Best Novella category.<br><br>She grew up in Milwaukee and Hollywood, California, and has lived and worked at various times in bustling New York; on the slopes of volcanoes in Amecameca, Mexico; in Rotorua, New Zealand; on a sandbar in Belize; in a Tibetan refugee settlement in the Indian Himalayas; near neon-lit Tokyo, where she worked as a military historian; and at the beach on North Shore, Oahu, Hawaii, where she graduated from the University of Hawaii.  She currently is working on a collection of her own stories, and continues to edit and publish Avram Davidson’s immortal literary estate.   Her most recent publication is “Estimado Angel” in the April 2013 issue of Locus Magazine.",
       "links" : {},
       "program" : [
          "592"
@@ -254,7 +243,7 @@ people = [
       "first" : "J.L.",
       "last" : "Doty",
       "id" : "2443",
-      "bio" : "No biography on file.",
+      "bio" : "Jim was born in Seattle, but he's lived most of his life in California, though he did live on the east coast and in Europe for a while. From a very early age he made up stories in his head, but he never considered writing. In his family you went to college, got a degree in something useful and got a real job. So he got a Ph.D. in optical engineering, and went to work as a research scientist. But he was still making up those stories in his head, so he wrote the first draft of A Choice of Treasons, and as he says, \"It was 250,000 words of pure, unmitigated crap. It was terrible: poorly written, poorly plotted, shallow characters that no reader could come to care about. It was the hardest decision I ever made, but I literally threw it away and turned to other projects.\" He spent more than a year writing the first draft of Child of the Sword. Then he went back to A Choice of Treasons and started again, from scratch, a complete rewrite from the get-go. He worked on it for several years before releasing it, and also spent some years putting Child of the Sword through a number of rewrites to insure quality.<br><br>Science has always been a passion of Jim's, but writing is an addiction. He's finished five books now, with three more that are in various stages of completion. Still Not Dead Enough, book 2 in The Dead Among Us, was released in April 2013.<br><br>Jim has a big pet peeve regarding lasers as weapons in science fiction. He spent decades working in the laser and electro-optics industry, even did some research on laser weapons in the 80's. And when writers use a laser as a weapon in a story, they invariably get it wrong, usually by violating some basic law of physics.<br><br>Jim intends to keep on writing and producing more stories, but no laser weapons.",
       "links" : {},
       "program" : [
          "000c",
@@ -290,7 +279,7 @@ people = [
       "first" : "Donald",
       "last" : "Eastlake III",
       "id" : "2485",
-      "bio" : "No biography on file.",
+      "bio" : "<br><br>",
       "links" : {},
       "program" : [
          "2043"
@@ -311,8 +300,7 @@ people = [
          "062",
          "062a",
          "062b",
-         "1063",
-         "2013"
+         "1063"
       ]
    },
    {
@@ -337,7 +325,7 @@ people = [
       "first" : "Kelley",
       "last" : "Eskridge",
       "id" : "2433",
-      "bio" : "No biography on file.",
+      "bio" : "Kelley Eskridge hails from Florida, where her parents vanity-published her first book when she was 12. She has a BA in Acting and has performed everything from hair-product commercials to a season of guerilla theatre in a bikers’ bar. <br><br>In 1988, she quit her job, took out a loan, and drove 800 miles on crutches to attend the Clarion Writer’s Workshop. She fell stone in love with writing, which she expected, and with Nicola Griffith, which she did not. <br><br>Her novel Solitaire is a New York Times Notable novel, a Borders Books Original Voices selection, and a finalist for the Nebula, Spectrum and Endeavour Awards. Her short fiction collection Dangerous Space includes an Astraea Prize winner, two Nebula finalists, two Tiptree Prize Honor Stories, and a story adapted for SyFy. Her joint essays with Nicola are published US and Australian anthologies, and she is a staff writer for @U2, the world’s largest U2 fan site.<br><br>In 2005, Cherry Road Films optioned Solitaire. In 2006, Kelley talked her producer into letting her <br>do a page-one rewrite of their screenplay. That script, now titled OtherLife, is in development with Cherry Road, Lago Film, Angelefine Productions and BUF. Kelley has three other projects in story/script development.<br><br>Like many writers, she’s had a vagabond career, from washing dishes and building stage sets to <br>writing multi-million dollar engineering proposals. She was among the first wave of women in freelance television crews broadcasting live sports. She wrote Solitaire while working as vice president at Wizards of the Coast. As co-owner of Sterling Editing, she currently edits and coaches an international client list of best-selling, critically acclaimed, and emerging writers.<br><br>Kelley is a board member and former board chair of Clarion West. She lives in Seattle with Nicola. She loves food, drink, conversation, and a good story.<br>",
       "links" : {},
       "program" : [
          "040",
@@ -407,7 +395,7 @@ people = [
       "first" : "M. Todd",
       "last" : "Gallowglas",
       "id" : "2405",
-      "bio" : "<br><br>M Todd Gallowglas has been a professional storyteller at Renaissance Faires and Medieval Festivals for over twenty years. After receiving his Bachelor of Arts in Creative Writing from San Francisco State University in 2009, he used his storytelling show as a platform to launch his fiction career. He is the author of the Tears of Rage and Halloween Jack series, which have spent time on various bestseller lists. He was a fiction contributor for Fantasy Flight Games and developed creative content for the reboot of the children’s classic Reading Rainbow. Now he spends most of his time trying to find the perfect balance between family, writing, airsoft (because it’s not as messy as paintball), and gaming while he’s not off somewhere telling stories.",
+      "bio" : "M Todd Gallowglas has been a professional storyteller at Renaissance Faires and Medieval Festivals for over twenty years. After receiving his Bachelor of Arts in Creative Writing from San Francisco State University in 2009, he used his storytelling show as a platform to launch his fiction career. He is the author of the Tears of Rage and Halloween Jack series, which have spent time on various bestseller lists. He was a fiction contributor for Fantasy Flight Games and developed creative content for the reboot of the children’s classic Reading Rainbow. Now he spends most of his time trying to find the perfect balance between family, writing, airsoft (because it’s not as messy as paintball), and gaming while he’s not off somewhere telling stories.",
       "links" : {},
       "program" : [
          "040",
@@ -443,7 +431,7 @@ people = [
       "first" : "David",
       "last" : "Gerrold",
       "id" : "0073",
-      "bio" : "No biography on file.",
+      "bio" : "David Gerrold is the author of over 50 books, several hundred articles and columns, and over a dozen television episodes.<br><br>TV credits include episodes of Star Trek (“The Trouble With Tribbles” “The Cloud Minders”), Star Trek Animated (“More Tribbles, More Troubles” “Bem”), Babylon 5 (“Believers”), Twilight Zone (“A Day In Beaumont” “A Saucer Of Loneliness”), Land Of The Lost (“Cha-Ka” “The Sleestak God” “Hurricane” “Possession” “Circle”), Tales From The Darkside (“Levitation” “If The Shoes Fit”), Logan’s Run (“Man Out Of Time”), and others.<br><br>Novels include When HARLIE Was One, The Man Who Folded Himself, The War Against The Chtorr septology, The Star Wolf trilogy, The Dingilliad young adult trilogy, the Trackers duology, and more.<br><br>The autobiographical tale of his son’s adoption, The Martian Child won the Hugo and Nebula awards for Best Novelette of the Year and was the basis for the 2007 movie Martian Child, starring John Cusack, Amanda Peet, and Joan Cusack.<br>",
       "links" : {
          "url" : "www.gerrold.com"
       },
@@ -461,7 +449,7 @@ people = [
       "first" : "Glenn",
       "last" : "Glazer",
       "id" : "2441",
-      "bio" : " Glenn Glazer has been working on conventions since 1980 in a wide variety of capacities, from door guard to department head (including a major sanity break  when he ran four art shows in one year – never again!) on up.  Most recently he has run registration for World Fantasy Convention 2009,  chaired SMOFcon 28 and Westercon 64, and is the Events Division Head for Lonestarcon 3.  Glenn is currently serving as a Director for two convention-running non-profit organizations, SCIFI and SFSFC.  He lives amidst the redwoods in Felton, California with his wonderful wife, Allison and their adorable pug, Winnie.",
+      "bio" : "Glenn Glazer has been working on conventions since 1980 in a wide variety of capacities, from door guard to department head (including a major sanity break  when he ran four art shows in one year – never again!) on up.  Most recently he has run registration for World Fantasy Convention 2009,  chaired SMOFcon 28 and Westercon 64, and is the Events Division Head for Lonestarcon 3.  Glenn is currently serving as a Director for two convention-running non-profit organizations, SCIFI and SFSFC.  He lives amidst the redwoods in Felton, California with his wonderful wife, Allison and their adorable pug, Winnie.",
       "links" : {},
       "program" : [
          "040",
@@ -595,7 +583,7 @@ people = [
       "first" : "Howard",
       "last" : "Hendrix",
       "id" : "0093",
-      "bio" : "Hendrix's first four published novels appeared from Ace Books (Penguin Putnam): Lightpaths (1997), Standing Wave (1998), Better Angels (1999), and Empty Cities of the Full Moon (2001). His fifth novel, The Labyrinth Key, appeared from Ballantine Del Rey in April 2004. His sixth novel,  Spears of God, was published by Del Rey in December 2006.  <br><br>His more recent short fiction has appeared in the Asimov’s Science Fiction Magazine (June 2002), in the DAW Books anthology Microcosms (January 2004), and Aeon Two (February 2005), Aeon Five (November 2005), and Future Shocks (January 2006).  His stories “Palimpsest” and <br>‘Knot Your Grandfather’s Knot“ appeared in the September 2007 and March 2008 issues of Analog, respectively.<br><br>He lives in Shaver Lake, California, where he spends his time dodging the slings and arrows of outrageous fortune.",
+      "bio" : "Hendrix's first four published novels appeared from Ace Books (Penguin Putnam): Lightpaths (1997), Standing Wave (1998), Better Angels (1999), and Empty Cities of the Full Moon (2001). His fifth novel, The Labyrinth Key, appeared from Ballantine Del Rey in April 2004. His sixth novel,  Spears of God, was published by Del Rey in December 2006.  <br><br>His more recent short fiction has appeared in the Asimov’s Science Fiction Magazine, Analog Science Fiction Science Fact, and various anthologies, such as Microcosms, Aeon Two, Aeon Five, and Future Shocks.  <br><br>He lives in Shaver Lake, California, where he spends his time dodging the slings and arrows of outrageous fortune.",
       "links" : {},
       "program" : [
          "061",
@@ -621,7 +609,7 @@ people = [
       "first" : "John",
       "last" : "Hertz",
       "id" : "0249",
-      "bio" : "Probably best known for infecting fandom with English Regency ballroom dancing. Often found moderating panels, judging Masquerades, leading Art Show tours. Cameo appearance in Larry Niven's _N-Space_. Wrote Program Book for L.A. con II (1984 Worldcon), possibly best ever. Westercon reviews in _File 770_, Worldcon Masquerade reviews in _S-F Chronicle_. With June and Len Moffatt, edited Rick Sneary memorial _Button-Tack_. Fan Guest of Honor at Lunacon 2001 (New York), InCon 2000 (Washington). Favorites non-SF writers, Maimonides, Nabokov, Saigyo, Sayers. Fanzine, _Vanamonde. Drink, Talisker. Likes rum pots, clay pots, crackpots, and how are you, Mr.Wilson?",
+      "bio" : "Probably best known for infecting fandom with English Regency ballroom dancing. Often found moderating panels, judging Masquerades, leading Art Show tours. Cameo appearance in Larry Niven's N-Space. Wrote Program Book for L.A. con II (1984 Worldcon), possibly best ever. Westercon reviews in File 770, Worldcon Masquerade reviews in S-F Chronicle. With June and Len Moffatt, edited Rick Sneary memorial Button-Tack. Fan Guest of Honor at Lunacon 2001 (New York), InCon 2000 (Washington). Favorites non-SF writers, Maimonides, Nabokov, Saigyo, Sayers. Fanzine: Vanamonde. Drink: Talisker. Likes rum pots, clay pots, crackpots, and how are you, Mr.Wilson?",
       "links" : {},
       "program" : [
          "1055",
@@ -635,7 +623,7 @@ people = [
       "first" : "Richard",
       "last" : "Hescox",
       "id" : "0340",
-      "bio" : "Richard Hescox's first paperback cover appeared in 1976, and since then he has produced over 130 covers for every major publisher of fantasy and science fiction. He has frequently illustrated for the motion picture industry, creating illustrations for the films \"The Howling\", \"The Philadelphia Experiment\", \"House\", \"E.T.\", \"The Dark Crystal\", \"The Fly\" and \"Swamp Thing\". His paintings have been exhibited at the Society of Illustrators, the Canton Museum of Art and at the Delaware Art Museum. Since 1993 Richard has created artwork for numerous computer games. He is currently working on conceptual designs for Mechwarrior 5.<br><br>***<br>Richard Hescox was born in Pasadena, California in 1949 and spent his childhood there on the periphery of Hollywood and just over the mountains from Edwards Air Force Base where the X-15 rocket plane was making it’s initial assault on outer space.  He fondly remembers the frequent sonic booms from military jets overhead before they were prohibited from flying over the Los Angeles area neighborhoods.<br><br>From an early age these nearby distractions inspired Richard’s soaring imagination along with the books of Edgar Rice Burroughs, H. G. Wells and others, which he devoured, interspersed with the comic books of the day, then undergoing a Renaissance.  Early on, he began translating his imagination into drawings, which displayed a marked talent, encouraged by his teachers, and leading inexorably to the pursuit of an education in art.<br><br>In High School, Richard won a National Merit Scholarship to the college of his choice and picked The Art Center College of Design with it’s well earned reputation as one of the best art schools in the U.S.<br><br>After graduation from the Art Center “With Honors” He continued his “education” with a job at the Museum of Natural History in Los Angeles learning much about nature and culture that would enrich the illustration career he was beginning to build. Starting with assignments from Marvel Comics, he branched out into many and varied fields of illustration.  As a book cover artist He worked for most of the major publishing houses that had Science Fiction or Fantasy lines including Daw, Del Rey, Signet, Baen, Bantam, Tor, Warner and Ace producing over 130 cover paintings.  Among these were many covers for the books of Marion Zimmer Bradley and the “Venus” series by Edgar Rice Burroughs.  (The latter had been a dream project of his since reading those novels in his youth.)   For the Hollywood film studios He created advertising art and production designs for “Swamp Thing”, “The Howling”, “The Philadelphia Experiment”, “E.T.”, “The Dark Crystal”, “The Fly”, “The Never-ending Story”, “Halloween 2”, and “The Time Bandits” among others.  For the computer games industry He has been an art director and conceptual designer for Microsoft Games Division, Sierra On-line, Wild Tangent, Dymanix and Zipper Interactive.  In this capacity He Art Directed the game “Rama” based on the novels by Arthur C. Clarke and Gentry Lee.  Numerous magazine illustrations, videocassette boxes and record albums also felt his touch.  Besides his many U.S. clients, publishers throughout Europe and Russia regularly make use of his images on books and magazines.<br><br>Richard is a winner of many awards in the field of Science Fiction and Fantasy art including The “Jack Gaughan Memorial Award” and the “Chesley” award from the Association of Science Fiction Artists.<br><br>With success in his profession Richard has turned in his spare time to creating fine art paintings, emerging directly from his imagination and personal aesthetic.  Unhindered by editorial and assignment related limits, these works soar to artistic heights which have elicited enthusiastic admiration from an ever widening field of art lovers.  Speaking of these paintings, writer and artist Paul Chadwick remarked: “Richard is now mining a vein that the English romantic realists of the late 1800s - J.W. Waterhouse, Arthur Hacker, Frank Dicksee, Herbert Draper, and others - first worked.  Softly painted oils of maidens, sometimes fantastical (sirens, tree nymphs, mermaids) in usually quiet scenes of antiquity, they obviously come out of a deep place in his psyche that yearns for rest, beauty, and mystery.  Other sources of his inspiration are the nonpareil American illustrator J.C. Leyendecker and Australian sensualist Norman Lindsay.”<br><br>The artwork of Richard Hescox has been exhibited at the ”Society of Illustrators” in New York City, at the “Delaware Art Museum”, at the “Canton Museum of Art” in Canton, Ohio and at The University of Maryland Art Gallery.<br><br>Recently published by Paper Tiger Press is a collection of his artwork entitled: “The Deceiving Eye, The Art of Richard Hescox”.  A great deal more biographical information on him is included in this book.<br>Richard now lives In Nevada  with his wife and son.",
+      "bio" : "Richard Hescox's first paperback cover appeared in 1976, and since then he has produced over 130 covers for every major publisher of fantasy and science fiction. He has frequently illustrated for the motion picture industry, creating illustrations for the films \"The Howling\", \"The Philadelphia Experiment\", \"House\", \"E.T.\", \"The Dark Crystal\", \"The Fly\" and \"Swamp Thing\". His paintings have been exhibited at the Society of Illustrators, the Canton Museum of Art and at the Delaware Art Museum. Since 1993 Richard has created artwork for numerous computer games. He worked on conceptual designs for Mechwarrior 5.  His current project is artwork for a special edition of A Clash of Kings, which will be published by Subterranean Press.<br>",
       "links" : {
          "url" : "www.richardhescox.com"
       },
@@ -701,7 +689,7 @@ people = [
       "first" : "Jordin",
       "last" : "Kare",
       "id" : "0348",
-      "bio" : "No biography on file.",
+      "bio" : "Jordin Kare is an astrophysicist / laser engineer / Star Warrior / rocket scientist / inventor / cybernetic necromancer / filker / punster and occasional fictional character.  He’s a graduate of MIT and has a Ph.D. in astrophysics from Berkeley.  He has worked on, among other things, laser launch systems, advanced satellites, and interstellar propulsion technologies.  <br><br>Jordin is currently a staff inventor at Intellectual Ventures in Bellevue, WA; his work at IV on a laser \"fence\" that kills mosquitos to combat malaria was featured in a front-page article in the Wall Street Journal.  He’s a inventor on over 100 issued patents and over 400 published patent applications.  He's also a founder of LaserMotive, a startup company building laser power beaming systems.<br><br>Jordin has also turned up on Manticore, at Callahan’s Bar, and in several other fictional universes; he attributes this to a side effect of having Ferdinand Feghoot as a Ph.D. advisor. <br><br>Jordin and his wife Mary Kay live in a 105-year-old house in Seattle with three extremely athletic Savannah cats and a \"Danger -- Class IV laser -- 10,000 Watts\" sign on the utility-room door.<br>",
       "links" : {},
       "program" : [
          "040",
@@ -739,10 +727,10 @@ people = [
       ]
    },
    {
-      "first" : "Brian",
+      "first" : "Bryan",
       "last" : "Little",
       "id" : "2271",
-      "bio" : "No biography on file.",
+      "bio" : "I am a Sci-fi fan with ADHD which means I like a lot of things a LOT!  My favorite Sci-fi book is. . . Ooh there’s a squirrel outside my window!!! Oh, what was I saying about Tikis? They’re awesome! And so is Voltron ! Hey, that contains Tron in it, lol, man that Peter Davison is a cheeky fellow, did anyone see that movie Sunshine? “I like to make waffles!” Punk rock, you say? . . . Man, writing bios is Hard!  Oh pickle!",
       "links" : {},
       "program" : [
          "040",
@@ -815,7 +803,7 @@ people = [
       "first" : "Michelle",
       "last" : "McNeill",
       "id" : "2482",
-      "bio" : "No biography on file.",
+      "bio" : "Michelle McNeill is a second-generation gamer who practically learned to read playing D&D. She ran her first LARP at LosCon in 1989, talking a number of fellow attendees into playing a pickup D&D game wearing togas made from hotel bedsheets. Since then, she’s been a Storyteller for several ongoing World of Darkness LARPs. Michelle is the primary source for the setting and characters in Theatre Arcanos games.",
       "links" : {},
       "program" : [
          "998"
@@ -825,7 +813,7 @@ people = [
       "first" : "Lance",
       "last" : "Moore",
       "id" : "0146",
-      "bio" : "No biography on file.",
+      "bio" : "Lance Moore is a technical communicator by trade, and a transgender educator and activist by inclination. He's been involved in fandom since the days of the Puget Sound Star Trekkers, co-founded the Santa Barbara Science Fiction Alliance after that, and working behind the scenes at cons (including this one) doing marketing and communications for ...awhile... now.",
       "links" : {},
       "program" : [
          "040",
@@ -884,7 +872,7 @@ people = [
       "first" : "John",
       "last" : "O’Halloran",
       "id" : "0266",
-      "bio" : "Computer Geek, Theatre Geek, Costumer, Taiko Player.  John has been reading F&SF since he could read.  Playing with computers since High School when the only input available was punch cards.  Loves spending days in the dark working in community theatre or at convention masquerades.  Most recently he has been learning the art Japaneese Taiko Drumming.",
+      "bio" : "Computer Geek, Theatre Geek, Costumer, Taiko Player.  John has been reading F&SF since he could read.  Playing with computers since High School when the only input available was punch cards.  Loves spending days in the dark working in community theatre or at convention masquerades.  ",
       "links" : {},
       "program" : [
          "040",
@@ -895,7 +883,7 @@ people = [
       "first" : "Chris",
       "last" : "O’Halloran",
       "id" : "2074",
-      "bio" : "No biography on file.",
+      "bio" : "",
       "links" : {},
       "program" : [
          "040",
@@ -976,16 +964,6 @@ people = [
       ]
    },
    {
-      "first" : "Kim Stanley",
-      "last" : "Robinson",
-      "id" : "0175",
-      "bio" : "Kim Stanley Robinson was born on March 23, 1952, in Waukegan, Ill., the birthplace of Ray Bradbury. He grew up in Orange County, Calif., and currently lives in Davis, Calif., near Sacramento, with his wife, Lisa Nowell (an environmental chemist at the U.S. Geological Survey), two boys and two cats.<br>A full-time writer since 1985, Robinson worked a variety of jobs prior to that, including bookstore clerk, but spent most of his pre-writing career as a teacher. He enjoys gardening, backpacking, sports and reading.<br><br>He is the winner of two Hugos, two Nebulas, a World Fantasy Award and the John W. Campbell Memorial Award (for best science-fiction novel). His most famous work is his Mars series—Red Mars, Green Mars and Blue Mars—which details the terraforming of the Red Planet. His Science in the Capital series, which is made up of three volumes—Forty Signs of Rain, Fifty Degrees Below and Sixty Days and Counting—speculates on the effects of and fixes for global warming. He is currently nominated for a Hugo award for Best Novel for 2312.<br>",
-      "links" : {},
-      "program" : [
-         "040"
-      ]
-   },
-   {
       "first" : "Kevin",
       "last" : "Roche",
       "id" : "0176",
@@ -1027,7 +1005,6 @@ people = [
          "040",
          "039",
          "937",
-         "132",
          "940",
          "2081"
       ]
@@ -1098,7 +1075,7 @@ people = [
       "first" : "Kevin",
       "last" : "Standlee",
       "id" : "0205",
-      "bio" : "Kevin Standlee was co-Chair of ConJosÈ, the 2002 Worldcon, and he is a Director of SFSFC, Inc., the parent corporation of the 2002 and 1993 Worldcons and 2000 Westercon, and is one of the directors of the Canada West Science Fiction Association, the parent corporation of Due North.. He has been attending conventions since 1984 and working on them since 1990, in roles from gopher to Worldcon Chairman.. Kevin is an acknowledged expert on the official rules of the Worldcon and Westercon. His other hobbies include a love of trains and rail transit. Kevin works as a database systems analyst for Menlo Worldwide, a logistics management company headquartered in San Mateo, California. Now in fannish semi-retirement, he hosts game shows at conventions and holds forth on con-running topics at the drop of a propeller beanie.",
+      "bio" : "Kevin Standlee was co-Chair of ConJosé, the 2002 Worldcon. He is a director of SFSFC, Inc., the parent corporation of the 1993 and 2002 Worldcons and the 2000, 2011, and 2013 Westercons, and is also a director of the Science Fiction & Fantasy Translation Awards. Kevin’s first SF convention was the 1984 Worldcon, and he has worked on conventions in roles from gopher to Worldcon Chairman. Kevin is an expert on the rules of Worldcon (including having administered the Hugo Awards three times) and Westercon. His other hobbies include trains and rail transit. Kevin works as a logistics solutions engineer for a supply-chain management company headquartered in San Francisco and divides his time between the Bay Area and his home in Fernley, Nevada.<br>",
       "links" : {
          "url" : "http://kevin-standlee.livejournal.com"
       },
@@ -1177,7 +1154,7 @@ people = [
       "first" : "Andy",
       "last" : "Stewart",
       "id" : "2484",
-      "bio" : "Andy Stewart's short fiction has appeared in ZYZZYVA and F&SF. His novella \"Wormwood Is Also A Star\" is the cover story of the May/June issue of F&SF. He's a Clarion 2011 alum, and holds an MFA in Creative Writing from SDSU. He's represented by Jason Yarn with the Paradigm Agency.<br><br>***<br>Andy’s short fiction has appeared in the online literary magazine Big Bridge and The Magazine of Fantasy and Science Fiction, with work forthcoming in the west coast literary magazine, ZYZZYVA. He is a contributing reviewer for RAIN TAXI and The Review of Contemporary Fiction.<br><br>He graduated with an MFA is Creative Writing from SDSU and is a Clarion 2011 alum (Go Narwolves!) Currently, he is an associate professor of English at Ashford University.<br><br>Andy’s most recent novel, tentatively titled All the Night a Song, is represented by Jason Yarn with the Paradigm agency in New York and soon goes to market. He is currently working on new short fiction and the next book in the All the Night a Song series.<br><br>When he is not writing, Andy spends his time either in the kitchen, the Pacific Ocean, or the bathtub.  When he is writing, he fights his addiction to watch old episodes of Mystery Science Theatre 3000. Some days are easier than others.",
+      "bio" : "Andy’s short fiction has appeared in the online literary magazine Big Bridge and The Magazine of Fantasy and Science Fiction, with work forthcoming in the west coast literary magazine, ZYZZYVA. He is a contributing reviewer for RAIN TAXI and The Review of Contemporary Fiction.<br><br>He graduated with an MFA is Creative Writing from SDSU and is a Clarion 2011 alum (Go Narwolves!) Currently, he is an associate professor of English at Ashford University.<br><br>Andy’s most recent novel, tentatively titled All the Night a Song, is represented by Jason Yarn with the Paradigm agency in New York and soon goes to market. He is currently working on new short fiction and the next book in the All the Night a Song series.<br><br>When he is not writing, Andy spends his time either in the kitchen, the Pacific Ocean, or the bathtub.  When he is writing, he fights his addiction to watch old episodes of Mystery Science Theatre 3000. Some days are easier than others.",
       "links" : {},
       "program" : [
          "040"
@@ -1219,7 +1196,7 @@ people = [
       "first" : "Jeff",
       "last" : "Sturgeon",
       "id" : "2465",
-      "bio" : "Jeff is well known NW artist whose cover work has graced book, magazine, album/cd's and board games. Also he was a long time artist-art director-game designer in the computer game field most notably with Electronic Arts. Jeff is a member of the IAAA, International Astronomical Artists Association and has done work for NASA.  He has won numerous awards over his career, Jeff has been nominated for a Chesley, and has won 9 Worldcon awards with Best of Shows at 2005 NASFIC,  2008 Devention Worldcon and Judges Choice LAcon4 2006, Devention 2008, Renovation 2011. He lives w/sons Corwin & Duncan.",
+      "bio" : "Jeff is well known NorthWest artist whose cover work has graced book, magazine, album/cd's and board games. Also he was a long time artist-art director-game designer in the computer game field most notably with Electronic Arts. Jeff is a member of the IAAA, International Astronomical Artists Association and has done work for NASA.  He has won numerous awards over his career, Jeff has been nominated for a Chesley, and has won 9 Worldcon awards with Best of Shows at 2005 NASFIC,  2008 Devention Worldcon and Judges Choice LAcon4 2006, Devention 2008, Renovation 2011. He lives w/sons Corwin & Duncan.",
       "links" : {
          "url" : "www.jeffsturgeon.com"
       },
@@ -1330,6 +1307,17 @@ people = [
       "links" : {},
       "program" : [
          "410"
+      ]
+   },
+   {
+      "first" : "Ed",
+      "last" : "Wilson",
+      "id" : "2455",
+      "bio" : "Ed Wilson is a Mechanical Engineer who got into an online fight in 2003 about how a Yellowstone eruption would end civilization. When somebody said; \"How can an event lasting seconds end civilization?\" I replied; \"It doesn't last seconds, it lasts weeks or months and I know how to calculate that.\" <br><br>I did, then they changed the plumbing on me, so I'm doing that calculation over, and am presenting it and the first one where I haven’t gotten to yet here at WesterCon. I also write fiction; Harshest Journey, Three Highland Lads are looking for publishers this fall, and Kalag’s Pass and Dearth of Eagles are in process. <br>",
+      "links" : {},
+      "program" : [
+         "040",
+         "2034"
       ]
    },
    {
