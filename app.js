@@ -114,7 +114,7 @@ function show_info(item, id) {
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
 		if ('people' in a[0]) {
-			var ap = a[0].people.map(function(p) { return "<a href=\"#part" + p.id + "\">" + p.name + "</a>"; });
+			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
 			if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
 		}
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
@@ -132,7 +132,12 @@ function show_prog_list(ls) {
 			prev_time = "";
 
 			var t = new Date(ls[i].day);
-			day_str = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+			var td = t - Date.now();
+			if ((td < 0) || (td > 1000*3600*24*6)) {
+				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
+				if (Math.abs(td) > 1000*3600*24*60) day_str += ' ' + t.getUTCFullYear();
+			}
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
@@ -622,7 +627,7 @@ function update_part_view(name_sort, first_letter, participant) {
 			else              return 0;
 		});
 		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
+			return '<li><a href="#part/' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
 		}).join('');
 		EL("part_info").innerHTML = "";
 		EL("prog_ls").innerHTML = "";
@@ -695,11 +700,18 @@ function show_part_view(opt) {
 	}
 
 	if (opt) {
-		var pa = people.filter(function(p) { return p.id == opt; });
+		var p_id = opt.substr(1);
+		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
 			first_letter = (name_sort == 'sort_first') ? pa[0].name[0][0] : pa[0].name[1][0];
+		} else {
+			window.location.hash = '#part';
+			return;
 		}
+	} else if (participant) {
+		window.location.hash = '#part/' + participant.substr(1);
+		return;
 	}
 
 	update_part_view(name_sort, first_letter, participant);
