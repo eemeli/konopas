@@ -101,8 +101,8 @@ h1 a { text-decoration: none; }
 #star_hint { padding: 20px 0; max-width: 600px; }
 #ical_link { color: #88847d; padding-left: 55px; cursor: pointer; }
 
-.filters { display: none; clear: both; margin-left: -20px; padding-top: 20px; background: white; }
-.filters > * { padding-left: 18px; }
+.filters { display: none; clear: both; margin-left: -15px; padding-top: 20px; background: white; }
+.filters > * { padding-left: 15px; }
 .filters ul { list-style-type: none; margin-top: 0; }
 .filters li { cursor: pointer; }
 
