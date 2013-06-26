@@ -81,6 +81,8 @@ body { margin: 8px; }
 h1 { font-size: 25px; margin: 0 0 8px 0; padding: 0; }
 h1 a { text-decoration: none; }
 
+#main p { max-width: 600px; }
+
 #tabs { list-style-type: none; border-bottom: 2px solid; padding: 5px 0 0 0; margin: 0; }
 #tabs li { display: inline-block; padding: 2px 6px; cursor: pointer; }
 #tabs a { text-decoration: none; }
@@ -96,7 +98,6 @@ h1 a { text-decoration: none; }
 
 #what_view h3 { margin: 20px 0 5px 0; border-bottom: 2px solid #ccc5bb; padding-bottom: 2px; }
 #what_view h3 + p { margin-top: 5px; }
-#what_view p { max-width: 600px; }
 
 #star_hint { padding: 20px 0; max-width: 600px; }
 #ical_link { color: #88847d; padding-left: 55px; cursor: pointer; }
@@ -189,7 +190,6 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .title { margin-left: 40px; }
 .loc { color: #88847d; font-size: 0.875em; clear: left; margin: 3px 10px 0 40px; }
 .extra { display: none; clear: left; padding: 20px 0 0 10px; }
-.extra p { max-width: 600px; }
 .ical_link {
 	display: none;
 	color: #88847d;
