@@ -1,8 +1,8 @@
 CACHE MANIFEST
 
 CACHE:
-data/chicon7-people.js
-data/chicon7-program.js
+data/people.js
+data/program.js
 classList.js
 app.js
 skin.css
