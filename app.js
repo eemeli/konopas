@@ -512,10 +512,14 @@ function update_prog_filters(day, area, tag, freetext) {
 
 	var tt = tag || "all_tags";
 	var tc = EL("tag").getElementsByTagName("li");
+	var t2_title = "More tags...";
 	for (var i = 0; i < tc.length; ++i) {
-		if (tc[i].id == tt) tc[i].classList.add("selected");
-		else tc[i].classList.remove("selected");
+		if (tc[i].id == tt) {
+			tc[i].classList.add("selected");
+			if (tc[i].parentNode.id == "tag2") t2_title = "<b>"+tc[i].innerHTML.trim()+"...</b>";
+		} else tc[i].classList.remove("selected");
 	}
+	var t2t = EL("tag2-title"); if (t2t) t2t.innerHTML = t2_title;
 
 	var qc = EL("q");
 	if (qc) {
@@ -553,9 +557,10 @@ function prog_filter(ctrl, item) {
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
-		case "day":   day = item; break;
+		case "day":  day = item; break;
 		case "area": area = item; break;
 		case "tag":  tag = item; break;
+		case "tag2": tag = item; break;
 	}
 
 	day = day.substr(1);

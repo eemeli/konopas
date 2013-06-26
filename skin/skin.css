@@ -143,6 +143,18 @@ input[type="text"]:valid + #q_ctrl input { border-color: black; }
 #q_fix { cursor: pointer; }
 #q_fix b { color: black; }
 
+.popuplist { position: relative; }
+.popuplist ul {
+	display: none !important;
+	position: absolute !important;
+	border: 1px solid #88847d;
+	right: 0; top: -3px;
+	padding: 2px 5px;
+	background: white;
+	background: rgba(255, 255, 255, 0.9);
+}
+.popuplist:hover ul, .popuplist:focus ul { display: block !important; }
+
 .ls { clear: both; }
 
 .part_list_link { display: block; text-decoration: none; padding-bottom: 10px; }
