@@ -4,7 +4,7 @@ prog = [
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
-         "performance"
+         "other"
       ],
       "mins" : 60,
       "people" : [],
@@ -399,10 +399,6 @@ prog = [
             "id" : "0591"
          },
          {
-            "name" : "Lisa Satterlund",
-            "id" : "2459"
-         },
-         {
             "name" : "Maurine “Mo” Starkey",
             "id" : "1970"
          },
@@ -447,7 +443,7 @@ prog = [
          }
       ],
       "day" : "2013-07-04",
-      "precis" : "Is wearing a skin-baring costume an invitation to attention?  What is the limit of \"\"socially awkward\"\" versus harassment?  How do you clearly communicate \"\"leave me alone\"\" without causing a scene; or is a scene appropriate?  What can conventions do to create a safe place for all members?<br>These and other questions will be considered by our panel.",
+      "precis" : "Is wearing a skin-baring costume an invitation to attention?  What is the limit of \"socially awkward\" versus harassment?  How do you clearly communicate \"leave me alone\" without causing a scene; or is a scene appropriate?  What can conventions do to create a safe place for all members?<br>These and other questions will be considered by our panel.",
       "id" : "1068",
       "title" : "Why “NO” means No!"
    },
@@ -545,7 +541,7 @@ prog = [
             "id" : "0217"
          },
          {
-            "name" : "Brian Little",
+            "name" : "Bryan Little",
             "id" : "2271"
          },
          {
@@ -589,7 +585,7 @@ prog = [
             "id" : "2267"
          },
          {
-            "name" : "Ed Wilson (Ed Buchan)",
+            "name" : "Ed Wilson",
             "id" : "2455"
          },
          {
@@ -1125,7 +1121,7 @@ prog = [
       "mins" : 60,
       "people" : [
          {
-            "name" : "Brian Little",
+            "name" : "Bryan Little",
             "id" : "2271"
          },
          {
@@ -1343,7 +1339,7 @@ prog = [
       "mins" : 120,
       "people" : [
          {
-            "name" : "Ed Wilson (Ed Buchan)",
+            "name" : "Ed Wilson",
             "id" : "2455"
          }
       ],
@@ -1894,7 +1890,7 @@ prog = [
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
-         "panel"
+         "other"
       ],
       "mins" : 60,
       "people" : [],
@@ -2491,10 +2487,6 @@ prog = [
          {
             "name" : "Edward Muller",
             "id" : "0151"
-         },
-         {
-            "name" : "J.E. Ellis",
-            "id" : "2392"
          },
          {
             "name" : "Rebecca Inch-Partridge",
@@ -3227,7 +3219,9 @@ prog = [
       "time" : "12:00",
       "floor" : "Ground",
       "room" : "Brandywine",
-      "tags" : [],
+      "tags" : [
+         "other"
+      ],
       "mins" : 60,
       "people" : [],
       "day" : "2013-07-07",
@@ -3357,7 +3351,7 @@ prog = [
          }
       ],
       "day" : "2013-07-07",
-      "precis" : "Your mission, should you choose to accept it, is to attend the retirement party of Dr. Ugarte, the world-renowed scientist. Dr. Ugarte is reportedly planning to auction off several \"\"devices\"\" that he has invented in order to pay for his retirement to a life of luxury. Your task is to ensure that certain of these items end up in the \"\"correct\"\" hands. To assist you in this undertaking, we have teamed you with two of our top operatives. As always, should you or any member of your team be caught or killed, we will disavow any knowledge of your actions.<br>In order to ensure manufacture of a plausible cover story, please complete the pre-mission background questionnaire available in the Gaming room.",
+      "precis" : "Your mission, should you choose to accept it, is to attend the retirement party of Dr. Ugarte, the world-renowed scientist. Dr. Ugarte is reportedly planning to auction off several \"devices\" that he has invented in order to pay for his retirement to a life of luxury. Your task is to ensure that certain of these items end up in the \"correct\" hands. To assist you in this undertaking, we have teamed you with two of our top operatives. As always, should you or any member of your team be caught or killed, we will disavow any knowledge of your actions.<br>In order to ensure manufacture of a plausible cover story, please complete the pre-mission background questionnaire available in the Gaming room.",
       "id" : "998",
       "title" : "Theatre Arcanos LARP"
    },
@@ -3414,6 +3408,25 @@ prog = [
       "precis" : "This class introduces the idea of a \"demo reel,\" a very common tool that many who work in Hollywood, including costumers, use to show off their past work to prospective employers. Most costumers have lots of photos and maybe even some masquerade videos of themselves that they can use to create their very own costumers' demo reel. This class will show how to use the various image, video, and audio editing tools on Windows and Mac OS to create the elements and put together the finished product.",
       "id" : "2068",
       "title" : "Creating a Costumer’s Demo Reel"
+   },
+   {
+      "time" : "13:45",
+      "floor" : "Ground - Back Hall",
+      "room" : "Sonoma",
+      "tags" : [
+         "other"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Lynn Gold",
+            "id" : "0324"
+         }
+      ],
+      "day" : "2013-07-07",
+      "precis" : "Join fans & filkers as they celebrate the life of Hugh Daniel.",
+      "id" : "2112",
+      "title" : "Hugh Daniel Memorial"
    },
    {
       "time" : "15:00",
