@@ -119,8 +119,8 @@ function show_info(item, id) {
 		}
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
-	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>"
-		+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\'); return false;\" title=\"Export this item as an ICS file for calendar import\">iCal</div>";
+	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
+		//+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\'); return false;\" title=\"Export this item as an ICS file for calendar import\">iCal</div>";
 }
 
 function show_prog_list(ls) {
@@ -404,17 +404,17 @@ function show_star_view() {
 		var star_ids = read_stars();
 		if (star_ids.length) {
 			sh.innerHTML = '';
-			EL("ical_link").style.display = 'block';
+			//EL("ical_link").style.display = 'block';
 			var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
 			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
-			EL("ical_link").style.display = 'none';
+			//EL("ical_link").style.display = 'none';
 			EL("prog_ls").innerHTML = '';
 		}
 	} else {
 		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
-		EL("ical_link").style.display = 'none';
+		//EL("ical_link").style.display = 'none';
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -766,7 +766,7 @@ if (EL("next_filters")) {
 
 
 // init star view
-if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
+//if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view
