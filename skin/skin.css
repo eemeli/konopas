@@ -209,6 +209,7 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 
 a { color: black; }
 
+.maps #time, .maps #scroll { display: none; }
 #maps_view h2 { font-size: 2.0em; margin-top: 40px; border-bottom: 2px solid; }
 #maps_view img { width: 600px; margin: 5px 0; }
 #maps_view a { display: block; float: left; max-width: 290px; margin-top: 20px; text-align: center; text-decoration: none; }
