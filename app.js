@@ -654,6 +654,8 @@ function update_part_view(name_sort, first_letter, participant) {
 					case 'fb': links += '<dt>Facebook:<dd>'
 						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
 						break;
+					case 'img':
+						break;
 					default: links += '<dt>' + type + ':<dd>' + tgt;
 				}
 			}
@@ -662,6 +664,7 @@ function update_part_view(name_sort, first_letter, participant) {
 		EL("part_names").innerHTML = "";
 		EL("part_info").innerHTML = listlink
 			+ '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
+			+ (pa[0].links && pa[0].links.img ? ('<p><img class="bio_img" src="' + pa[0].links.img + '">') : '')
 			+ (pa[0].bio ? ('<p>' + pa[0].bio) : '')
 			+ links;
 		show_prog_list(prog.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));

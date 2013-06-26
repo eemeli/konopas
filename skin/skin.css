@@ -130,6 +130,7 @@ h1 a { text-decoration: none; }
 .fn, .ln { display: block; width: 128px; width: calc(50% - 2px); min-height: 1px; float: left; }
 .fn { text-align: right; vertical-align: top; clear: both; padding-right: 2px; }
 .ln { vertical-align: bottom; padding-left: 2px; }
+.bio_img { float: right; border: 5px solid #ebe3d7; margin: 0 0 5px 10px; }
 
 .disabled { color: #ccc5bb !important; cursor: auto !important; }
 .selected { font-weight: 500; border-color: black !important; }
