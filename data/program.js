@@ -174,6 +174,23 @@ prog = [
       "title" : "Comedy in SF/F"
    },
    {
+      "time" : "15:15",
+      "floor" : "Second Floor",
+      "room" : "Eureka (219)",
+      "tags" : [],
+      "mins" : 120,
+      "people" : [
+         {
+            "name" : "Jeff Sturgeon",
+            "id" : "2465"
+         }
+      ],
+      "day" : "2013-07-04",
+      "precis" : "BRING 5-8 pieces from your portfolio for review by professional artist, Jeff Sturgeon.  Originals or digital work may be brought.  Sign up in advance at Program Operations.",
+      "id" : "2053",
+      "title" : "Portfolio Critique by Jeff Sturgeon"
+   },
+   {
       "time" : "16:30",
       "floor" : "Ground",
       "room" : "Brandywine",
@@ -893,10 +910,6 @@ prog = [
             "id" : "2466"
          },
          {
-            "name" : "Jeff Sturgeon",
-            "id" : "2465"
-         },
-         {
             "name" : "Richard Hescox",
             "id" : "0340"
          }
@@ -1374,21 +1387,6 @@ prog = [
       "precis" : "Join the members of Radio Free Skaro as they record their weekly episode.",
       "id" : "2039",
       "title" : "Radio Free Skaro - Live Podcast"
-   },
-   {
-      "time" : "13:45",
-      "tags" : [],
-      "mins" : 120,
-      "people" : [
-         {
-            "name" : "Jeff Sturgeon",
-            "id" : "2465"
-         }
-      ],
-      "day" : "2013-07-05",
-      "precis" : "BRING 5-8 pieces from your portfolio for review by professional artist, Jeff Sturgeon.  Originals or digital work may be brought.  Sign up in advance at Program Operations.",
-      "id" : "2053",
-      "title" : "Portfolio Critique by Jeff Sturgeon"
    },
    {
       "time" : "13:45",
@@ -2811,10 +2809,6 @@ prog = [
          {
             "name" : "James Stanley Daugherty",
             "id" : "0040"
-         },
-         {
-            "name" : "Jeff Sturgeon",
-            "id" : "2465"
          },
          {
             "name" : "John Hertz",
