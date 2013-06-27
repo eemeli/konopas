@@ -1,6 +1,6 @@
 prog = [
    {
-      "time" : "12:00 PM",
+      "time" : "12:00",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -14,7 +14,7 @@ prog = [
       "title" : "Art Show"
    },
    {
-      "time" : "12:00 PM",
+      "time" : "12:00",
       "floor" : "Ground",
       "room" : "Grand Ballroom",
       "tags" : [],
@@ -26,7 +26,7 @@ prog = [
       "title" : "Dealer’s Room"
    },
    {
-      "time" : " 2:00 PM",
+      "time" : "14:00",
       "floor" : "Ground",
       "room" : "Chardonnay",
       "tags" : [],
@@ -38,7 +38,7 @@ prog = [
       "title" : "Gaming"
    },
    {
-      "time" : " 2:00 PM",
+      "time" : "14:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -73,7 +73,7 @@ prog = [
       "title" : "Can Fandom Break Free of the Geek Social Fallacies"
    },
    {
-      "time" : " 2:00 PM",
+      "time" : "14:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -108,7 +108,7 @@ prog = [
       "title" : "To Be or Not To Be... Anachronistic"
    },
    {
-      "time" : " 3:15 PM",
+      "time" : "15:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -139,7 +139,7 @@ prog = [
       "title" : "Finding & Listening to Podcasts"
    },
    {
-      "time" : " 3:15 PM",
+      "time" : "15:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -174,7 +174,7 @@ prog = [
       "title" : "Comedy in SF/F"
    },
    {
-      "time" : " 4:30 PM",
+      "time" : "16:30",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -193,7 +193,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : " 4:30 PM",
+      "time" : "16:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -212,7 +212,7 @@ prog = [
       "title" : "Baby needs a new pair of shoes!"
    },
    {
-      "time" : " 4:30 PM",
+      "time" : "16:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [],
@@ -241,7 +241,7 @@ prog = [
       "title" : "Becoming a Professional Writer or Artist"
    },
    {
-      "time" : " 4:30 PM",
+      "time" : "16:30",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -268,7 +268,7 @@ prog = [
       "title" : "Care & Feeding of Performers"
    },
    {
-      "time" : " 4:30 PM",
+      "time" : "16:30",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [],
@@ -285,7 +285,7 @@ prog = [
       "title" : "Fannish Inquisition:  Westercon"
    },
    {
-      "time" : " 5:45 PM",
+      "time" : "17:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -316,7 +316,7 @@ prog = [
       "title" : "Performing in a Masquerade"
    },
    {
-      "time" : " 5:45 PM",
+      "time" : "17:45",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -347,7 +347,7 @@ prog = [
       "title" : "Hair for Fans"
    },
    {
-      "time" : " 5:45 PM",
+      "time" : "17:45",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -370,7 +370,7 @@ prog = [
       "title" : "Reading:  Nicola & Kelley"
    },
    {
-      "time" : " 6:00 PM",
+      "time" : "18:00",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -413,7 +413,7 @@ prog = [
       "title" : "Match Game SF"
    },
    {
-      "time" : " 7:00 PM",
+      "time" : "19:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -448,7 +448,7 @@ prog = [
       "title" : "Why “NO” means No!"
    },
    {
-      "time" : " 7:00 PM",
+      "time" : "19:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [],
@@ -481,7 +481,7 @@ prog = [
       "title" : "Developing the Craft:  Workshops, MFA, Books"
    },
    {
-      "time" : " 7:00 PM",
+      "time" : "19:00",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -500,7 +500,7 @@ prog = [
       "title" : "Classic Literature 1: Moonraker"
    },
    {
-      "time" : " 8:30 PM",
+      "time" : "20:30",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -811,7 +811,7 @@ prog = [
       "title" : "Opening Ceremonies/Meet the Guests/Fireworks"
    },
    {
-      "time" : "10:00 PM",
+      "time" : "22:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [],
@@ -836,7 +836,7 @@ prog = [
       "title" : "RFS does MST3K"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -850,7 +850,7 @@ prog = [
       "title" : "Art Show"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Grand Ballroom",
       "tags" : [],
@@ -862,7 +862,7 @@ prog = [
       "title" : "Dealer’s Room"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - Back Hall",
       "room" : "Napa",
       "tags" : [
@@ -876,7 +876,7 @@ prog = [
       "title" : "Family Friendly"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -893,6 +893,10 @@ prog = [
             "id" : "2466"
          },
          {
+            "name" : "Jeff Sturgeon",
+            "id" : "2465"
+         },
+         {
             "name" : "Richard Hescox",
             "id" : "0340"
          }
@@ -903,7 +907,7 @@ prog = [
       "title" : "Evolution of Cover Art"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -934,7 +938,7 @@ prog = [
       "title" : "Disguises:  What Every Agent 66 Needs to Know"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -965,7 +969,7 @@ prog = [
       "title" : "California as a setting for Speculative Fiction"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -984,7 +988,7 @@ prog = [
       "title" : "Reading:  Nicola Griffith"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -1019,7 +1023,7 @@ prog = [
       "title" : "Fight Scenes for Writers and Artists"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -1038,7 +1042,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -1073,7 +1077,7 @@ prog = [
       "title" : "Costuming from your Closet"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - Back Hall",
       "room" : "Sonoma",
       "tags" : [
@@ -1108,7 +1112,7 @@ prog = [
       "title" : "The Pain & Joy of Self Publishing"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1131,7 +1135,7 @@ prog = [
       "title" : "Making Molded Pieces"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -1150,7 +1154,7 @@ prog = [
       "title" : "Reading:  Kelley Eskridge"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1185,7 +1189,7 @@ prog = [
       "title" : "Fan Community Input"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -1216,7 +1220,7 @@ prog = [
       "title" : "Presentation & Stage Movement"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1239,7 +1243,7 @@ prog = [
       "title" : "Crowdsourcing Science"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1270,7 +1274,7 @@ prog = [
       "title" : "Running a Convention"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -1305,7 +1309,7 @@ prog = [
       "title" : "Women in Gaming"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [],
@@ -1326,7 +1330,7 @@ prog = [
       "title" : "Interview:  Eric Shanower"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -1345,7 +1349,7 @@ prog = [
       "title" : "And Open The Mouth of Hell II:  Re-Estimation"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1372,9 +1376,7 @@ prog = [
       "title" : "Radio Free Skaro - Live Podcast"
    },
    {
-      "time" : " 1:45 PM",
-      "floor" : "Second Floor",
-      "room" : "Eureka (219)",
+      "time" : "13:45",
       "tags" : [],
       "mins" : 120,
       "people" : [
@@ -1389,7 +1391,7 @@ prog = [
       "title" : "Portfolio Critique by Jeff Sturgeon"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1420,7 +1422,7 @@ prog = [
       "title" : "Ask the Costumer"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -1439,7 +1441,7 @@ prog = [
       "title" : "Concert:  Cliff Winnig"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -1458,7 +1460,7 @@ prog = [
       "title" : "Classic Literature 2: Vintage Season"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -1477,7 +1479,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1512,7 +1514,7 @@ prog = [
       "title" : "A Single If..."
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "tags" : [],
       "mins" : 60,
       "people" : [
@@ -1527,7 +1529,7 @@ prog = [
       "title" : "Publishing an ezine"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [],
@@ -1548,7 +1550,7 @@ prog = [
       "title" : "Interview:  David Maxine"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -1567,7 +1569,7 @@ prog = [
       "title" : "Concert:  Unwoman"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1590,7 +1592,7 @@ prog = [
       "title" : "Military impressions and the “Fruit Salad” - Part 1"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -1625,7 +1627,7 @@ prog = [
       "title" : "A Child Free Lifestyle"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [],
@@ -1642,7 +1644,7 @@ prog = [
       "title" : "Fannish Inquisition:  Worldcon"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1665,7 +1667,7 @@ prog = [
       "title" : "The Land of Oz and the Trojan War:  Graphic Novels by Eric Shanower"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1688,7 +1690,7 @@ prog = [
       "title" : "Military impressions and the “Fruit Salad” - Part 2"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -1702,7 +1704,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1737,7 +1739,7 @@ prog = [
       "title" : "Gender Identity in Public Places"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1772,7 +1774,7 @@ prog = [
       "title" : "Exomusicology"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -1799,7 +1801,7 @@ prog = [
       "title" : "It Is Rewritten!  (FanFic)"
    },
    {
-      "time" : " 6:45 PM",
+      "time" : "18:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1830,7 +1832,7 @@ prog = [
       "title" : "Marketing for Writers & Artists"
    },
    {
-      "time" : " 6:45 PM",
+      "time" : "18:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -1865,7 +1867,7 @@ prog = [
       "title" : "Infinite Diversity in Infinite Combinations"
    },
    {
-      "time" : " 8:00 PM",
+      "time" : "20:00",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -1884,7 +1886,7 @@ prog = [
       "title" : "Concert:  Phenomenauts"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -1898,7 +1900,7 @@ prog = [
       "title" : "Art Show"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Grand Ballroom",
       "tags" : [],
@@ -1910,7 +1912,7 @@ prog = [
       "title" : "Dealer’s Room"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - Back Hall",
       "room" : "Napa",
       "tags" : [],
@@ -1922,7 +1924,7 @@ prog = [
       "title" : "Family Friendly"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -1957,7 +1959,7 @@ prog = [
       "title" : "Using SF/F in the Classroom"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -1984,7 +1986,7 @@ prog = [
       "title" : "Where’s My Tricorder?"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - Back Hall",
       "room" : "Sonoma",
       "tags" : [
@@ -2003,7 +2005,7 @@ prog = [
       "title" : "Classic Literature 3: To Live Forever"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - Back Hall",
       "room" : "Sonoma",
       "tags" : [
@@ -2030,7 +2032,7 @@ prog = [
       "title" : "Secrets of Publishing"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2065,7 +2067,7 @@ prog = [
       "title" : "Storytelling the Old-Fashioned Way"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2092,7 +2094,7 @@ prog = [
       "title" : "Westercon Business Meeting"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2123,7 +2125,7 @@ prog = [
       "title" : "Shoes, Shoes and More Shoes!"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [],
@@ -2140,7 +2142,7 @@ prog = [
       "title" : "Live Demo:  Recording, Editing and Posting your Podcast"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -2159,7 +2161,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -2190,7 +2192,7 @@ prog = [
       "title" : "Page 119 - Is The Book Any Good?"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2217,7 +2219,7 @@ prog = [
       "title" : "Masquerade Contestant’s Meeting"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -2240,7 +2242,7 @@ prog = [
       "title" : "The Fanboy Planet Podcast"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2271,7 +2273,7 @@ prog = [
       "title" : "Princess Culture - Pros/Cons"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2310,7 +2312,7 @@ prog = [
       "title" : "Publishing Options:  Traditional vs On-Demand and Self-Publishing"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2337,7 +2339,7 @@ prog = [
       "title" : "Costume Photography & Videography"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2368,7 +2370,7 @@ prog = [
       "title" : "NaNoWriMo "
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2399,7 +2401,7 @@ prog = [
       "title" : "Hugo Awards:  2013 Nominees"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [],
@@ -2424,7 +2426,7 @@ prog = [
       "title" : "Interview:  Nicola Griffith & \rKelley Eskridge"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -2443,7 +2445,7 @@ prog = [
       "title" : "Illustrating “A Clash of Kings”"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2474,7 +2476,7 @@ prog = [
       "title" : "Someone Else’s Sandbox:  Writing Media Tie-Ins and Shared World Novels"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2501,7 +2503,7 @@ prog = [
       "title" : "Powered Armor:  Is Disabled or Small still a problem?"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2540,7 +2542,7 @@ prog = [
       "title" : "Star Trek: The Original Series"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -2559,7 +2561,7 @@ prog = [
       "title" : "Ask The Editor"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -2578,7 +2580,7 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2609,7 +2611,7 @@ prog = [
       "title" : "Finding Your Muse"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2636,7 +2638,7 @@ prog = [
       "title" : "Green Construction and Architecture"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [],
@@ -2657,7 +2659,7 @@ prog = [
       "title" : "Fannish Inquisition:  NASFiC"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -2680,7 +2682,7 @@ prog = [
       "title" : "Science To Do At Home"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -2715,7 +2717,7 @@ prog = [
       "title" : "Matrons & Crones"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2734,7 +2736,7 @@ prog = [
       "title" : "Makeup SFx"
    },
    {
-      "time" : " 5:30 PM",
+      "time" : "17:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2765,7 +2767,7 @@ prog = [
       "title" : "Spy Themes (or Why I Want to Visit Portmeirion)"
    },
    {
-      "time" : " 6:45 PM",
+      "time" : "18:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2800,7 +2802,7 @@ prog = [
       "title" : "Doctor Who Through the Ages"
    },
    {
-      "time" : " 6:45 PM",
+      "time" : "18:45",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [],
@@ -2809,6 +2811,10 @@ prog = [
          {
             "name" : "James Stanley Daugherty",
             "id" : "0040"
+         },
+         {
+            "name" : "Jeff Sturgeon",
+            "id" : "2465"
          },
          {
             "name" : "John Hertz",
@@ -2825,7 +2831,7 @@ prog = [
       "title" : "Art Appreciation"
    },
    {
-      "time" : " 6:45 PM",
+      "time" : "18:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -2860,7 +2866,7 @@ prog = [
       "title" : "Pro-Con:  Print vs E-Books"
    },
    {
-      "time" : " 8:00 PM",
+      "time" : "20:00",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [
@@ -2907,7 +2913,7 @@ prog = [
       "title" : "Masquerade"
    },
    {
-      "time" : "10:00 PM",
+      "time" : "22:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -2950,7 +2956,7 @@ prog = [
       "title" : "Match Game SF - Evening Edition"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Grand Ballroom",
       "tags" : [],
@@ -2962,7 +2968,7 @@ prog = [
       "title" : "Dealer’s Room"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -2997,7 +3003,7 @@ prog = [
       "title" : "Comfort Reading"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -3024,7 +3030,7 @@ prog = [
       "title" : "Top 10 real-life Star Trek inventions"
    },
    {
-      "time" : "10:00 AM",
+      "time" : "10:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -3055,7 +3061,7 @@ prog = [
       "title" : "The Clarion and Clarion West Experience"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -3082,7 +3088,7 @@ prog = [
       "title" : "Single Pattern "
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -3117,7 +3123,7 @@ prog = [
       "title" : "From Geek To Chic"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -3148,7 +3154,7 @@ prog = [
       "title" : "Men Tell Us What It Is To Be a Girl:  Baum and Carroll"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -3187,7 +3193,7 @@ prog = [
       "title" : "Is Theater Dead?"
    },
    {
-      "time" : "11:15 AM",
+      "time" : "11:15",
       "floor" : "Ground - Back Hall",
       "room" : "Sonoma",
       "tags" : [
@@ -3210,7 +3216,7 @@ prog = [
       "title" : "Climate Extremes:  Reality vs Fiction"
    },
    {
-      "time" : "12:00 PM",
+      "time" : "12:00",
       "floor" : "Ground",
       "room" : "Brandywine",
       "tags" : [
@@ -3224,7 +3230,7 @@ prog = [
       "title" : "Art Auction "
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Cabernet",
       "tags" : [
@@ -3255,7 +3261,7 @@ prog = [
       "title" : "Bad Science"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [
@@ -3290,7 +3296,7 @@ prog = [
       "title" : "Modern Forms of Writing:  Books, Comics, Film"
    },
    {
-      "time" : "12:30 PM",
+      "time" : "12:30",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -3325,7 +3331,7 @@ prog = [
       "title" : "Fantasy Series:  Too Much of a Good Thing?"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
       "tags" : [],
@@ -3350,7 +3356,7 @@ prog = [
       "title" : "Theatre Arcanos LARP"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
@@ -3385,7 +3391,7 @@ prog = [
       "title" : "The Hugo Awards:  Why Should We Care?"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -3404,7 +3410,7 @@ prog = [
       "title" : "Creating a Costumer’s Demo Reel"
    },
    {
-      "time" : " 1:45 PM",
+      "time" : "13:45",
       "floor" : "Ground - Back Hall",
       "room" : "Sonoma",
       "tags" : [
@@ -3423,7 +3429,7 @@ prog = [
       "title" : "Hugh Daniel Memorial"
    },
    {
-      "time" : " 3:00 PM",
+      "time" : "15:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [],
@@ -3444,7 +3450,7 @@ prog = [
       "title" : "Closing Ceremonies"
    },
    {
-      "time" : " 4:15 PM",
+      "time" : "16:15",
       "floor" : "Ground",
       "room" : "Zinfandel",
       "tags" : [
