@@ -1688,20 +1688,6 @@ prog = [
       "title" : "Military impressions and the “Fruit Salad” - Part 2"
    },
    {
-      "time" : "16:15",
-      "floor" : "Ground",
-      "room" : "Brandywine",
-      "tags" : [
-         "other"
-      ],
-      "mins" : 60,
-      "people" : [],
-      "day" : "2013-07-05",
-      "precis" : "Join artists and fans as they lead a tour of the Art Show.  Meet outside of the Art Show, Brandywine.",
-      "id" : "573d",
-      "title" : "Docent Led Art Show Tour"
-   },
-   {
       "time" : "17:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
@@ -1866,6 +1852,20 @@ prog = [
    },
    {
       "time" : "20:00",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "performance"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-05",
+      "precis" : "The Sneaky Tikis are a young northern California surf band whose influences are Dick Dale, The Ventures, The Pyronauts, and Slacktone. They will play a set of instrumental surf music, including songs familiar to many fans.",
+      "id" : "2113",
+      "title" : "Concert:  Sneaky Tikis"
+   },
+   {
+      "time" : "21:00",
       "floor" : "Ground",
       "room" : "Atrium",
       "tags" : [

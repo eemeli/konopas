@@ -262,7 +262,9 @@ people = [
          "040",
          "035",
          "2024",
-         "937"
+         "937",
+         "016",
+         "077"
       ]
    },
    {
@@ -442,7 +444,8 @@ people = [
          "037",
          "2019",
          "650",
-         "987"
+         "987",
+         "016"
       ]
    },
    {
@@ -519,7 +522,8 @@ people = [
          "035",
          "1065",
          "1066",
-         "1064"
+         "1064",
+         "016"
       ]
    },
    {
@@ -536,7 +540,8 @@ people = [
          "035",
          "039",
          "2066",
-         "2068"
+         "2068",
+         "016"
       ]
    },
    {
@@ -609,7 +614,7 @@ people = [
       "first" : "John",
       "last" : "Hertz",
       "id" : "0249",
-      "bio" : "Probably best known for infecting fandom with English Regency ballroom dancing. Often found moderating panels, judging Masquerades, leading Art Show tours. Cameo appearance in Larry Niven's N-Space. Wrote Program Book for L.A. con II (1984 Worldcon), possibly best ever. Westercon reviews in File 770, Worldcon Masquerade reviews in S-F Chronicle. With June and Len Moffatt, edited Rick Sneary memorial Button-Tack. Fan Guest of Honor at Lunacon 2001 (New York), InCon 2000 (Washington). Favorites non-SF writers, Maimonides, Nabokov, Saigyo, Sayers. Fanzine: Vanamonde. Drink: Talisker. Likes rum pots, clay pots, crackpots, and how are you, Mr.Wilson?",
+      "bio" : "Probably best known for infecting fandom with English Regency ballroom dancing. Often found moderating panels, judging Masquerades, leading Art Show tours. Cameo appearance in Larry Niven's N-Space. Fan Guest of Honor at Westercon 57. Three Hugo nominations as Best Fanwriter. Favorite non-SF authors, Maimonides, Nabokov, Saigyo, Sayers. Fanzine: Vanamonde. Drink: Talisker. Likes rum pots, clay pots, crackpots, and how are you, Mr.Wilson?<br>",
       "links" : {},
       "program" : [
          "1055",
@@ -876,7 +881,9 @@ people = [
       "links" : {},
       "program" : [
          "040",
-         "035"
+         "035",
+         "016",
+         "077"
       ]
    },
    {
@@ -887,7 +894,9 @@ people = [
       "links" : {},
       "program" : [
          "040",
-         "035"
+         "035",
+         "016",
+         "077"
       ]
    },
    {
@@ -1279,7 +1288,9 @@ people = [
          "1070",
          "1072",
          "906",
-         "2069"
+         "2069",
+         "016",
+         "077"
       ]
    },
    {
@@ -1294,7 +1305,9 @@ people = [
          "2002",
          "1072",
          "1070",
-         "2069"
+         "2069",
+         "016",
+         "077"
       ]
    },
    {
