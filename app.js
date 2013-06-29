@@ -172,7 +172,6 @@ function show_prog_list(ls) {
 
 function make_ical_item(p) {
 	var t_ev = 'TZID=' + ical_set.timezone + ':' + p.day.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
-	t_ev = t_ev.replace(':2012', ':2013'); // DEBUG
 	var t_now = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}/, '');
 
 	var desc = '', attend = '';
@@ -251,7 +250,6 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
-	t.setFullYear(2012); // DEBUG for Chicon data
 	var now_str = string_time(t);
 	var now_day = now_str.substr(0, 10);
 	var now_time = now_str.substr(11);
