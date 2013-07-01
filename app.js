@@ -734,3 +734,20 @@ function init_view() {
 
 init_view();
 window.onhashchange = init_view;
+
+// Check if a new cache is available on page load.
+// Source: http://www.html5rocks.com/en/tutorials/appcache/beginner/
+window.addEventListener('load', function(e) {
+  window.applicationCache.addEventListener('updateready', function(e) {
+	if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+	  window.applicationCache.swapCache();
+	  if (confirm('A new version of the schedule is available. Load it?')) {
+		window.location.reload();
+	  }
+	} else {
+	  // Manifest didn't change. Nothing new to serve.
+	}
+  }, false);
+
+}, false);
+
