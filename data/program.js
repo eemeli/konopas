@@ -387,6 +387,20 @@ prog = [
       "title" : "Reading:  Nicola & Kelley"
    },
    {
+      "time" : "17:45",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-04",
+      "precis" : "Join many of our newest authors for an “open mike” reading session.  Please sign up at the Info Desk or in Program Operations.",
+      "id" : "2090c",
+      "title" : "Open Readings"
+   },
+   {
       "time" : "18:00",
       "floor" : "Ground",
       "room" : "Atrium",
@@ -1001,6 +1015,20 @@ prog = [
       "title" : "Reading:  Nicola Griffith"
    },
    {
+      "time" : "11:14",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-05",
+      "precis" : "Join many of our newest authors for an “open mike” reading session.  Please sign up at the Info Desk or in Program Operations.",
+      "id" : "2090a",
+      "title" : "Open Readings"
+   },
+   {
       "time" : "11:15",
       "floor" : "Ground",
       "room" : "Atrium",
@@ -1477,6 +1505,24 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
+      "time" : "14:15",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 30,
+      "people" : [
+         {
+            "name" : "Karen Sandler",
+            "id" : "2452"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2120",
+      "title" : "Reading:  Karen Sandler"
+   },
+   {
       "time" : "15:00",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
@@ -1688,6 +1734,19 @@ prog = [
       "title" : "Military impressions and the “Fruit Salad” - Part 2"
    },
    {
+      "time" : "16:15",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "kaffee klatsch/BOF"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-05",
+      "id" : "2124",
+      "title" : "BOF:  Game of Thrones"
+   },
+   {
       "time" : "17:30",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
@@ -1882,6 +1941,18 @@ prog = [
       "precis" : "The Phenomenauts perform a science-fiction inspired mix of punk rock, garage and new-wave. Combined with compelling antics and theatrics, the group’s message is a call to arms to defenders of science and honor across the galaxy, dealing with the serious implications of science fiction, science fact, and offering new perspectives on Earth life as we know it.",
       "id" : "2077",
       "title" : "Concert:  Phenomenauts"
+   },
+   {
+      "time" : "22:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-05",
+      "precis" : "DJ Neshamah will start spinning after the concert.  Keep on dancing!",
+      "id" : "2125",
+      "title" : "Dance"
    },
    {
       "time" : "10:00",
@@ -2157,6 +2228,24 @@ prog = [
       "precis" : "Join artists and fans as they lead a tour of the Art Show.  Meet outside of the Art Show, Brandywine.",
       "id" : "573e",
       "title" : "Docent Led Art Show Tour"
+   },
+   {
+      "time" : "11:15",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Kim Stanley Robinson",
+            "id" : "0175"
+         }
+      ],
+      "day" : "2013-07-06",
+      "id" : "2117",
+      "title" : "Reading:  Kim Stanley Robinson"
    },
    {
       "time" : "12:30",
@@ -2443,6 +2532,20 @@ prog = [
       "title" : "Illustrating “A Clash of Kings”"
    },
    {
+      "time" : "13:45",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-06",
+      "precis" : "Join many of our newest authors for an “open mike” reading session.  Please sign up at the Info Desk or in Program Operations.",
+      "id" : "2090b",
+      "title" : "Open Readings"
+   },
+   {
       "time" : "15:00",
       "floor" : "Ground",
       "room" : "Zinfandel",
@@ -2680,6 +2783,24 @@ prog = [
       "title" : "Science To Do At Home"
    },
    {
+      "time" : "16:15",
+      "floor" : "Ground - Back Hall",
+      "room" : "Boardroom",
+      "tags" : [
+         "author reading"
+      ],
+      "mins" : 30,
+      "people" : [
+         {
+            "name" : "Cliff Winnig",
+            "id" : "2462"
+         }
+      ],
+      "day" : "2013-07-06",
+      "id" : "2118",
+      "title" : "Reading:  Cliff Winnig"
+   },
+   {
       "time" : "17:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
@@ -2763,6 +2884,19 @@ prog = [
       "precis" : "Spies have long pushed the boundaries of the possible.  From mind-control devices to invisible cars, super computers to secret volcano lairs, spy stories abound with elements of science fiction.  Is any of it also science fact?  Our panelists will discuss the best and worst examples of spy-fi.",
       "id" : "2001",
       "title" : "Spy Themes (or Why I Want to Visit Portmeirion)"
+   },
+   {
+      "time" : "17:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "kaffee klatsch/BOF"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-06",
+      "id" : "2123",
+      "title" : "BOF:  Sac Geeks"
    },
    {
       "time" : "18:45",
@@ -3328,7 +3462,9 @@ prog = [
       "time" : "13:45",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
-      "tags" : [],
+      "tags" : [
+         "other"
+      ],
       "mins" : 60,
       "people" : [
          {
@@ -3345,9 +3481,9 @@ prog = [
          }
       ],
       "day" : "2013-07-07",
-      "precis" : "Your mission, should you choose to accept it, is to attend the retirement party of Dr. Ugarte, the world-renowed scientist. Dr. Ugarte is reportedly planning to auction off several \"devices\" that he has invented in order to pay for his retirement to a life of luxury. Your task is to ensure that certain of these items end up in the \"correct\" hands. To assist you in this undertaking, we have teamed you with two of our top operatives. As always, should you or any member of your team be caught or killed, we will disavow any knowledge of your actions.<br>In order to ensure manufacture of a plausible cover story, please complete the pre-mission background questionnaire available in the Gaming room.",
+      "precis" : "After the Earth was used up, we found a new solar system and hundreds of new Earths were terraformed and colonized. The central planets formed the Alliance and decided all the planets had to join under their rule.<br> <br>There was some disagreement on that point.<br> <br>After the War, many of the Independents who had fought and lost drifted to the edges of the system, far from Alliance control.<br> <br>Out here, people struggled to get by with the most basic technologies; a ship would bring you work, a gun would help you keep it.<br> <br> A captain’s goal was simple: find a crew, find a job, keep flying.<br>                                                                                                                    -Joss Whedon’s Firefly<br><br>I do the job. I get paid.<br>                                                  -Malcolm Reynolds<br><br>Fuel shipments come in to Anubis station about once an Earth standard week. This is usually not a problem, but there was a freak accident yesterday that burned out the reserves.  Anubis station sits right near the best passage through “The Wall,” the dense, deep asteroid belt that sets the Border worlds apart from the Rim planets. Right now, the corridor is closed for maintenance, with Alliance boats using the asteroids as a gunnery range, and like to shoot anything not running out an Alliance pulse beacon. So five ships are docked here waiting for the fuel transport or the all-clear: Alliance interceptor, Peregrine, Firefly class transport Kitsune, Monarch class long range freighter, Belfast, Bernard class salvage-refitted-as-colony ship, Beta, and the Arrowhead class courier, Lamora.<br><br>Five ships worth of crew  is a whole lot of humanity to be kicking around a 4000 square foot space station, and tensions are like to run high. ‘Specially ‘cause not all them folks are strangers.",
       "id" : "998",
-      "title" : "Theatre Arcanos LARP"
+      "title" : "Theatre Arcanos - Still Flyin, a Firefly LARP"
    },
    {
       "time" : "13:45",
