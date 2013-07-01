@@ -22,11 +22,11 @@
 <h1><!--<a href="#what">--><a href="http://2013.finncon.org/"><img id="title" src="data/finncon2013/title.png" alt="Finncon 2013"></a></h1>
 
 <ul id="tabs">
-<!--<li id="tab_next"><a href="#next">Next</a>-->
+<li id="tab_next"><a href="#next">Next</a>
 <li id="tab_star"><a href="#star">My con</a>
 <li id="tab_prog"><a href="#prog">Program</a>
 <li id="tab_part"><a href="#part">People</a>
-<!--<li id="tab_maps"><a href="#maps">Info</a>-->
+<li id="tab_maps"><a href="#maps">Maps</a>
 </ul>
 </div>
 
@@ -70,7 +70,7 @@
 
 <div id="star_view" class="view">
 	<div id="star_hint" class="hint"></div>
-	<div id="ical_link">&raquo; Export all as iCalendar</div>
+	<!--<div id="ical_link">&raquo; Export all as iCalendar</div>-->
 </div>
 
 
@@ -83,25 +83,36 @@
 	<li id="d2013-07-07">Sunday
 	</ul>
 
-	<ul id="tag">
-	<li id="all_tags">All items
-	<li id="In_English">In English
-	<li id="På_svenska">På svenska
-	<li id="Suomeksi">Suomeksi
-	<li id="Palkinnot" data-regexp="^Palkintojenjako|^Julki">Palkinnot &<br>julkistamiset
-	</ul>
-
-	<ul id="area">
+	<ul id="area" style="max-width: 25%;">
 	<li id="everywhere">All rooms
 	<li id="Pannuhalli">Pannuhalli
 	<li id="Puristamo">Puristamo
 	<li id="Valssaamo">Valssaamo
 	<li id="Watti-Kela">Watti-Kela
 	<li id="Käämi">Käämi
+	<li id="Fandom lounge">Fandom lounge
 	</ul>
 
+	<ul id="tag" style="width: 90px;">
+	<li id="all_tags">All&nbsp;items
+	<li id="In_English">In&nbsp;English
+	<li id="På_svenska" style="margin-bottom: 21px;">På&nbsp;svenska
+	<li class="popuplist"><span id="tag2-title">More tags...</span>
+	<ul id="tag2">
+		<li id="Guests">Guests/<wbr>Vieraat
+		<li id="kf" data-regexp="^Kaffeeklatsch">Kaffee&shy;klatschit
+		<li id="Fandom">Fandom
+		<li id="Tiede">Tiede
+		<li id="Anime">Anime
+		<li id="Musiikki">Musiikki
+		<li id="Pelit">Pelit
+		<li id="Elokuvat_TV">TV ja elokuvat
+		<li id="Kirjoittaminen">Kirjoittaminen&nbsp;& suomentaminen
+		<li id="Palkinnot" data-regexp="^Palkintojenjako|^Julki">Palkinnot&nbsp;& julkistamiset
+	</ul></ul>
+
 	<form name="search" id="search">
-	<input type="text" id="q" placeholder="Search">
+	<input type="text" id="q" placeholder="Search" required>
 	<div id="q_ctrl">
 	<input type="submit" id="q_submit" value="Go">
 	<input type="reset" id="q_clear" value="Clear">
@@ -133,6 +144,71 @@
 
 
 <div id="maps_view" class="view">
+<h2>Kaapelitehdas</h2>
+<img src="data/finncon2013/kaapelitehdas.png" title="Kaapelitehdas">
+
+<h2>Ruoholahti</h2>
+<img src="data/finncon2013/ruoholahti.png" title="Ruoholahti">
+
+<table>
+<tr><td>
+<h3>Ravintolat</h3>
+<ol>
+<li>Hima & Sali
+<li>Don Angelo
+<li>Tiger Mama
+<li>Bar & Restaurant Faro
+<li>Yeti Nepal
+<li>Ravintola Meritähti
+<li>Martina
+</ol>
+
+<h3>Pikaruoka</h3>
+<ol start="8">
+<li>McDonald’s Ruoholahti
+<li>Picnic Ruoholahti
+<li>Subway – Ruoholahden kauppakeskus
+</ol>
+
+<td>
+<h3>Pubi</h3>
+<ol start="11">
+<li>Amsterdam
+</ol>
+
+<h3>Majoitus</h3>
+<ol start="12">
+<li>Holiday Inn Helsinki City West Ruoholahti
+</ol>
+
+<h3>Muut</h3>
+<ol style="list-style-type: upper-latin;">
+<li value="13">Metroasema
+<li value="18">Raitiovaunupysäkki
+<li value="5">Pankkiautomaatti
+</ol>
+</table>
+
+<h2>Helsinki</h2>
+<img src="data/finncon2013/helsinki.png" title="Helsinki">
+
+<table>
+<tr><td>
+<h3>Kauppoja</h3>
+<ol start="13">
+<li>Stockmann
+<li>Sokos
+<li>Kampin kauppakeskus
+<li>Verkkokauppa
+</ol>
+
+<td>
+<h3>Muut</h3>
+<ol style="list-style-type: upper-alpha;">
+<li value="13">Metroasema
+</ol>
+</table>
+
 </div>
 
 
@@ -154,4 +230,4 @@
 <script src="data/finncon2013/people.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>
-<script src="FileSaver.min.js"></script>
+<!--<script src="FileSaver.min.js"></script>-->

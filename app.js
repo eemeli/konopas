@@ -114,13 +114,13 @@ function show_info(item, id) {
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
 		if ('people' in a[0]) {
-			var ap = a[0].people.map(function(p) { return "<a href=\"#part" + p.id + "\">" + p.name + "</a>"; });
+			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
 			if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
 		}
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
-	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>"
-		+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\'); return false;\" title=\"Export this item as an ICS file for calendar import\">iCal</div>";
+	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
+		//+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\'); return false;\" title=\"Export this item as an ICS file for calendar import\">iCal</div>";
 }
 
 function show_prog_list(ls) {
@@ -132,7 +132,12 @@ function show_prog_list(ls) {
 			prev_time = "";
 
 			var t = new Date(ls[i].day);
-			day_str = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+			var td = t - Date.now();
+			if ((td < 0) || (td > 1000*3600*24*6)) {
+				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
+				if (Math.abs(td) > 1000*3600*24*60) day_str += ' ' + t.getUTCFullYear();
+			}
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
@@ -399,17 +404,17 @@ function show_star_view() {
 		var star_ids = read_stars();
 		if (star_ids.length) {
 			sh.innerHTML = '';
-			EL("ical_link").style.display = 'block';
+			//EL("ical_link").style.display = 'block';
 			var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
 			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
-			EL("ical_link").style.display = 'none';
+			//EL("ical_link").style.display = 'none';
 			EL("prog_ls").innerHTML = '';
 		}
 	} else {
 		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
-		EL("ical_link").style.display = 'none';
+		//EL("ical_link").style.display = 'none';
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -507,10 +512,14 @@ function update_prog_filters(day, area, tag, freetext) {
 
 	var tt = tag || "all_tags";
 	var tc = EL("tag").getElementsByTagName("li");
+	var t2_title = "More tags...";
 	for (var i = 0; i < tc.length; ++i) {
-		if (tc[i].id == tt) tc[i].classList.add("selected");
-		else tc[i].classList.remove("selected");
+		if (tc[i].id == tt) {
+			tc[i].classList.add("selected");
+			if (tc[i].parentNode.id == "tag2") t2_title = "<b>"+tc[i].innerHTML.trim()+"...</b>";
+		} else tc[i].classList.remove("selected");
 	}
+	var t2t = EL("tag2-title"); if (t2t) t2t.innerHTML = t2_title;
 
 	var qc = EL("q");
 	if (qc) {
@@ -548,9 +557,10 @@ function prog_filter(ctrl, item) {
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
-		case "day":   day = item; break;
+		case "day":  day = item; break;
 		case "area": area = item; break;
 		case "tag":  tag = item; break;
+		case "tag2": tag = item; break;
 	}
 
 	day = day.substr(1);
@@ -622,7 +632,7 @@ function update_part_view(name_sort, first_letter, participant) {
 			else              return 0;
 		});
 		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
+			return '<li><a href="#part/' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
 		}).join('');
 		EL("part_info").innerHTML = "";
 		EL("prog_ls").innerHTML = "";
@@ -644,6 +654,8 @@ function update_part_view(name_sort, first_letter, participant) {
 					case 'fb': links += '<dt>Facebook:<dd>'
 						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
 						break;
+					case 'img':
+						break;
 					default: links += '<dt>' + type + ':<dd>' + tgt;
 				}
 			}
@@ -652,7 +664,8 @@ function update_part_view(name_sort, first_letter, participant) {
 		EL("part_names").innerHTML = "";
 		EL("part_info").innerHTML = listlink
 			+ '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
-			+ (pa[0].bio ? ('<p>' + pa[0].bio + '</p>') : '')
+			+ (pa[0].links && pa[0].links.img ? ('<p><img class="bio_img" src="' + pa[0].links.img + '">') : '')
+			+ (pa[0].bio ? ('<p>' + pa[0].bio) : '')
 			+ links;
 		show_prog_list(prog.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
@@ -695,11 +708,18 @@ function show_part_view(opt) {
 	}
 
 	if (opt) {
-		var pa = people.filter(function(p) { return p.id == opt; });
+		var p_id = opt.substr(1);
+		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
 			first_letter = (name_sort == 'sort_first') ? pa[0].name[0][0] : pa[0].name[1][0];
+		} else {
+			window.location.hash = '#part';
+			return;
 		}
+	} else if (participant) {
+		window.location.hash = '#part/' + participant.substr(1);
+		return;
 	}
 
 	update_part_view(name_sort, first_letter, participant);
@@ -746,7 +766,7 @@ if (EL("next_filters")) {
 
 
 // init star view
-if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
+//if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view

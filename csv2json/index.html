@@ -41,6 +41,15 @@ function parse_sub_arrays(data) {
 					}
 				}
 				delete data[i][j];
+			} else {
+				n = j.match(/^([^.]+)\.([^.]+)$/);
+				if (n) {
+					if (data[i][j] !== "") {
+						if (typeof data[i][n[1]] != 'object') data[i][n[1]] = new Object();
+						data[i][n[1]][n[2]] = data[i][j];
+					}
+					delete data[i][j];
+				}
 			}
 		}
 	}
