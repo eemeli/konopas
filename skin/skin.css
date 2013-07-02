@@ -214,10 +214,12 @@ a { color: black; }
 #maps_view img { width: 600px; margin: 5px 0; }
 #maps_view a { display: block; float: left; max-width: 290px; margin-top: 20px; text-align: center; text-decoration: none; }
 #maps_view a img { border: 2px solid; }
-#maps_view table { width: 600px; }
-#maps_view td { width: 50%; vertical-align: top; }
 #maps_view h3 { margin-bottom: 5px; }
 #maps_view ol { margin: 5px 0; }
+.compact_list th { color: #88847d; font-weight: 500; text-align: left;  }
+.compact_list td { vertical-align: top; padding-right: 6px; }
+.compact_list td:first-child { text-align: right; color: #88847d; font-weight: 500; }
+.dim { color: #88847d; }
 
 .black, .black #next_time { background: black; color: white; }
 .black.next #tab_next, .black.prog #tab_prog, .black.part #tab_part, .black.maps #tab_maps { border-bottom-color: black !important; }
