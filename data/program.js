@@ -275,6 +275,10 @@ prog = [
             "id" : "2442"
          },
          {
+            "name" : "Lynn Gold",
+            "id" : "0324"
+         },
+         {
             "name" : "M. Todd Gallowglas",
             "id" : "2405"
          }
@@ -414,6 +418,10 @@ prog = [
             "id" : "0071"
          },
          {
+            "name" : "Eric Larson",
+            "id" : "2021"
+         },
+         {
             "name" : "Glenn Glazer",
             "id" : "2441"
          },
@@ -428,6 +436,10 @@ prog = [
          {
             "name" : "Leigh Ann Hildebrand",
             "id" : "0591"
+         },
+         {
+            "name" : "Lisa Hayes",
+            "id" : "2162"
          },
          {
             "name" : "Maurine “Mo” Starkey",
@@ -1371,6 +1383,28 @@ prog = [
       "title" : "Interview:  Eric Shanower"
    },
    {
+      "time" : "12:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Kelley Eskridge",
+            "id" : "2433"
+         },
+         {
+            "name" : "Nicola Griffith",
+            "id" : "2432"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2127",
+      "title" : "Autographs:  Nicola & Kelley"
+   },
+   {
       "time" : "13:45",
       "floor" : "Ground",
       "room" : "Zinfandel",
@@ -1636,6 +1670,24 @@ prog = [
       "title" : "Military impressions and the “Fruit Salad” - Part 1"
    },
    {
+      "time" : "15:00",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Karen Sandler",
+            "id" : "2452"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2135",
+      "title" : "Autographs:  Karen Sandler"
+   },
+   {
       "time" : "16:15",
       "floor" : "Ground",
       "room" : "Cabernet",
@@ -1712,6 +1764,25 @@ prog = [
    },
    {
       "time" : "16:15",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "performance"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "M. Todd Gallowglas",
+            "id" : "2405"
+         }
+      ],
+      "day" : "2013-07-05",
+      "precis" : "Join master Storyteller M. Todd Gallowglas as he regales folks with a variety of stories.",
+      "id" : "2079",
+      "title" : "Story Time"
+   },
+   {
+      "time" : "16:15",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
       "tags" : [
@@ -1745,6 +1816,24 @@ prog = [
       "day" : "2013-07-05",
       "id" : "2124",
       "title" : "BOF:  Game of Thrones"
+   },
+   {
+      "time" : "16:15",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "David Gerrold",
+            "id" : "0073"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2129",
+      "title" : "Autographs:  David Gerrold"
    },
    {
       "time" : "17:30",
@@ -1842,6 +1931,46 @@ prog = [
       "precis" : "Fanfic has become more and more public - to the point one newspaper called it the “fantasy football of the literary world”  But what’s it all about?  And if you write fanfic, can you write mainstream fiction?",
       "id" : "2023",
       "title" : "It Is Rewritten!  (FanFic)"
+   },
+   {
+      "time" : "17:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "David Maxine",
+            "id" : "1643"
+         },
+         {
+            "name" : "Eric Shanower",
+            "id" : "1759"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2131",
+      "title" : "Autographs:  Eric & David"
+   },
+   {
+      "time" : "17:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "M. Todd Gallowglas",
+            "id" : "2405"
+         }
+      ],
+      "day" : "2013-07-05",
+      "id" : "2136",
+      "title" : "Autographs:  M. Todd Gallowglas"
    },
    {
       "time" : "18:45",
@@ -1948,7 +2077,12 @@ prog = [
       "room" : "Atrium",
       "tags" : [],
       "mins" : 60,
-      "people" : [],
+      "people" : [
+         {
+            "name" : "Jean Battiato",
+            "id" : "2138"
+         }
+      ],
       "day" : "2013-07-05",
       "precis" : "DJ Neshamah will start spinning after the concert.  Keep on dancing!",
       "id" : "2125",
@@ -2319,6 +2453,10 @@ prog = [
             "id" : "0071"
          },
          {
+            "name" : "Derek McCaw",
+            "id" : "0588"
+         },
+         {
             "name" : "Ric Bretschneider",
             "id" : "2308"
          }
@@ -2397,6 +2535,24 @@ prog = [
       "precis" : "The days of needing your own printing press are long gone.  With modern publishing methods you can print one copy or 1 million.  Our panelists will discuss the benefits and drawback of the various publishing options.",
       "id" : "1061",
       "title" : "Publishing Options:  Traditional vs On-Demand and Self-Publishing"
+   },
+   {
+      "time" : "12:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Kim Stanley Robinson",
+            "id" : "0175"
+         }
+      ],
+      "day" : "2013-07-06",
+      "id" : "2133",
+      "title" : "Autographs:  Kim Stanley Robinson"
    },
    {
       "time" : "13:45",
@@ -2681,6 +2837,28 @@ prog = [
       "title" : "Docent Led Art Show Tour"
    },
    {
+      "time" : "15:00",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "David Maxine",
+            "id" : "1643"
+         },
+         {
+            "name" : "Eric Shanower",
+            "id" : "1759"
+         }
+      ],
+      "day" : "2013-07-06",
+      "id" : "2132",
+      "title" : "Autographs:  Eric & David"
+   },
+   {
       "time" : "16:15",
       "floor" : "Ground - OffSide",
       "room" : "Folsom",
@@ -2801,6 +2979,28 @@ prog = [
       "title" : "Reading:  Cliff Winnig"
    },
    {
+      "time" : "16:15",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Kelley Eskridge",
+            "id" : "2433"
+         },
+         {
+            "name" : "Nicola Griffith",
+            "id" : "2432"
+         }
+      ],
+      "day" : "2013-07-06",
+      "id" : "2128",
+      "title" : "Autographs:  Nicola & Kelley"
+   },
+   {
       "time" : "17:30",
       "floor" : "Ground - Back Hall",
       "room" : "Merlot",
@@ -2897,6 +3097,19 @@ prog = [
       "day" : "2013-07-06",
       "id" : "2123",
       "title" : "BOF:  Sac Geeks"
+   },
+   {
+      "time" : "17:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [],
+      "day" : "2013-07-06",
+      "id" : "2137",
+      "title" : "Autographs:  Cliff Winnig"
    },
    {
       "time" : "18:45",
@@ -3058,6 +3271,10 @@ prog = [
             "id" : "0071"
          },
          {
+            "name" : "Eric Larson",
+            "id" : "2021"
+         },
+         {
             "name" : "Jonnalyhn Wolfcat",
             "id" : "2453"
          },
@@ -3072,6 +3289,10 @@ prog = [
          {
             "name" : "Leigh Ann Hildebrand",
             "id" : "0591"
+         },
+         {
+            "name" : "Lisa Hayes",
+            "id" : "2162"
          },
          {
             "name" : "Ric Bretschneider",
@@ -3344,6 +3565,24 @@ prog = [
       "title" : "Climate Extremes:  Reality vs Fiction"
    },
    {
+      "time" : "11:15",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "David Gerrold",
+            "id" : "0073"
+         }
+      ],
+      "day" : "2013-07-07",
+      "id" : "2130",
+      "title" : "Autographs:  David Gerrold"
+   },
+   {
       "time" : "12:00",
       "floor" : "Ground",
       "room" : "Brandywine",
@@ -3457,6 +3696,24 @@ prog = [
       "precis" : "You read that first book and wait for the sequel.  And then another... and another...  Is it possible for a fantasy series to become unwieldy and out of control?  What are the issues the author has to contend with?  What happens if there is a media tie-in?  Our panelists discuss several well-known series.",
       "id" : "2091",
       "title" : "Fantasy Series:  Too Much of a Good Thing?"
+   },
+   {
+      "time" : "12:30",
+      "floor" : "Ground",
+      "room" : "Atrium",
+      "tags" : [
+         "autograph session"
+      ],
+      "mins" : 60,
+      "people" : [
+         {
+            "name" : "Maya Kaathryn Bohnhoff",
+            "id" : "0016"
+         }
+      ],
+      "day" : "2013-07-07",
+      "id" : "2134",
+      "title" : "Autographs:  Maya Kaathryn Bohnhoff"
    },
    {
       "time" : "13:45",

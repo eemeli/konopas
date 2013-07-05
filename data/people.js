@@ -34,6 +34,16 @@ people = [
       ]
    },
    {
+      "first" : "Jean",
+      "last" : "Battiato",
+      "id" : "2138",
+      "bio" : "Referred to as the Grandmother or the Godmother of industrial, Neshamah was been the California goth, industrial, trance, and punk scenes for years, making her first appearance as a bouncer in a punk club. In early 1994, she moved from being the hostess to being a dj. After a start with old skool punk and deathrock, she moved into industrial, techno, fusion, and almost any type of music that you can think of. Her eclectic sound has taken her all over the world, placed her on the airwaves of the FM dial, and has given her the title as one of the craziest djs you will ever hear. (Especially in 2001 when she broke six dj world records in one shoot: longest live air shift by a single dj; youngest person to attempt; first college radio station to attempt; first “true” alternative attempt; longest live internet feed of mixing; and first woman to attempt with 102 hours and 45 mins).<br><br>Neshamah was also one of the first club djs to make the jump from the decks to the silver screen. She was picked up almost right off the decks and placed in front of the camera in the forthcoming film, The Last.*  She has since worked as a costumer and a bit player in a number of short and feature films.<br><br>*(editor’s note:  The Last had its preview premiere at last year’s BayCon.)",
+      "links" : {},
+      "program" : [
+         "2125"
+      ]
+   },
+   {
       "first" : "Kent",
       "last" : "Bloom",
       "id" : "0715",
@@ -303,7 +313,9 @@ people = [
          "2033",
          "2071",
          "2073",
-         "2074"
+         "2074",
+         "2127",
+         "2128"
       ]
    },
    {
@@ -364,7 +376,8 @@ people = [
          "1063",
          "2021",
          "2091",
-         "778"
+         "778",
+         "2079"
       ]
    },
    {
@@ -398,7 +411,9 @@ people = [
          "035",
          "2019",
          "650",
-         "987"
+         "987",
+         "2129",
+         "2130"
       ]
    },
    {
@@ -421,7 +436,8 @@ people = [
          "url" : "www.rahul.net/figmo"
       },
       "program" : [
-         "2018"
+         "2018",
+         "2017"
       ]
    },
    {
@@ -436,7 +452,9 @@ people = [
          "2071",
          "2072",
          "2074",
-         "2091"
+         "2091",
+         "2127",
+         "2128"
       ]
    },
    {
@@ -626,6 +644,14 @@ people = [
       ]
    },
    {
+      "first" : "Eric",
+      "last" : "Larson",
+      "id" : "2021",
+      "bio" : "No biography on file.",
+      "links" : {},
+      "program" : []
+   },
+   {
       "first" : "Steve",
       "last" : "Libbey",
       "id" : "2402",
@@ -692,7 +718,9 @@ people = [
          "2002",
          "2009",
          "2076",
-         "410"
+         "410",
+         "2131",
+         "2132"
       ]
    },
    {
@@ -708,6 +736,18 @@ people = [
          "2018",
          "2020",
          "2022"
+      ]
+   },
+   {
+      "first" : "Derek",
+      "last" : "McCaw",
+      "id" : "0588",
+      "bio" : "Derek McCaw has commented on geek culture for over six years as Editor-in-Chief of Fanboy Planet. After years of dreaming, he turned comics professional last year writing Tony Loco for Illusive Arts Entertainment and now serving as editor for William Katt's Catastrophic Comics. For twenty years, he has been a professional actor improvisational comedian with ComedySportz, Mumblypeg and anyone who will have him, and teaches Drama at Notre Dame High School in San Jose. Late at night, he is troubled by the thought that Christopher J. Garcia just might be his fault.",
+      "links" : {
+         "url" : "www.fanboyplanet.com"
+      },
+      "program" : [
+         "486"
       ]
    },
    {
@@ -941,7 +981,9 @@ people = [
          "940",
          "2012",
          "2070",
-         "2075"
+         "2075",
+         "2131",
+         "2132"
       ]
    },
    {
