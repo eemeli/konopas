@@ -217,7 +217,7 @@ a { color: black; }
 .compact_list th { color: #88847d; font-weight: 500; text-align: left;  }
 .compact_list td { vertical-align: top; padding-right: 6px; }
 .compact_list td:first-child { text-align: right; color: #88847d; font-weight: 500; }
-.dim { color: #88847d; }
+.dim, .dim a { color: #88847d; }
 
 .black, .black #next_time { background: black; color: white; }
 .black.next #tab_next, .black.prog #tab_prog, .black.part #tab_part, .black.maps #tab_maps { border-bottom-color: black !important; }
