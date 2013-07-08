@@ -183,7 +183,7 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .item_frame { position: relative; margin-left: 45px; }
 
 .item_star { position: absolute; width: 20px; height: 20px; top: 10px; left: 10px; background: #bfb9af; cursor: pointer; }
-.item_star.has_star { background: #f37021; }
+.item_star.has_star { background: #c00; }
 
 .item { clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 10px; cursor: pointer; }
 
