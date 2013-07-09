@@ -15,11 +15,10 @@
 <div id="time"></div>
 <div id="scroll"><a href="#top" id="scroll_link">Scroll up</a></div>
 
-<!--<a href="#what" id="opt_what">?</a>-->
 <!--<div id="opt_style">A</div>-->
 
 <div id="banner">
-<h1><!--<a href="#what">--><a href="http://readercon.org/"><img id="title" src="data/title.png" alt="Readercon 24"></a></h1>
+<h1><a href="http://readercon.org/"><img id="title" src="data/title.png" alt="Readercon 24"></a></h1>
 
 <ul id="tabs">
 <li id="tab_next"><a href="#next">Next</a>
@@ -31,26 +30,6 @@
 </div>
 
 <div id="main">
-
-<div id="what_view" class="view">
-<p>This is the mobile guide to <a href="http://readercon.org/">Readercon 24</a>.
-
-<p>The program and participant databases were last updated on July 1, 2013.
-
-<h3>What?</h3>
-<p>It's a web page that works like a mobile app, so your browser should cache all of it and make it <b>work when you're offline</b> as well. To start using the guide, <b>click on one of the above tabs</b>. (If they're gray and don't react, the page is still loading data.)</a>
-
-<p>The guide seems to work on most sort-of modern phones. On older Androids, I've disabled some of the nice-to-have things and prevented listing all of the program items at once to make them not slow down horribly. And I'm somewhat surprised to find it working on Windows phones as well, though the "Next" view may be buggy.
-
-<h3>How?</h3>
-<p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In other words, magic. In order to make said magic work, about 1MB of your phone memory is being used (probably without your phone telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > aut-web.hut.fi > Clear stored data</tt> (depends on your browser, OS, etc.)
-
-<h3>Who?</h3>
-<p>My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I'm being paid to work on my dissertation on an autonomous group of <a href="http://autsys.aalto.fi/en/SWARM">underwater robots</a> by Aalto University in Helsinki, Finland, but I seem to end up doing quite a few other things as well. Like chair a bid for a Worldcon: <a href="http://helsinkiin2015.org/">Helsinki in 2015</a>!
-
-<p>I'm releasing this work under the <a href="http://en.wikipedia.org/wiki/ISC_license">ISC license</a>, so if you want to use it for your con or some other purpose, you can.
-</div>
-
 
 <div id="next_view" class="view">
 	<div id="next_filters" class="filters">
@@ -142,6 +121,8 @@
 
 
 <div id="maps_view" class="view">
+<p>The program and participant databases were last updated on <b>July 9, 2013</b>.
+
 <h2>Hotel map</h2>
 <img src="data/hotelmap.png" title="Boston Marriott Burlington">
 
@@ -165,6 +146,13 @@
 
 <h2>Restaurant guide</h2>
 <p><a href="http://readercon.org/docs/RC24RestGuide.pdf">The Readercon Restaurant Guide</a> (PDF, 406kB)
+
+<h2>What is this?</h2>
+<p>This is the mobile guide to <a href="http://readercon.org/">Readercon 24</a>. It's a web page that works like a mobile app, so your browser should cache all of it and make it <b>work when you're offline</b> as well. The guide should work on most computers, phones and tablets that have some sort of relatively modern web browser, though on Windows phones the "Next" view may be buggy.
+
+<p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In order to make said magic work, about 1MB of your browser's memory is being used (probably without telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > [this site] > Clear stored data</tt> (details depend on your browser, OS, etc.)
+
+<p>My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. This guide is an instance of <a href="https://github.com/eemeli/konopas">KonOpas</a>, an open-source project I started for providing conventions with easy-to-use mobile guides. I also do a few other fannish things as well, like chair a bid for a Worldcon: <a href="http://helsinkiin2015.org/">Helsinki in 2015</a>!
 </div>
 
 
@@ -186,4 +174,3 @@
 <script src="data/people.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>
-<!--<script src="FileSaver.min.js"></script>-->

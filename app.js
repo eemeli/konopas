@@ -95,7 +95,7 @@ function GlobToRE(pat) {
 	return new RegExp(terms.join('|'), 'i');
 }
 
-var views = [ "what", "next", "star", "prog", "part", "maps" ];
+var views = [ "next", "star", "prog", "part", "maps" ];
 function set_view(new_view) {
 	for (var i in views) { document.body.classList.remove(views[i]); }
 	document.body.classList.add(new_view);
@@ -259,16 +259,6 @@ function save_ical(p) {
 	var ls = prog.filter(function(it) { return (ids.indexOf(it.id) >= 0); });
 	var blob = new Blob([make_ical(ls)], {type: "text/calendar;charset=utf-8"});
 	saveAs(blob, fn + '.ics');
-}
-
-
-
-// ------------------------------------------------------------------------------------------------ what view
-
-function show_what_view() {
-	set_view("what");
-
-	EL("prog_ls").innerHTML = '';
 }
 
 
@@ -828,13 +818,12 @@ function init_view() {
 	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".view") : '';
 	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
-		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
 		case 'star': show_star_view(); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'maps': show_maps_view(); break;
 		case 'prog': show_prog_view(opt.substr(4)); break;
-		default:     show_what_view(); break;
+		default:     show_prog_view(); break;
 	}
 
 	if (EL("top")) EL("top").scrollIntoView();
