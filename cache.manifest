@@ -1,14 +1,20 @@
 CACHE MANIFEST
+#
 
 CACHE:
-data/chicon7-people.js
-data/chicon7-program.js
+data/people.js
+data/program.js
 classList.js
 app.js
-skin.css
-favicon-simple.ico
-data/chicon7-con-map.thumb.png
-data/chicon7-hotel-map.thumb.png
+skin/skin.css
+skin/Roboto300.ttf
+skin/Roboto500.ttf
+skin/Oswald400.ttf
+data/favicon.ico
+data/title.png
+data/hotelmap.png
+data/mchugh.jpg
+data/mckillip.jpg
 
 NETWORK:
 *
