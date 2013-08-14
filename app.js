@@ -120,7 +120,6 @@ function show_info(item, id) {
 		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
 	}
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
-		//+ "<div class=\"ical_link\" onclick=\"save_ical(\'" + id + "\'); return false;\" title=\"Export this item as an ICS file for calendar import\">iCal</div>";
 }
 
 function show_prog_list(ls) {
@@ -190,75 +189,6 @@ function show_prog_list(ls) {
 			if (el) el.classList.add("has_star");
 		});
 	}
-}
-
-
-
-// ------------------------------------------------------------------------------------------------ ical export
-
-function make_ical_item(p) {
-	var t0 = new Date(p.date + 'T' + p.time + 'Z');
-	var t1 = new Date(p.date + 'T' + p.time + 'Z');
-	t1.setUTCMinutes(t1.getUTCMinutes() + p.mins);
-	var t_start = t0.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
-	var t_end = t1.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
-	var t_now = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}/, '');
-
-	var loc_str = '';
-	if (p.loc.length) {
-		loc_str = p.loc[0];
-		if (p.loc.length > 1) loc_str += ' (' + p.loc.slice(1).join(', ') + ')';
-	}
-
-	var desc = '', attend = '';
-	if (('people' in p) && (p.people.length)) {
-		desc = "Participants: ";
-		var pa = new Array();
-		for (var i = 0; i < p.people.length; ++i) {
-			pa[pa.length] = p.people[i].name;
-			attend += 'ATTENDEE;CN=' + p.people[i].name + ':invalid:nomail\r\n';
-		}
-		desc += pa.join(', ') + '\\n\\n';
-	}
-	desc += p.desc;
-
-	var s = 'BEGIN:VEVENT\r\n'
-			//+ 'SEQUENCE:0\r\n'
-			+ 'UID:' + p.id + '@' + konopas_set.domain + '\r\n'
-			+ 'LAST-MODIFIED:' + t_now + '\r\n'
-			+ 'DTSTART;TZID=' + konopas_set.timezone + ':' + t_start + '\r\n'
-			+ 'DTEND;TZID=' + konopas_set.timezone + ':' + t_end + '\r\n'
-			+ 'SUMMARY:' + p.title + '\r\n'
-			+ 'LOCATION:' + loc_str + '\r\n'
-			+ attend
-			+ 'DESCRIPTION:' + desc + '\r\n'
-			+ 'END:VEVENT\r\n';
-	return s;
-}
-
-function make_ical(ls) {
-	var ical = 'BEGIN:VCALENDAR\r\n'
-			+ 'VERSION:2.0\r\n'
-			+ 'PRODID:-//eemeli//KonOpas ' + konopas_set.ical_id + '\r\n';
-	for (var i = 0; i < ls.length; ++i) ical += make_ical_item(ls[i]);
-	ical += 'END:VCALENDAR';
-	return ical;
-}
-
-function save_ical(p) {
-	var ids;
-	var fn = konopas_set.ical_filename;
-	if (p) {
-		ids = [p];
-		fn += '-' + p;
-	} else {
-		ids = read_stars();
-	}
-
-	if (ids.length < 1) return;
-	var ls = program.filter(function(it) { return (ids.indexOf(it.id) >= 0); });
-	var blob = new Blob([make_ical(ls)], {type: "text/calendar;charset=utf-8"});
-	saveAs(blob, fn + '.ics');
 }
 
 
@@ -394,17 +324,14 @@ function show_star_view() {
 		var star_ids = read_stars();
 		if (star_ids.length) {
 			sh.innerHTML = '';
-			//EL("ical_link").style.display = 'block';
 			var ls = program.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
 			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
-			//EL("ical_link").style.display = 'none';
 			EL("prog_ls").innerHTML = '';
 		}
 	} else {
 		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
-		//EL("ical_link").style.display = 'none';
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -753,10 +680,6 @@ if (EL("next_filters")) {
 		ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
 	}
 }
-
-
-// init star view
-//if (EL("ical_link")) EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view

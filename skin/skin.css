@@ -47,7 +47,7 @@ body { margin: 8px; }
 #scroll { bottom: 0; display: none; max-width: 40px; font-size: 0.8em; }
 #scroll a { color: #ccc5bb; text-decoration: none; }
 
-#banner, .filters, #part_view, .hint, #ical_link { position: relative; z-index: 3; background: white; padding-top: 0; }
+#banner, .filters, #part_view, .hint { position: relative; z-index: 3; background: white; padding-top: 0; }
 
 h1 { font-size: 25px; margin: 0 0 8px 0; padding: 0; }
 h1 a { text-decoration: none; }
@@ -67,7 +67,6 @@ h1 a { text-decoration: none; }
 .info #info_view { display: block; }
 
 #star_hint { padding: 20px 0; max-width: 600px; }
-#ical_link { color: #88847d; padding-left: 55px; cursor: pointer; }
 
 .filters { display: none; clear: both; margin-left: -20px; padding-top: 20px; background: white; }
 .filters > * { padding-left: 20px; }
@@ -158,21 +157,11 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .title { margin-left: 40px; }
 .loc { color: #88847d; font-size: 0.875em; clear: left; margin: 3px 10px 0 40px; }
 .extra { display: none; clear: left; padding: 20px 0 0 10px; }
-.ical_link {
-	display: none;
-	color: #88847d;
-	font-size: 0.875em;
-	margin: -10px 10px 10px 0;
-	padding-left: 13px;
-	clear: left;
-	float: right !important;
-	background: transparent url('../img/export-10px-888.png') no-repeat left 5px;
-}
 
 .expanded { background: #ebe3d7; margin-bottom: 10px; }
 .expanded .loc { color: #736f68; }
 .expanded .title { font-weight: 500; }
-.expanded .ical_link, .expanded .extra { display: block; }
+.expanded .extra { display: block; }
 
 a { color: black; }
 
