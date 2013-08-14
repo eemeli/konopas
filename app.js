@@ -95,7 +95,7 @@ function GlobToRE(pat) {
 	return new RegExp(terms.join('|'), 'i');
 }
 
-var views = [ "what", "next", "star", "prog", "part", "maps" ];
+var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
 	for (var i in views) { document.body.classList.remove(views[i]); }
 	document.body.classList.add(new_view);
@@ -110,7 +110,7 @@ function show_info(item, id) {
 	if (EL("e" + id)) return;
 
 	var html = "";
-	var a = prog.filter(function(el) { return el.id == id; });
+	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
 		if ('people' in a[0]) {
@@ -125,13 +125,13 @@ function show_info(item, id) {
 
 function show_prog_list(ls) {
 	var list = [];
-	var prev_day = "", day_str = "", prev_time = "";
+	var prev_date = "", day_str = "", prev_time = "";
 	for (var i = 0; i < ls.length; ++i) {
-		if (ls[i].day != prev_day) {
-			prev_day = ls[i].day;
+		if (ls[i].date != prev_date) {
+			prev_date = ls[i].date;
 			prev_time = "";
 
-			var t = new Date(ls[i].day);
+			var t = new Date(ls[i].date);
 			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
 			var td = t - Date.now();
 			if ((td < 0) || (td > 1000*3600*24*6)) {
@@ -197,8 +197,8 @@ function show_prog_list(ls) {
 // ------------------------------------------------------------------------------------------------ ical export
 
 function make_ical_item(p) {
-	var t0 = new Date(p.day + 'T' + p.time + 'Z');
-	var t1 = new Date(p.day + 'T' + p.time + 'Z');
+	var t0 = new Date(p.date + 'T' + p.time + 'Z');
+	var t1 = new Date(p.date + 'T' + p.time + 'Z');
 	t1.setUTCMinutes(t1.getUTCMinutes() + p.mins);
 	var t_start = t0.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
 	var t_end = t1.toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}Z/, '');
@@ -256,19 +256,9 @@ function save_ical(p) {
 	}
 
 	if (ids.length < 1) return;
-	var ls = prog.filter(function(it) { return (ids.indexOf(it.id) >= 0); });
+	var ls = program.filter(function(it) { return (ids.indexOf(it.id) >= 0); });
 	var blob = new Blob([make_ical(ls)], {type: "text/calendar;charset=utf-8"});
 	saveAs(blob, fn + '.ics');
-}
-
-
-
-// ------------------------------------------------------------------------------------------------ what view
-
-function show_what_view() {
-	set_view("what");
-
-	EL("prog_ls").innerHTML = '';
 }
 
 
@@ -298,7 +288,7 @@ function update_next_list(next_type) {
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
 	var now_str = string_time(t);
-	var now_day = now_str.substr(0, 10);
+	var now_date = now_str.substr(0, 10);
 	var now_time = now_str.substr(11);
 
 	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
@@ -307,17 +297,17 @@ function update_next_list(next_type) {
 	var ms_next = 0;
 	var ms_max = t.valueOf() + 60 * 60 * 1000;
 	var n = 0;
-	prog.forEach(function(it) {
-		if (it.day < now_day) return;
-		if ((it.day == now_day) && (it.time < now_time)) return;
+	program.forEach(function(it) {
+		if (it.date < now_date) return;
+		if ((it.date == now_date) && (it.time < now_time)) return;
 
-		var ms_it = Date.parse(it.day + 'T' + it.time);
+		var ms_it = Date.parse(it.date + 'T' + it.time);
 		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
 			if (next[it.loc[0]]) {
-				if (next[it.loc[0]].day < it.day) return;
-				if ((next[it.loc[0]].day == it.day) && (next[it.loc[0]].time < it.loc[0])) return;
+				if (next[it.loc[0]].date < it.date) return;
+				if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) return;
 			}
 			next[it.loc[0]] = it;
 		} else {
@@ -405,7 +395,7 @@ function show_star_view() {
 		if (star_ids.length) {
 			sh.innerHTML = '';
 			//EL("ical_link").style.display = 'block';
-			var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
+			var ls = program.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
 			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
@@ -438,8 +428,8 @@ function update_prog_list(day, area, tag, freetext) {
 		}
 	}
 
-	var ls = prog.filter(function(it) {
-		if (day && it.day != day) return false;
+	var ls = program.filter(function(it) {
+		if (day && it.date != day) return false;
 
 		if (area) switch (area) {
 			case "everywhere": break;
@@ -530,8 +520,8 @@ function update_prog_filters(day, area, tag, freetext) {
 }
 
 function default_prog_day() {
-	var day_start = prog[0].day;
-	var day_end = prog[prog.length-1].day;
+	var day_start = program[0].date;
+	var day_end = program[program.length-1].date;
 	var day_now = string_time().substr(0, 10);
 
 	var day = (day_now <= day_start) ? ''
@@ -667,7 +657,7 @@ function update_part_view(name_sort, first_letter, participant) {
 			+ (pa[0].links && pa[0].links.img ? ('<p><img class="bio_img" src="' + pa[0].links.img + '">') : '')
 			+ (pa[0].bio ? ('<p>' + pa[0].bio) : '')
 			+ links;
-		show_prog_list(prog.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
+		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
 
 
@@ -727,10 +717,10 @@ function show_part_view(opt) {
 
 
 
-// ------------------------------------------------------------------------------------------------ maps view
+// ------------------------------------------------------------------------------------------------ info view
 
-function show_maps_view() {
-	set_view("maps");
+function show_info_view() {
+	set_view("info");
 
 	EL("prog_ls").innerHTML = "";
 }
@@ -828,13 +818,12 @@ function init_view() {
 	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".view") : '';
 	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
-		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
 		case 'star': show_star_view(); break;
 		case 'part': show_part_view(opt.substr(4)); break;
-		case 'maps': show_maps_view(); break;
+		case 'info': show_info_view(); break;
 		case 'prog': show_prog_view(opt.substr(4)); break;
-		default:     show_what_view(); break;
+		default:     show_prog_view(); break;
 	}
 
 	if (EL("top")) EL("top").scrollIntoView();

@@ -20,11 +20,9 @@
 
 @media all and (min-width: 700px) {
 	#banner { width: 200px; float: left; }
-	#opt_what { left: 8px !important; top: 50px !important; }
-	#opt_style { left: 41px !important; top: 50px !important; }
 	#tabs { border-bottom: none !important; border-right: 2px solid; margin-top: 46px !important; padding-top: 0 !important; font-size: 1.2em; }
 	#tabs li { display: block !important; text-align: right; margin: 10px 0; }
-	.next #tabs #tab_next, .star #tabs #tab_star, .prog #tabs #tab_prog,.part #tabs #tab_part, .maps #tabs #tab_maps {
+	.next #tabs #tab_next, .star #tabs #tab_star, .prog #tabs #tab_prog,.part #tabs #tab_part, .info #tabs #tab_info {
 		border-bottom-color: inherit !important;
 		border-right-color: white !important;
 		margin-right: -2px;
@@ -48,33 +46,6 @@ body { margin: 8px; }
 #time { top: 0; }
 #scroll { bottom: 0; display: none; max-width: 40px; font-size: 0.8em; }
 #scroll a { color: #ccc5bb; text-decoration: none; }
-.what #time, .what #scroll { display: none !important; }
-
-#opt_what, #opt_style {
-	position: absolute;
-	display: block;
-	z-index: 4;
-	top: 8px;
-	width: 25px;
-	line-height: 25px;
-	text-align: center;
-	font-weight: 500;
-	cursor: pointer;
-}
-#opt_what {
-	right: 41px;
-	width: 21px;
-	line-height: 21px;
-	border: 2px solid;
-	text-decoration: none;
-}
-
-#opt_style {
-	right: 8px;
-	background: black;
-	color: white;
-}
-.black #opt_style { background: white; color: black; }
 
 #banner, .filters, #part_view, .hint, #ical_link { position: relative; z-index: 3; background: white; padding-top: 0; }
 
@@ -86,18 +57,14 @@ h1 a { text-decoration: none; }
 #tabs { list-style-type: none; border-bottom: 2px solid; padding: 5px 0 0 0; margin: 0; }
 #tabs li { display: inline-block; padding: 2px 6px; cursor: pointer; }
 #tabs a { text-decoration: none; }
-.next #tab_next, .star #tab_star, .prog #tab_prog,.part #tab_part, .maps #tab_maps { font-weight: 500; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
+.next #tab_next, .star #tab_star, .prog #tab_prog,.part #tab_part, .info #tab_info { font-weight: 500; border: 2px solid; border-bottom-color: white !important; margin-bottom: -2px; }
 
 .view { display: none; }
-.what #what_view { display: block; position: relative; z-index: 6; }
 .next #next_view { display: block; }
 .star #star_view { display: block; }
 .prog #prog_view { display: block; }
 .part #part_view { display: block; }
-.maps #maps_view { display: block; }
-
-#what_view h3 { margin: 20px 0 5px 0; border-bottom: 2px solid #ccc5bb; padding-bottom: 2px; }
-#what_view h3 + p { margin-top: 5px; }
+.info #info_view { display: block; }
 
 #star_hint { padding: 20px 0; max-width: 600px; }
 #ical_link { color: #88847d; padding-left: 55px; cursor: pointer; }
@@ -209,27 +176,15 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 
 a { color: black; }
 
-.maps #time, .maps #scroll { display: none !important; }
-#maps_view h2 { font-size: 2.0em; margin-top: 40px; border-bottom: 2px solid; }
-#maps_view img { width: 600px; margin: 5px 0; }
-#maps_view a { display: block; float: left; max-width: 290px; margin-top: 20px; text-align: center; text-decoration: none; }
-#maps_view a img { border: 2px solid; }
-#maps_view table { width: 600px; }
-#maps_view td { width: 50%; vertical-align: top; }
-#maps_view h3 { margin-bottom: 5px; }
-#maps_view ol { margin: 5px 0; }
+#info_view h3 { margin: 20px 0 5px 0; border-bottom: 2px solid #ccc5bb; padding-bottom: 2px; }
+#info_view h3 + p { margin-top: 5px; }
 
-.black, .black #next_time { background: black; color: white; }
-.black.next #tab_next, .black.prog #tab_prog, .black.part #tab_part, .black.maps #tab_maps { border-bottom-color: black !important; }
-.black #banner, .black .filters, .black #part_view, .black input, .black .new_day { background: black; }
-.black .new_time {
-	background: black;
-	background: transparent -webkit-linear-gradient(top, black 50%, rgba(0,0,0,0.0));
-	background: transparent    -moz-linear-gradient(top, black 50%, rgba(0,0,0,0.0));
-	background: transparent     -ms-linear-gradient(top, black 50%, rgba(0,0,0,0.0));
-	background: transparent         linear-gradient(top, black 50%, rgba(0,0,0,0.0));
-}
-.black input, .black #q_fix b, .black a { color: white; }
-.black .selected, .black .selected span { border-color: white !important; text-decoration: underline; }
-.black input.selected { text-decoration: none !important; }
-.black .expanded { background: #202020; }
+.info #time, .info #scroll { display: none !important; }
+#info_view h2 { font-size: 2.0em; margin-top: 40px; border-bottom: 2px solid; }
+#info_view img { width: 600px; margin: 5px 0; }
+#info_view a { display: block; float: left; max-width: 290px; margin-top: 20px; text-align: center; text-decoration: none; }
+#info_view a img { border: 2px solid; }
+#info_view table { width: 600px; }
+#info_view td { width: 50%; vertical-align: top; }
+#info_view h3 { margin-bottom: 5px; }
+#info_view ol { margin: 5px 0; }
