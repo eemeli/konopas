@@ -17,9 +17,11 @@
   src: local('Oswald Regular'), local('Oswald-Regular'), url(Oswald400.ttf) format('truetype');
 }
 
+#title { margin-left: 25px; width: 50px; }
 
 @media all and (min-width: 700px) {
 	#banner { width: 200px; float: left; }
+	#title { width: 150px; }
 	#tabs { border-bottom: none !important; border-right: 2px solid; margin-top: 46px !important; padding-top: 0 !important; font-size: 1.2em; }
 	#tabs li { display: block !important; text-align: right; margin: 10px 0; }
 	.next #tabs #tab_next, .star #tabs #tab_star, .prog #tabs #tab_prog,.part #tabs #tab_part, .info #tabs #tab_info {
