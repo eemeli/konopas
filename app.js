@@ -65,13 +65,19 @@ function supports_localstorage() {
 	}
 }
 
-function read_stars() {
-	var ls_stars = localStorage.getItem(konopas_set.id + ".stars");
-	return ls_stars ? JSON.parse(ls_stars) : [];
+function storage_get(name) {
+	if (!supports_localstorage()) return false;
+	var v = localStorage.getItem(konopas_set.id + '.' + name);
+	return v ? JSON.parse(v) : v;
+}
+
+function storage_set(name, value) {
+	if (!supports_localstorage()) return;
+	localStorage.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
 }
 
 function toggle_star(el, id) {
-	var stars = read_stars();
+	var stars = storage_get('stars') || [];
 	if (el.classList.contains("has_star")) {
 		stars = stars.filter(function(el) { return el != id; });
 		el.classList.remove("has_star");
@@ -80,7 +86,7 @@ function toggle_star(el, id) {
 		el.classList.add("has_star");
 	}
 	stars.sort();
-	localStorage.setItem(konopas_set.id + ".stars", JSON.stringify(stars));
+	storage_set('stars', stars);
 }
 
 function GlobToRE(pat) {
@@ -99,7 +105,7 @@ var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
 	for (var i in views) { document.body.classList.remove(views[i]); }
 	document.body.classList.add(new_view);
-	if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".view", new_view);
+	storage_set('view', new_view);
 }
 
 
@@ -184,10 +190,11 @@ function show_prog_list(ls) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
 
-		read_stars().forEach(function(s) {
-			var el = EL('s' + s);
+		var stars = storage_get('stars') || [];
+		for (var i = 0; i < stars.length; ++i) {
+			var el = EL('s' + stars[i]);
 			if (el) el.classList.add("has_star");
-		});
+		}
 	}
 }
 
@@ -227,23 +234,24 @@ function update_next_list(next_type) {
 	var ms_next = 0;
 	var ms_max = t.valueOf() + 60 * 60 * 1000;
 	var n = 0;
-	program.forEach(function(it) {
-		if (it.date < now_date) return;
-		if ((it.date == now_date) && (it.time < now_time)) return;
+	for (var i = 0; i < program.length; ++i) {
+		var it = program[i];
+		if (it.date < now_date) continue;
+		if ((it.date == now_date) && (it.time < now_time)) continue;
 
 		var ms_it = Date.parse(it.date + 'T' + it.time);
 		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
 			if (next[it.loc[0]]) {
-				if (next[it.loc[0]].date < it.date) return;
-				if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) return;
+				if (next[it.loc[0]].date < it.date) continue;
+				if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) continue;
 			}
 			next[it.loc[0]] = it;
 		} else {
 			if (ms_it <= ms_max) next['n' + (++n)] = it;
 		}
-	});
+	}
 
 	var next_prog = [];
 	for (var k in next) {
@@ -280,9 +288,7 @@ function update_next_filters(next_type) {
 		else ul[i].classList.remove("selected");
 	}
 
-	if (supports_localstorage()) localStorage.setItem(konopas_set.id + '.next_filter', JSON.stringify([
-		["next_type", next_type]
-	]));
+	storage_set('next', { 'next_type': next_type })
 }
 
 function next_filter(ctrl, item) {
@@ -302,11 +308,8 @@ function show_next_view() {
 
 	var next_type = "next_by_hour";
 
-	var f0s = supports_localstorage() ? localStorage.getItem(konopas_set.id + '.next_filter') : '';
-	var f0 = f0s ? JSON.parse(f0s) : [];
-	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-		case "next_type":    next_type = f0[i][1]; break;
-	}
+	var store = storage_get('next') || {};
+	if ('next_type' in store) next_type = store.next_type;
 
 	update_next_list(next_type);
 	update_next_filters(next_type);
@@ -321,10 +324,10 @@ function show_star_view() {
 
 	var sh = EL("star_hint");
 	if (supports_localstorage()) {
-		var star_ids = read_stars();
-		if (star_ids.length) {
+		var stars = storage_get('stars');
+		if (stars) {
 			sh.innerHTML = '';
-			var ls = program.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
+			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
 			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
@@ -402,9 +405,7 @@ function update_prog_list(day, area, tag, freetext) {
 		}
 	}
 
-	if (supports_localstorage()) localStorage.setItem(konopas_set.id + '.prog_filter', JSON.stringify([
-		["day", day], ["area", area], ["tag", tag], ["freetext", freetext]
-	]));
+	storage_set('prog', { 'day': day, 'area': area, 'tag': tag, 'freetext': freetext });
 }
 
 function update_prog_filters(day, area, tag, freetext) {
@@ -491,13 +492,12 @@ function show_prog_view(opt) {
 	if (!document.body.classList.contains("prog")) {
 		set_view("prog");
 
-		var f0s = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".prog_filter") : '';
-		var f0 = f0s ? JSON.parse(f0s) : [];
-		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-			case "day": day = f0[i][1]; break;
-			case "area": area = f0[i][1]; break;
-			case "tag": tag = f0[i][1]; break;
-			case "freetext": freetext = f0[i][1]; break;
+		var store = storage_get('prog');
+		if (store) {
+			if ('day' in store) day = store.day;
+			if ('area' in store) area = store.area;
+			if ('tag' in store) tag = store.tag;
+			if ('freetext' in store) freetext = store.freetext;
 		}
 	}
 
@@ -585,9 +585,7 @@ function update_part_view(name_range, participant) {
 		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
 
-
-	if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".part",
-		JSON.stringify({ 'name_range': name_range, 'participant': participant }));
+	storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
 function part_filter(ctrl, el) {
@@ -614,13 +612,13 @@ function find_name_range(name) {
 function show_part_view(opt) {
 	var name_range ='', participant = '';
 
+	var store = storage_get('part') || {};
+	if ('name_range' in store) name_range = store.name_range;
+
 	if (!document.body.classList.contains("part")) {
 		set_view("part");
 
-		var f0s = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".part") : '';
-		var f0 = f0s ? JSON.parse(f0s) : {};
-		if ('name_range' in f0) name_range = f0.name_range;
-		if ('participant' in f0) participant = f0.participant;
+		if ('participant' in store) participant = store.participant;
 	}
 
 	if (opt) {
@@ -720,7 +718,7 @@ if (EL("scroll_link")) {
 
 function init_view() {
 	var opt = window.location.hash.substr(1);
-	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".view") : '';
+	if (opt.length < 4) opt = storage_get('view');
 	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
 		case 'next': show_next_view(); break;
