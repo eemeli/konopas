@@ -509,7 +509,6 @@ function show_prog_view(opt) {
 // ------------------------------------------------------------------------------------------------ participant view
 
 function update_part_view(name_range, participant) {
-	console.log('part update '+name_range+' '+participant);
 	var el_nr = EL('name_range');
 	if (el_nr) {
 		var ll = el_nr.getElementsByTagName('li');
@@ -593,7 +592,6 @@ function update_part_view(name_range, participant) {
 
 function part_filter(ctrl, el) {
 	var name_range = (ctrl == 'name_range') ? el.getAttribute("data-range") : '';
-	console.log('part filter '+ctrl+' '+name_range);
 	update_part_view(name_range, '');
 }
 
@@ -624,7 +622,6 @@ function show_part_view(opt) {
 		if ('name_range' in f0) name_range = f0.name_range;
 		if ('participant' in f0) participant = f0.participant;
 	}
-	console.log('part show '+name_range+' '+participant);
 
 	if (opt) {
 		var p_id = opt.substr(1);
@@ -640,7 +637,6 @@ function show_part_view(opt) {
 		window.location.hash = '#part/' + participant.substr(1);
 		return;
 	}
-	console.log('> '+name_range+' '+participant);
 
 	update_part_view(name_range, participant);
 }
@@ -658,23 +654,6 @@ function show_info_view() {
 
 
 // ------------------------------------------------------------------------------------------------ init
-
-// page style
-if (supports_localstorage()) {
-	var style = localStorage.getItem(konopas_set.id + ".style");
-	if (style) document.body.classList.add(style);
-}
-var os = EL("opt_style");
-if (os) os.onclick = function() {
-	if (document.body.classList.contains("black")) {
-		document.body.classList.remove("black");
-		if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".style", "");
-	} else {
-		document.body.classList.add("black");
-		if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".style", "black");
-	}
-};
-
 
 // init next view
 if (EL("next_filters")) {
