@@ -508,54 +508,53 @@ function show_prog_view(opt) {
 
 // ------------------------------------------------------------------------------------------------ participant view
 
-function update_part_view(name_sort, first_letter, participant) {
-	var el_sf = EL('sort_first'),
-	    el_sl = EL('sort_last'),
-	    el_fl = EL('first_letter');
-
-	if (el_sf && el_sl) {
-		if (name_sort == "sort_first") {
-			el_sf.classList.add("selected");
-			el_sl.classList.remove("selected");
-		} else {
-			el_sf.classList.remove("selected");
-			el_sl.classList.add("selected");
-		}
-	}
-
-	if (el_fl) {
-		var ll = el_fl.getElementsByTagName("li");
+function update_part_view(name_range, participant) {
+	console.log('part update '+name_range+' '+participant);
+	var el_nr = EL('name_range');
+	if (el_nr) {
+		var ll = el_nr.getElementsByTagName('li');
 		for (var i = 0; i < ll.length; ++i) {
-			if ((ll[i].innerHTML == first_letter) || ((ll[i].innerHTML == 'all') && (first_letter == ''))) ll[i].classList.add("selected");
-			else ll[i].classList.remove("selected");
+			if (ll[i].getAttribute('data-range') == name_range) ll[i].classList.add('selected');
+			else ll[i].classList.remove('selected');
 		}
 	}
-
 
 	var p_id = participant.substr(1);
 	var pa = people.filter(function(p) { return p.id == p_id; });
 	if (!pa.length) {
 		participant = '';
 
-		var lp = (first_letter == '') ? people.slice(0) : people.filter(function(p) {
-			var n = ((name_sort != 'sort_first') && p.name[1]) ? p.name[1] : p.name[0];
-			return n[0] == first_letter;
-		});
-		if (name_sort == 'sort_first') lp.sort(function(a, b) {
-			var an = (a.name[0] + '  ' + a.name[1]).toLowerCase();
-			var bn = (b.name[0] + '  ' + b.name[1]).toLowerCase();
-				 if (an < bn) return -1;
-			else if (an > bn) return 1;
-			else              return 0;
-		});
-		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part/' + p.id + '"><span class="fn">' + (p.name[0] ? p.name[0] : '') + '</span> <span class="ln">' + p.name[1] + '</span></a></li>';
-		}).join('');
-		EL("part_info").innerHTML = "";
-		EL("prog_ls").innerHTML = "";
-	} else {
-		var listlink = EL('first_letter') ? '' : '<a href="#part" class="part_list_link">&laquo; List of all participants</a>';
+		if (name_range) {
+			var lp = people.filter(function(p) {
+				var n = (p.name[1] + '  ' + p.name[0]).replace(/^ +/, '');
+				var n0 = n[0].toUpperCase();
+				switch (name_range.length) {
+					case 1:  if (n0 == name_range[0])                            return true; break;
+					case 2:  if ((n0 >= name_range[0]) && (n0 <= name_range[1])) return true; break;
+					default: if (name_range.indexOf(n0) >= 0)                    return true; break;
+				}
+				return false;
+			});
 
+			lp.sort(function(a, b) {
+				var an = (a.name[1] + '  ' + a.name[0]).toLowerCase().replace(/^ +/, '');
+				var bn = (b.name[1] + '  ' + b.name[0]).toLowerCase().replace(/^ +/, '');
+					 if (an < bn) return -1;
+				else if (an > bn) return 1;
+				else              return 0;
+			});
+			EL('part_names').innerHTML = lp.map(function(p) {
+				return '<li><a href="#part/' + p.id + '">'
+					+ '<span class="fn">' + (p.name[1] ? p.name[0] : '') + '</span> '
+					+ '<span class="ln">' + (p.name[1] ? p.name[1] : p.name[0]) + '</span>'
+					+ '</a></li>';
+			}).join('');
+		} else {
+			EL('part_names').innerHTML = '';
+		}
+		EL('part_info').innerHTML = '';
+		EL('prog_ls').innerHTML = '';
+	} else {
 		var links = '';
 		if (pa[0].links) {
 			links += '<dl class="linklist">';
@@ -578,9 +577,9 @@ function update_part_view(name_sort, first_letter, participant) {
 			}
 			links += '</dl>';
 		}
-		EL("part_names").innerHTML = "";
-		EL("part_info").innerHTML = listlink
-			+ '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
+		EL("part_names").innerHTML = '';
+		EL("part_info").innerHTML = 
+			  '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
 			+ (pa[0].links && pa[0].links.img ? ('<p><img class="bio_img" src="' + pa[0].links.img + '">') : '')
 			+ (pa[0].bio ? ('<p>' + pa[0].bio) : '')
 			+ links;
@@ -588,48 +587,51 @@ function update_part_view(name_sort, first_letter, participant) {
 	}
 
 
-	if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".part_filter", JSON.stringify([
-		["name_sort", name_sort], ["first_letter", first_letter], ["participant", participant]
-	]));
+	if (supports_localstorage()) localStorage.setItem(konopas_set.id + ".part",
+		JSON.stringify({ 'name_range': name_range, 'participant': participant }));
 }
 
 function part_filter(ctrl, el) {
-	var name_sort = selected_id("name_sort");
-	var first_letter = selected_id("first_letter");
-	var participant = "";
+	var name_range = (ctrl == 'name_range') ? el.getAttribute("data-range") : '';
+	console.log('part filter '+ctrl+' '+name_range);
+	update_part_view(name_range, '');
+}
 
-	switch (ctrl) {
-		case "name_sort":    name_sort = el.id; break;
-		case "first_letter":
-			first_letter = el.innerHTML;
-			if (first_letter == 'all') first_letter = '';
-			break;
+function find_name_range(name) {
+	var n = (name[1] + '  ' + name[0]).toUpperCase().replace(/^ +/, ''); if (!n) return '';
+	var par = EL('name_range'); if (!par) return '';
+	var ll = par.getElementsByTagName('li'); if (!ll.length) return '';
+	for (var i in ll) {
+		var range = ll[i].getAttribute('data-range');
+		switch (range.length) {
+			case 0:  break;
+			case 1:  if (n[0] == range[0])                         return range; break;
+			case 2:  if ((n[0] >= range[0]) && (n[0] <= range[1])) return range; break;
+			default: if (range.indexOf(n[0]) >= 0)                 return range; break;
+		}
 	}
-
-	update_part_view(name_sort, first_letter, participant);
+	return '';
 }
 
 function show_part_view(opt) {
-	var name_sort = "sort_last", first_letter = "", participant = "";
+	var name_range ='', participant = '';
 
 	if (!document.body.classList.contains("part")) {
 		set_view("part");
 
-		var f0s = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".part_filter") : '';
-		var f0 = f0s ? JSON.parse(f0s) : [];
-		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-			case "name_sort":    name_sort = f0[i][1]; break;
-			case "first_letter": first_letter = f0[i][1]; break;
-			case "participant":  participant = f0[i][1]; break;
-		}
+		var f0s = supports_localstorage() ? localStorage.getItem(konopas_set.id + ".part") : '';
+		var f0 = f0s ? JSON.parse(f0s) : {};
+		if ('name_range' in f0) name_range = f0.name_range;
+		if ('participant' in f0) participant = f0.participant;
 	}
+	console.log('part show '+name_range+' '+participant);
 
 	if (opt) {
 		var p_id = opt.substr(1);
 		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
-			first_letter = (name_sort == 'sort_first') ? pa[0].name[0][0] : pa[0].name[1][0];
+			name_range = find_name_range(pa[0].name);
 		} else {
 			window.location.hash = '#part';
 			return;
@@ -638,8 +640,9 @@ function show_part_view(opt) {
 		window.location.hash = '#part/' + participant.substr(1);
 		return;
 	}
+	console.log('> '+name_range+' '+participant);
 
-	update_part_view(name_sort, first_letter, participant);
+	update_part_view(name_range, participant);
 }
 
 
