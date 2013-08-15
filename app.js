@@ -119,6 +119,10 @@ function show_info(item, id) {
 	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
+		if (('tags' in a[0]) && a[0].tags.length) {
+			var at = a[0].tags.map(function(t) { return '<a href="#prog/tag:' + t/*.toLowerCase().replace(/\W+/g, '-')*/ + '">' + t + '</a>'; });
+			if (at.length) html += '<div class="item-tags">Tags: ' + at.join(', ') + '</div><br>\n';
+		}
 		if ('people' in a[0]) {
 			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
 			if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
@@ -464,6 +468,23 @@ function update_prog(day, area, tag, freetext) {
 		day = default_prog_day();
 	}
 
+	console.log('update_prog '+day+' '+area+' '+tag+' '+freetext);
+
+	var hash_in = window.location.hash;
+
+	var parts_out = ['#prog'];
+	if (day) parts_out.push('day:' + day);
+	if (area && (area != 'everywhere')) parts_out.push('area:' + area);
+	if (tag && (tag != 'all_tags')) parts_out.push('tag:' + tag);
+	var hash_out = parts_out.join('/');
+
+	console.log(hash_in+' > '+hash_out+(hash_in == hash_out ? ' ok' : ' redirect'));
+
+	if (hash_in != hash_out) {
+		window.location.hash = hash_out;
+		return;
+	}
+
 	update_prog_list(day, area, tag, freetext);
 	update_prog_filters(day, area, tag, freetext);
 }
@@ -498,6 +519,18 @@ function show_prog_view(opt) {
 			if ('area' in store) area = store.area;
 			if ('tag' in store) tag = store.tag;
 			if ('freetext' in store) freetext = store.freetext;
+		}
+	}
+
+	if (opt) {
+		var parts_in = opt.split('/');
+		for (var i in parts_in) {
+			var s = parts_in[i].split(':');
+			if (s.length >= 2) switch (s[0]) {
+				case 'day':  if (!day) day = s[1]; break;
+				case 'area': if (!area) area = s[1]; break;
+				case 'tag':  if (!tag) tag = s[1]; break;
+			}
 		}
 	}
 

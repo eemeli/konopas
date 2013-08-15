@@ -169,6 +169,8 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 .expanded .title { font-weight: 500; }
 .expanded .extra { display: block; }
 
+.item-tags { margin: -20px 0 0 30px; color: #736f68; font-size: 0.875em; }
+
 a { color: black; }
 
 #info_view h3 { margin: 20px 0 5px 0; border-bottom: 2px solid #ccc5bb; padding-bottom: 2px; }
