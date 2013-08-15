@@ -325,7 +325,7 @@ function show_star_view() {
 	var sh = EL("star_hint");
 	if (supports_localstorage()) {
 		var stars = storage_get('stars');
-		if (stars) {
+		if (stars && stars.length) {
 			sh.innerHTML = '';
 			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
@@ -635,6 +635,8 @@ function show_part_view(opt) {
 		window.location.hash = '#part/' + participant.substr(1);
 		return;
 	}
+
+	if (!name_range) name_range = EL('name_range').getElementsByTagName('li')[0].getAttribute('data-range');
 
 	update_part_view(name_range, participant);
 }
