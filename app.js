@@ -57,7 +57,7 @@ function time_sum(t0_str, m_str) {
 	return pre0(h % 24) + ':' + pre0(m);
 }
 
-function supports_localstorage() {
+function supports_storage() {
 	try {
 		return 'localStorage' in window && window['localStorage'] !== null;
 	} catch (e) {
@@ -65,19 +65,21 @@ function supports_localstorage() {
 	}
 }
 
-function storage_get(name) {
-	if (!supports_localstorage()) return false;
-	var v = localStorage.getItem(konopas_set.id + '.' + name);
+function storage_get(name, use_localstorage) {
+	if (!supports_storage()) return false;
+	var s = use_localstorage ? localStorage : sessionStorage;
+	var v = s.getItem(konopas_set.id + '.' + name);
 	return v ? JSON.parse(v) : v;
 }
 
-function storage_set(name, value) {
-	if (!supports_localstorage()) return;
-	localStorage.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
+function storage_set(name, value, use_localstorage) {
+	if (!supports_storage()) return;
+	var s = use_localstorage ? localStorage : sessionStorage;
+	s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
 }
 
 function toggle_star(el, id) {
-	var stars = storage_get('stars') || [];
+	var stars = storage_get('stars', true) || [];
 	if (el.classList.contains("has_star")) {
 		stars = stars.filter(function(el) { return el != id; });
 		el.classList.remove("has_star");
@@ -86,7 +88,7 @@ function toggle_star(el, id) {
 		el.classList.add("has_star");
 	}
 	stars.sort();
-	storage_set('stars', stars);
+	storage_set('stars', stars, true);
 }
 
 function GlobToRE(pat) {
@@ -188,13 +190,13 @@ function show_prog_list(ls) {
 		};
 	}
 
-	if (supports_localstorage()) {
+	if (supports_storage()) {
 		var star_els = EL("prog_ls").getElementsByClassName("item_star");
 		for (var i = 0; i < star_els.length; ++i) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
 
-		var stars = storage_get('stars') || [];
+		var stars = storage_get('stars', true) || [];
 		for (var i = 0; i < stars.length; ++i) {
 			var el = EL('s' + stars[i]);
 			if (el) el.classList.add("has_star");
@@ -327,8 +329,8 @@ function show_star_view() {
 	set_view("star");
 
 	var view = EL("star_view");
-	if (supports_localstorage()) {
-		var stars = storage_get('stars');
+	if (supports_storage()) {
+		var stars = storage_get('stars', true);
 		if (stars && stars.length) {
 			view.innerHTML = '';
 			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
