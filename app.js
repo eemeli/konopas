@@ -326,19 +326,19 @@ function show_next_view() {
 function show_star_view() {
 	set_view("star");
 
-	var sh = EL("star_hint");
+	var view = EL("star_view");
 	if (supports_localstorage()) {
 		var stars = storage_get('stars');
 		if (stars && stars.length) {
-			sh.innerHTML = '';
+			view.innerHTML = '';
 			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
-			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
+			view.innerHTML = "<p><b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
 			EL("prog_ls").innerHTML = '';
 		}
 	} else {
-		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
+		view.innerHTML = "<p>HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
 		EL("prog_ls").innerHTML = '';
 	}
 }
