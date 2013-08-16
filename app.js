@@ -468,19 +468,14 @@ function update_prog(day, area, tag, freetext) {
 		day = default_prog_day();
 	}
 
-	console.log('update_prog '+day+' '+area+' '+tag+' '+freetext);
-
-	var hash_in = window.location.hash;
-
 	var parts_out = ['#prog'];
 	if (day) parts_out.push('day:' + day);
 	if (area && (area != 'everywhere')) parts_out.push('area:' + area);
 	if (tag && (tag != 'all_tags')) parts_out.push('tag:' + tag);
+	if (freetext) parts_out.push('query:' + freetext);
 	var hash_out = parts_out.join('/');
 
-	console.log(hash_in+' > '+hash_out+(hash_in == hash_out ? ' ok' : ' redirect'));
-
-	if (hash_in != hash_out) {
+	if (window.location.hash != hash_out) {
 		window.location.hash = hash_out;
 		return;
 	}
@@ -527,9 +522,10 @@ function show_prog_view(opt) {
 		for (var i in parts_in) {
 			var s = parts_in[i].split(':');
 			if (s.length >= 2) switch (s[0]) {
-				case 'day':  if (!day) day = s[1]; break;
-				case 'area': if (!area) area = s[1]; break;
-				case 'tag':  if (!tag) tag = s[1]; break;
+				case 'day':   day = s[1]; break;
+				case 'area':  area = s[1]; break;
+				case 'tag':   tag = s[1]; break;
+				case 'query': freetext = s[1]; break;
 			}
 		}
 	}
@@ -700,12 +696,12 @@ if (EL("next_filters")) {
 // init prog view
 var dc = EL("prog_filters").getElementsByTagName("li");
 for (var i = 0; i < dc.length; ++i) {
-	dc[i].onclick = function() { prog_filter(this.parentNode.id, this.id); return true; };
+	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); ev.stopPropagation(); return true; };
 }
 var sf = EL("search");
 if (sf) {
 	sf.onsubmit = function() { prog_filter(); return false; };
-	sf.onreset = function() { EL("q").value = ""; prog_filter(); return true; };
+	sf.onreset = function() { EL("q").value = ""; window.location.hash = '#prog'; return true; };
 }
 EL("q").onblur = prog_filter;
 

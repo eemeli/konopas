@@ -114,8 +114,9 @@ input[type="text"] { border: 2px solid #ccc5bb; box-shadow: none !important; }
 input[type="text"]:valid { background: #ebe3d7; }
 input[type="text"]:valid + #q_ctrl input { border-color: black; }
 #q, #q_ctrl { display: block; float: left; }
-#q_fix { cursor: pointer; }
+#q_ctrl input, #q_fix { cursor: pointer; }
 #q_fix b { color: black; }
+#q_clear { margin-left: 14px !important; }
 
 .popuplist { position: relative; }
 .popuplist ul {
@@ -123,11 +124,13 @@ input[type="text"]:valid + #q_ctrl input { border-color: black; }
 	position: absolute !important;
 	border: 1px solid #88847d;
 	right: 0; top: 18px;
+	width: 250px;
 	padding: 2px 5px;
 	background: white;
 	background: rgba(255, 255, 255, 0.9);
 }
 .popuplist:hover ul, .popuplist:focus ul { display: block !important; }
+.popuplist li { width: 125px; display: inline-block; }
 
 .ls { clear: both; }
 
