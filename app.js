@@ -20,6 +20,7 @@ var time_show_am_pm = false;
 
 
 // ------------------------------------------------------------------------------------------------ utilities
+if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^\s+|\s+$/g, ''); }; }
 
 function EL(id) { return document.getElementById(id); }
 
@@ -110,6 +111,69 @@ function set_view(new_view) {
 	storage_set('view', new_view);
 }
 
+function clean_name(p, span_parts) {
+	var fn = '', ln = '';
+	switch (p.name.length) {
+		case 1:
+			ln = p.name[0];
+			break;
+		case 2:
+			if (p.name[1]) {
+				fn = p.name[0];
+				ln = p.name[1];
+			} else {
+				ln = p.name[0];
+			}
+			break;
+		case 3:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1];
+			break;
+		case 4:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1] + ', ' + p.name[3];
+			break;
+	}
+
+	return span_parts
+		? '<span class="fn">' + fn.trim() + '</span> <span class="ln">' + ln.trim() + '</span>'
+		: (fn + ' ' + ln).trim();
+}
+
+function clean_links(p) {
+	var ok = false;
+	var o = {};
+
+	if ('links' in p) {
+		if (('photo' in p.links) && p.links.photo) {
+			var photo = p.links.photo.trim();
+			if (/^www/.exec(photo)) photo = 'http://' + photo;
+			if (/:\/\//.exec(photo)) { o['photo'] = photo; ok = true; }
+		}
+
+		if (('url' in p.links) && p.links.url) {
+			var url = p.links.url.trim();
+			if (!/:\/\//.exec(url)) url = 'http://' + url;
+			o['url'] = url; ok = true;
+		}
+
+		if (('fb' in p.links) && p.links.fb) {
+			var fb = p.links.fb.trim();
+			fb = fb.replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
+			if (/[^a-zA-Z0-9.]/.exec(fb) && !/^pages\//.exec(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
+			o['fb'] = fb; ok = true;
+		}
+
+		if (('twitter' in p.links) && p.links.twitter) {
+			var tw = p.links.twitter.trim();
+			tw = tw.replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
+			if (/[^a-zA-Z0-9_]/.exec(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
+			o['twitter'] = tw; ok = true;
+		}
+	}
+
+	return ok ? o : false;
+}
 
 
 // ------------------------------------------------------------------------------------------------ items
@@ -574,10 +638,7 @@ function update_part_view(name_range, participant) {
 				else              return 0;
 			});
 			EL('part_names').innerHTML = lp.map(function(p) {
-				return '<li><a href="#part/' + p.id + '">'
-					+ '<span class="fn">' + (p.name[1] ? p.name[0] : '') + '</span> '
-					+ '<span class="ln">' + (p.name[1] ? p.name[1] : p.name[0]) + '</span>'
-					+ '</a></li>';
+				return '<li><a href="#part/' + p.id + '">' + clean_name(p, true) + '</a></li>';
 			}).join('');
 		} else {
 			EL('part_names').innerHTML = '';
@@ -585,11 +646,14 @@ function update_part_view(name_range, participant) {
 		EL('part_info').innerHTML = '';
 		EL('prog_ls').innerHTML = '';
 	} else {
+		var p_name = clean_name(pa[0], false);
 		var links = '';
-		if (pa[0].links) {
+		var photo = '';
+		var pl = clean_links(pa[0]);
+		if (pl) {
 			links += '<dl class="linklist">';
-			for (var type in pa[0].links) {
-				var tgt = pa[0].links[type];
+			for (var type in pl) {
+				var tgt = pl[type];
 				switch (type) {
 					case 'url': links += '<dt>URL:<dd>'
 						+ '<a href="' + tgt + '">' + tgt + '</a>';
@@ -600,7 +664,12 @@ function update_part_view(name_range, participant) {
 					case 'fb': links += '<dt>Facebook:<dd>'
 						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
 						break;
-					case 'img':
+					case 'photo':
+						if (navigator.onLine) {
+							photo = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
+						} else {
+							links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
+						}
 						break;
 					default: links += '<dt>' + type + ':<dd>' + tgt;
 				}
@@ -609,9 +678,8 @@ function update_part_view(name_range, participant) {
 		}
 		EL("part_names").innerHTML = '';
 		EL("part_info").innerHTML = 
-			  '<h2 id="part_title">' + (pa[0].name[0] ? pa[0].name[0] : '') + ' ' + pa[0].name[1] + '</h2>' 
-			+ (pa[0].links && pa[0].links.img ? ('<p><img class="bio_img" src="' + pa[0].links.img + '">') : '')
-			+ (pa[0].bio ? ('<p>' + pa[0].bio) : '')
+			  '<h2 id="part_title">' + p_name + '</h2>'
+			+ ((pa[0].bio || photo) ? ('<p>' + photo + pa[0].bio) : '')
 			+ links;
 		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
