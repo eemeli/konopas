@@ -183,9 +183,9 @@ a { color: black; }
 .info #time, .info #scroll { display: none !important; }
 #info_view h2 { font-size: 2.0em; margin-top: 40px; border-bottom: 2px solid; }
 #info_view img { width: 600px; margin: 5px 0; }
-#info_view a { display: block; float: left; max-width: 290px; margin-top: 20px; text-align: center; text-decoration: none; }
-#info_view a img { border: 2px solid; }
 #info_view table { width: 600px; }
-#info_view td { width: 50%; vertical-align: top; }
+#info_view tr:hover { background: #ebe3d7; }
+#info_view td { text-align: center; }
+#info_view td:first-child { text-align: left; }
 #info_view h3 { margin-bottom: 5px; }
 #info_view ol { margin: 5px 0; }
