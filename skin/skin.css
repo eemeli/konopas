@@ -81,6 +81,16 @@ h1 a { text-decoration: none; }
 .filters ul { list-style-type: none; margin-top: 0; }
 .filters li { cursor: pointer; }
 
+#filter_sum {
+	clear: left;
+	max-width: 600px;
+	margin: 10px 0 0 20px;
+	border: 2px solid #800000;
+	border-radius: 5px;
+	padding: 10px;
+	background: #f0d79d;
+}
+
 .next #next_filters { display: block; }
 .prog #prog_filters { display: block; margin-left: -20px; }
 .part #part_filters { display: block; }

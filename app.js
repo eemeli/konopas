@@ -461,16 +461,34 @@ function update_prog_list(day, area, tag, freetext) {
 		return true;
 	});
 
+	var fs = EL('filter_sum');
+	if (fs) {
+		var ls_all = true;
+		var ft = 'item'; if (ls.length != 1) ft += 's';
+		if (tag && (tag != 'all_tags')) { ft = '<b>' + tag + '</b> ' + ft; ls_all = false; }
+		if (day) {
+			var dt = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][(new Date(day)).getDay()];
+			ft += ' on <b>' + dt + '</b>';
+			ls_all = false;
+		}
+		if (area && (area != 'everywhere')) { ft += ' in <b>' + area + '</b>'; ls_all = false; }
+		if (freetext) { ft += ' matching the query <b>' + freetext + '</b>'; ls_all = false; }
+
+		fs.innerHTML = 'Listing ' + (ls_all ? '<b>all</b> ' : '') + ls.length + ' ' + ft;
+	}
+
 	show_prog_list(ls);
 
 	var dh = EL("q_hint");
 	if (dh) {
 		if (re_hint) {
+			//dh.classList.add('hint');
 			dh.innerHTML = "<b>Hint:</b> search is for full words, but you may also use * and ? as wildcards or \"quoted words\" for exact phrases.";
 			if (hint) dh.innerHTML += " For example, "
 				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"EL('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
 				+ "searching for <b>" + glob_hint + "</b> would also match <b>" + hint + "</b></span>";
 		} else {
+			//dh.classList.remove('hint');
 			dh.innerHTML = "";
 		}
 	}
