@@ -187,13 +187,13 @@ function show_info(item, id) {
 	else {
 		if (('tags' in a[0]) && a[0].tags.length) {
 			var at = a[0].tags.map(function(t) { return '<a href="#prog/tag:' + t/*.toLowerCase().replace(/\W+/g, '-')*/ + '">' + t + '</a>'; });
-			if (at.length) html += '<div class="item-tags">Tags: ' + at.join(', ') + '</div><br>\n';
+			if (at.length) html += '<div class="item-tags">Tracks: ' + at.join(', ') + '</div>\n';
 		}
 		if ('people' in a[0]) {
 			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
-			if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
+			if (ap.length > 0) html += '<p>' + ap.join(', ') + '\n';
 		}
-		if (a[0].desc) html += "<p>" + a[0].desc + "</p>";
+		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
 }
@@ -225,7 +225,7 @@ function show_prog_list(ls) {
 
 		var loc_str = '';
 		if (ls[i].loc.length) {
-			loc_str = ls[i].loc[0];
+			loc_str = ls[i].loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
 			if (ls[i].loc.length > 1) loc_str += ' (' + ls[i].loc.slice(1).join(', ') + ')';
 		}
 		if (ls[i].mins && (ls[i].mins != default_duration)) {
@@ -244,10 +244,10 @@ function show_prog_list(ls) {
 	var items = EL("prog_ls").getElementsByClassName("item");
 	for (var i = 0; i < items.length; ++i) {
 		items[i].onclick = function() {
-			if (this.classList.contains("expanded")) {
-				this.classList.remove("expanded");
+			if (this.parentNode.classList.contains("expanded")) {
+				this.parentNode.classList.remove("expanded");
 			} else {
-				this.classList.add("expanded");
+				this.parentNode.classList.add("expanded");
 				show_info(this, this.id.substr(1));
 			}
 			return true;
@@ -500,7 +500,7 @@ function update_prog_filters(day, area, tag, freetext) {
 
 	var tt = tag || "all_tags";
 	var tc = EL("tag").getElementsByTagName("li");
-	var t2_title = "More tags...";
+	var t2_title = "More...";
 	for (var i = 0; i < tc.length; ++i) {
 		if (tc[i].id == tt) {
 			tc[i].classList.add("selected");
