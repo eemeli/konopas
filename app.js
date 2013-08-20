@@ -784,7 +784,7 @@ if (EL("next_filters")) {
 // init prog view
 var dc = EL("prog_filters").getElementsByTagName("li");
 for (var i = 0; i < dc.length; ++i) {
-	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); ev.stopPropagation(); return true; };
+	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); return true; };
 }
 var sf = EL("search");
 if (sf) {
@@ -792,6 +792,20 @@ if (sf) {
 	sf.onreset = function() { EL("q").value = ""; window.location.hash = '#prog'; return true; };
 }
 EL("q").onblur = prog_filter;
+
+var pl = EL("tag2-list");
+if (pl) {
+	pl.onclick = function(ev) {
+		if (pl.classList.contains("show_list")) {
+			EL("tag2-disable-bg").style.display = "none";
+			pl.classList.remove("show_list");
+		} else {
+			EL("tag2-disable-bg").style.display = "block";
+			pl.classList.add("show_list");
+		}
+		ev.stopPropagation();
+	};
+}
 
 
 // init part view
