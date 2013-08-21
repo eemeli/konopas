@@ -207,7 +207,7 @@ function show_prog_list(ls) {
 			prev_time = "";
 
 			var t = new Date(ls[i].date);
-			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getDay()];
 			var td = t - Date.now();
 			if ((td < 0) || (td > 1000*3600*24*6)) {
 				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
