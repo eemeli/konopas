@@ -207,7 +207,7 @@ function show_prog_list(ls) {
 			prev_time = "";
 
 			var t = new Date(ls[i].date);
-			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getDay()];
+			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
 			var td = t - Date.now();
 			if ((td < 0) || (td > 1000*3600*24*6)) {
 				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
@@ -467,7 +467,7 @@ function update_prog_list(day, area, tag, freetext) {
 		var ft = 'item'; if (ls.length != 1) ft += 's';
 		if (tag && (tag != 'all_tags')) { ft = '<b>' + tag + '</b> ' + ft; ls_all = false; }
 		if (day) {
-			var dt = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][(new Date(day)).getDay()];
+			var dt = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][(new Date(day)).getUTCDay()];
 			ft += ' on <b>' + dt + '</b>';
 			ls_all = false;
 		}
