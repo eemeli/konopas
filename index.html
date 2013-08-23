@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html> <!--manifest="cache.manifest"-->
+<html manifest="cache.manifest">
 <head>
 <meta charset="utf-8">
 <meta name="HandheldFriendly" content="true">
@@ -186,7 +186,7 @@
 <p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In order to make said magic work, about 1MB of your browser's memory is being used (probably without telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > [this site] > Clear stored data</tt> (details depend on your browser, OS, etc.)
 -->
 
-<p>This guide is an instance of <a href="https://github.com/eemeli/konopas">KonOpas</a>, an open-source project I started to provide conventions with easy-to-use mobile-friendly guides. My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I do a few other fannish things as well, like chair a bid for a Worldcon: <a href="http://helsinkiin2015.org/">Helsinki in 2015</a>!
+<p>This guide is an instance of <a href="https://github.com/eemeli/konopas">KonOpas</a>, an open-source project I started to provide conventions with easy-to-use mobile-friendly guides. My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I do a few other fannish things as well, like chair a bid for a Worldcon: Helsinki in 2015!
 </div>
 
 
@@ -196,13 +196,9 @@
 </div><!-- /main -->
 
 <script>
-	var konopas_set = {
-		'id': 'ko.lsc3',
-		'domain': 'lonestarcon3.org',
-		'timezone': 'America/Chicago'
-	};
+	var konopas_set = { 'id': 'ko.lsc3', 'domain': 'lonestarcon3.org', 'timezone': 'America/Chicago' };
 </script>
-<script src="data/program.js"></script>
-<script src="data/participants.js"></script>
+<script src="http://program.lonestarcon3.org/program.js"></script>
+<script src="http://program.lonestarcon3.org/program/participants.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>

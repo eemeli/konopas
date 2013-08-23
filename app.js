@@ -683,9 +683,9 @@ function update_part_view(name_range, participant) {
 						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
 						break;
 					case 'photo':
-						if (navigator.onLine) {
+						/*if (navigator.onLine) {
 							photo = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
-						} else {
+						} else*/ {
 							links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
 						}
 						break;
