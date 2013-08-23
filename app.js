@@ -51,6 +51,16 @@ function pretty_time(t) {
 	}
 }
 
+function pretty_time_diff(t) {
+	var diff = ( new Date() - t ) / 1e3,
+	       u = [ "seconds", "minutes", "hours", "days", "weeks", "months", "years" ],
+	       s = [ 1, 60, 60, 24, 7, 4.333, 12, 1e9],
+	   tense = ( diff<0 ? " from now" : " ago" );
+	diff = Math.abs(diff);
+	if (diff<20) return "just now";
+	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
+}
+
 function time_sum(t0_str, m_str) {
 	var t1 = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str;
 	var h = (t1 / 60) >> 0;
@@ -848,6 +858,18 @@ if (EL("scroll_link")) {
 	}
 }
 
+
+// init info view
+var lu = EL('last-updated');
+if (lu) {
+	var x = new XMLHttpRequest();
+	x.onload = function() {
+		var t = new Date(this.getResponseHeader("Last-Modified"));
+		lu.innerHTML = 'Program and participant data were last updated <span style="border-bottom: 1px dotted; cursor: pointer;" onclick="var tmp = this.title; this.title = this.innerHTML; this.innerHTML = tmp;" title="' + t.toLocaleString() + '">' + pretty_time_diff(t) + '</span>.';
+	};
+	x.open('GET', 'cache.manifest', true);
+	x.send();
+}
 
 function init_view() {
 	var opt = window.location.hash.substr(1);
