@@ -16,7 +16,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
 var default_duration = 60;
-var time_show_am_pm = false;
+var time_show_am_pm = true;
 
 
 // ------------------------------------------------------------------------------------------------ utilities
