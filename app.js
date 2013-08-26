@@ -208,6 +208,17 @@ function show_info(item, id) {
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
 }
 
+function expand_prog_item(ev) {
+	var p = ev.target.parentNode;
+	if (p.classList.contains("expanded")) {
+		p.classList.remove("expanded");
+	} else {
+		p.classList.add("expanded");
+		show_info(ev.target, ev.target.id.substr(1));
+	}
+	return true;
+};
+
 function show_prog_list(ls) {
 	var list = [];
 	var prev_date = "", day_str = "", prev_time = "";
@@ -252,17 +263,7 @@ function show_prog_list(ls) {
 	EL("prog_ls").innerHTML = list.join('');
 
 	var items = EL("prog_ls").getElementsByClassName("item");
-	for (var i = 0; i < items.length; ++i) {
-		items[i].onclick = function() {
-			if (this.parentNode.classList.contains("expanded")) {
-				this.parentNode.classList.remove("expanded");
-			} else {
-				this.parentNode.classList.add("expanded");
-				show_info(this, this.id.substr(1));
-			}
-			return true;
-		};
-	}
+	for (var i = 0; i < items.length; ++i) items[i].onclick = expand_prog_item;
 
 	if (supports_storage()) {
 		var star_els = EL("prog_ls").getElementsByClassName("item_star");
