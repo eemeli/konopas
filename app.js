@@ -891,3 +891,13 @@ function init_view() {
 
 init_view();
 window.onhashchange = init_view;
+
+window.addEventListener('load', function(e) {
+	window.applicationCache.addEventListener('updateready', function(e) {
+		if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+			window.applicationCache.swapCache();
+			var r = EL('refresh');
+			if (r) { r.classList.add('enabled'); r.onclick = function() { window.location.reload(); }; }
+		}
+	}, false);
+}, false);
