@@ -15,10 +15,14 @@ PERFORMANCE OF THIS SOFTWARE.
 
 
 var full_version = !navigator.userAgent.match(/Android [12]/);
+var default_duration = 60;
+var time_show_am_pm = true;
+
 
 
 
 // ------------------------------------------------------------------------------------------------ utilities
+if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^\s+|\s+$/g, ''); }; }
 
 function EL(id) { return document.getElementById(id); }
 
@@ -40,14 +44,33 @@ function string_time(t) {
 }
 
 function pretty_time(t) {
-	var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
-	return [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()]
-		+ ', ' + h12
-		+ ':' + pre0(t.getMinutes())
-		+ (t.getHours() < 12 ? ' am' : ' pm');
+	var d = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+	if (time_show_am_pm) {
+		var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
+		return d + ', ' + h12 + ':' + pre0(t.getMinutes()) + (t.getHours() < 12 ? ' am' : ' pm');
+	} else {
+		return d + ', ' + t.getHours() + ':' + pre0(t.getMinutes());
+	}
 }
 
-function supports_localstorage() {
+function pretty_time_diff(t) {
+	var diff = ( new Date() - t ) / 1e3,
+	       u = [ "seconds", "minutes", "hours", "days", "weeks", "months", "years" ],
+	       s = [ 1, 60, 60, 24, 7, 4.333, 12, 1e9],
+	   tense = ( diff<0 ? " from now" : " ago" );
+	diff = Math.abs(diff);
+	if (diff<20) return "just now";
+	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
+}
+
+function time_sum(t0_str, m_str) {
+	var t1 = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str;
+	var h = (t1 / 60) >> 0;
+	var m = t1 - 60 * h;
+	return pre0(h % 24) + ':' + pre0(m);
+}
+
+function supports_storage() {
 	try {
 		return 'localStorage' in window && window['localStorage'] !== null;
 	} catch (e) {
@@ -55,13 +78,21 @@ function supports_localstorage() {
 	}
 }
 
-function read_stars() {
-	var ls_stars = localStorage.getItem("ko.stars");
-	return ls_stars ? JSON.parse(ls_stars) : [];
+function storage_get(name, use_localstorage) {
+	if (!supports_storage()) return false;
+	var s = use_localstorage ? localStorage : sessionStorage;
+	var v = s.getItem(konopas_set.id + '.' + name);
+	return v ? JSON.parse(v) : v;
+}
+
+function storage_set(name, value, use_localstorage) {
+	if (!supports_storage()) return;
+	var s = use_localstorage ? localStorage : sessionStorage;
+	s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
 }
 
 function toggle_star(el, id) {
-	var stars = read_stars();
+	var stars = storage_get('stars', true) || [];
 	if (el.classList.contains("has_star")) {
 		stars = stars.filter(function(el) { return el != id; });
 		el.classList.remove("has_star");
@@ -70,7 +101,7 @@ function toggle_star(el, id) {
 		el.classList.add("has_star");
 	}
 	stars.sort();
-	localStorage.setItem("ko.stars", JSON.stringify(stars));
+	storage_set('stars', stars, true);
 }
 
 function GlobToRE(pat) {
@@ -85,11 +116,75 @@ function GlobToRE(pat) {
 	return new RegExp(terms.join('|'), 'i');
 }
 
-var views = [ "what", "next", "star", "prog", "part", "maps" ];
+var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
 	for (var i in views) { document.body.classList.remove(views[i]); }
 	document.body.classList.add(new_view);
-	if (supports_localstorage()) localStorage.setItem("ko.view", new_view);
+	storage_set('view', new_view);
+}
+
+function clean_name(p, span_parts) {
+	var fn = '', ln = '';
+	switch (p.name.length) {
+		case 1:
+			ln = p.name[0];
+			break;
+		case 2:
+			if (p.name[1]) {
+				fn = p.name[0];
+				ln = p.name[1];
+			} else {
+				ln = p.name[0];
+			}
+			break;
+		case 3:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1];
+			break;
+		case 4:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1] + ', ' + p.name[3];
+			break;
+	}
+
+	return span_parts
+		? '<span class="fn">' + fn.trim() + '</span> <span class="ln">' + ln.trim() + '</span>'
+		: (fn + ' ' + ln).trim();
+}
+
+function clean_links(p) {
+	var ok = false;
+	var o = {};
+
+	if ('links' in p) {
+		if (('photo' in p.links) && p.links.photo) {
+			var photo = p.links.photo.trim();
+			if (/^www/.exec(photo)) photo = 'http://' + photo;
+			if (/:\/\//.exec(photo)) { o['photo'] = photo; ok = true; }
+		}
+
+		if (('url' in p.links) && p.links.url) {
+			var url = p.links.url.trim();
+			if (!/:\/\//.exec(url)) url = 'http://' + url;
+			o['url'] = url; ok = true;
+		}
+
+		if (('fb' in p.links) && p.links.fb) {
+			var fb = p.links.fb.trim();
+			fb = fb.replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
+			if (/[^a-zA-Z0-9.]/.exec(fb) && !/^pages\//.exec(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
+			o['fb'] = fb; ok = true;
+		}
+
+		if (('twitter' in p.links) && p.links.twitter) {
+			var tw = p.links.twitter.trim();
+			tw = tw.replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
+			if (/[^a-zA-Z0-9_]/.exec(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
+			o['twitter'] = tw; ok = true;
+		}
+	}
+
+	return ok ? o : false;
 }
 
 
@@ -100,26 +195,48 @@ function show_info(item, id) {
 	if (EL("e" + id)) return;
 
 	var html = "";
-	var a = prog.filter(function(el) { return el.id == id; });
+	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
-		var ap = a[0].people.map(function(p) { return "<a href=\"#part" + p.id + "\">" + p.name + "</a>"; });
-		if (ap.length > 0) html += /*"Participants: " +*/ ap.join(", ") + "\n";
-		html += "<p>" + a[0].precis + "</p>";
+		if (('tags' in a[0]) && a[0].tags.length) {
+			var at = a[0].tags.map(function(t) { return '<a href="#prog/tag:' + t/*.toLowerCase().replace(/\W+/g, '-')*/ + '">' + t + '</a>'; });
+			if (at.length) html += '<div class="item-tags">Tracks: ' + at.join(', ') + '</div>\n';
+		}
+		if ('people' in a[0]) {
+			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
+			if (ap.length > 0) html += '<p>' + ap.join(', ') + '\n';
+		}
+		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
 }
 
+function expand_prog_item(ev) {
+	var p = ev.target.parentNode;
+	if (p.classList.contains("expanded")) {
+		p.classList.remove("expanded");
+	} else {
+		p.classList.add("expanded");
+		show_info(ev.target, ev.target.id.substr(1));
+	}
+	return true;
+};
+
 function show_prog_list(ls) {
 	var list = [];
-	var prev_day = "", day_str = "", prev_time = "";
+	var prev_date = "", day_str = "", prev_time = "";
 	for (var i = 0; i < ls.length; ++i) {
-		if (ls[i].day != prev_day) {
-			prev_day = ls[i].day;
+		if (ls[i].date != prev_date) {
+			prev_date = ls[i].date;
 			prev_time = "";
 
-			var t = new Date(ls[i].day);
-			day_str = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+			var t = new Date(ls[i].date);
+			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+			var td = t - Date.now();
+			if ((td < 0) || (td > 1000*3600*24*6)) {
+				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
+				if (Math.abs(td) > 1000*3600*24*60) day_str += ' ' + t.getUTCFullYear();
+			}
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
@@ -130,40 +247,40 @@ function show_prog_list(ls) {
 			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + time_str + '</div>';
 		}
 
+		var loc_str = '';
+		if (ls[i].loc.length) {
+			loc_str = ls[i].loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
+			if (ls[i].loc.length > 1) loc_str += ' (' + ls[i].loc.slice(1).join(', ') + ')';
+		}
+		if (ls[i].mins && (ls[i].mins != default_duration)) {
+			if (loc_str) loc_str += ', ';
+			loc_str += ls[i].time + ' - ' + time_sum(ls[i].time, ls[i].mins);
+		}
+
 		list[list.length] = '<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 			+ '<div class="title">' + ls[i].title + '</div>'
-			+ '<div class="room">' + ls[i].room + ' (' + ls[i].floor + ')</div>'
+			+ '<div class="loc">' + loc_str + '</div>'
 			+ '</div></div>';
 	}
 	EL("prog_ls").innerHTML = list.join('');
 
 	var items = EL("prog_ls").getElementsByClassName("item");
-	for (var i = 0; i < items.length; ++i) {
-		items[i].onclick = function() {
-			if (this.classList.contains("expanded")) {
-				this.classList.remove("expanded");
-			} else {
-				this.classList.add("expanded");
-				show_info(this, this.id.substr(1));
-			}
-			return true;
-		};
-	}
+	for (var i = 0; i < items.length; ++i) items[i].onclick = expand_prog_item;
 
-	if (supports_localstorage()) {
+	if (supports_storage()) {
 		var star_els = EL("prog_ls").getElementsByClassName("item_star");
 		for (var i = 0; i < star_els.length; ++i) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
 
-		read_stars().forEach(function(s) {
-			var el = EL('s' + s);
+		var stars = storage_get('stars', true) || [];
+		for (var i = 0; i < stars.length; ++i) {
+			var el = EL('s' + stars[i]);
 			if (el) el.classList.add("has_star");
-		});
+		}
 	}
 }
-
 
 
 // ------------------------------------------------------------------------------------------------ ical export
@@ -214,17 +331,6 @@ function save_ical() {
 }
 
 
-
-// ------------------------------------------------------------------------------------------------ what view
-
-function show_what_view() {
-	set_view("what");
-
-	EL("prog_ls").innerHTML = '';
-}
-
-
-
 // ------------------------------------------------------------------------------------------------ next view
 
 function update_next_select(t_off) {
@@ -249,9 +355,8 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setHours(t.getHours() + t_off);
-	t.setFullYear(2012); // DEBUG for Chicon data
 	var now_str = string_time(t);
-	var now_day = now_str.substr(0, 10);
+	var now_date = now_str.substr(0, 10);
 	var now_time = now_str.substr(11);
 
 	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
@@ -260,23 +365,24 @@ function update_next_list(next_type) {
 	var ms_next = 0;
 	var ms_max = t.valueOf() + 60 * 60 * 1000;
 	var n = 0;
-	prog.forEach(function(it) {
-		if (it.day < now_day) return;
-		if ((it.day == now_day) && (it.time < now_time)) return;
+	for (var i = 0; i < program.length; ++i) {
+		var it = program[i];
+		if (it.date < now_date) continue;
+		if ((it.date == now_date) && (it.time < now_time)) continue;
 
-		var ms_it = Date.parse(it.day + 'T' + it.time);
+		var ms_it = Date.parse(it.date + 'T' + it.time);
 		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
-			if (next[it.room]) {
-				if (next[it.room].day < it.day) return;
-				if ((next[it.room].day == it.day) && (next[it.room].time < it.room)) return;
+			if (next[it.loc[0]]) {
+				if (next[it.loc[0]].date < it.date) continue;
+				if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) continue;
 			}
-			next[it.room] = it;
+			next[it.loc[0]] = it;
 		} else {
 			if (ms_it <= ms_max) next['n' + (++n)] = it;
 		}
-	});
+	}
 
 	var next_prog = [];
 	for (var k in next) {
@@ -313,9 +419,7 @@ function update_next_filters(next_type) {
 		else ul[i].classList.remove("selected");
 	}
 
-	if (supports_localstorage()) localStorage.setItem("ko.next_filter", JSON.stringify([
-		["next_type", next_type]
-	]));
+	storage_set('next', { 'next_type': next_type })
 }
 
 function next_filter(ctrl, item) {
@@ -335,11 +439,8 @@ function show_next_view() {
 
 	var next_type = "next_by_hour";
 
-	var f0s = supports_localstorage() ? localStorage.getItem("ko.next_filter") : '';
-	var f0 = f0s ? JSON.parse(f0s) : [];
-	for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-		case "next_type":    next_type = f0[i][1]; break;
-	}
+	var store = storage_get('next') || {};
+	if ('next_type' in store) next_type = store.next_type;
 
 	update_next_list(next_type);
 	update_next_filters(next_type);
@@ -352,22 +453,21 @@ function show_next_view() {
 function show_star_view() {
 	set_view("star");
 
-	var sh = EL("star_hint");
-	if (supports_localstorage()) {
-		var star_ids = read_stars();
-		if (star_ids.length) {
-			sh.innerHTML = '';
-			EL("ical_link").style.display = 'block';
-			var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
+	var view = EL("star_view");
+	if (supports_storage()) {
+		var stars = storage_get('stars', true);
+		if (stars && stars.length) {
+			view.innerHTML = '';
+			//EL("ical_link").style.display = 'block';
+			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
 			show_prog_list(ls);
 		} else {
-			sh.innerHTML = "<b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
-			EL("ical_link").style.display = 'none';
+			view.innerHTML = "<p><b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
+			//EL("ical_link").style.display = 'none';
 			EL("prog_ls").innerHTML = '';
 		}
 	} else {
-		sh.innerHTML = "HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
-		EL("ical_link").style.display = 'none';
+		view.innerHTML = "<p>HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -377,10 +477,10 @@ function show_star_view() {
 
 // ------------------------------------------------------------------------------------------------ program view
 
-function update_prog_list(day, floor, tag, freetext) {
+function update_prog_list(day, area, tag, freetext) {
 	var re_t, re_q, re_hint, glob_hint = '', hint = '';
 	if (tag) {
-		var t = EL(tag).getAttribute("data-regexp");
+		var t = EL(tag) && EL(tag).getAttribute("data-regexp");
 		if (t) re_t = new RegExp(t);
 	}
 	if (freetext) {
@@ -391,20 +491,26 @@ function update_prog_list(day, floor, tag, freetext) {
 		}
 	}
 
-	var ls = prog.filter(function(it) {
-		if (day && it.day != day) return false;
+	var ls = program.filter(function(it) {
+		if (day && it.date != day) return false;
 
-		if (floor) switch (floor) {
-			case "all floors": break;
-			case "other floors": if (it.floor) return false; else break;
-			default: if (it.floor != floor) return false;
+		if (area) switch (area) {
+			case "everywhere": break;
+			//case "other areas": if (it.loc.length > 1) return false; else break;
+			default: if (it.loc.indexOf(area) < 0) return false;
 		}
 
-		if (tag && re_t && !re_t.test(it.title)) return false;
+		if (tag && (tag != 'all_tags')) {
+			if (re_t) {
+				if (!re_t.test(it.title)) return false;
+			} else {
+				if (!it.tags || (it.tags.indexOf(tag) < 0)) return false;
+			}
+		}
 
 		if (freetext) {
-			var sa = [ it.title, it.precis, it.room ];
-			for (var j = 0; j < it.people.length; ++j) sa[sa.length] = it.people[j].name;
+			var sa = [ it.title, it.desc, it.loc[0] ];
+			if (it.people) for (var j = 0; j < it.people.length; ++j) sa[sa.length] = it.people[j].name;
 			var sa_str = sa.join("\t");
 			if (!sa_str.match(re_q)) {
 				if (re_hint && !hint) {
@@ -418,40 +524,56 @@ function update_prog_list(day, floor, tag, freetext) {
 		return true;
 	});
 
+	var fs = EL('filter_sum');
+	if (fs) {
+		var ls_all = true;
+		var ft = 'item'; if (ls.length != 1) ft += 's';
+		if (tag && (tag != 'all_tags')) { ft = '<b>' + tag + '</b> ' + ft; ls_all = false; }
+		if (day) {
+			var dt = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][(new Date(day)).getUTCDay()];
+			ft += ' on <b>' + dt + '</b>';
+			ls_all = false;
+		}
+		if (area && (area != 'everywhere')) { ft += ' in <b>' + area + '</b>'; ls_all = false; }
+		if (freetext) { ft += ' matching the query <b>' + freetext + '</b>'; ls_all = false; }
+
+		fs.innerHTML = 'Listing ' + (ls_all ? '<b>all</b> ' : '') + ls.length + ' ' + ft;
+	}
+
 	show_prog_list(ls);
 
 	var dh = EL("q_hint");
 	if (dh) {
 		if (re_hint) {
+			//dh.classList.add('hint');
 			dh.innerHTML = "<b>Hint:</b> search is for full words, but you may also use * and ? as wildcards or \"quoted words\" for exact phrases.";
 			if (hint) dh.innerHTML += " For example, "
 				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"EL('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
 				+ "searching for <b>" + glob_hint + "</b> would also match <b>" + hint + "</b></span>";
 		} else {
+			//dh.classList.remove('hint');
 			dh.innerHTML = "";
 		}
 	}
 
-	if (supports_localstorage()) localStorage.setItem("ko.prog_filter", JSON.stringify([
-		["day", day], ["floor", floor], ["tag", tag], ["freetext", freetext]
-	]));
+	storage_set('prog', { 'day': day, 'area': area, 'tag': tag, 'freetext': freetext });
 }
 
-function update_prog_filters(day, floor, tag, freetext) {
+function update_prog_filters(day, area, tag, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0; i < dc.length; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
-	if (!full_version && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
+	if (!full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		EL("d").classList.add("disabled");
 	} else {
 		EL("d").classList.remove("disabled");
 	}
 
-	var ft = floor ? floor.replace(/ /g, "_") : "all_floors";
-	var fc = EL("floor").getElementsByTagName("li");
+	var ft = area || "everywhere";
+	var fc = EL("area").getElementsByTagName("li");
 	for (var i = 0; i < fc.length; ++i) {
 		if (fc[i].id == ft) fc[i].classList.add("selected");
 		else fc[i].classList.remove("selected");
@@ -459,10 +581,14 @@ function update_prog_filters(day, floor, tag, freetext) {
 
 	var tt = tag || "all_tags";
 	var tc = EL("tag").getElementsByTagName("li");
+	var t2_title = "More...";
 	for (var i = 0; i < tc.length; ++i) {
-		if (tc[i].id == tt) tc[i].classList.add("selected");
-		else tc[i].classList.remove("selected");
+		if (tc[i].id == tt) {
+			tc[i].classList.add("selected");
+			if (tc[i].parentNode.id == "tag2") t2_title = "<b>"+tc[i].innerHTML.trim()+"...</b>";
+		} else tc[i].classList.remove("selected");
 	}
+	var t2t = EL("tag2-title"); if (t2t) t2t.innerHTML = t2_title;
 
 	var qc = EL("q");
 	if (qc) {
@@ -473,159 +599,234 @@ function update_prog_filters(day, floor, tag, freetext) {
 }
 
 function default_prog_day() {
-	var day_start = prog[0].day;
-	var day_end = prog[prog.length-1].day;
+	var day_start = program[0].date;
+	var day_end = program[program.length-1].date;
 	var day_now = string_time().substr(0, 10);
 
-	var day = (day_now <= day_start) ? day_start
-	        : (day_now > day_end) ? day_start
+	var day = (day_now <= day_start) ? ''
+	        : (day_now > day_end) ? ''
 	        : day_now;
 
 	return day;
 }
 
-function update_prog(day, floor, tag, freetext) {
-	if (!full_version && !day && (floor == "all floors") && tag.match(/tags$/) && !freetext) {
+function update_prog(day, area, tag, freetext) {
+	if (!full_version && !day && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		day = default_prog_day();
 	}
 
-	update_prog_list(day, floor, tag, freetext);
-	update_prog_filters(day, floor, tag, freetext);
+	var parts_out = ['#prog'];
+	if (day) parts_out.push('day:' + day);
+	if (area && (area != 'everywhere')) parts_out.push('area:' + area);
+	if (tag && (tag != 'all_tags')) parts_out.push('tag:' + tag);
+	if (freetext) parts_out.push('query:' + freetext);
+	var hash_out = parts_out.join('/');
+
+	if (window.location.hash != hash_out) {
+		window.location.hash = hash_out;
+		return;
+	}
+
+	update_prog_list(day, area, tag, freetext);
+	update_prog_filters(day, area, tag, freetext);
 }
 
 function prog_filter(ctrl, item) {
 	var day = selected_id("day");
-	var floor = selected_id("floor");
+	var area = selected_id("area");
 	var tag = selected_id("tag");
 	var freetext = EL("q").value;
 
 	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
-		case "day":   day = item; break;
-		case "floor": floor = item; break;
+		case "day":  day = item; break;
+		case "area": area = item; break;
 		case "tag":  tag = item; break;
+		case "tag2": tag = item; break;
 	}
 
 	day = day.substr(1);
-	floor = floor.replace(/_/g, " ");
 
-	update_prog(day, floor, tag, freetext);
+	update_prog(day, area, tag, freetext);
 }
 
 function show_prog_view(opt) {
-	var day = default_prog_day(), floor = "all floors", tag = "all_tags", freetext = "";
+	var day = default_prog_day(), area = "everywhere", tag = "all_tags", freetext = "";
 
 	if (!document.body.classList.contains("prog")) {
 		set_view("prog");
 
-		var f0s = supports_localstorage() ? localStorage.getItem("ko.prog_filter") : '';
-		var f0 = f0s ? JSON.parse(f0s) : [];
-		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-			case "day": day = f0[i][1]; break;
-			case "floor": floor = f0[i][1]; break;
-			case "tag": tag = f0[i][1]; break;
-			case "freetext": freetext = f0[i][1]; break;
+		var store = storage_get('prog');
+		if (store) {
+			if ('day' in store) day = store.day;
+			if ('area' in store) area = store.area;
+			if ('tag' in store) tag = store.tag;
+			if ('freetext' in store) freetext = store.freetext;
 		}
 	}
 
-	update_prog(day, floor, tag, freetext);
+	if (opt) {
+		var parts_in = opt.split('/');
+		for (var i in parts_in) {
+			var s = parts_in[i].split(':');
+			if (s.length >= 2) switch (s[0]) {
+				case 'day':   day = s[1]; break;
+				case 'area':  area = s[1]; break;
+				case 'tag':   tag = s[1]; break;
+				case 'query': freetext = s[1]; break;
+			}
+		}
+	}
+
+	update_prog(day, area, tag, freetext);
 }
 
 
 
 // ------------------------------------------------------------------------------------------------ participant view
 
-function update_part_view(name_sort, first_letter, participant) {
-	if (name_sort == "sort_first") {
-		EL("sort_first").classList.add("selected");
-		EL("sort_last").classList.remove("selected");
-	} else {
-		EL("sort_first").classList.remove("selected");
-		EL("sort_last").classList.add("selected");
+function update_part_view(name_range, participant) {
+	var el_nr = EL('name_range');
+	if (el_nr) {
+		var ll = el_nr.getElementsByTagName('li');
+		for (var i = 0; i < ll.length; ++i) {
+			if (ll[i].getAttribute('data-range') == name_range) ll[i].classList.add('selected');
+			else ll[i].classList.remove('selected');
+		}
 	}
-
-	var ll = EL("first_letter").getElementsByTagName("li");
-	for (var i = 0; i < ll.length; ++i) {
-		if (ll[i].innerHTML == first_letter) ll[i].classList.add("selected");
-		else ll[i].classList.remove("selected");
-	}
-
 
 	var p_id = participant.substr(1);
-	var pa = people.filter(function(p) { return p.id == p_id; });
+	var pa = participants.filter(function(p) { return p.id == p_id; });
 	if (!pa.length) {
 		participant = '';
 
-		var lp = people.filter(function(p) { return ((name_sort == 'sort_first') ? p.first : p.last)[0] == first_letter });
-		if (name_sort == 'sort_first') lp.sort(function(a, b) {
-			var an = (a.first + '  ' + a.last).toLowerCase();
-			var bn = (b.first + '  ' + b.last).toLowerCase();
-				 if (an < bn) return -1;
-			else if (an > bn) return 1;
-			else              return 0;
-		});
+		if (name_range) {
+			var lp = participants.filter(function(p) {
+				var n = (p.name[1] + '  ' + p.name[0]).replace(/^ +/, '');
+				var n0 = n[0].toUpperCase();
+				switch (name_range.length) {
+					case 1:  if (n0 == name_range[0])                            return true; break;
+					case 2:  if ((n0 >= name_range[0]) && (n0 <= name_range[1])) return true; break;
+					default: if (name_range.indexOf(n0) >= 0)                    return true; break;
+				}
+				return false;
+			});
 
-		EL("part_names").innerHTML = lp.map(function(p) {
-			return '<li><a href="#part' + p.id + '"><span class="fn">' + p.first + '</span> ' + p.last + '</a></li>';
-		}).join('');
-		EL("part_info").innerHTML = "";
-		EL("prog_ls").innerHTML = "";
+			lp.sort(function(a, b) {
+				var an = (a.name[1] + '  ' + a.name[0]).toLowerCase().replace(/^ +/, '');
+				var bn = (b.name[1] + '  ' + b.name[0]).toLowerCase().replace(/^ +/, '');
+					 if (an < bn) return -1;
+				else if (an > bn) return 1;
+				else              return 0;
+			});
+			EL('part_names').innerHTML = lp.map(function(p) {
+				return '<li><a href="#part/' + p.id + '">' + clean_name(p, true) + '</a></li>';
+			}).join('');
+		} else {
+			EL('part_names').innerHTML = '';
+		}
+		EL('part_info').innerHTML = '';
+		EL('prog_ls').innerHTML = '';
 	} else {
-		EL("part_names").innerHTML = "";
-		EL("part_info").innerHTML = '<h2 id="part_title">' + pa[0].first + ' ' + pa[0].last + '</h2><p>' + pa[0].bio + '</p>';
-		show_prog_list(prog.filter(function(it) { return pa[0].program.indexOf(it.id) >= 0; }));
+		var p_name = clean_name(pa[0], false);
+		var links = '';
+		var photo = '';
+		var pl = clean_links(pa[0]);
+		if (pl) {
+			links += '<dl class="linklist">';
+			for (var type in pl) {
+				var tgt = pl[type];
+				switch (type) {
+					case 'url': links += '<dt>URL:<dd>'
+						+ '<a href="' + tgt + '">' + tgt + '</a>';
+						break;
+					case 'twitter': links += '<dt>Twitter:<dd>'
+						+ '<a href="https://www.twitter.com/' + tgt + '">@' + tgt + '</a>';
+						break;
+					case 'fb': links += '<dt>Facebook:<dd>'
+						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
+						break;
+					case 'photo':
+						/*if (navigator.onLine) {
+							photo = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
+						} else*/ {
+							links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
+						}
+						break;
+					default: links += '<dt>' + type + ':<dd>' + tgt;
+				}
+			}
+			links += '</dl>';
+		}
+		EL("part_names").innerHTML = '';
+		EL("part_info").innerHTML = 
+			  '<h2 id="part_title">' + p_name + '</h2>'
+			+ ((pa[0].bio || photo) ? ('<p>' + photo + pa[0].bio) : '')
+			+ links;
+		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
 
-
-	if (supports_localstorage()) localStorage.setItem("ko.part_filter", JSON.stringify([
-		["name_sort", name_sort], ["first_letter", first_letter], ["participant", participant]
-	]));
+	storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
 function part_filter(ctrl, el) {
-	var name_sort = selected_id("name_sort");
-	var first_letter = selected_id("first_letter");
-	var participant = "";
+	var name_range = (ctrl == 'name_range') ? el.getAttribute("data-range") : '';
+	update_part_view(name_range, '');
+}
 
-	switch (ctrl) {
-		case "name_sort":    name_sort = el.id; break;
-		case "first_letter": first_letter = el.innerHTML; break;
+function find_name_range(name) {
+	var n = (name[1] + '  ' + name[0]).toUpperCase().replace(/^ +/, ''); if (!n) return '';
+	var par = EL('name_range'); if (!par) return '';
+	var ll = par.getElementsByTagName('li'); if (!ll.length) return '';
+	for (var i in ll) {
+		var range = ll[i].getAttribute('data-range');
+		switch (range.length) {
+			case 0:  break;
+			case 1:  if (n[0] == range[0])                         return range; break;
+			case 2:  if ((n[0] >= range[0]) && (n[0] <= range[1])) return range; break;
+			default: if (range.indexOf(n[0]) >= 0)                 return range; break;
+		}
 	}
-
-	update_part_view(name_sort, first_letter, participant);
+	return '';
 }
 
 function show_part_view(opt) {
-	var name_sort = "sort_last", first_letter = "A", participant = "";
+	var name_range ='', participant = '';
+
+	var store = storage_get('part') || {};
+	if ('name_range' in store) name_range = store.name_range;
 
 	if (!document.body.classList.contains("part")) {
 		set_view("part");
 
-		var f0s = supports_localstorage() ? localStorage.getItem("ko.part_filter") : '';
-		var f0 = f0s ? JSON.parse(f0s) : [];
-		for (var i = 0; i < f0.length; ++i) switch (f0[i][0]) {
-			case "name_sort":    name_sort = f0[i][1]; break;
-			case "first_letter": first_letter = f0[i][1]; break;
-			case "participant":  participant = f0[i][1]; break;
-		}
+		if ('participant' in store) participant = store.participant;
 	}
 
 	if (opt) {
-		var pa = people.filter(function(p) { return p.id == opt; });
+		var p_id = opt.substr(1);
+		var pa = participants.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
-			first_letter = (name_sort == 'sort_first') ? pa[0].first[0] : pa[0].last[0];
+			name_range = find_name_range(pa[0].name);
+		} else {
+			window.location.hash = '#part';
+			return;
 		}
+	} else if (participant) {
+		window.location.hash = '#part/' + participant.substr(1);
+		return;
 	}
 
-	update_part_view(name_sort, first_letter, participant);
+	if (!name_range) name_range = EL('name_range').getElementsByTagName('li')[0].getAttribute('data-range');
+
+	update_part_view(name_range, participant);
 }
 
 
 
-// ------------------------------------------------------------------------------------------------ maps view
+// ------------------------------------------------------------------------------------------------ info view
 
-function show_maps_view() {
-	set_view("maps");
+function show_info_view() {
+	set_view("info");
 
 	EL("prog_ls").innerHTML = "";
 }
@@ -634,27 +835,12 @@ function show_maps_view() {
 
 // ------------------------------------------------------------------------------------------------ init
 
-// page style
-if (supports_localstorage()) {
-	var style = localStorage.getItem("ko.style");
-	if (style) document.body.classList.add(style);
-}
-var os = EL("opt_style");
-if (os) os.onclick = function() {
-	if (document.body.classList.contains("black")) {
-		document.body.classList.remove("black");
-		if (supports_localstorage()) localStorage.setItem("ko.style", "");
-	} else {
-		document.body.classList.add("black");
-		if (supports_localstorage()) localStorage.setItem("ko.style", "black");
-	}
-};
-
-
 // init next view
-var ul = EL("next_filters").getElementsByTagName("li");
-for (var i = 0; i < ul.length; ++i) {
-	ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
+if (EL("next_filters")) {
+	var ul = EL("next_filters").getElementsByTagName("li");
+	for (var i = 0; i < ul.length; ++i) {
+		ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
+	}
 }
 
 
@@ -665,14 +851,28 @@ EL("ical_link").onclick = function() { save_ical(); return false; };
 // init prog view
 var dc = EL("prog_filters").getElementsByTagName("li");
 for (var i = 0; i < dc.length; ++i) {
-	dc[i].onclick = function() { prog_filter(this.parentNode.id, this.id); return true; };
+	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); return true; };
 }
 var sf = EL("search");
 if (sf) {
 	sf.onsubmit = function() { prog_filter(); return false; };
-	sf.onreset = function() { EL("q").value = ""; prog_filter(); return true; };
+	sf.onreset = function() { EL("q").value = ""; window.location.hash = '#prog'; return true; };
 }
 EL("q").onblur = prog_filter;
+
+var pl = EL("tag2-list");
+if (pl) {
+	pl.onclick = function(ev) {
+		if (pl.classList.contains("show_list")) {
+			EL("tag2-disable-bg").style.display = "none";
+			pl.classList.remove("show_list");
+		} else {
+			EL("tag2-disable-bg").style.display = "block";
+			pl.classList.add("show_list");
+		}
+		ev.stopPropagation();
+	};
+}
 
 
 // init part view
@@ -683,54 +883,77 @@ for (var i = 0; i < pc.length; ++i) {
 
 
 // set up fixed time display
-EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
-var prev_scroll = { "i": 0, "top": 0 };
-var n = 0;
-if (full_version) { window.onscroll = function() {
-	var st = document.body.scrollTop || document.documentElement.scrollTop;
+if (EL("scroll_link")) {
+	EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
+	var prev_scroll = { "i": 0, "top": 0 };
+	var n = 0;
+	if (full_version) { window.onscroll = function() {
+		var st = document.body.scrollTop || document.documentElement.scrollTop;
 
-	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
+		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 
-	st += 20; // to have more time for change behind new_time
-	var te = EL("time"); if (!te) return;
-	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
-	//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
-	var i = prev_scroll.top ? prev_scroll.i : 1;
-	if (i >= tl.length) i = tl.length - 1;
-	if (st > tl[i].offsetTop) {
-		while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
-		--i;
-	} else {
-		while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+		st += 20; // to have more time for change behind new_time
+		var te = EL("time"); if (!te) return;
+		var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
+		//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
+		var i = prev_scroll.top ? prev_scroll.i : 1;
+		if (i >= tl.length) i = tl.length - 1;
+		if (st > tl[i].offsetTop) {
+			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
+			--i;
+		} else {
+			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+		}
+		if (i < 0) i = 0;
+
+		prev_scroll.i = i;
+		prev_scroll.top = tl[i].offsetTop;
+		te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
+	};} else {
+		EL("time").style.display = "none";
+		EL("scroll").style.display = "none";
 	}
-	if (i < 0) i = 0;
-
-	prev_scroll.i = i;
-	prev_scroll.top = tl[i].offsetTop;
-	te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
-};} else {
-	EL("time").style.display = "none";
-	EL("scroll").style.display = "none";
 }
 
 
+// init info view
+var lu = EL('last-updated');
+if (lu) {
+	var x = new XMLHttpRequest();
+	x.onload = function() {
+		var t = new Date(this.getResponseHeader("Last-Modified"));
+		lu.innerHTML = 'Program and participant data were last updated <span style="border-bottom: 1px dotted; cursor: pointer;" onclick="var tmp = this.title; this.title = this.innerHTML; this.innerHTML = tmp;" title="' + t.toLocaleString() + '">' + pretty_time_diff(t) + '</span>.';
+	};
+	x.open('GET', 'cache.manifest', true);
+	x.send();
+}
+
 function init_view() {
 	var opt = window.location.hash.substr(1);
-	if (opt.length < 4) opt = supports_localstorage() ? localStorage.getItem("ko.view") : '';
-	if (!opt) opt = 'what';
+	if (opt.length < 4) opt = storage_get('view');
+	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
-		case 'what': show_what_view(); break;
 		case 'next': show_next_view(); break;
 		case 'star': show_star_view(); break;
 		case 'part': show_part_view(opt.substr(4)); break;
-		case 'maps': show_maps_view(); break;
+		case 'info': show_info_view(); break;
 		case 'prog': show_prog_view(opt.substr(4)); break;
-		default:     show_what_view(); break;
+		default:     show_prog_view(); break;
 	}
 
-	EL("top").scrollIntoView();
-	EL("load_disable").style.display = "none";
+	if (EL("top")) EL("top").scrollIntoView();
+	if (EL("load_disable")) EL("load_disable").style.display = "none";
 }
 
 init_view();
 window.onhashchange = init_view;
+
+window.addEventListener('load', function(e) {
+	window.applicationCache.addEventListener('updateready', function(e) {
+		if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+			window.applicationCache.swapCache();
+			var r = EL('refresh');
+			if (r) { r.classList.add('enabled'); r.onclick = function() { window.location.reload(); }; }
+		}
+	}, false);
+}, false);

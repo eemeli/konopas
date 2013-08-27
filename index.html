@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
-<html> <!--manifest="cache.manifest"-->
+<html manifest="cache.manifest">
 <head>
 <meta charset="utf-8">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="favicon-simple.ico">
-<title>KonOpas - Your convention's mobile guide</title>
-<link rel="stylesheet" href="skin.css">
+<link rel="shortcut icon" href="data/favicon.ico">
+<title>LoneStarCon 3 Guide</title>
+<link rel="stylesheet" href="skin/skin.css">
 </head>
 
 <body><div id="top"></div>
@@ -15,47 +15,21 @@
 <div id="time"></div>
 <div id="scroll"><a href="#top" id="scroll_link">Scroll up</a></div>
 
-<a href="#what" id="opt_what">?</a>
-<div id="opt_style">A</div>
-
 <div id="banner">
-<h1><a href="#what">Chicon 7</a></h1>
+<h1><a href="#info"><img id="title-small" src="data/title-small.png" alt="LoneStarCon 3"><img id="title" src="data/title.png" alt="LoneStarCon 3"></a></h1>
 
 <ul id="tabs">
 <li id="tab_next"><a href="#next">Next</a>
 <li id="tab_star"><a href="#star">My con</a>
 <li id="tab_prog"><a href="#prog">Program</a>
 <li id="tab_part"><a href="#part">People</a>
-<li id="tab_maps"><a href="#maps">Info</a>
+<li id="tab_info"><a href="#info">Info</a>
 </ul>
+
+<div id="refresh">Refresh data</div>
 </div>
 
-<div id="what_view" class="view">
-<p>This is the officially unofficial mobile guide to <a href="http://chicon.org/">Chicon 7</a>.
-
-<p>The program and participant databases were last updated on August 30, 2012.
-
-<h3>What?</h3>
-<p>It's a web page that works like a mobile app, so your browser should cache all of it and make it <b>work when you're offline</b> as well. This is not in any way an official Chicon production, and it's not in any way associated with <a href="http://www.viafo.com">Viafo</a>'s official <a href="http://chicon.org/mobile.php">Chicon app</a>&mdash;except I'm using some of their back-end work to help. So if it displeases you, telling them won't help you any.
-
-<p>To start using the guide, <b>click on one of the above tabs</b>. (If they're gray and don't react, the page is still loading data.)</a>
-
-<p>The guide seems to work on most sort-of modern phones. On older Androids, I've disabled some of the nice-to-have things and prevented listing all of the program items at once to make them not slow down horribly. And I'm somewhat surprised to find it working on Windows phones as well, though the "Next" view may be buggy.
-
-<h3>Why?</h3>
-<p>I put this together as I couldn't get the official app to work well enough on the phone I'll have on me at Chicon. Also, because I had other things I should've been doing and it was easier to actually work on something New and Shiny. And because I've never done any kind of mobile web or app development before.
-
-<p>In other words, this site doesn't have a support team; it's just me (Eemeli Aro). I'm just a fan, and I'll be at Chicon as well (and busy doing all the stuff I should've been doing instead of working on this until then...) so my ability to fix things will be limited. But I'd still appreciate being informed about things breaking, even if only in order to fix them later.
-
-<p>I'm releasing this work under the <a href="http://en.wikipedia.org/wiki/ISC_license">ISC license</a>, so if you want to use it for your con or some other purpose, you can.
-
-<h3>How?</h3>
-<p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In other words, magic. In order to make said magic work, about 1MB of your phone memory is being used (probably without your phone telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > aut-web.hut.fi > Clear stored data</tt> (depends on your browser, OS, etc.)
-
-<h3>Who?</h3>
-<p>My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I'm being paid to work on my dissertation on an autonomous group of <a href="http://autsys.tkk.fi/en/SWARM">underwater robots</a> by Aalto University in Helsinki, Finland, but I seem to end up doing quite a few other things as well. Like chair a bid for a <a href="http://mariehamnin2016.org/">W&aring;rldcon</a>! Come to the party on Friday (hosted by <a href="http://www.kcin2016.org/">Kansas City</a>), and Mariehamn in 2016!
-</div>
-
+<div id="main">
 
 <div id="next_view" class="view">
 	<div id="next_filters" class="filters">
@@ -74,8 +48,10 @@
 
 
 <div id="star_view" class="view">
+	<!--
 	<div id="star_hint" class="hint"></div>
 	<div id="ical_link">&raquo; Export to calendar</div>
+	-->
 </div>
 
 
@@ -83,84 +59,154 @@
 	<div id="prog_filters" class="filters">
 	<ul id="day">
 	<li id="d">All days
-	<li id="d2012-08-30">Thursday
-	<li id="d2012-08-31">Friday
-	<li id="d2012-09-01">Saturday
-	<li id="d2012-09-02">Sunday
-	<li id="d2012-09-03">Monday
+	<li id="d2013-08-29">Thursday
+	<li id="d2013-08-30">Friday
+	<li id="d2013-08-31">Saturday
+	<li id="d2013-09-01">Sunday
+	<li id="d2013-09-02">Monday
 	</ul>
 
-	<ul id="tag">
-	<li id="all_tags">All item types
-	<li id="ChiKidz" data-regexp="^ChiKidz">ChiKidz
-	<li id="kk" data-regexp="^(Kaffeeklatsch|Literary Bh?eer)">Kaffeeklatches
-	<li id="Reading" data-regexp="Reading">Readings
-	<li id="Autograph" data-regexp="^Autograph">Autographs
-	<li id="filk" data-regexp="\bFilk\b">Filk
-	<li id="other_tags" data-regexp="^(?!ChiKidz|Reading|Autograph|Kaffeeklatsch|Literary Bh?eer|.*Filk).">All others
+	<ul id="area" style="max-width: 25%;">
+	<li id="everywhere">Everywhere
+	<li id="Convention Center">Convention Center
+	<li id="Rivercenter">Rivercenter
+	<li id="Riverwalk">Riverwalk
 	</ul>
 
-	<ul id="floor">
-	<li id="all_floors">All floors
-	<li id="Silver_West">Silver W
-	<li id="Green_East">Green E
-	<li id="Green_West">Green W
-	<li id="Bronze_West">Bronze W
-	<li id="Gold_East">Gold E
-	<li id="Gold_West">Gold W
-	<li id="Purple_East">Purple E
-	<!--<li id="other_floors">Other-->
-	</ul>
+	<ul id="tag" style="width: 90px;">
+	<li id="all_tags">All&nbsp;tracks
+	<li id="Fannish">Fannish
+	<li id="Literature">Literature
+	<li id="Rangernauts">Rangernauts
+	<li id="Science" style="margin-bottom: 21px;">Science
+	<li id="tag2-list"><span id="tag2-title">More...</span>
+	<div id="tag2-disable-bg"></div>
+	<ul id="tag2">
+		<li id="Academic">Academic
+		<li id="Animation">Animation
+		<li id="Anime">Anime
+		<li id="Art">Art
+		<li id="Authors">Authors
+		<li id="Concert">Concert
+		<li id="Costuming">Costuming
+		<li id="Culture">Culture
+		<li id="Dance">Dance
+		<li id="Docent Tour">Docent Tour
+		<li id="Events">Events
+		<li id="Filk">Filk
+		<li id="Film Festival">Film Festival
+		<li id="Gaming">Gaming
+		<li id="Group Reading">Group Reading
+		<li id="Guest of Honor">Guest of Honor
+		<li id="History">History
+		<li id="Industry">Industry
+		<li id="Media">Media
+		<li id="Media Viewing">Media Viewing
+		<li id="Music">Music
+		<li id="Poetry">Poetry
+		<li id="Real World">Real World
+		<li id="SIG">SIG
+		<li id="Spanish">Spanish
+		<li id="Texas">Texas
+		<li id="Workshop">Workshop
+		<li id="YA">YA
+		<!-- id="kf" data-regexp="^Kaffeeklatsch">Kaffee&shy;klatschit -->
+	</ul></ul>
 
 	<form name="search" id="search">
-	<input type="text" id="q" placeholder="Search">
+	<input type="text" id="q" placeholder="Search" required>
 	<div id="q_ctrl">
 	<input type="submit" id="q_submit" value="Go">
-	<input type="reset" id="q_clear" value="Clear">
+	<input type="reset" id="q_clear" value="Clear all">
 	</div>
 	<div id="q_hint" class="hint"></div>
 	</form>
+
+	<div id="filter_sum"></div>
 	</div>
 </div>
 
 
 <div id="part_view" class="view">
 	<div id="part_filters" class="filters">
-	<ul id="name_sort">
-	<li id="sort_first">By first name
-	<li id="sort_last">By last name
+	&raquo; All participants by last name:
+	<ul id="name_range">
+		<li data-range="AE">A - E
+		<li data-range="FK">F - K
+		<li data-range="LR">L - R
+		<li data-range="SZ">S - Z
 	</ul>
-
-	<ul id="first_letter">
-	<li>A<li>B<li>C<li>D<li>E<li>F<li>G<li>H<li>I<li>J<li>K<li>L<li>M<li>N<li>O<li>P<li>Q<li>R<li>S<li>T<li>U<li>V<li>W<li>X<li>Y<li>Z
-	</ul>
+	</div>
 
 	<ul id="part_names"></ul>
-	</div>
 
 	<div id="part_info"></div>
 </div>
 
 
-<div id="maps_view" class="view">
-<a href="data/chicon7-con-map.png">Convention areas <img src="data/chicon7-con-map.thumb.png"></a>
-<a href="data/chicon7-hotel-map.png">Hotel services <img src="data/chicon7-hotel-map.thumb.png"></a>
+<div id="info_view" class="view">
+<p>This is the program guide for <a href="http://www.lonestarcon3.org/">LoneStarCon 3</a>. It should be suitable for use on most browsers and devices, and will be made accessible with additional functionality and information during the con itself.
+
+<p>Program and participant data will be kept updated as final changes and corrections are made. Also, the contents of this "Info" view will be updated with more information.
+
+<div id="last-updated"></div>
+
+<!--img src="data/map.png"-->
+<!--p>The program and participant databases were last updated on <b>July 9, 2013</b>.-->
+
+<!--
+<h2>Parties</h2><td>
+<p>...
+<table class="compact_list">
+<tr><td>Friday <nobr>3pm &ndash; 5pm</nobr><td>Afternoon Tea <span class="dim">(sponsored by <a href="http://www.helsinkiin2015.org/">Helsinki in 2015</a>)</span>
+<tr><td>Saturday <nobr>3pm &ndash; 5pm</nobr><td>Taste of Detroit <span class="dim">(sponsored by <a href="http://detroitin2014.org/">Detroit in 2014</a>)</span>
+<tr><td>Saturday <nobr>9pm &ndash; 11pm</nobr><td>Annual Dessert Party <span class="dim">(cosponsored by <a href="http://www.nesfa.org/boskone/">Boskone</a> & <a href="http://2013.philcon.org/">Philcon</a>)</span>
+<tr><td>Sunday <nobr>9am &ndash; noon</nobr><td>Sunday Brunch <span class="dim">(sponsored by <a href="http://www.helsinkiin2015.org/">Helsinki in 2015</a>)</span>
+</table>
+-->
+
+<h2>Start and end times for various areas</h2>
+<table class="compact_list">
+<tr><th><th>Thu<th>Fri<th>Sat<th>Sun<th>Mon
+<tr><td>Registration<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;1pm
+<tr><td>Information<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;3pm
+<tr><td>Exhibit Hall<td>noon&ndash;10pm<td>9am&ndash;10pm<td>9am&ndash;9pm<td>9am&ndash;9pm<td>9am&ndash;4pm
+<tr><td>Dealers' Room<td>noon&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;3pm
+<tr><td>Art Show<td>noon&ndash;6pm<td>10am&ndash;10pm<td>10am&ndash;6pm<td>10am&ndash;noon<td>
+</table>
+
+<p>Registration is also open on Wednesday before the convention from 9am to 7pm.
+
+<p>Please consult the <a href="http://www.lonestarcon3.org/schedule/index.shtml">schedule</a> for further information.
+
+<h2>Publications</h2>
+<ul>
+<li><a href="http://www.lonestarcon3.org/newsletter/index.shtml">Newsletter</a>
+<li><a href="http://www.lonestarcon3.org/publications/restaurant-guide.pdf">Restaurant Guide</a> (PDF, 6MB)
+<li><a href="http://www.lonestarcon3.org/publications/pr5.shtml">Progress Report 5</a> (web page)
+<li><a href="http://www.lonestarcon3.org/memberships/Code%20of%20Conduct.pdf">Code of Conduct</a> (PDF)
+</ul>
+
+<h2>What is this?</h2>
+<!--
+<p>This is a mobile guide to <a href="http://www.lonestarcon3.org/">LoneStarCon 3</a>. It's a web page that works like a mobile app, so your browser should cache all of it and make it <b>work when you're offline</b> as well. The guide should work on most computers, phones and tablets that have some sort of relatively modern web browser, though on Windows phones the "Next" view may be buggy.
+
+<p>What's at work here is the magic of the <a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5">HTML5 cache manifest</a>. In order to make said magic work, about 1MB of your browser's memory is being used (probably without telling you anything about it). To clear that cache, you'll need to look at your browser settings, then something like <tt>Advanced > Website settings > [this site] > Clear stored data</tt> (details depend on your browser, OS, etc.)
+-->
+
+<p>This guide is an instance of <a href="https://github.com/eemeli/konopas">KonOpas</a>, an open-source project I started to provide conventions with easy-to-use mobile-friendly guides. My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I do a few other fannish things as well, like chair a bid for a Worldcon: Helsinki in 2015!
 </div>
+
 
 <div id="prog_ls" class="ls"><br>Loading ...</div>
 
+</div><!-- /main -->
+
 <script>
-	var ical_set = {
-		'id': 'Chicon7//EN',
-		'domain': 'chicon.org',
-		'timezone': 'America/Chicago',
-		'filename': 'my-chicon.ics'
-	};
+	var konopas_set = { 'id': 'ko.lsc3', 'domain': 'lonestarcon3.org', 'timezone': 'America/Chicago' }; //'filename': 'my-chicon.ics'
 </script>
-<script src="data/chicon7-program.js"></script>
-<script src="data/chicon7-people.js"></script>
+<script src="http://program.lonestarcon3.org/program.js"></script>
+<script src="http://program.lonestarcon3.org/program/participants.js"></script>
 <script src="classList.js"></script>
 <script src="app.js"></script>
-<script src="FileSaver.min.js"></script>
-</body>
-</html>
+<!--script src="FileSaver.min.js"></script-->
