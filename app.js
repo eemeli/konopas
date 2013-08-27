@@ -845,7 +845,7 @@ if (EL("next_filters")) {
 
 
 // init star view
-EL("ical_link").onclick = function() { save_ical(); return false; };
+//EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view
