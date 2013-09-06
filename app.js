@@ -462,6 +462,7 @@ function show_star_view() {
 			show_prog_list(ls);
 		} else {
 			view.innerHTML = "<p><b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
+			//EL("ical_link").style.display = 'none';
 			EL("prog_ls").innerHTML = '';
 			//EL("ical_link").style.display = 'none';
 		}
