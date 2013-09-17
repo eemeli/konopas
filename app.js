@@ -157,10 +157,10 @@ function clean_links(p) {
 	var o = {};
 
 	if ('links' in p) {
-		if (('photo' in p.links) && p.links.photo) {
-			var photo = p.links.photo.trim();
-			if (/^www/.exec(photo)) photo = 'http://' + photo;
-			if (/:\/\//.exec(photo)) { o['photo'] = photo; ok = true; }
+		if (('img' in p.links) && p.links.img) {
+			var img = p.links.img.trim();
+			if (/^www/.exec(img)) img = 'http://' + img;
+			if (/:\/\//.exec(img)) { o['img'] = img; ok = true; }
 		}
 
 		if (('url' in p.links) && p.links.url) {
@@ -730,7 +730,7 @@ function update_part_view(name_range, participant) {
 	} else {
 		var p_name = clean_name(pa[0], false);
 		var links = '';
-		var photo = '';
+		var img = '';
 		var pl = clean_links(pa[0]);
 		if (pl) {
 			links += '<dl class="linklist">';
@@ -746,9 +746,9 @@ function update_part_view(name_range, participant) {
 					case 'fb': links += '<dt>Facebook:<dd>'
 						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
 						break;
-					case 'photo':
+					case 'img':
 						/*if (navigator.onLine) {
-							photo = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
+							img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
 						} else*/ {
 							links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
 						}
@@ -761,7 +761,7 @@ function update_part_view(name_range, participant) {
 		EL("part_names").innerHTML = '';
 		EL("part_info").innerHTML = 
 			  '<h2 id="part_title">' + p_name + '</h2>'
-			+ ((pa[0].bio || photo) ? ('<p>' + photo + pa[0].bio) : '')
+			+ ((pa[0].bio || img) ? ('<p>' + img + pa[0].bio) : '')
 			+ links;
 		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
 	}
