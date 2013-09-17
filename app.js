@@ -696,12 +696,12 @@ function update_part_view(name_range, participant) {
 	}
 
 	var p_id = participant.substr(1);
-	var pa = participants.filter(function(p) { return p.id == p_id; });
+	var pa = people.filter(function(p) { return p.id == p_id; });
 	if (!pa.length) {
 		participant = '';
 
 		if (name_range) {
-			var lp = participants.filter(function(p) {
+			var lp = people.filter(function(p) {
 				var n = (p.name[1] + '  ' + p.name[0]).replace(/^ +/, '');
 				var n0 = n[0].toUpperCase();
 				switch (name_range.length) {
@@ -804,7 +804,7 @@ function show_part_view(opt) {
 
 	if (opt) {
 		var p_id = opt.substr(1);
-		var pa = participants.filter(function(p) { return p.id == p_id; });
+		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
 			name_range = find_name_range(pa[0].name);
