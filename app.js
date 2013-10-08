@@ -66,6 +66,17 @@ function pretty_time_diff(t) {
 	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
 }
 
+function pretty_date(t) {
+	var s = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+	var td = t - Date.now();
+	if ((td < 0) || (td > 1000*3600*24*6)) {
+		s += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
+		if (Math.abs(td) > 1000*3600*24*60) s += ' ' + t.getUTCFullYear();
+	}
+
+	return s;
+}
+
 function time_sum(t0_str, m_str) {
 	var t1 = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str;
 	var h = (t1 / 60) >> 0;
@@ -223,12 +234,7 @@ function show_prog_list(ls) {
 			prev_time = "";
 
 			var t = new Date(ls[i].date);
-			day_str = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
-			var td = t - Date.now();
-			if ((td < 0) || (td > 1000*3600*24*6)) {
-				day_str += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
-				if (Math.abs(td) > 1000*3600*24*60) day_str += ' ' + t.getUTCFullYear();
-			}
+			day_str = pretty_date(t);
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
