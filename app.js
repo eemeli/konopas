@@ -609,12 +609,19 @@ function update_prog_filters(day, area, tag, freetext) {
 }
 
 function default_prog_day() {
-	var day_start = program[0].date;
-	var day_end = program[program.length-1].date;
+	var day_start = '', day_end = '';
+	var el_dl = EL("day"); if (!el_dl) return '';
+	var dl = el_dl.getElementsByTagName("li"); if (!dl || !dl.length) return '';
+	for (var i = 0; i < dl.length; ++i) {
+		var d = dl[i].id.substr(1);
+		if (!d.length) continue;
+		if (!day_start || (d < day_start)) day_start = d;
+		if (!day_end || (d > day_end)) day_end = d;
+	}
 	var day_now = string_time().substr(0, 10);
 
-	var day = (day_now <= day_start) ? ''
-	        : (day_now > day_end) ? ''
+	var day = (day_now <= day_start) ? day_start
+	        : (day_now > day_end) ? day_start
 	        : day_now;
 
 	return day;
