@@ -220,8 +220,9 @@ function clean_links(p) {
 
 function arrays_equal(a, b) {
 	if (!a || !b) return false;
-	if (a.length != b.length) return false;
-	for (var i = 0; i < a.length; ++i) {
+	var a_len = a.length;
+	if (a_len != b.length) return false;
+	for (var i = 0; i < a_len; ++i) {
 		if (a[i] != b[i]) return false;
 	}
 	return true;
@@ -266,19 +267,19 @@ function show_info(item, id) {
 function show_prog_list(ls) {
 	var list = [];
 	var prev_date = "", day_str = "", prev_time = "";
-	for (var i = 0; i < ls.length; ++i) {
+	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
 			prev_date = ls[i].date;
 			prev_time = "";
 
 			var t = new Date(ls[i].date);
 			day_str = pretty_date(t);
-			list[list.length] = '<div class="new_day">' + day_str + '</div>';
+			list.push('<div class="new_day">' + day_str + '</div>');
 		}
 
 		if (ls[i].time != prev_time) {
 			prev_time = ls[i].time;
-			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time) + '</div>';
+			list.push('<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time) + '</div>');
 		}
 
 		var loc_str = '';
@@ -291,16 +292,16 @@ function show_prog_list(ls) {
 			loc_str += pretty_time(ls[i].time) + ' - ' + pretty_time(time_sum(ls[i].time, ls[i].mins));
 		}
 
-		list[list.length] = '<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
+		list.push('<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 			+ '<div class="title">' + ls[i].title + '</div>'
 			+ '<div class="loc">' + loc_str + '</div>'
-			+ '</div></div>';
+			+ '</div></div>');
 	}
 	EL("prog_ls").innerHTML = list.join('');
 
 	var items = EL("prog_ls").getElementsByClassName("item");
-	for (var i = 0; i < items.length; ++i) {
+	for (var i = 0, l = items.length; i < l; ++i) {
 		items[i].onclick = function() {
 			if (this.parentNode.classList.contains("expanded")) {
 				this.parentNode.classList.remove("expanded");
@@ -314,12 +315,12 @@ function show_prog_list(ls) {
 
 	if (supports_storage()) {
 		var star_els = EL("prog_ls").getElementsByClassName("item_star");
-		for (var i = 0; i < star_els.length; ++i) {
+		for (var i = 0, l = star_els.length; i < l; ++i) {
 			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
 		}
 
 		var stars = storage_get('stars', true) || [];
-		for (var i = 0; i < stars.length; ++i) {
+		for (var i = 0, l = stars.length; i < l; ++i) {
 			var el = EL('s' + stars[i]);
 			if (el) el.classList.add("has_star");
 		}
@@ -338,8 +339,8 @@ function make_ical_item(p) {
 	if (p.people.length) {
 		desc = "Participants: ";
 		var pa = new Array();
-		for (var i = 0; i < p.people.length; ++i) {
-			pa[pa.length] = p.people[i].name;
+		for (var i = 0, l = p.people.length; i < l; ++i) {
+			pa.push(p.people[i].name);
 			attend += 'ATTENDEE;CN=' + p.people[i].name + ':invalid:nomail\r\n';
 		}
 		desc += pa.join(', ') + '\\n\\n';
@@ -367,7 +368,7 @@ function save_ical() {
 		var ical = 'BEGIN:VCALENDAR\r\n'
 				+ 'VERSION:2.0\r\n'
 				+ 'PRODID:-//eemeli//KonOpas ' + ical_set.id + '\r\n';
-		for (var i = 0; i < ls.length; ++i) ical += make_ical_item(ls[i]);
+		for (var i = 0, l = ls.length; i < l; ++i) ical += make_ical_item(ls[i]);
 		ical += 'END:VCALENDAR';
 		var blob = new Blob([ical], {type: "text/calendar;charset=utf-8"});
 		saveAs(blob, ical_set.filename);
@@ -383,7 +384,7 @@ function update_next_select(t_off) {
 	var lt = [];
 	t.setHours(h_now - 12);
 	for (var i = -12; i <= 12; ++i) {
-		lt[lt.length] = '<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + weekday(t, false) + ', ' + pretty_time(t, false) + '</option>';
+		lt.push('<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + weekday(t, false) + ', ' + pretty_time(t, false) + '</option>');
 		t.setHours(t.getHours() + 1);
 	}
 	var ts = EL("next_time");
@@ -409,7 +410,7 @@ function update_next_list(next_type) {
 	var ms_next = 0;
 	var ms_max = t.valueOf() + 60 * 60 * 1000;
 	var n = 0;
-	for (var i = 0; i < program.length; ++i) {
+	for (var i = 0, l = program.length; i < l; ++i) {
 		var it = program[i];
 		if (it.date < now_date) continue;
 		if ((it.date == now_date) && (it.time < now_time)) continue;
@@ -429,9 +430,7 @@ function update_next_list(next_type) {
 	}
 
 	var next_prog = [];
-	for (var k in next) {
-		next_prog[next_prog.length] = next[k];
-	}
+	for (var k in next) next_prog.push(next[k]);
 
 	var start_str = '';
 	if (ms_next) {
@@ -458,7 +457,7 @@ function update_next_list(next_type) {
 function update_next_filters(next_type) {
 	if (next_type != "next_by_room") next_type = "next_by_hour";
 	var ul = EL("next_type").getElementsByTagName("li");
-	for (var i = 0; i < ul.length; ++i) {
+	for (var i = 0, l = ul.length; i < l; ++i) {
 		if (ul[i].id == next_type) ul[i].classList.add("selected");
 		else ul[i].classList.remove("selected");
 	}
@@ -523,22 +522,24 @@ function show_star_view(opt) {
 	var set_raw = (opt && (opt.substr(1,4) == 'set:')) ? opt.substr(5).split(',') : [];
 	var set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; });
 	set.sort();
+	var set_len = set.length;
 
 	var stars = storage_get('stars', true) || [];
-	if (stars.length || set.length) {
+	var stars_len = stars.length;
+	if (stars_len || set_len) {
 		var set_link = '<a href="#star/set:' + stars.join(',') + '">';
-		if (set.length) {
+		if (set_len) {
 			if (arrays_equal(set, stars)) {
 				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection. You could also generate a <a href="' + link_to_create_short_url(location.href) + '">shorter link</a> for easier sharing.';
 			} else {
 				var n_same = array_overlap(set, stars);
-				var n_new = set.length - n_same;
+				var n_new = set_len - n_same;
 				var html = '<p>Your previously selected items are shown with a highlighted interior, while those imported via <a href="' + location.href + '">this link</a> have a highlighted border.';
 				html += '\n<p>Your previous selection ';
-				switch (stars.length) {
+				switch (stars_len) {
 					case 0:  html += 'was empty'; break;
 					case 1:  html += 'had 1 item'; break;
-					default: html += 'had ' + stars.length + ' items';
+					default: html += 'had ' + stars_len + ' items';
 				}
 				html += ', and the imported selection has ';
 				switch (n_new) {
@@ -551,15 +552,15 @@ function show_star_view(opt) {
 					case 1:  html += ' and 1 which was already selected.'; break;
 					default: html += ' and ' + n_same + ' which were already selected.';
 				}
-				if (set.length != set_raw.length) {
-					var n_bad = set_raw.length - set.length;
+				if (set_len != set_raw.length) {
+					var n_bad = set_raw.length - set_len;
 					html += ' ' + n_bad + ' of the imported items had ' + (n_bad > 1 ? 'invalid IDs.' : 'an invalid ID.');
 				}
 				html += '<p>&raquo; <a href="#star" id="star_set_set">Set my selection to the imported selection</a>';
-				if (stars.length) {
+				if (stars_len) {
 					var d = [];
 					if (n_new) d.push('add ' + n_new);
-					if (n_same != stars.length) d.push('discard ' + (stars.length - n_same));
+					if (n_same != stars_len) d.push('discard ' + (stars_len - n_same));
 					html += ' (' + d.join(', ') + ')';
 					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">Add the ' + (n_new > 1 ? n_new + ' new items' : 'new item') + ' to my selection</a>';
 				}
@@ -570,9 +571,9 @@ function show_star_view(opt) {
 			}
 		} else {
 			var html = '<p>&raquo; ' + set_link + 'Export selection</a>';
-			switch (stars.length) {
+			switch (stars_len) {
 				case 1:  html += ' (1 item)'; break;
-				default: html += ' (' + stars.length + ' items)';
+				default: html += ' (' + stars_len + ' items)';
 			}
 			view.innerHTML = html;
 		}
@@ -580,9 +581,9 @@ function show_star_view(opt) {
 		var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 		show_prog_list(ls);
 
-		if (set.length) {
+		if (set_len) {
 			document.body.classList.add("show_set");
-			for (var i = 0; i < set.length; ++i) {
+			for (var i = 0; i < set_len; ++i) {
 				var el = EL('s' + set[i]);
 				if (el) el.classList.add("in_set");
 			}
@@ -632,7 +633,7 @@ function update_prog_list(day, area, tag, freetext) {
 
 		if (freetext) {
 			var sa = [ it.title, it.desc, it.loc[0] ];
-			if (it.people) for (var j = 0; j < it.people.length; ++j) sa[sa.length] = it.people[j].name;
+			if (it.people) for (var j = 0, l = it.people.length; j < l; ++j) sa.push(it.people[j].name);
 			var sa_str = sa.join("\t");
 			if (!sa_str.match(re_q)) {
 				if (re_hint && !hint) {
@@ -684,7 +685,7 @@ function update_prog_list(day, area, tag, freetext) {
 function update_prog_filters(day, area, tag, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
-	for (var i = 0; i < dc.length; ++i) {
+	for (var i = 0, l = dc.length; i < l; ++i) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
@@ -696,7 +697,7 @@ function update_prog_filters(day, area, tag, freetext) {
 
 	var ft = area || "everywhere";
 	var fc = EL("area").getElementsByTagName("li");
-	for (var i = 0; i < fc.length; ++i) {
+	for (var i = 0, l = fc.length; i < l; ++i) {
 		if (fc[i].id == ft) fc[i].classList.add("selected");
 		else fc[i].classList.remove("selected");
 	}
@@ -704,7 +705,7 @@ function update_prog_filters(day, area, tag, freetext) {
 	var tt = tag || "all_tags";
 	var tc = EL("tag").getElementsByTagName("li");
 	var t2_title = "More...";
-	for (var i = 0; i < tc.length; ++i) {
+	for (var i = 0, l = tc.length; i < l; ++i) {
 		if (tc[i].id == tt) {
 			tc[i].classList.add("selected");
 			if (tc[i].parentNode.id == "tag2") t2_title = "<b>"+tc[i].innerHTML.trim()+"...</b>";
@@ -724,7 +725,7 @@ function default_prog_day() {
 	var day_start = '', day_end = '';
 	var el_dl = EL("day"); if (!el_dl) return '';
 	var dl = el_dl.getElementsByTagName("li"); if (!dl || !dl.length) return '';
-	for (var i = 0; i < dl.length; ++i) {
+	for (var i = 0, l = dl.length; i < l; ++i) {
 		var d = dl[i].id.substr(1);
 		if (!d.length) continue;
 		if (!day_start || (d < day_start)) day_start = d;
@@ -875,7 +876,7 @@ function update_part_view(name_range, participant) {
 	var el_nr = EL('name_range');
 	if (el_nr) {
 		var ll = el_nr.getElementsByTagName('li');
-		for (var i = 0; i < ll.length; ++i) {
+		for (var i = 0, l = ll.length; i < l; ++i) {
 			if (ll[i].getAttribute('data-range') == name_range) ll[i].classList.add('selected');
 			else ll[i].classList.remove('selected');
 		}
@@ -883,7 +884,7 @@ function update_part_view(name_range, participant) {
 
 	var p_id = participant.substr(1);
 	var i;
-	for (i = 0; i < people.length; ++i) {
+	for (i = 0, l = people.length; i < l; ++i) {
 		if (people[i].id == p_id) { show_participant(people[i]); break; }
 	}
 	if (i == people.length) {
@@ -964,7 +965,7 @@ function show_info_view() {
 // init next view
 if (EL("next_filters")) {
 	var ul = EL("next_filters").getElementsByTagName("li");
-	for (var i = 0; i < ul.length; ++i) {
+	for (var i = 0, l = ul.length; i < l; ++i) {
 		ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
 	}
 }
@@ -976,7 +977,7 @@ if (EL("next_filters")) {
 
 // init prog view
 var dc = EL("prog_filters").getElementsByTagName("li");
-for (var i = 0; i < dc.length; ++i) {
+for (var i = 0, l = dc.length; i < l; ++i) {
 	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); return true; };
 }
 var sf = EL("search");
@@ -1002,7 +1003,7 @@ if (pl) {
 
 
 // init part view
-for (var i = 0; i < people.length; ++i) {
+for (var i = 0, l = people.length; i < l; ++i) {
 	people[i].sortname = (people[i].name[1] + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
 }
 people.sort(function(a, b) {
@@ -1012,7 +1013,7 @@ people.sort(function(a, b) {
 });
 
 var pc = EL("part_filters").getElementsByTagName("li");
-for (var i = 0; i < pc.length; ++i) {
+for (var i = 0, l = pc.length; i < l; ++i) {
 	pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
 }
 
