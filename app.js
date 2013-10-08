@@ -701,6 +701,64 @@ function show_prog_view(opt) {
 
 // ------------------------------------------------------------------------------------------------ participant view
 
+function show_participant(p) {
+	var p_name = clean_name(p, false);
+	var links = '';
+	var img = '';
+	var pl = clean_links(p);
+	if (pl) {
+		links += '<dl class="linklist">';
+		for (var type in pl) {
+			var tgt = pl[type];
+			switch (type) {
+				case 'url': links += '<dt>URL:<dd>'
+					+ '<a href="' + tgt + '">' + tgt + '</a>';
+					break;
+				case 'twitter': links += '<dt>Twitter:<dd>'
+					+ '<a href="https://www.twitter.com/' + tgt + '">@' + tgt + '</a>';
+					break;
+				case 'fb': links += '<dt>Facebook:<dd>'
+					+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
+					break;
+				case 'img':
+					/*if (navigator.onLine) {
+						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
+					} else*/ {
+						links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
+					}
+					break;
+				default: links += '<dt>' + type + ':<dd>' + tgt;
+			}
+		}
+		links += '</dl>';
+	}
+	EL("part_names").innerHTML = '';
+	EL("part_info").innerHTML = 
+		  '<h2 id="part_title">' + p_name + '</h2>'
+		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
+		+ links;
+	show_prog_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
+}
+
+function show_participant_list(name_range) {
+	var lp = !name_range ? people : people.filter(function(p) {
+		var n0 = p.sortname[0].toUpperCase();
+		switch (name_range.length) {
+			case 1:  if (n0 == name_range[0])                            return true; break;
+			case 2:  if ((n0 >= name_range[0]) && (n0 <= name_range[1])) return true; break;
+			default: if (name_range.indexOf(n0) >= 0)                    return true; break;
+		}
+		return false;
+	});
+
+	EL('part_names').innerHTML = lp.map(function(p) {
+		return '<li><a href="#part/' + p.id + '">' + clean_name(p, true) + '</a></li>';
+	}).join('');
+
+	EL('part_info').innerHTML = '';
+	EL('prog_ls').innerHTML = '';
+}
+
 function update_part_view(name_range, participant) {
 	var el_nr = EL('name_range');
 	if (el_nr) {
@@ -712,74 +770,13 @@ function update_part_view(name_range, participant) {
 	}
 
 	var p_id = participant.substr(1);
-	var pa = people.filter(function(p) { return p.id == p_id; });
-	if (!pa.length) {
+	var i;
+	for (i = 0; i < people.length; ++i) {
+		if (people[i].id == p_id) { show_participant(people[i]); break; }
+	}
+	if (i == people.length) {
 		participant = '';
-
-		if (name_range) {
-			var lp = people.filter(function(p) {
-				var n = (p.name[1] + '  ' + p.name[0]).replace(/^ +/, '');
-				var n0 = n[0].toUpperCase();
-				switch (name_range.length) {
-					case 1:  if (n0 == name_range[0])                            return true; break;
-					case 2:  if ((n0 >= name_range[0]) && (n0 <= name_range[1])) return true; break;
-					default: if (name_range.indexOf(n0) >= 0)                    return true; break;
-				}
-				return false;
-			});
-
-			lp.sort(function(a, b) {
-				var an = (a.name[1] + '  ' + a.name[0]).toLowerCase().replace(/^ +/, '');
-				var bn = (b.name[1] + '  ' + b.name[0]).toLowerCase().replace(/^ +/, '');
-					 if (an < bn) return -1;
-				else if (an > bn) return 1;
-				else              return 0;
-			});
-			EL('part_names').innerHTML = lp.map(function(p) {
-				return '<li><a href="#part/' + p.id + '">' + clean_name(p, true) + '</a></li>';
-			}).join('');
-		} else {
-			EL('part_names').innerHTML = '';
-		}
-		EL('part_info').innerHTML = '';
-		EL('prog_ls').innerHTML = '';
-	} else {
-		var p_name = clean_name(pa[0], false);
-		var links = '';
-		var img = '';
-		var pl = clean_links(pa[0]);
-		if (pl) {
-			links += '<dl class="linklist">';
-			for (var type in pl) {
-				var tgt = pl[type];
-				switch (type) {
-					case 'url': links += '<dt>URL:<dd>'
-						+ '<a href="' + tgt + '">' + tgt + '</a>';
-						break;
-					case 'twitter': links += '<dt>Twitter:<dd>'
-						+ '<a href="https://www.twitter.com/' + tgt + '">@' + tgt + '</a>';
-						break;
-					case 'fb': links += '<dt>Facebook:<dd>'
-						+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
-						break;
-					case 'img':
-						/*if (navigator.onLine) {
-							img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
-						} else*/ {
-							links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
-						}
-						break;
-					default: links += '<dt>' + type + ':<dd>' + tgt;
-				}
-			}
-			links += '</dl>';
-		}
-		EL("part_names").innerHTML = '';
-		EL("part_info").innerHTML = 
-			  '<h2 id="part_title">' + p_name + '</h2>'
-			+ ((pa[0].bio || img) ? ('<p>' + img + pa[0].bio) : '')
-			+ links;
-		show_prog_list(program.filter(function(it) { return pa[0].prog.indexOf(it.id) >= 0; }));
+		show_participant_list(name_range);
 	}
 
 	storage_set('part', { 'name_range': name_range, 'participant': participant });
@@ -893,6 +890,15 @@ if (pl) {
 
 
 // init part view
+for (var i = 0; i < people.length; ++i) {
+	people[i].sortname = (people[i].name[1] + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
+}
+people.sort(function(a, b) {
+		 if (a.sortname < b.sortname) return -1;
+	else if (a.sortname > b.sortname) return 1;
+	else                              return 0;
+});
+
 var pc = EL("part_filters").getElementsByTagName("li");
 for (var i = 0; i < pc.length; ++i) {
 	pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
