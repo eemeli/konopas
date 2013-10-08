@@ -25,6 +25,10 @@ var time_show_am_pm = true;
 var abbrev_00_minutes = true; // only for am/pm time
 
 // ------------------------------------------------------------------------------------------------ utilities
+function link_to_create_short_url(url) {
+	return 'http://is.gd/create.php?url=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
+}
+
 if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^\s+|\s+$/g, ''); }; }
 
 function EL(id) { return document.getElementById(id); }
@@ -127,7 +131,7 @@ function toggle_star(el, id) {
 		stars = stars.filter(function(el) { return el != id; });
 		el.classList.remove("has_star");
 	} else {
-		stars[stars.length] = id;
+		stars.push(id);
 		el.classList.add("has_star");
 	}
 	stars.sort();
@@ -148,8 +152,7 @@ function GlobToRE(pat) {
 
 var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
-	for (var i in views) { document.body.classList.remove(views[i]); }
-	document.body.classList.add(new_view);
+	document.body.className = new_view;
 	storage_set('view', new_view);
 }
 
@@ -215,6 +218,27 @@ function clean_links(p) {
 	}
 
 	return ok ? o : false;
+}
+
+function arrays_equal(a, b) {
+	if (!a || !b) return false;
+	if (a.length != b.length) return false;
+	for (var i = 0; i < a.length; ++i) {
+		if (a[i] != b[i]) return false;
+	}
+	return true;
+}
+
+function array_overlap(a, b) {
+	if (!a || !b) return 0;
+	var a_len = a.length, b_len = b.length;
+	if (a_len > b_len) return array_overlap(b, a);
+
+	var n = 0;
+	for (var i = 0; i < a_len; ++i) {
+		for (var j = 0; j < b_len; ++j) if (a[i] == b[j]) { ++n; break; }
+	}
+	return n;
 }
 
 
@@ -469,28 +493,104 @@ function show_next_view() {
 }
 
 
-
 // ------------------------------------------------------------------------------------------------ "my con" view
 
-function show_star_view() {
-	set_view("star");
+function make_star_setter(set, replace) {
+	if (replace) {
+		return function() {
+			storage_set('stars', set, true);
+			return true;
+		};
+	} else {
+		return function() {
+			var stars = set.concat(storage_get('stars', true) || []).filter(function(val, i, self) { return self.indexOf(val) === i; } );
+			stars.sort();
+			storage_set('stars', stars, true);
+			return true;
+		};
+	}
+}
 
+function show_star_view(opt) {
+	set_view("star");
 	var view = EL("star_view");
-	if (supports_storage()) {
-		var stars = storage_get('stars', true);
-		if (stars && stars.length) {
-			view.innerHTML = '';
-			//EL("ical_link").style.display = 'block';
-			var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0); });
-			show_prog_list(ls);
+
+	if (!supports_storage()) {
+		view.innerHTML = "<p>HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
+		EL("prog_ls").innerHTML = '';
+		//EL("ical_link").style.display = 'none';
+		return;
+	}
+
+	var set_raw = (opt && (opt.substr(1,4) == 'set:')) ? opt.substr(5).split(',') : [];
+	var set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; });
+	set.sort();
+
+	var stars = storage_get('stars', true) || [];
+	if (stars.length || set.length) {
+		var set_link = '<a href="#star/set:' + stars.join(',') + '">';
+		if (set.length) {
+			if (arrays_equal(set, stars)) {
+				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection. You could also generate a <a href="' + link_to_create_short_url(location.href) + '">shorter link</a> for easier sharing.';
+			} else {
+				var n_same = array_overlap(set, stars);
+				var n_new = set.length - n_same;
+				var html = '<p>Your previously selected items are shown with a highlighted interior, while those imported via <a href="' + location.href + '">this link</a> have a highlighted border.';
+				html += '\n<p>Your previous selection ';
+				switch (stars.length) {
+					case 0:  html += 'was empty'; break;
+					case 1:  html += 'had 1 item'; break;
+					default: html += 'had ' + stars.length + ' items';
+				}
+				html += ', and the imported selection has ';
+				switch (n_new) {
+					case 0:  html += 'no new items'; break;
+					case 1:  html += '1 new item'; break;
+					default: html += n_new + ' new items';
+				};
+				switch (n_same) {
+					case 0:  html += '.'; break;
+					case 1:  html += ' and 1 which was already selected.'; break;
+					default: html += ' and ' + n_same + ' which were already selected.';
+				}
+				if (set.length != set_raw.length) {
+					var n_bad = set_raw.length - set.length;
+					html += ' ' + n_bad + ' of the imported items had ' + (n_bad > 1 ? 'invalid IDs.' : 'an invalid ID.');
+				}
+				html += '<p>&raquo; <a href="#star" id="star_set_set">Set my selection to the imported selection</a>';
+				if (stars.length) {
+					var d = [];
+					if (n_new) d.push('add ' + n_new);
+					if (n_same != stars.length) d.push('discard ' + (stars.length - n_same));
+					html += ' (' + d.join(', ') + ')';
+					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">Add the ' + (n_new > 1 ? n_new + ' new items' : 'new item') + ' to my selection</a>';
+				}
+				view.innerHTML = html;
+
+				var el_set = EL('star_set_set'); if (el_set) el_set.onclick = make_star_setter(set, true);
+				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = make_star_setter(set, false);
+			}
 		} else {
-			view.innerHTML = "<p><b>Hint:</b> To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
-			//EL("ical_link").style.display = 'none';
-			EL("prog_ls").innerHTML = '';
-			//EL("ical_link").style.display = 'none';
+			var html = '<p>&raquo; ' + set_link + 'Export selection</a>';
+			switch (stars.length) {
+				case 1:  html += ' (1 item)'; break;
+				default: html += ' (' + stars.length + ' items)';
+			}
+			view.innerHTML = html;
+		}
+		//EL("ical_link").style.display = 'block';
+		var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
+		show_prog_list(ls);
+
+		if (set.length) {
+			document.body.classList.add("show_set");
+			for (var i = 0; i < set.length; ++i) {
+				var el = EL('s' + set[i]);
+				if (el) el.classList.add("in_set");
+			}
 		}
 	} else {
-		view.innerHTML = "<p>HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
+		view.innerHTML = "<p>To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
 		EL("prog_ls").innerHTML = '';
 		//EL("ical_link").style.display = 'none';
 	}
@@ -634,8 +734,8 @@ function default_prog_day() {
 	}
 	var day_now = string_time().substr(0, 10);
 
-	var day = (day_now <= day_start) ? day_start
-	        : (day_now > day_end) ? day_start
+	var day = (day_now < day_start) ? ''
+	        : (day_now > day_end) ? ''
 	        : day_now;
 
 	return day;
@@ -977,7 +1077,7 @@ function init_view() {
 	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
 		case 'next': show_next_view(); break;
-		case 'star': show_star_view(); break;
+		case 'star': show_star_view(opt.substr(4)); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'info': show_info_view(); break;
 		case 'prog': show_prog_view(opt.substr(4)); break;

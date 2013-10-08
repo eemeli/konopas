@@ -196,6 +196,8 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 
 .item_star { position: absolute; width: 20px; height: 20px; top: 10px; left: 10px; background: #f5e6c3; cursor: pointer; }
 .item_star.has_star { background: #800000 !important; }
+.show_set .item_star { width: 14px; height: 14px; border: 3px solid #f5e6c3; }
+.show_set .item_star.in_set { border-color: #800000; }
 
 .item { clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 10px; cursor: pointer; }
 
