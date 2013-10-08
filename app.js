@@ -29,8 +29,6 @@ function link_to_create_short_url(url) {
 	return 'http://is.gd/create.php?url=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
 }
 
-if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^\s+|\s+$/g, ''); }; }
-
 function EL(id) { return document.getElementById(id); }
 
 function selected_id(parent_id) {
