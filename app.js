@@ -22,7 +22,7 @@
 var full_version = !navigator.userAgent.match(/Android [12]/);
 var default_duration = 60;
 var time_show_am_pm = true;
-
+var abbrev_00_minutes = true; // only for am/pm time
 
 // ------------------------------------------------------------------------------------------------ utilities
 if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^\s+|\s+$/g, ''); }; }
@@ -46,13 +46,29 @@ function string_time(t) {
 		+ ':' + pre0(t.getMinutes());
 }
 
-function pretty_time(t) {
-	var d = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ][t.getDay()];
+function weekday(t, utc) {
+	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][utc ? t.getUTCDay() : t.getDay()];
+}
+
+function _pretty_time(h, m) {
 	if (time_show_am_pm) {
-		var h12 = t.getHours() % 12; if (h12 == 0) h12 = 12;
-		return d + ', ' + h12 + ':' + pre0(t.getMinutes()) + (t.getHours() < 12 ? ' am' : ' pm');
+		var h12 = h % 12; if (h12 == 0) h12 = 12;
+		var m_str = ((m == 0) && abbrev_00_minutes ) ? '' : ':' + pre0(m);
+		return h12 + m_str + (h < 12 ? 'am' : 'pm');
 	} else {
-		return d + ', ' + t.getHours() + ':' + pre0(t.getMinutes());
+		return pre0(h) + ':' + pre0(m);
+	}
+}
+function pretty_time(t, utc) {
+	if (t instanceof Date) {
+		return utc ? _pretty_time(t.getUTCHours(), t.getUTCMinutes()) : _pretty_time(t.getHours(), t.getMinutes());
+	} else if (typeof t == 'string' || t instanceof String) {
+		if (time_show_am_pm) {
+			var a = t.split(':'); // hh:mm
+			return _pretty_time(parseInt(a[0], 10), parseInt(a[1], 10));
+		} else return t;
+	} else {
+		return '';
 	}
 }
 
@@ -67,7 +83,7 @@ function pretty_time_diff(t) {
 }
 
 function pretty_date(t) {
-	var s = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getUTCDay()];
+	var s = weekday(t, true);
 	var td = t - Date.now();
 	if ((td < 0) || (td > 1000*3600*24*6)) {
 		s += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
@@ -238,11 +254,9 @@ function show_prog_list(ls) {
 			list[list.length] = '<div class="new_day">' + day_str + '</div>';
 		}
 
-		var time_str = "";
 		if (ls[i].time != prev_time) {
-			time_str = prev_time = ls[i].time;
-
-			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + time_str + '</div>';
+			prev_time = ls[i].time;
+			list[list.length] = '<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time) + '</div>';
 		}
 
 		var loc_str = '';
@@ -252,7 +266,7 @@ function show_prog_list(ls) {
 		}
 		if (ls[i].mins && (ls[i].mins != default_duration)) {
 			if (loc_str) loc_str += ', ';
-			loc_str += ls[i].time + ' - ' + time_sum(ls[i].time, ls[i].mins);
+			loc_str += pretty_time(ls[i].time) + ' - ' + pretty_time(time_sum(ls[i].time, ls[i].mins));
 		}
 
 		list[list.length] = '<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
@@ -347,7 +361,7 @@ function update_next_select(t_off) {
 	var lt = [];
 	t.setHours(h_now - 12);
 	for (var i = -12; i <= 12; ++i) {
-		lt[lt.length] = '<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + pretty_time(t) + '</option>';
+		lt[lt.length] = '<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + weekday(t, false) + ', ' + pretty_time(t, false) + '</option>';
 		t.setHours(t.getHours() + 1);
 	}
 	var ts = EL("next_time");
@@ -540,8 +554,8 @@ function update_prog_list(day, area, tag, freetext) {
 		var ft = 'item'; if (ls.length != 1) ft += 's';
 		if (tag && (tag != 'all_tags')) { ft = '<b>' + tag + '</b> ' + ft; ls_all = false; }
 		if (day) {
-			var dt = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][(new Date(day)).getUTCDay()];
-			ft += ' on <b>' + dt + '</b>';
+			var dt = new Date(day);
+			ft += ' on <b>' + weekday(dt, true) + '</b>';
 			ls_all = false;
 		}
 		if (area && (area != 'everywhere')) { ft += ' in <b>' + area + '</b>'; ls_all = false; }
