@@ -11,7 +11,7 @@ data/title-small.png
 data/title.png
 data/program.js
 data/people.js
-classList.js
+polyfill.min.js
 app.js
 
 NETWORK:
