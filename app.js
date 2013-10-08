@@ -958,7 +958,6 @@ function init_view() {
 		default:     show_prog_view(); break;
 	}
 
-	if (EL("top")) EL("top").scrollIntoView();
 	if (EL("load_disable")) EL("load_disable").style.display = "none";
 }
 
