@@ -932,20 +932,26 @@ if (EL("scroll_link")) {
 		st += 20; // to have more time for change behind new_time
 		var te = EL("time"); if (!te) return;
 		var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
-		//var i = 1; while ((i < tl.length) && (tl[i].offsetTop < st)) ++i; --i;
-		var i = prev_scroll.top ? prev_scroll.i : 1;
-		if (i >= tl.length) i = tl.length - 1;
-		if (st > tl[i].offsetTop) {
-			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
-			--i;
+		if (st < tl[0].offsetTop) {
+			prev_scroll.i = 0;
+			prev_scroll.top = tl[0].offsetTop;
+			te.style.display = "none";
 		} else {
-			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
-		}
-		if (i < 0) i = 0;
+			var i = prev_scroll.top ? prev_scroll.i : 1;
+			if (i >= tl.length) i = tl.length - 1;
+			if (st > tl[i].offsetTop) {
+				while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
+				--i;
+			} else {
+				while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+			}
+			if (i < 0) i = 0;
 
-		prev_scroll.i = i;
-		prev_scroll.top = tl[i].offsetTop;
-		te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
+			prev_scroll.i = i;
+			prev_scroll.top = tl[i].offsetTop;
+			te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
+			te.style.display = "block";
+		}
 	};} else {
 		EL("time").style.display = "none";
 		EL("scroll").style.display = "none";
