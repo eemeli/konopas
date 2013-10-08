@@ -172,7 +172,9 @@ input[type="text"]:valid + #q_ctrl input { border-color: #800000; }
 #part_info h2 { font-size: 2.0em; margin: 0 0 10px 0; border-bottom: 2px solid #800000; }
 #part_info p { margin-bottom: 0; }
 
+.linklist { max-width: 600px; }
 .linklist dt { float: left; width: 100px; text-align: right; margin-right: 6px; }
+.linklist dd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .linklist a { text-decoration: none; font-weight: 500; }
 .linklist a:hover { text-decoration: underline; }
 
