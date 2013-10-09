@@ -24,6 +24,11 @@ var default_duration = 60;
 var time_show_am_pm = true;
 var abbrev_00_minutes = true; // only for am/pm time
 
+
+if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window))
+	alert("Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.");
+
+
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_create_short_url(url) {
 	return 'http://is.gd/create.php?url=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
@@ -104,23 +109,13 @@ function time_sum(t0_str, m_str) {
 	return pre0(h % 24) + ':' + pre0(m);
 }
 
-function supports_storage() {
-	try {
-		return 'localStorage' in window && window['localStorage'] !== null;
-	} catch (e) {
-		return false;
-	}
-}
-
 function storage_get(name, use_localstorage) {
-	if (!supports_storage()) return false;
 	var s = use_localstorage ? localStorage : sessionStorage;
 	var v = s.getItem(konopas_set.id + '.' + name);
 	return v ? JSON.parse(v) : v;
 }
 
 function storage_set(name, value, use_localstorage) {
-	if (!supports_storage()) return;
 	var s = use_localstorage ? localStorage : sessionStorage;
 	s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
 }
@@ -315,17 +310,15 @@ function show_prog_list(ls) {
 		};
 	}
 
-	if (supports_storage()) {
-		var star_els = EL("prog_ls").getElementsByClassName("item_star");
-		for (var i = 0, l = star_els.length; i < l; ++i) {
-			star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
-		}
+	var star_els = EL("prog_ls").getElementsByClassName("item_star");
+	for (var i = 0, l = star_els.length; i < l; ++i) {
+		star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
+	}
 
-		var stars = storage_get('stars', true) || [];
-		for (var i = 0, l = stars.length; i < l; ++i) {
-			var el = EL('s' + stars[i]);
-			if (el) el.classList.add("has_star");
-		}
+	var stars = storage_get('stars', true) || [];
+	for (var i = 0, l = stars.length; i < l; ++i) {
+		var el = EL('s' + stars[i]);
+		if (el) el.classList.add("has_star");
 	}
 }
 
@@ -513,13 +506,6 @@ function make_star_setter(set, replace) {
 function show_star_view(opt) {
 	set_view("star");
 	var view = EL("star_view");
-
-	if (!supports_storage()) {
-		view.innerHTML = "<p>HTML5 localStorage is apparently <b>not supported</b> by your current browser, so unfortunately the selection and display of starred items is not possible."
-		EL("prog_ls").innerHTML = '';
-		//EL("ical_link").style.display = 'none';
-		return;
-	}
 
 	var set_raw = (opt && (opt.substr(1,4) == 'set:')) ? opt.substr(5).split(',') : [];
 	var set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; });
