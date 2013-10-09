@@ -1058,7 +1058,7 @@ if (EL("scroll_link")) {
 
 // init info view
 var lu = EL('last-updated');
-if (lu) {
+if (lu && (location.protocol == 'http:')) {
 	var x = new XMLHttpRequest();
 	x.onload = function() {
 		var t = new Date(this.getResponseHeader("Last-Modified"));
