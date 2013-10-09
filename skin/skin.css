@@ -63,14 +63,14 @@
   .part #tabs #tab_part,
   .info #tabs #tab_info {
     border-bottom: 2px solid #800000 !important;
-    border-right-color: white !important;
+    border-right-color: #ffffff !important;
     border-top-right-radius: 0;
     border-bottom-left-radius: 5px;
     margin: -2px 0 !important;
   }
   #time,
   #scroll {
-    left: 220px !important;
+    left: 228px !important;
   }
   #main {
     position: absolute;
@@ -95,6 +95,8 @@ h5,
 html {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+  color: #000000;
+  background: #ffffff;
   width: 100%;
 }
 body {
@@ -107,7 +109,7 @@ body {
 #load_disable {
   position: fixed;
   z-index: 5;
-  background-color: white;
+  background-color: #ffffff;
   opacity: 0.7;
   top: 0;
   left: 0;
@@ -120,18 +122,20 @@ body {
 #scroll {
   position: fixed;
   z-index: 2;
-  left: 0;
-  margin: 8px;
+  margin: 0;
+  min-width: 45px;
   text-align: center;
   color: #ccc5bb;
 }
 #time {
-  top: 0;
+  left: 8px;
+  top: 8px;
 }
 #scroll {
-  bottom: 0;
+  left: 8px;
+  bottom: 8px;
   display: none;
-  max-width: 40px;
+  max-width: 45px;
   font-size: 0.8em;
 }
 #scroll a {
@@ -144,7 +148,7 @@ body {
 .hint {
   position: relative;
   z-index: 3;
-  background: white;
+  background: #ffffff;
   padding-top: 0;
 }
 h1 {
@@ -154,6 +158,16 @@ h1 {
 }
 h1 a {
   text-decoration: none;
+}
+hr {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  border: none;
+  padding: 0;
+  height: 2px;
+  background: #800000;
 }
 #main p {
   max-width: 600px;
@@ -183,7 +197,7 @@ h1 a {
   font-weight: 500;
   margin: 0 -2px;
   border: 2px solid #800000;
-  border-bottom-color: white;
+  border-bottom-color: #ffffff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -203,18 +217,10 @@ h1 a {
 .view {
   display: none;
 }
-.next #next_view {
-  display: block;
-}
-.star #star_view {
-  display: block;
-}
-.prog #prog_view {
-  display: block;
-}
-.part #part_view {
-  display: block;
-}
+.next #next_view,
+.star #star_view,
+.prog #prog_view,
+.part #part_view,
 .info #info_view {
   display: block;
 }
@@ -252,7 +258,7 @@ h1 a {
   padding: 2px 4px;
   -webkit-appearance: none;
   -webkit-border-radius: 0;
-  background: white;
+  background: #ffffff;
   font-size: 1em;
 }
 #next_start_note {
@@ -270,8 +276,6 @@ h1 a {
   line-height: 1.0;
   padding-bottom: 5px;
 }
-/*#floor, #stars { margin-bottom: -19px !important; }
-#prog_filters input { margin: 38px 4px -33px 0; }*/
 #prog_filters input {
   margin: 0 4px 0 0;
 }
@@ -353,7 +357,7 @@ input {
   border: 2px solid #ccc5bb;
   border-radius: 5px;
   padding: 3px;
-  background: white;
+  background: #ffffff;
 }
 input[type="text"] {
   border: 2px solid #ccc5bb;
@@ -383,19 +387,6 @@ input[type="text"]:valid + #q_ctrl input {
 #tag2-list {
   position: relative;
 }
-#tag2-disable-bg {
-  display: none;
-  position: fixed;
-  z-index: 5;
-  background-color: white;
-  opacity: 0.7;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 #tag2-list ul {
   display: none !important;
   position: absolute !important;
@@ -406,7 +397,7 @@ input[type="text"]:valid + #q_ctrl input {
   top: 18px;
   width: 250px;
   padding: 2px 5px;
-  background: white;
+  background: #ffffff;
   background: rgba(255, 255, 255, 0.9);
 }
 #tag2-list.show_list ul {
@@ -415,6 +406,19 @@ input[type="text"]:valid + #q_ctrl input {
 #tag2-list li {
   width: 125px;
   display: inline-block;
+}
+#tag2-disable-bg {
+  display: none;
+  position: fixed;
+  z-index: 5;
+  background-color: #ffffff;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 #filter_sum {
   clear: left;
@@ -467,7 +471,7 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .new_day {
   padding-top: 40px;
-  background: white;
+  background: #ffffff;
   border-bottom: 5px solid #800000;
   font-size: 2.0em;
   width: 100%;
@@ -477,16 +481,6 @@ input[type="text"]:valid + #q_ctrl input {
   position: relative;
   z-index: 2;
 }
-hr {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  margin: 0;
-  border: none;
-  padding: 0;
-  height: 2px;
-  background: #800000;
-}
 .new_day + hr {
   display: none;
 }
@@ -495,7 +489,8 @@ hr {
   height: 70px;
   margin-bottom: -75px;
   width: 45px;
-  background: white;
+  text-align: center;
+  background: #ffffff;
   background: transparent -webkit-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
   background: transparent -moz-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
   background: transparent -ms-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
@@ -581,7 +576,11 @@ hr {
   font-size: 0.875em;
 }
 a {
-  color: black;
+  color: #000000;
+}
+.info #time,
+.info #scroll {
+  display: none !important;
 }
 #info_view h3 {
   margin: 20px 0 5px 0;
@@ -590,10 +589,6 @@ a {
 }
 #info_view h3 + p {
   margin-top: 5px;
-}
-.info #time,
-.info #scroll {
-  display: none !important;
 }
 #info_view h2 {
   font-size: 2.0em;
