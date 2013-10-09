@@ -115,9 +115,19 @@ function storage_get(name, use_localstorage) {
 	return v ? JSON.parse(v) : v;
 }
 
+var private_browsing_noted = false;
 function storage_set(name, value, use_localstorage) {
 	var s = use_localstorage ? localStorage : sessionStorage;
-	s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
+	try {
+		s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
+	} catch (e) {
+		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (s.length === 0)) {
+			if (!private_browsing_noted) {
+				alert("It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.");
+				private_browsing_noted = true;
+			}
+		} else throw e;
+	}
 }
 
 function toggle_star(el, id) {
