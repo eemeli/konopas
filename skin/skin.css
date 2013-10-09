@@ -210,7 +210,7 @@ hr {
   border-radius: 5px;
   padding: 5px 5px 5px 50px;
   height: 40px;
-  background: url(../img/refresh.png) 5px 5px no-repeat;
+  background: url(refresh.png) 5px 5px no-repeat;
   line-height: 40px;
   cursor: pointer;
 }

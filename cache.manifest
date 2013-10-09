@@ -3,6 +3,7 @@ CACHE MANIFEST
 
 CACHE:
 skin/skin.css
+skin/refresh.png
 skin/Roboto300.ttf
 skin/Roboto500.ttf
 skin/Oswald400.ttf
