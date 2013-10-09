@@ -75,13 +75,15 @@ function pretty_time(t, utc) {
 }
 
 function pretty_time_diff(t) {
-	var diff = ( new Date() - t ) / 1e3,
-	       u = [ "seconds", "minutes", "hours", "days", "weeks", "months", "years" ],
-	       s = [ 1, 60, 60, 24, 7, 4.333, 12, 1e9],
-	   tense = ( diff<0 ? " from now" : " ago" );
+	var diff = (Date.now() - t) / 1e3,
+	       u = ["seconds", "minutes", "hours", "days", "weeks", "months", "years"],
+	       s = [1, 60, 60, 24, 7, 4.333, 12, 1e9],
+	   tense = (diff < 0 ? " from now" : " ago");
 	diff = Math.abs(diff);
-	if (diff<20) return "just now";
-	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
+	if (diff < 20) return "just now";
+	for (var i = 0, l = s.length; i < l; ++i) {
+		if ((diff /= s[i]) < 2) return ~~(diff *= s[i]) + " " + u[i-1] + tense;
+	}
 }
 
 function pretty_date(t) {
@@ -796,7 +798,7 @@ function show_prog_view(opt) {
 
 	if (opt) {
 		var parts_in = opt.split('/');
-		for (var i in parts_in) {
+		for (var i = 0, l = parts_in.length; i < l; ++i) {
 			var s = parts_in[i].split(':');
 			if (s.length >= 2) switch (s[0]) {
 				case 'day':   day = s[1]; break;
@@ -901,16 +903,16 @@ function part_filter(ctrl, el) {
 }
 
 function find_name_range(name) {
-	var n = (name[1] + '  ' + name[0]).toUpperCase().replace(/^ +/, ''); if (!n) return '';
+	var n0 = name[0].toUpperCase(); if (!n0) return '';
 	var par = EL('name_range'); if (!par) return '';
 	var ll = par.getElementsByTagName('li'); if (!ll.length) return '';
-	for (var i in ll) {
+	for (var i = 0, l = ll.length; i < l; ++i) {
 		var range = ll[i].getAttribute('data-range');
 		switch (range.length) {
 			case 0:  break;
-			case 1:  if (n[0] == range[0])                         return range; break;
-			case 2:  if ((n[0] >= range[0]) && (n[0] <= range[1])) return range; break;
-			default: if (range.indexOf(n[0]) >= 0)                 return range; break;
+			case 1:  if (n0 == range[0])                       return range; break;
+			case 2:  if ((n0 >= range[0]) && (n0 <= range[1])) return range; break;
+			default: if (range.indexOf(n0) >= 0)               return range; break;
 		}
 	}
 	return '';
@@ -933,7 +935,7 @@ function show_part_view(opt) {
 		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
-			name_range = find_name_range(pa[0].name);
+			name_range = find_name_range(pa[0].sortname);
 		} else {
 			window.location.hash = '#part';
 			return;
