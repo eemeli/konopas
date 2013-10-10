@@ -19,10 +19,15 @@
  */
 
 
-var full_version = !navigator.userAgent.match(/Android [12]/);
-var default_duration = 60;
-var time_show_am_pm = true;
-var abbrev_00_minutes = true; // only for am/pm time
+var ko = {
+	// these are default values, use konopas_set to override
+	'id': location.pathname.split('/').filter(function(p) { return p; }).join('-'),
+	'full_version': !navigator.userAgent.match(/Android [12]/),
+	'default_duration': 60,
+	'time_show_am_pm': false,
+	'abbrev_00_minutes': true // only for am/pm time
+};
+if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 
 
 if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window))
@@ -58,9 +63,9 @@ function weekday(t, utc) {
 }
 
 function _pretty_time(h, m) {
-	if (time_show_am_pm) {
+	if (ko.time_show_am_pm) {
 		var h12 = h % 12; if (h12 == 0) h12 = 12;
-		var m_str = ((m == 0) && abbrev_00_minutes ) ? '' : ':' + pre0(m);
+		var m_str = ((m == 0) && ko.abbrev_00_minutes ) ? '' : ':' + pre0(m);
 		return h12 + m_str + (h < 12 ? 'am' : 'pm');
 	} else {
 		return pre0(h) + ':' + pre0(m);
@@ -70,7 +75,7 @@ function pretty_time(t, utc) {
 	if (t instanceof Date) {
 		return utc ? _pretty_time(t.getUTCHours(), t.getUTCMinutes()) : _pretty_time(t.getHours(), t.getMinutes());
 	} else if (typeof t == 'string' || t instanceof String) {
-		if (time_show_am_pm) {
+		if (ko.time_show_am_pm) {
 			var a = t.split(':'); // hh:mm
 			return _pretty_time(parseInt(a[0], 10), parseInt(a[1], 10));
 		} else return t;
@@ -294,7 +299,7 @@ function show_prog_list(ls) {
 			loc_str = ls[i].loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
 			if (ls[i].loc.length > 1) loc_str += ' (' + ls[i].loc.slice(1).join(', ') + ')';
 		}
-		if (ls[i].mins && (ls[i].mins != default_duration)) {
+		if (ls[i].mins && (ls[i].mins != ko.default_duration)) {
 			if (loc_str) loc_str += ', ';
 			loc_str += pretty_time(ls[i].time) + ' - ' + pretty_time(time_sum(ls[i].time, ls[i].mins));
 		}
@@ -637,7 +642,7 @@ function update_prog_filters(day, area, tag, freetext) {
 		if (dc[i].id == dt) dc[i].classList.add("selected");
 		else dc[i].classList.remove("selected");
 	}
-	if (!full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
+	if (!ko.full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		EL("d").classList.add("disabled");
 	} else {
 		EL("d").classList.remove("disabled");
@@ -689,7 +694,7 @@ function default_prog_day() {
 }
 
 function update_prog(day, area, tag, freetext) {
-	if (!full_version && !day && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
+	if (!ko.full_version && !day && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
 		day = default_prog_day();
 	}
 
@@ -971,7 +976,7 @@ if (EL("scroll_link")) {
 	EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
 	var prev_scroll = { "i": 0, "top": 0 };
 	var n = 0;
-	if (full_version) { window.onscroll = function() {
+	if (ko.full_version) { window.onscroll = function() {
 		var st = document.body.scrollTop || document.documentElement.scrollTop;
 
 		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
