@@ -256,6 +256,35 @@ function array_overlap(a, b) {
 
 // ------------------------------------------------------------------------------------------------ items
 
+function _item_people(it) {
+	if (!it.people || !it.people.length) return '';
+	var a = it.people.map(function(p) {
+		return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>";
+	});
+	return '<div class="item-people">' + a.join(', ') + '</div>\n';
+}
+
+function _item_tags(it) {
+	if (!it.tags || !it.tags.length) return '';
+	var a = it.tags.map(function(t) {
+		return '<a href="#prog/tag:' + t + '">' + t + '</a>';
+	});
+	return '<div class="item-tags">Tracks: ' + a.join(', ') + '</div>\n';
+}
+
+function _item_loc(it) {
+	var s = '';
+	if (it.loc && it.loc.length) {
+		s = it.loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
+		if (it.loc.length > 1) s += ' (' + it.loc.slice(1).join(', ') + ')';
+	}
+	if (it.mins && (it.mins != ko.default_duration)) {
+		if (s) s += ', ';
+		s += pretty_time(it.time) + ' - ' + pretty_time(time_sum(it.time, it.mins));
+	}
+	return !s ? '' : '<div class="loc">' + s + '</div>\n';
+}
+
 function show_info(item, id) {
 	if (EL("e" + id)) return;
 
@@ -263,14 +292,7 @@ function show_info(item, id) {
 	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
 	else {
-		if (('tags' in a[0]) && a[0].tags.length) {
-			var at = a[0].tags.map(function(t) { return '<a href="#prog/tag:' + t/*.toLowerCase().replace(/\W+/g, '-')*/ + '">' + t + '</a>'; });
-			if (at.length) html += '<div class="item-tags">Tracks: ' + at.join(', ') + '</div>\n';
-		}
-		if ('people' in a[0]) {
-			var ap = a[0].people.map(function(p) { return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>"; });
-			if (ap.length > 0) html += '<p>' + ap.join(', ') + '\n';
-		}
+		html = _item_tags(a[0]) + _item_people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
@@ -286,31 +308,21 @@ function show_prog_list(ls) {
 
 			var t = new Date(ls[i].date);
 			day_str = pretty_date(t);
-			list.push('<div class="new_day">' + day_str + '</div>');
+			list.push('<div class="new_day">' + day_str);
 		}
 
 		if (ls[i].time != prev_time) {
 			prev_time = ls[i].time;
-			list.push('<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time) + '</div>');
-		}
-
-		var loc_str = '';
-		if (ls[i].loc.length) {
-			loc_str = ls[i].loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
-			if (ls[i].loc.length > 1) loc_str += ' (' + ls[i].loc.slice(1).join(', ') + ')';
-		}
-		if (ls[i].mins && (ls[i].mins != ko.default_duration)) {
-			if (loc_str) loc_str += ', ';
-			loc_str += pretty_time(ls[i].time) + ' - ' + pretty_time(time_sum(ls[i].time, ls[i].mins));
+			list.push('<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time));
 		}
 
 		list.push('<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
-			+ '<div class="title">' + ls[i].title + '</div>'
-			+ '<div class="loc">' + loc_str + '</div>'
-			+ '</div></div>');
+				+ '<div class="title">' + ls[i].title + '</div>'
+				+ _item_loc(ls[i])
+			+ '</div>');
 	}
-	EL("prog_ls").innerHTML = list.join('');
+	EL("prog_ls").innerHTML = list.join('</div>');
 
 	var items = EL("prog_ls").getElementsByClassName("item");
 	for (var i = 0, l = items.length; i < l; ++i) {
