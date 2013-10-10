@@ -25,7 +25,8 @@ var ko = {
 	'full_version': !navigator.userAgent.match(/Android [12]/),
 	'default_duration': 60,
 	'time_show_am_pm': false,
-	'abbrev_00_minutes': true // only for am/pm time
+	'abbrev_00_minutes': true, // only for am/pm time
+	'always_show_participants': false
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 
@@ -320,6 +321,7 @@ function show_prog_list(ls) {
 			+ '<div class="item" id="p' + ls[i].id + '">'
 				+ '<div class="title">' + ls[i].title + '</div>'
 				+ _item_loc(ls[i])
+				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
 			+ '</div>');
 	}
 	EL("prog_ls").innerHTML = list.join('</div>');

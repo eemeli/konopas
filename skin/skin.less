@@ -251,20 +251,26 @@ input[type="text"] {
 
 .item {
 	clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 5px; cursor: pointer;
-	div { float:left; padding-right: 10px; min-height: 1em; }
+	> div { margin-left: 40px; }
+	.title { margin: 3px 0 3px 40px; }
+	.loc, > .item-people {
+		color: @fg-light; font-size: 0.875em;
+		a { color: @fg-light; }
+	}
 }
-.title { margin-left: 40px; }
-.loc { color: @fg-light; font-size: 0.875em; clear: left; margin: 3px 10px 0 40px; }
 .extra {
+	margin: 0 !important;
 	display: none; clear: left; padding: 0 0 0 10px;
 	div { float: none; }
+	.item-people { max-width: @main-width; margin: 1em 0; }
 }
 
 .expanded {
 	background: @bg-highlight;
 	.item_star { background: @bg-highlight-more; }
-	.loc { color: @fg-light-in-box; }
 	.title { .font-heavy; }
+	.loc { color: @fg-light-in-box; }
+	.item > .item-people { display: none; }
 	.extra { display: block; }
 }
 
