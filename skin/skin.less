@@ -228,7 +228,7 @@ input[type="text"] {
 .new_day { padding-top: 40px; background: @bg-plain; border-bottom: @border-heavy; font-size: 2.0em; width: 100%; }
 .new_day, .new_time { position: relative; z-index: 2; }
 .new_day + hr { display: none; }
-.new_time { padding: 10px 0 0 0; height: 70px; margin-bottom: -75px; width: @time-width; text-align: center;
+.new_time { padding: 13px 0 0 0; height: 70px; margin-bottom: -78px; width: @time-width; text-align: center;
 	background: @bg-plain;
 	background: transparent -webkit-linear-gradient(top, @bg-plain 50%, rgba(255,255,255,0.0));
 	background: transparent    -moz-linear-gradient(top, @bg-plain 50%, rgba(255,255,255,0.0));
@@ -250,7 +250,7 @@ input[type="text"] {
 }
 
 .item {
-	clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 10px; cursor: pointer;
+	clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 5px; cursor: pointer;
 	div { float:left; padding-right: 10px; min-height: 1em; }
 }
 .title { margin-left: 40px; }
@@ -261,7 +261,7 @@ input[type="text"] {
 }
 
 .expanded {
-	background: @bg-highlight; margin-bottom: 10px;
+	background: @bg-highlight;
 	.item_star { background: @bg-highlight-more; }
 	.loc { color: @fg-light-in-box; }
 	.title { .font-heavy; }
