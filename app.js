@@ -333,54 +333,6 @@ function show_prog_list(ls) {
 }
 
 
-// ------------------------------------------------------------------------------------------------ ical export
-
-function make_ical_item(p) {
-	var t_ev = 'TZID=' + ical_set.timezone + ':' + p.day.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
-	t_ev = t_ev.replace(':2012', ':2013'); // DEBUG
-	var t_now = new Date().toISOString().replace(/[-:]/g, '').replace(/\.[0-9]{3}/, '');
-
-	var desc = '', attend = '';
-	if (p.people.length) {
-		desc = "Participants: ";
-		var pa = new Array();
-		for (var i = 0, l = p.people.length; i < l; ++i) {
-			pa.push(p.people[i].name);
-			attend += 'ATTENDEE;CN=' + p.people[i].name + ':invalid:nomail\r\n';
-		}
-		desc += pa.join(', ') + '\\n\\n';
-	}
-	desc += p.precis;
-
-	var s = 'BEGIN:VEVENT\r\n'
-			//+ 'SEQUENCE:0\r\n'
-			+ 'UID:' + p.id + '@' + ical_set.domain + '\r\n'
-			+ 'LAST-MODIFIED:' + t_now + '\r\n'
-			+ 'DTSTART;' + t_ev + '\r\n'
-			+ 'DTEND;' + t_ev + '\r\n'
-			+ 'SUMMARY:' + p.title + '\r\n'
-			+ 'LOCATION:' + p.room + ' (' + p.floor + ')\r\n'
-			+ attend
-			+ 'DESCRIPTION:' + desc + '\r\n'
-			+ 'END:VEVENT\r\n';
-	return s;
-}
-
-function save_ical() {
-	var star_ids = read_stars();
-	if (star_ids.length) {
-		var ls = prog.filter(function(it) { return (star_ids.indexOf(it.id) >= 0); });
-		var ical = 'BEGIN:VCALENDAR\r\n'
-				+ 'VERSION:2.0\r\n'
-				+ 'PRODID:-//eemeli//KonOpas ' + ical_set.id + '\r\n';
-		for (var i = 0, l = ls.length; i < l; ++i) ical += make_ical_item(ls[i]);
-		ical += 'END:VCALENDAR';
-		var blob = new Blob([ical], {type: "text/calendar;charset=utf-8"});
-		saveAs(blob, ical_set.filename);
-	}
-}
-
-
 // ------------------------------------------------------------------------------------------------ next view
 
 function update_next_select(t_off) {
@@ -575,7 +527,6 @@ function show_star_view(opt) {
 			}
 			view.innerHTML = html;
 		}
-		//EL("ical_link").style.display = 'block';
 		var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 		show_prog_list(ls);
 
@@ -589,7 +540,6 @@ function show_star_view(opt) {
 	} else {
 		view.innerHTML = "<p>To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
 		EL("prog_ls").innerHTML = '';
-		//EL("ical_link").style.display = 'none';
 	}
 }
 
@@ -971,7 +921,6 @@ if (EL("next_filters")) {
 
 
 // init star view
-//EL("ical_link").onclick = function() { save_ical(); return false; };
 
 
 // init prog view
