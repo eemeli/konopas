@@ -21,7 +21,7 @@
 
 var ko = {
 	// these are default values, use konopas_set to override
-	'id': location.pathname.split('/').filter(function(p) { return p; }).join('-'),
+	'id': '', //location.pathname.split('/').filter(function(p) { return p; }).join('-'),
 	'full_version': !navigator.userAgent.match(/Android [12]/),
 	'default_duration': 60,
 	'time_show_am_pm': false,
@@ -29,6 +29,7 @@ var ko = {
 	'always_show_participants': false
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
+if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
 
 
 if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window))
@@ -117,7 +118,7 @@ function time_sum(t0_str, m_str) {
 
 function storage_get(name, use_localstorage) {
 	var s = use_localstorage ? localStorage : sessionStorage;
-	var v = s.getItem(konopas_set.id + '.' + name);
+	var v = s.getItem(ko.id + '.' + name);
 	return v ? JSON.parse(v) : v;
 }
 
@@ -125,7 +126,7 @@ var private_browsing_noted = false;
 function storage_set(name, value, use_localstorage) {
 	var s = use_localstorage ? localStorage : sessionStorage;
 	try {
-		s.setItem(konopas_set.id + '.' + name, JSON.stringify(value));
+		s.setItem(ko.id + '.' + name, JSON.stringify(value));
 	} catch (e) {
 		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (s.length === 0)) {
 			if (!private_browsing_noted) {
@@ -352,6 +353,129 @@ function show_prog_list(ls) {
 }
 
 
+// ------------------------------------------------------------------------------------------------ server
+
+var server = {
+	host: 'https://konopas-server.appspot.com',
+	el_id: 'server_connect',
+
+	el: null,
+	my_prog_data: null,
+	my_votes_data: null,
+	pub_votes_data: null,
+
+	init: function() {
+		console.log("server init");
+		server.el = EL(server.el_id);
+		if (!server.el || !ko.id) return;
+		server.exec('info');
+	},
+
+
+	makelink: function(v) {
+		return '<a '
+			+ (!v.id ? '' : 'id="' + v.id + '" ')
+			+ 'href="' + server.host + v.path + '" '
+			+ 'onclick="server.exec(\'' + v.path + '\'); event.preventDefault(); return false;">'
+			+ v.txt + '</a>';
+	},
+
+	url: function(cmd) {
+		return server.host + (cmd[0] == '/' ? '' : '/' + ko.id + '/') + cmd;
+	},
+
+	exec: function(cmd) {
+		// based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
+		var script = document.createElement('script'),
+		    done = false,
+		    url = server.url(cmd);
+		script.src = url;
+		script.async = true;
+		script.onerror = function(ex){ server.exec_error({url: url, event: ex}); };
+ 
+		script.onload = script.onreadystatechange = function() {
+			if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
+				done = true;
+				script.onload = script.onreadystatechange = null;
+				if (script && script.parentNode) {
+					script.parentNode.removeChild(script);
+				}
+			}
+		};
+		document.getElementsByTagName('head')[0].appendChild(script);
+	},
+	exec_error: function(v) {
+		console.log("server exec_error, url: " + v.url);
+	},
+
+	// callback for successful auth, logout, prog, vote
+	ok: function(v) {
+		console.log("server ok: " + JSON.stringify(v));
+		var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
+		switch (m[2]) {
+			case 'auth':
+			case 'logout':
+				server.exec('info');
+				break;
+			case 'prog':
+			case 'vote':
+				alert(m[2] + ' ok: ' + m[3]);
+				// fallthrough
+			default:
+				console.log("\tcon '" + m[1] + "', cmd '" + m[2] + "', param '" + m[3] + "'");
+		}
+	},
+
+	// callback for reporting server errors
+	fail: function(v) {
+		console.log("server fail: " + JSON.stringify(v));
+	},
+
+	// callback for setting logged-in info
+	info: function(v) {
+		console.log("server info: " + JSON.stringify(v));
+		var n = (v.name == v.email) ? v.email : v.name + ' <' + v.email + '>';
+		var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
+		if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
+		html += server.makelink({id:'server_logout', path:v.logout, txt:'Logout'});
+		server.el.innerHTML = html;
+	},
+
+	// callback for showing login options
+	login: function(v) {
+		console.log("server login: " + JSON.stringify(v));
+		var links = [];
+		for (var path in v) {
+			links.push('<a href="' + server.host + path + '">' + v[path] + '</a>');
+		}
+		server.el.innerHTML = '<div id="login_links"><span>Login with:</span><ul>' + "\n<li>" + links.join("\n<li>") + "\n</ul></div>";
+	},
+
+	// callback for setting starred items
+	my_prog: function(prog) {
+		console.log("server my_prog: " + JSON.stringify(prog));
+		server.my_prog_data = prog;
+		var old_prog = storage_get('stars', true) || [];
+		if (!arrays_equal(prog, old_prog)) {
+			// HERE
+		}
+	},
+
+	// callback for setting user's own votes
+	my_votes: function(v) {
+		console.log("server my_votes: " + JSON.stringify(v));
+		server.my_votes_data = v;
+	},
+
+	// callback for public vote data
+	pub_votes: function(v) {
+		console.log("server pub_votes: " + JSON.stringify(v));
+		server.pub_votes_data = v;
+	},
+};
+window.addEventListener('load', server.init, false);
+
+
 // ------------------------------------------------------------------------------------------------ next view
 
 function update_next_select(t_off) {
@@ -486,7 +610,7 @@ function make_star_setter(set, replace) {
 
 function show_star_view(opt) {
 	set_view("star");
-	var view = EL("star_view");
+	var view = EL("star_data");
 
 	var set_raw = (opt && (opt.substr(1,4) == 'set:')) ? opt.substr(5).split(',') : [];
 	var set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; });
