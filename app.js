@@ -434,7 +434,7 @@ var server = {
 	// callback for setting logged-in info
 	info: function(v) {
 		console.log("server info: " + JSON.stringify(v));
-		var n = (v.name == v.email) ? v.email : v.name + ' <' + v.email + '>';
+		var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 		var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
 		if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
 		html += server.makelink({id:'server_logout', path:v.logout, txt:'Logout'});
@@ -445,8 +445,8 @@ var server = {
 	login: function(v) {
 		console.log("server login: " + JSON.stringify(v));
 		var links = [];
-		for (var path in v) {
-			links.push('<a href="' + server.host + path + '">' + v[path] + '</a>');
+		for (var cmd in v) {
+			links.push('<a href="' + server.url(cmd) + '">' + v[cmd] + '</a>');
 		}
 		server.el.innerHTML = '<div id="login_links"><span>Login with:</span><ul>' + "\n<li>" + links.join("\n<li>") + "\n</ul></div>";
 	},
