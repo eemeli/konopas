@@ -36,6 +36,8 @@ if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map 
 	alert("Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.");
 
 
+var server = new Server(ko.id);
+
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_create_short_url(url) {
 	return 'http://is.gd/create.php?url=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
@@ -351,129 +353,6 @@ function show_prog_list(ls) {
 		if (el) el.classList.add("has_star");
 	}
 }
-
-
-// ------------------------------------------------------------------------------------------------ server
-
-var server = {
-	host: 'https://konopas-server.appspot.com',
-	el_id: 'server_connect',
-
-	el: null,
-	my_prog_data: null,
-	my_votes_data: null,
-	pub_votes_data: null,
-
-	init: function() {
-		console.log("server init");
-		server.el = EL(server.el_id);
-		if (!server.el || !ko.id) return;
-		server.exec('info');
-	},
-
-
-	makelink: function(v) {
-		return '<a '
-			+ (!v.id ? '' : 'id="' + v.id + '" ')
-			+ 'href="' + server.host + v.path + '" '
-			+ 'onclick="server.exec(\'' + v.path + '\'); event.preventDefault(); return false;">'
-			+ v.txt + '</a>';
-	},
-
-	url: function(cmd) {
-		return server.host + (cmd[0] == '/' ? '' : '/' + ko.id + '/') + cmd;
-	},
-
-	exec: function(cmd) {
-		// based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
-		var script = document.createElement('script'),
-		    done = false,
-		    url = server.url(cmd);
-		script.src = url;
-		script.async = true;
-		script.onerror = function(ex){ server.exec_error({url: url, event: ex}); };
- 
-		script.onload = script.onreadystatechange = function() {
-			if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
-				done = true;
-				script.onload = script.onreadystatechange = null;
-				if (script && script.parentNode) {
-					script.parentNode.removeChild(script);
-				}
-			}
-		};
-		document.getElementsByTagName('head')[0].appendChild(script);
-	},
-	exec_error: function(v) {
-		console.log("server exec_error, url: " + v.url);
-	},
-
-	// callback for successful auth, logout, prog, vote
-	ok: function(v) {
-		console.log("server ok: " + JSON.stringify(v));
-		var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
-		switch (m[2]) {
-			case 'auth':
-			case 'logout':
-				server.exec('info');
-				break;
-			case 'prog':
-			case 'vote':
-				alert(m[2] + ' ok: ' + m[3]);
-				// fallthrough
-			default:
-				console.log("\tcon '" + m[1] + "', cmd '" + m[2] + "', param '" + m[3] + "'");
-		}
-	},
-
-	// callback for reporting server errors
-	fail: function(v) {
-		console.log("server fail: " + JSON.stringify(v));
-	},
-
-	// callback for setting logged-in info
-	info: function(v) {
-		console.log("server info: " + JSON.stringify(v));
-		var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
-		var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
-		if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
-		html += server.makelink({id:'server_logout', path:v.logout, txt:'Logout'});
-		server.el.innerHTML = html;
-	},
-
-	// callback for showing login options
-	login: function(v) {
-		console.log("server login: " + JSON.stringify(v));
-		var links = [];
-		for (var cmd in v) {
-			links.push('<a href="' + server.url(cmd) + '">' + v[cmd] + '</a>');
-		}
-		server.el.innerHTML = '<div id="login_links"><span>Login with:</span><ul>' + "\n<li>" + links.join("\n<li>") + "\n</ul></div>";
-	},
-
-	// callback for setting starred items
-	my_prog: function(prog) {
-		console.log("server my_prog: " + JSON.stringify(prog));
-		server.my_prog_data = prog;
-		var old_prog = storage_get('stars', true) || [];
-		if (!arrays_equal(prog, old_prog)) {
-			// HERE
-		}
-	},
-
-	// callback for setting user's own votes
-	my_votes: function(v) {
-		console.log("server my_votes: " + JSON.stringify(v));
-		server.my_votes_data = v;
-	},
-
-	// callback for public vote data
-	pub_votes: function(v) {
-		console.log("server pub_votes: " + JSON.stringify(v));
-		server.pub_votes_data = v;
-	},
-};
-window.addEventListener('load', server.init, false);
 
 
 // ------------------------------------------------------------------------------------------------ next view
