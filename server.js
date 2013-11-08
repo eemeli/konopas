@@ -20,6 +20,13 @@ function Server(id, stars, opt) {
 	} else console.warn("server init failed");
 }
 
+Server.prototype.logout = function(ev) {
+	console.log("server logout");
+	server.exec('/logout');
+	ev.preventDefault();
+	return false;
+}
+
 Server.prototype.prog_mtime = function() {
 	var mtime = this.prog_server_mtime;
 	for (var id in this.prog_data) {
@@ -41,14 +48,6 @@ Server.prototype.set_prog = function(star_list) {
 	this.exec('prog'
 		+ '?set=' + star_list.join(',')
 		+ '&t=' + this.prog_mtime());
-}
-
-Server.prototype.makelink = function(v) {
-	return '<a '
-		+ (!v.id ? '' : 'id="' + v.id + '" ')
-		+ 'href="' + this.host + v.path + '" '
-		+ 'onclick="server.exec(\'' + v.path + '\'); event.preventDefault(); return false;">'
-		+ v.txt + '</a>';
 }
 
 Server.prototype.url = function(cmd) {
@@ -89,6 +88,14 @@ Server.prototype.ok = function(v) {
 	var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
 	switch (m[2]) {
 		case 'logout':
+			this.connected = false;
+			this.prog_data = {};
+			this.prog_server_mtime = 0;
+			if (this.stars) {
+				this.stars.data = {};
+				this.stars.write();
+				init_view();
+			}
 			this.exec('info');
 			console.log("server ok (logout): " + JSON.stringify(v));
 			break;
@@ -120,8 +127,9 @@ Server.prototype.info = function(v) {
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
 	if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
-	html += this.makelink({id:'server_logout', path:v.logout, txt:'Logout'});
+	html += '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a>';
 	this.el.innerHTML = html;
+	document.getElementById('server_logout').onclick = this.logout;
 }
 
 // callback for showing login options
