@@ -52,6 +52,22 @@ function selected_id(parent_id) {
 	return sel[0].id;
 }
 
+function make_popup_menu(root_id, disable_id) {
+	var el = EL(root_id);
+	if (!el) return;
+
+	el.onclick = function(ev) {
+		if (el.classList.contains("show_box")) {
+			EL(disable_id).style.display = "none";
+			el.classList.remove("show_box");
+		} else {
+			EL(disable_id).style.display = "block";
+			el.classList.add("show_box");
+		}
+		ev.stopPropagation();
+	};
+}
+
 function pre0(n) { return (n < 10 ? '0' : '') + n; }
 
 function string_time(t) {
@@ -518,7 +534,7 @@ function show_star_view(opt) {
 				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
-			var html = '<p>&raquo; ' + set_link + 'Export selection</a>';
+			var html = '<p>&raquo; ' + set_link + 'Export selection via URL</a>';
 			switch (stars_len) {
 				case 1:  html += ' (1 item)'; break;
 				default: html += ' (' + stars_len + ' items)';
@@ -933,19 +949,7 @@ if (sf) {
 }
 EL("q").onblur = prog_filter;
 
-var pl = EL("tag2-list");
-if (pl) {
-	pl.onclick = function(ev) {
-		if (pl.classList.contains("show_list")) {
-			EL("tag2-disable-bg").style.display = "none";
-			pl.classList.remove("show_list");
-		} else {
-			EL("tag2-disable-bg").style.display = "block";
-			pl.classList.add("show_list");
-		}
-		ev.stopPropagation();
-	};
-}
+make_popup_menu("tag2-list", "tag2-disable-bg");
 
 
 // init part view

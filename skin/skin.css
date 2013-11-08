@@ -214,6 +214,40 @@ hr {
   line-height: 40px;
   cursor: pointer;
 }
+#login-links {
+  margin-top: 1em;
+}
+#login-links span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+#login-links .popup {
+  top: 2em;
+}
+#login-links ul {
+  margin: 5px 0;
+  padding: 0;
+}
+#login-links li {
+  line-height: 1.0;
+  padding-bottom: 5px;
+  text-align: center;
+}
+#server_info {
+  float: right;
+  top: 1em;
+  color: #ccc5bb;
+}
+#server_info a {
+  color: #88847d;
+}
+#server_info a:hover {
+  color: #000000;
+}
+#server_user {
+  display: inline-block;
+  padding: 0 10px 10px 10px;
+}
 .view {
   display: none;
 }
@@ -384,29 +418,36 @@ input[type="text"]:valid + #q_ctrl input {
 #q_clear {
   margin-left: 14px !important;
 }
+#login-links,
 #tag2-list {
   position: relative;
 }
-#tag2-list ul {
+#login-links .popup,
+#tag2-list .popup {
   display: none !important;
   position: absolute !important;
   z-index: 6;
   border: 2px solid #800000;
   border-radius: 5px;
-  right: 0;
-  top: 18px;
   width: 250px;
-  padding: 2px 5px;
+  padding: 5px 0 0 5px;
   background: #ffffff;
   background: rgba(255, 255, 255, 0.9);
 }
-#tag2-list.show_list ul {
+#login-links.show_box .popup,
+#tag2-list.show_box .popup {
   display: block !important;
 }
+#login-links li,
 #tag2-list li {
   width: 125px;
   display: inline-block;
 }
+#tag2-list ul {
+  right: 0;
+  top: 18px;
+}
+#login-disable-bg,
 #tag2-disable-bg {
   display: none;
   position: fixed;
