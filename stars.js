@@ -1,9 +1,11 @@
 function Stars(id, opt) {
 	this.name = 'konopas.' + id + '.stars';
-	this.server = opt.server || false;
+
+	opt = opt || {};
 	this.store = opt.store || localStorage;
 	this.tag = opt.tag || 'has_star';
 
+	this.server = false;
 	this.data = this.read();
 }
 
@@ -53,4 +55,23 @@ Stars.prototype.toggle = function(el, id) {
 
 	if (add_star) el.classList.add(this.tag);
 	else          el.classList.remove(this.tag);
+}
+
+Stars.prototype.sync = function(new_data) {
+	console.log("old data: " + JSON.stringify(this.data));
+	console.log("new data: " + JSON.stringify(new_data));
+
+	var mod = false;
+	for (var id in new_data) {
+		if (new_data[id].length != 2) {
+			console.warn("Stars.sync: invalid input " + id + ": " + JSON.stringify(new_data[id]));
+			continue;
+		}
+		if (!(id in this.data) || (new_data[id][1] > this.data[id][1])) {
+			this.data[id] = new_data[id];
+			mod = true;
+		}
+	}
+	if (!mod) console.log("nothing changed");
+	else init_view();
 }

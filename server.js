@@ -1,6 +1,8 @@
-
-function Server(id, opt) {
+function Server(id, stars, opt) {
 	this.id = id;
+	this.stars = stars;
+
+	opt = opt || {};
 	this.host = opt.host ||  'https://konopas-server.appspot.com';
 	this.el_id = opt.el_id || 'server_connect';
 
@@ -10,10 +12,11 @@ function Server(id, opt) {
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
 
+	if (this.stars) this.stars.server = this;
 	if (this.el && this.id) {
 		this.exec('info');
 		console.log("server init ok");
-	} else console.log("server init failed");
+	} else console.warn("server init failed");
 }
 
 Server.prototype.add_prog = function(id, add_star) {
@@ -41,7 +44,7 @@ Server.prototype.url = function(cmd) {
 // based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
 Server.prototype.exec = function(cmd) {
 	if (/^(prog|vote)/.test(cmd) && !this.connected) {
-		console.log('server not connected: ' + cmd);
+		console.warn('server not connected: ' + cmd);
 		return;
 	}
 
@@ -116,22 +119,8 @@ Server.prototype.login = function(v) {
 Server.prototype.my_prog = function(prog) {
 	console.log("server my_prog: " + JSON.stringify(prog));
 	this.my_prog_data = prog;
-
-	var old_prog = storage_get('stars', true) || [];
-	console.log("old prog: " + JSON.stringify(old_prog));
-
-	var empty = true;
-	for (var id in prog) {
-		if (prog[id].length != 2) {
-			console.log("invalid key " + id + ": " + JSON.stringify(prog[id]));
-			delete prog[id];
-			continue;
-		}
-		empty = false;
-	}
-	if (empty) {
-		console.log("prog data is empty");
-	}
+	if (this.stars) this.stars.sync(prog);
+	else console.warn("Server.stars required for prog sync");
 }
 
 // callback for setting user's own votes

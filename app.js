@@ -36,8 +36,8 @@ if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map 
 	alert("Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.");
 
 
-var server = new Server(ko.id);
-var stars = new Stars(ko.id, {server: server});
+var stars = new Stars(ko.id);
+var server = new Server(ko.id, stars);
 
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_create_short_url(url) {
