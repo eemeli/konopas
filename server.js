@@ -8,6 +8,7 @@ function Server(id, stars, opt) {
 
 	this.connected = false;
 	this.prog_data = {};
+	this.prog_server_mtime = 0;
 	this.my_votes_data = null;
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
@@ -20,7 +21,7 @@ function Server(id, stars, opt) {
 }
 
 Server.prototype.prog_mtime = function() {
-	var mtime = 0;
+	var mtime = this.prog_server_mtime;
 	for (var id in this.prog_data) {
 		if (this.prog_data[id][1] > mtime) mtime = this.prog_data[id][1];
 	}
@@ -83,21 +84,26 @@ Server.prototype.exec_error = function(v) {
 	console.log("server exec_error, url: " + v.url);
 }
 
-// callback for successful auth, logout, prog, vote
+// callback for successful logout, prog, vote
 Server.prototype.ok = function(v) {
 	var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
 	switch (m[2]) {
 		case 'logout':
 			this.exec('info');
+			console.log("server ok (logout): " + JSON.stringify(v));
 			break;
 
 		case 'prog':
-			console.log("server ok: " + JSON.stringify(v));
+			var t = /&server_mtime=(\d+)/.exec(m[3]);
+			if (t) this.prog_server_mtime = parseInt(t[1], 10);
+			console.log("server ok (prog): " + JSON.stringify(v));
 			break;
 
 		case 'vote':
+			console.log("server ok (vote): " + JSON.stringify(v));
+			break;
+
 		default:
-			console.log("server ok: " + JSON.stringify(v));
 			console.log("\tcon '" + m[1] + "', cmd '" + m[2] + "', param '" + m[3] + "'");
 	}
 }

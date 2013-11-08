@@ -58,26 +58,25 @@ Stars.prototype.toggle = function(el, id) {
 }
 
 Stars.prototype.sync = function(new_data) {
-	console.log("old data: " + JSON.stringify(this.data));
-	console.log("new data: " + JSON.stringify(new_data));
+	//console.log("old data: " + JSON.stringify(this.data));
+	//console.log("new data: " + JSON.stringify(new_data));
 
-	var local_mod = [];
+	var local_mod = [], redraw = false;
 	for (var id in new_data) {
 		if (new_data[id].length != 2) {
-			console.warn("Stars.sync: invalid input " + id + ": " + JSON.stringify(new_data[id]));
+			console.warn('Stars.sync: invalid input ' + id + ': ' + JSON.stringify(new_data[id]));
 			continue;
 		}
-		if (!(id in this.data)) {
+		if (!(id in this.data) || (new_data[id][1] > this.data[id][1])) {
 			local_mod.push(id);
-			this.data[id] = new_data[id];
-		} else if (new_data[id][1] > this.data[id][1]) {
-			if (new_data[id][0] != this.data[id][0]) local_mod.push(id);
+			if (!(id in this.data) || (new_data[id][0] != this.data[id][0])) redraw = true;
 			this.data[id] = new_data[id];
 		}
 	}
 	if (local_mod.length) {
-		console.log("Stars.sync: local changes to: " + local_mod);
-		init_view();
+		console.log('Stars.sync: local changes: ' + local_mod + (redraw ? ' -> redraw' : ''));
+		this.write();
+		if (redraw) init_view();
 	}
 
 	if (this.server) {
@@ -89,12 +88,16 @@ Stars.prototype.sync = function(new_data) {
 			}
 		}
 		if (server_add.length) {
-			console.log("Stars.sync: server add: " + server_add);
+			console.log('Stars.sync: server add: ' + server_add);
 			this.server.add_prog(server_add, true);
 		}
 		if (server_rm.length) {
-			console.log("Stars.sync: server rm: " + server_rm);
+			console.log('Stars.sync: server rm: ' + server_rm);
 			this.server.add_prog(server_rm, false);
+		}
+
+		if (!local_mod.length && !server_add.length && !server_rm.length) {
+			console.log('Stars.sync: no changes');
 		}
 	}
 }
