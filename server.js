@@ -7,7 +7,7 @@ function Server(id, stars, opt) {
 	this.el_id = opt.el_id || 'server_connect';
 
 	this.connected = false;
-	this.my_prog_data = null;
+	this.prog_data = {};
 	this.my_votes_data = null;
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
@@ -19,15 +19,27 @@ function Server(id, stars, opt) {
 	} else console.warn("server init failed");
 }
 
+Server.prototype.prog_mtime = function() {
+	var mtime = 0;
+	for (var id in this.prog_data) {
+		if (this.prog_data[id][1] > mtime) mtime = this.prog_data[id][1];
+	}
+	return mtime;
+}
+
 Server.prototype.add_prog = function(id, add_star) {
 	if (id instanceof Array) id = id.join(',');
 	console.log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
-	this.exec('prog?' + (add_star ? 'add=' : 'rm=') + id);
+	this.exec('prog'
+		+ (add_star ? '?add=' : '?rm=') + id
+		+ '&t=' + this.prog_mtime());
 }
 
 Server.prototype.set_prog = function(star_list) {
 	console.log('server set_prog "' + star_list);
-	this.exec('prog?set=' + star_list.join(','));
+	this.exec('prog'
+		+ '?set=' + star_list.join(',')
+		+ '&t=' + this.prog_mtime());
 }
 
 Server.prototype.makelink = function(v) {
@@ -119,7 +131,7 @@ Server.prototype.login = function(v) {
 // callback for setting starred items
 Server.prototype.my_prog = function(prog) {
 	console.log("server my_prog: " + JSON.stringify(prog));
-	this.my_prog_data = prog;
+	this.prog_data = prog;
 	if (this.stars) this.stars.sync(prog);
 	else console.warn("Server.stars required for prog sync");
 }
