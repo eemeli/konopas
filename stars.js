@@ -61,17 +61,40 @@ Stars.prototype.sync = function(new_data) {
 	console.log("old data: " + JSON.stringify(this.data));
 	console.log("new data: " + JSON.stringify(new_data));
 
-	var mod = false;
+	var local_mod = [];
 	for (var id in new_data) {
 		if (new_data[id].length != 2) {
 			console.warn("Stars.sync: invalid input " + id + ": " + JSON.stringify(new_data[id]));
 			continue;
 		}
-		if (!(id in this.data) || (new_data[id][1] > this.data[id][1])) {
+		if (!(id in this.data)) {
+			local_mod.push(id);
 			this.data[id] = new_data[id];
-			mod = true;
+		} else if (new_data[id][1] > this.data[id][1]) {
+			if (new_data[id][0] != this.data[id][0]) local_mod.push(id);
+			this.data[id] = new_data[id];
 		}
 	}
-	if (!mod) console.log("nothing changed");
-	else init_view();
+	if (local_mod.length) {
+		console.log("Stars.sync: local changes to: " + local_mod);
+		init_view();
+	}
+
+	if (this.server) {
+		var server_add = [], server_rm = [];
+		for (var id in this.data) {
+			if (!(id in new_data) || (new_data[id][1] < this.data[id][1])) {
+				if (this.data[id][0]) server_add.push(id);
+				else                  server_rm.push(id);
+			}
+		}
+		if (server_add.length) {
+			console.log("Stars.sync: server add: " + server_add);
+			this.server.add_prog(server_add, true);
+		}
+		if (server_rm.length) {
+			console.log("Stars.sync: server rm: " + server_rm);
+			this.server.add_prog(server_rm, false);
+		}
+	}
 }

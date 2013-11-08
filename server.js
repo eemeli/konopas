@@ -20,6 +20,7 @@ function Server(id, stars, opt) {
 }
 
 Server.prototype.add_prog = function(id, add_star) {
+	if (id instanceof Array) id = id.join(',');
 	console.log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
 	this.exec('prog?' + (add_star ? 'add=' : 'rm=') + id);
 }
