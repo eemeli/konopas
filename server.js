@@ -84,7 +84,7 @@ Server.prototype.exec_error = function(v) {
 }
 
 // callback for successful logout, prog, vote
-Server.prototype.ok = function(v) {
+Server.prototype.cb_ok = function(v) {
 	var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
 	switch (m[2]) {
 		case 'logout':
@@ -116,12 +116,12 @@ Server.prototype.ok = function(v) {
 }
 
 // callback for reporting server errors
-Server.prototype.fail = function(v) {
+Server.prototype.cb_fail = function(v) {
 	console.log("server fail: " + JSON.stringify(v));
 }
 
 // callback for setting logged-in info
-Server.prototype.info = function(v) {
+Server.prototype.cb_info = function(v) {
 	this.connected = true;
 	console.log("server info: " + JSON.stringify(v));
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
@@ -133,7 +133,7 @@ Server.prototype.info = function(v) {
 }
 
 // callback for showing login options
-Server.prototype.login = function(v) {
+Server.prototype.cb_login = function(v) {
 	console.log("server login: " + JSON.stringify(v));
 	var links = [];
 	for (var cmd in v) {
@@ -149,7 +149,7 @@ Server.prototype.login = function(v) {
 }
 
 // callback for setting starred items
-Server.prototype.my_prog = function(prog) {
+Server.prototype.cb_my_prog = function(prog) {
 	console.log("server my_prog: " + JSON.stringify(prog));
 	this.prog_data = prog;
 	if (this.stars) this.stars.sync(prog);
@@ -157,7 +157,7 @@ Server.prototype.my_prog = function(prog) {
 }
 
 // callback for setting user's own votes
-Server.prototype.my_votes = function(v) {
+Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
 	var mtime = new Date(v.t);
 	console.log("mtime "+mtime);
@@ -165,7 +165,7 @@ Server.prototype.my_votes = function(v) {
 }
 
 // callback for public vote data
-Server.prototype.pub_votes = function(v) {
+Server.prototype.cb_pub_votes = function(v) {
 	console.log("server pub_votes: " + JSON.stringify(v));
 	this.pub_votes_data = v;
 }
