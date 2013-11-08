@@ -469,6 +469,7 @@ function show_star_view(opt) {
 	var set_len = set.length;
 
 	var star_list = stars.list();
+	star_list.sort();
 	var stars_len = star_list.length;
 	if (stars_len || set_len) {
 		var set_link = '<a href="#star/set:' + star_list.join(',') + '">';
@@ -492,20 +493,25 @@ function show_star_view(opt) {
 					default: html += n_new + ' new items';
 				};
 				switch (n_same) {
-					case 0:  html += '.'; break;
-					case 1:  html += ' and 1 which was already selected.'; break;
-					default: html += ' and ' + n_same + ' which were already selected.';
+					case 0:         html += '.'; break;
+					case stars_len: html += '.'; break;
+					case 1:         html += ' and 1 which was already selected.'; break;
+					default:        html += ' and ' + n_same + ' which were already selected.';
 				}
 				if (set_len != set_raw.length) {
 					var n_bad = set_raw.length - set_len;
 					html += ' ' + n_bad + ' of the imported items had ' + (n_bad > 1 ? 'invalid IDs.' : 'an invalid ID.');
 				}
-				html += '<p>&raquo; <a href="#star" id="star_set_set">Set my selection to the imported selection</a>';
+				if (!stars_len || (n_same != stars_len)) {
+					html += '<p>&raquo; <a href="#star" id="star_set_set">Set my selection to the imported selection</a>';
+				}
 				if (stars_len) {
-					var d = [];
-					if (n_new) d.push('add ' + n_new);
-					if (n_same != stars_len) d.push('discard ' + (stars_len - n_same));
-					html += ' (' + d.join(', ') + ')';
+					if (n_same != stars_len) {
+						var d = [];
+						if (n_new) d.push('add ' + n_new);
+						d.push('discard ' + (stars_len - n_same));
+						html += ' (' + d.join(', ') + ')';
+					}
 					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">Add the ' + (n_new > 1 ? n_new + ' new items' : 'new item') + ' to my selection</a>';
 				}
 				view.innerHTML = html;

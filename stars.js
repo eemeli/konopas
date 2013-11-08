@@ -29,10 +29,10 @@ Stars.prototype.list = function() {
 
 Stars.prototype.add = function(star_list, mtime) {
 	mtime = mtime || Math.floor(Date.now()/1000);
-	star_list.forEach(function(id) { this.data[id] = [1, mtime]; });
+	star_list.forEach(function(id) { this.data[id] = [1, mtime]; }, this);
 
 	this.write();
-	if (this.server) this.server.set_prog(star_list);
+	if (this.server) this.server.set_prog(this.list());
 }
 
 Stars.prototype.set = function(star_list) {
