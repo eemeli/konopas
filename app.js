@@ -37,6 +37,7 @@ if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map 
 
 
 var server = new Server(ko.id);
+var stars = new Stars(ko.id, {server: server});
 
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_create_short_url(url) {
@@ -137,19 +138,6 @@ function storage_set(name, value, use_localstorage) {
 			}
 		} else throw e;
 	}
-}
-
-function toggle_star(el, id) {
-	var stars = storage_get('stars', true) || [];
-	if (el.classList.contains("has_star")) {
-		stars = stars.filter(function(el) { return el != id; });
-		el.classList.remove("has_star");
-	} else {
-		stars.push(id);
-		el.classList.add("has_star");
-	}
-	stars.sort();
-	storage_set('stars', stars, true);
 }
 
 function GlobToRE(pat) {
@@ -344,12 +332,12 @@ function show_prog_list(ls) {
 
 	var star_els = EL("prog_ls").getElementsByClassName("item_star");
 	for (var i = 0, l = star_els.length; i < l; ++i) {
-		star_els[i].onclick = function() { toggle_star(this, this.id.substr(1)); return false; };
+		star_els[i].onclick = function() { stars.toggle(this, this.id.substr(1)); return false; };
 	}
 
-	var stars = storage_get('stars', true) || [];
-	for (var i = 0, l = stars.length; i < l; ++i) {
-		var el = EL('s' + stars[i]);
+	var star_list = stars.list();
+	for (var i = 0, l = star_list.length; i < l; ++i) {
+		var el = EL('s' + star_list[i]);
 		if (el) el.classList.add("has_star");
 	}
 }
@@ -471,22 +459,6 @@ function show_next_view() {
 
 // ------------------------------------------------------------------------------------------------ "my con" view
 
-function make_star_setter(set, replace) {
-	if (replace) {
-		return function() {
-			storage_set('stars', set, true);
-			return true;
-		};
-	} else {
-		return function() {
-			var stars = set.concat(storage_get('stars', true) || []).filter(function(val, i, self) { return self.indexOf(val) === i; } );
-			stars.sort();
-			storage_set('stars', stars, true);
-			return true;
-		};
-	}
-}
-
 function show_star_view(opt) {
 	set_view("star");
 	var view = EL("star_data");
@@ -496,15 +468,15 @@ function show_star_view(opt) {
 	set.sort();
 	var set_len = set.length;
 
-	var stars = storage_get('stars', true) || [];
-	var stars_len = stars.length;
+	var star_list = stars.list();
+	var stars_len = star_list.length;
 	if (stars_len || set_len) {
-		var set_link = '<a href="#star/set:' + stars.join(',') + '">';
+		var set_link = '<a href="#star/set:' + star_list.join(',') + '">';
 		if (set_len) {
-			if (arrays_equal(set, stars)) {
+			if (arrays_equal(set, star_list)) {
 				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection. You could also generate a <a href="' + link_to_create_short_url(location.href) + '">shorter link</a> for easier sharing.';
 			} else {
-				var n_same = array_overlap(set, stars);
+				var n_same = array_overlap(set, star_list);
 				var n_new = set_len - n_same;
 				var html = '<p>Your previously selected items are shown with a highlighted interior, while those imported via <a href="' + location.href + '">this link</a> have a highlighted border.';
 				html += '\n<p>Your previous selection ';
@@ -538,8 +510,8 @@ function show_star_view(opt) {
 				}
 				view.innerHTML = html;
 
-				var el_set = EL('star_set_set'); if (el_set) el_set.onclick = make_star_setter(set, true);
-				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = make_star_setter(set, false);
+				var el_set = EL('star_set_set'); if (el_set) el_set.onclick = function() { stars.set(set); return true; };
+				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
 			var html = '<p>&raquo; ' + set_link + 'Export selection</a>';
@@ -549,7 +521,7 @@ function show_star_view(opt) {
 			}
 			view.innerHTML = html;
 		}
-		var ls = program.filter(function(it) { return (stars.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
+		var ls = program.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 		show_prog_list(ls);
 
 		if (set_len) {
