@@ -119,19 +119,17 @@ function time_sum(t0_str, m_str) {
 	return pre0(h % 24) + ':' + pre0(m);
 }
 
-function storage_get(name, use_localstorage) {
-	var s = use_localstorage ? localStorage : sessionStorage;
-	var v = s.getItem(ko.id + '.' + name);
+function storage_get(name) {
+	var v = sessionStorage.getItem('konopas.' + ko.id + '.' + name);
 	return v ? JSON.parse(v) : v;
 }
 
 var private_browsing_noted = false;
-function storage_set(name, value, use_localstorage) {
-	var s = use_localstorage ? localStorage : sessionStorage;
+function storage_set(name, value) {
 	try {
-		s.setItem(ko.id + '.' + name, JSON.stringify(value));
+		sessionStorage.setItem('konopas.' + ko.id + '.' + name, JSON.stringify(value));
 	} catch (e) {
-		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (s.length === 0)) {
+		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
 			if (!private_browsing_noted) {
 				alert("It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.");
 				private_browsing_noted = true;
