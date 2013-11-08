@@ -85,7 +85,7 @@ Server.prototype.exec_error = function(v) {
 
 // callback for successful logout, prog, vote
 Server.prototype.cb_ok = function(v) {
-	var m = /^\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
+	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
 	switch (m[2]) {
 		case 'logout':
 			this.connected = false;
