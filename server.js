@@ -14,10 +14,8 @@ function Server(id, stars, opt) {
 	this.el = document.getElementById(this.el_id);
 
 	if (this.stars) this.stars.server = this;
-	if (this.el && this.id) {
-		this.exec('info');
-		console.log("server init ok");
-	} else console.warn("server init failed");
+	if (this.el && this.id) this.exec('info');
+	else console.warn("server init failed");
 }
 
 Server.prototype.logout = function(ev) {
@@ -111,19 +109,19 @@ Server.prototype.cb_ok = function(v) {
 			break;
 
 		default:
-			console.log("\tcon '" + m[1] + "', cmd '" + m[2] + "', param '" + m[3] + "'");
+			console.warn("server ok (???): " + JSON.stringify(v));
 	}
 }
 
 // callback for reporting server errors
 Server.prototype.cb_fail = function(v) {
-	console.log("server fail: " + JSON.stringify(v));
+	console.error("server fail: " + JSON.stringify(v));
 }
 
 // callback for setting logged-in info
 Server.prototype.cb_info = function(v) {
-	this.connected = true;
 	console.log("server info: " + JSON.stringify(v));
+	this.connected = true;
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
 	if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
@@ -159,8 +157,6 @@ Server.prototype.cb_my_prog = function(prog) {
 // callback for setting user's own votes
 Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
-	var mtime = new Date(v.t);
-	console.log("mtime "+mtime);
 	this.my_votes_data = v;
 }
 
