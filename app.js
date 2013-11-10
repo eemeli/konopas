@@ -40,8 +40,12 @@ var stars = new Stars(ko.id);
 var server = new Server(ko.id, stars);
 
 // ------------------------------------------------------------------------------------------------ utilities
-function link_to_create_short_url(url) {
+function link_to_short_url(url) {
 	return 'http://is.gd/create.php?url=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
+}
+
+function link_to_qr_code(url) {
+	return 'http://chart.apis.google.com/chart?cht=qr&chs=350x350&chl=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
 }
 
 function EL(id) { return document.getElementById(id); }
@@ -489,7 +493,7 @@ function show_star_view(opt) {
 		var set_link = '<a href="#star/set:' + star_list.join(',') + '">';
 		if (set_len) {
 			if (arrays_equal(set, star_list)) {
-				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection. You could also generate a <a href="' + link_to_create_short_url(location.href) + '">shorter link</a> for easier sharing.';
+				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection.<p>For easier sharing, you can also generate a <a href="' + link_to_short_url(location.href) + '">shorter link</a> or a <a href="' + link_to_qr_code(location.href) + '">QR code</a>.';
 			} else {
 				var n_same = array_overlap(set, star_list);
 				var n_new = set_len - n_same;
