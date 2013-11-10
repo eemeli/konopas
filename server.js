@@ -13,9 +13,15 @@ function Server(id, stars, opt) {
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
 
+	this.disconnect();
 	if (this.stars) this.stars.server = this;
 	if (this.el && this.id) this.exec('info');
 	else console.warn("server init failed");
+}
+
+Server.prototype.disconnect = function() {
+	this.connected = false;
+	if (this.el) this.el.innerHTML = '<div id="server_info">Not connected</div>';
 }
 
 Server.prototype.logout = function(ev) {
@@ -86,7 +92,7 @@ Server.prototype.cb_ok = function(v) {
 	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
 	switch (m[2]) {
 		case 'logout':
-			this.connected = false;
+			this.disconnect();
 			this.prog_data = {};
 			this.prog_server_mtime = 0;
 			if (this.stars) {
