@@ -20,7 +20,7 @@ function Server(id, stars, opt) {
 	if (this.el && this.id) this.exec('info');
 	else console.warn("server init failed");
 
-	var m = /[?&]server_error=([^&]+)/.exec(window.location.search);
+	var m = /#server_error=(.+)/.exec(window.location.hash);
 	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href, this);
 }
 
