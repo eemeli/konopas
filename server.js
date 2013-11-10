@@ -5,6 +5,7 @@ function Server(id, stars, opt) {
 	opt = opt || {};
 	this.host = opt.host ||  'https://konopas-server.appspot.com';
 	this.el_id = opt.el_id || 'server_connect';
+	this.err_el_id = opt.err_el_id || 'server_error';
 
 	this.connected = false;
 	this.prog_data = {};
@@ -12,11 +13,15 @@ function Server(id, stars, opt) {
 	this.my_votes_data = null;
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
+	this.err_el = false;
 
 	this.disconnect();
 	if (this.stars) this.stars.server = this;
 	if (this.el && this.id) this.exec('info');
 	else console.warn("server init failed");
+
+	var m = /[?&]server_error=([^&]+)/.exec(window.location.search);
+	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href, this);
 }
 
 Server.prototype.disconnect = function() {
@@ -29,6 +34,26 @@ Server.prototype.logout = function(ev) {
 	server.exec('/logout');
 	ev.preventDefault();
 	return false;
+}
+
+Server.prototype.error = function(msg, url, server_ptr) {
+	console.error('server error ' + msg + ', url: ' + url);
+	server_ptr = server_ptr || this;
+	if (msg =='') {
+		var cmd = url.replace(server_ptr.host, '').replace('/' + server_ptr.id + '/', '');
+		msg = 'The command "<code>' + cmd + '</code>" failed.';
+	}
+	if (!server_ptr.err_el) {
+		var el = document.createElement('div');
+		el.id = server_ptr.err_el_id;
+		el.title = 'Click to close';
+		el.onclick = function(ev) { server_ptr.err_el.style.display = 'none'; };
+		document.body.appendChild(el);
+		server_ptr.err_el = el;
+	}
+	server_ptr.err_el.innerHTML = '<div>Server error: <b>' + msg + '</b></div>';
+	server_ptr.err_el.style.display = 'block';
+	return true;
 }
 
 Server.prototype.prog_mtime = function() {
@@ -67,10 +92,11 @@ Server.prototype.exec = function(cmd) {
 
 	var script = document.createElement('script'),
 		done = false,
-		url = this.url(cmd);
+		url = this.url(cmd),
+		server_ptr = this;
 	script.src = url;
 	script.async = true;
-	script.onerror = function(ex){ this.exec_error({url: url, event: ex}); };
+	script.onerror = function(ev) { server_ptr.error('', ev.target.src, server_ptr); };
 
 	script.onload = script.onreadystatechange = function() {
 		if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
@@ -82,9 +108,6 @@ Server.prototype.exec = function(cmd) {
 		}
 	};
 	document.getElementsByTagName('head')[0].appendChild(script);
-}
-Server.prototype.exec_error = function(v) {
-	console.log("server exec_error, url: " + v.url);
 }
 
 // callback for successful logout, prog, vote
@@ -121,7 +144,7 @@ Server.prototype.cb_ok = function(v) {
 
 // callback for reporting server errors
 Server.prototype.cb_fail = function(v) {
-	console.error("server fail: " + JSON.stringify(v));
+	this.error(v.msg, v.url, this);
 }
 
 // callback for setting logged-in info

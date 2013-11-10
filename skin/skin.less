@@ -140,6 +140,24 @@ hr { position: relative; z-index: 2; width: 100%; margin: 0; border: none; paddi
 	display: inline-block;
 	padding: 0 10px 10px 10px;
 }
+#server_error {
+	display: none;
+	position: fixed;
+	z-index: 6;
+	top: 2px;
+	left: 50%;
+	> div {
+		position: relative;
+		left: -50%;
+		background: #ffbaba;
+		color: #d80000;
+		border: @border-normal;
+		border-radius: @border-radius;
+		padding: 2px;
+		cursor: pointer;
+		code { font-size: 1.2em; }
+	}
+}
 
 .view { display: none; }
 .next #next_view, .star #star_view, .prog #prog_view, .part #part_view, .info #info_view { display: block; }

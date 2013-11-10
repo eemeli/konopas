@@ -248,6 +248,26 @@ hr {
   display: inline-block;
   padding: 0 10px 10px 10px;
 }
+#server_error {
+  display: none;
+  position: fixed;
+  z-index: 6;
+  top: 2px;
+  left: 50%;
+}
+#server_error > div {
+  position: relative;
+  left: -50%;
+  background: #ffbaba;
+  color: #d80000;
+  border: 2px solid #800000;
+  border-radius: 5px;
+  padding: 2px;
+  cursor: pointer;
+}
+#server_error > div code {
+  font-size: 1.2em;
+}
 .view {
   display: none;
 }
