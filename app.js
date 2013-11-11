@@ -305,7 +305,8 @@ function show_info(item, id) {
 		html = _item_tags(a[0]) + _item_people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
-	item.innerHTML += "<div class=\"extra\" id=\"e" + id + "\">" + html + "</div>";
+	item.innerHTML += '<div class="extra" id="e' + id + '">' + html + '</div>';
+	if (server) server.show_votes(item, id);
 }
 
 function show_prog_list(ls) {

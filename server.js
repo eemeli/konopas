@@ -10,7 +10,8 @@ function Server(id, stars, opt) {
 	this.connected = false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
-	this.my_votes_data = null;
+	this.my_votes_data = {};
+	this.my_votes_mtime = 0;
 	this.pub_votes_data = null;
 	this.el = document.getElementById(this.el_id);
 	this.err_el = false;
@@ -30,6 +31,7 @@ Server.prototype.disconnect = function() {
 }
 
 Server.prototype.logout = function(ev) {
+	ev = ev || window.event;
 	console.log("server logout");
 	server.exec('/logout');
 	ev.preventDefault();
@@ -79,6 +81,58 @@ Server.prototype.set_prog = function(star_list) {
 		+ '&t=' + this.prog_mtime());
 }
 
+Server.prototype.show_my_vote = function(id, v) {
+	var el = document.getElementById('v' + id);
+	if (!el) return;
+	var items = el.getElementsByTagName('a');
+	for (var i = 0, l = items.length; i < l; ++i) {
+		if (items[i].classList.contains('a' + v)) {
+			items[i].classList.add("voted");
+		} else {
+			items[i].classList.remove("voted");
+		}
+	}
+}
+
+Server.prototype.vote = function(id, v, self) {
+	self = self || this;
+	if (self.my_votes_data[id] == v) v = 0;
+	console.log('server vote ' + id + ' ' + v);
+
+	self.my_votes_data[id] = v;
+	self.show_my_vote(id, v);
+	self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
+}
+
+Server.prototype.vote_click = function(ev, self) {
+	ev = ev || window.event;
+	ev.preventDefault();
+	ev.cancelBubble = true;
+	ev.stopPropagation();
+
+	var v = 0;
+	switch (ev.target.classList[0]) {
+		case 'a2':  v =  2; break;
+		case 'a1':  v =  1; break;
+		case 'a-1': v = -1; break;
+	}
+	if (v) self.vote(ev.target.parentNode.id.substr(1), v, self);
+
+	return false;
+}
+
+Server.prototype.show_votes = function(el, id) {
+	if (!this.connected) return;
+	el.innerHTML += '<div class="vote" id="v' + id + '">'
+		+ '<a class="a2" title="doubleplusgood">&laquo;</a>'
+		+ '<a class="a1" title="good">&lsaquo;</a>'
+		+ '<a class="a-1" title="not so good">&rsaquo;</a>'
+		+ '</div>';
+	var self = this;
+	document.getElementById('v' + id).onclick = function(ev) { self.vote_click(ev, self); };
+	if (id in this.my_votes_data) this.show_my_vote(id, this.my_votes_data[id]);
+}
+
 Server.prototype.url = function(cmd) {
 	return this.host + (cmd[0] == '/' ? '' : '/' + this.id + '/') + cmd;
 }
@@ -96,7 +150,7 @@ Server.prototype.exec = function(cmd) {
 		server_ptr = this;
 	script.src = url;
 	script.async = true;
-	script.onerror = function(ev) { server_ptr.error('', ev.target.src, server_ptr); };
+	script.onerror = function(ev) { server_ptr.error('', ev.target.src || window.event.target.src, server_ptr); };
 
 	script.onload = script.onreadystatechange = function() {
 		if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
@@ -134,6 +188,8 @@ Server.prototype.cb_ok = function(v) {
 			break;
 
 		case 'vote':
+			var t = /&server_mtime=(\d+)/.exec(m[3]);
+			if (t) this.my_votes_mtime = parseInt(t[1], 10);
 			console.log("server ok (vote): " + JSON.stringify(v));
 			break;
 
@@ -186,7 +242,9 @@ Server.prototype.cb_my_prog = function(prog) {
 // callback for setting user's own votes
 Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
-	this.my_votes_data = v;
+	this.my_votes_data = v.votes;
+	this.my_votes_mtime = v.mtime;
+	for (var id in v.votes) this.show_my_vote(id, v.votes[id]);
 }
 
 // callback for public vote data
