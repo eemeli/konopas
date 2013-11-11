@@ -118,6 +118,7 @@ Server.prototype.vote = function(id, v, self) {
 
 	self.my_votes_data[id] = v;
 	if (v && self.pub_votes_data) {
+		if (!(id in self.pub_votes_data)) self.pub_votes_data[id] = [0, 0, 0];
 		++self.pub_votes_data[id][(v < 0) ? 0 : v];
 	}
 	self.show_pub_votes(id);
