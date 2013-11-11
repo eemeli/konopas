@@ -82,14 +82,27 @@ Server.prototype.set_prog = function(star_list) {
 }
 
 Server.prototype.show_my_vote = function(id, v) {
-	var el = document.getElementById('v' + id);
-	if (!el) return;
-	var items = el.getElementsByTagName('a');
-	for (var i = 0, l = items.length; i < l; ++i) {
-		if (items[i].classList.contains('a' + v)) {
-			items[i].classList.add("voted");
-		} else {
-			items[i].classList.remove("voted");
+	var mv_el = document.getElementById('v' + id);
+	if (mv_el) {
+		var items = mv_el.getElementsByTagName('a');
+		for (var i = 0, l = items.length; i < l; ++i) {
+			var cl = items[i].classList;
+			if (cl.contains('a' + v)) cl.add("voted");
+			else cl.remove("voted");
+		}
+	}
+	var p_el = document.getElementById('p' + id);
+	if (p_el) {
+		var spans = p_el.getElementsByTagName('span');
+		for (var i = 0, l = spans.length; i < l; ++i) {
+			var cl = spans[i].classList;
+			if (cl.contains('pv_pos')) {
+				if (v > 0) cl.add('voted');
+				else cl.remove('voted');
+			} else if (cl.contains('pv_neg')) {
+				if (v < 0) cl.add('voted');
+				else cl.remove('voted');
+			}
 		}
 	}
 }
@@ -107,8 +120,8 @@ Server.prototype.vote = function(id, v, self) {
 	if (v && self.pub_votes_data) {
 		++self.pub_votes_data[id][(v < 0) ? 0 : v];
 	}
-	self.show_my_vote(id, v);
 	self.show_pub_votes(id);
+	self.show_my_vote(id, v);
 	self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
 }
 
@@ -145,14 +158,17 @@ Server.prototype.show_votes = function(id, el) {
 	var v_id = 'v' + id;
 	if (!document.getElementById(v_id)) {
 		el = el || document.getElementById('p' + id);
-		el.innerHTML += '<div class="vote" id="' + v_id + '">'
+		if (el) el.innerHTML += '<div class="vote" id="' + v_id + '">'
 			+ '<a class="a2" title="doubleplusgood">&laquo;</a>'
 			+ '<a class="a1" title="good">&lsaquo;</a>'
 			+ '<a class="a-1" title="not so good">&rsaquo;</a>'
 			+ '</div>';
 	}
-	var self = this;
-	document.getElementById(v_id).onclick = function(ev) { self.vote_click(ev, self); };
+	var v_el = document.getElementById(v_id);
+	if (v_el) {
+		var self = this;
+		v_el.onclick = function(ev) { self.vote_click(ev, self); };
+	}
 	this.show_my_vote(id, this.my_votes_data[id]);
 }
 
@@ -161,7 +177,7 @@ Server.prototype.show_pub_votes = function(id) {
 	var p_el = v && document.getElementById('p' + id);
 	var pa = p_el && p_el.getElementsByClassName('pub_votes');
 	if (pa && pa.length) pa[0].innerHTML = (v[0] || v[1] || v[2])
-		? '+' + (v[1] + 2 * v[2]) + ' / -' + v[0]
+		? '<span class="pv_pos">+' + (v[1] + 2 * v[2]) + '</span> / <span class="pv_neg">-' + v[0] + '</span>'
 		: '';
 }
 

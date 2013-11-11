@@ -299,6 +299,8 @@ input[type="text"] {
 		margin-left: 10px;
 		color: @fg-lighter;
 		font-size: 0.875em;
+		.pv_neg.voted { color: #0000ff; }
+		.pv_pos.voted { color: #ff0000; }
 	}
 	.loc, > .item-people {
 		display: inline-block;
@@ -315,8 +317,9 @@ input[type="text"] {
 }
 .vote {
 	position: absolute;
+	display: none;
 	overflow: hidden;
-	top: 35px;
+	top: 45px;
 	left: 38px;
 	margin: 0 !important;
 	font-size: 3em;
@@ -330,7 +333,7 @@ input[type="text"] {
 		-ms-transform: rotate(90deg);
 			transform: rotate(90deg);
 	a {
-		display: none;
+		display: inline-block;
 		height: 0.7em;
 		text-decoration: none;
 		color: @fg-light;
@@ -339,21 +342,16 @@ input[type="text"] {
 	.a1 { margin-right: 8px; }
 	.a-1:hover, .a-1.voted { color: #0000ff; }
 	.a1:hover, .a2:hover, .a1.voted, .a2.voted { color: #ff0000; }
-	.voted {
-		display: inline-block;
-		opacity: 0.5 !important;
-	}
+	.voted { opacity: 1.0 !important; }
 }
 
 .expanded {
 	background: @bg-highlight;
 	.item_star { background: @bg-highlight-more; }
 	.title { .font-heavy; }
-	.pub_votes, .loc { color: @fg-light-in-box; }
+	.pub_votes, .pub_votes .voted, .loc { color: @fg-light-in-box !important; }
 	.item > .item-people { display: none; }
-	.extra { display: block; }
-	.vote a { display: inline-block; }
-	.vote .voted { opacity: 1.0 !important; }
+	.extra, .vote { display: block; }
 }
 
 .item-tags { color: @fg-light-in-box; font-size: 0.875em; }

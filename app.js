@@ -346,8 +346,8 @@ function show_prog_list(ls) {
 		};
 		var id = items[i].id.substr(1);
 		if (server) {
-			if (id in server.my_votes_data) server.show_votes(id, items[i]);
 			server.show_pub_votes(id);
+			if (id in server.my_votes_data) server.show_votes(id, items[i]);
 		}
 	}
 

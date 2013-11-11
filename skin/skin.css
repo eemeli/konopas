@@ -605,6 +605,12 @@ input[type="text"]:valid + #q_ctrl input {
   color: #ccc5bb;
   font-size: 0.875em;
 }
+.item .pub_votes .pv_neg.voted {
+  color: #0000ff;
+}
+.item .pub_votes .pv_pos.voted {
+  color: #ff0000;
+}
 .item .loc,
 .item > .item-people {
   display: inline-block;
@@ -628,8 +634,9 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .vote {
   position: absolute;
+  display: none;
   overflow: hidden;
-  top: 35px;
+  top: 45px;
   left: 38px;
   margin: 0 !important;
   font-size: 3em;
@@ -644,7 +651,7 @@ input[type="text"]:valid + #q_ctrl input {
   transform: rotate(90deg);
 }
 .vote a {
-  display: none;
+  display: inline-block;
   height: 0.7em;
   text-decoration: none;
   color: #88847d;
@@ -666,8 +673,7 @@ input[type="text"]:valid + #q_ctrl input {
   color: #ff0000;
 }
 .vote .voted {
-  display: inline-block;
-  opacity: 0.5 !important;
+  opacity: 1.0 !important;
 }
 .expanded {
   background: #f5e6c3;
@@ -679,20 +685,16 @@ input[type="text"]:valid + #q_ctrl input {
   font-weight: 500;
 }
 .expanded .pub_votes,
+.expanded .pub_votes .voted,
 .expanded .loc {
-  color: #736f68;
+  color: #736f68 !important;
 }
 .expanded .item > .item-people {
   display: none;
 }
-.expanded .extra {
+.expanded .extra,
+.expanded .vote {
   display: block;
-}
-.expanded .vote a {
-  display: inline-block;
-}
-.expanded .vote .voted {
-  opacity: 1.0 !important;
 }
 .item-tags {
   color: #736f68;
