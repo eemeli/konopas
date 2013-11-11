@@ -562,7 +562,7 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .item_frame {
   position: relative;
-  margin-left: 45px;
+  margin: 0 0 10px 45px;
 }
 .item_star {
   position: absolute;
@@ -601,6 +601,7 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .item .loc,
 .item > .item-people {
+  display: inline-block;
   color: #88847d;
   font-size: 0.875em;
 }
@@ -620,30 +621,33 @@ input[type="text"]:valid + #q_ctrl input {
   margin: 1em 0;
 }
 .vote {
-  display: none;
   position: absolute;
   overflow: hidden;
-  top: 55px;
-  left: -8px;
+  top: 35px;
+  left: 38px;
   margin: 0 !important;
   font-size: 3em;
   line-height: 0.55em;
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  transform-origin: 0 0;
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 .vote a {
-  display: inline-block;
+  display: none;
   height: 0.7em;
   text-decoration: none;
   color: #88847d;
 }
 .vote a:hover {
-  opacity: 0.75;
+  opacity: 0.5;
 }
-.vote .a-1 {
-  margin-left: 8px;
+.vote .a1 {
+  margin-right: 8px;
 }
 .vote .a-1:hover,
 .vote .a-1.voted {
@@ -656,7 +660,8 @@ input[type="text"]:valid + #q_ctrl input {
   color: #ff0000;
 }
 .vote .voted {
-  opacity: 1.0 !important;
+  display: inline-block;
+  opacity: 0.5 !important;
 }
 .expanded {
   background: #f5e6c3;
@@ -673,9 +678,14 @@ input[type="text"]:valid + #q_ctrl input {
 .expanded .item > .item-people {
   display: none;
 }
-.expanded .extra,
-.expanded .vote {
+.expanded .extra {
   display: block;
+}
+.expanded .vote a {
+  display: inline-block;
+}
+.expanded .vote .voted {
+  opacity: 1.0 !important;
 }
 .item-tags {
   color: #736f68;

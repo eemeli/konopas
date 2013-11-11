@@ -276,7 +276,10 @@ input[type="text"] {
 
 .star #prog_ls .new_day:first-child { padding-top: 20px; }
 
-.item_frame { position: relative; margin-left: @time-width; }
+.item_frame {
+	position: relative;
+	margin: 0 0 10px @time-width;
+}
 
 .item_star {
 	position: absolute; width: 20px; height: 20px; top: 10px; left: 10px; background: @bg-highlight; cursor: pointer;
@@ -303,29 +306,35 @@ input[type="text"] {
 	.item-people { max-width: @main-width; margin: 1em 0; }
 }
 .vote {
-	display: none;
 	position: absolute;
 	overflow: hidden;
-	top: 55px;
-	left: -8px;
+	top: 35px;
+	left: 38px;
 	margin: 0 !important;
 	font-size: 3em;
 	line-height: 0.55em;
+	-webkit-transform-origin: 0 0;
+	   -moz-transform-origin: 0 0;
+		-ms-transform-origin: 0 0;
+			transform-origin: 0 0;
 	-webkit-transform: rotate(90deg);
 	   -moz-transform: rotate(90deg);
 		-ms-transform: rotate(90deg);
 			transform: rotate(90deg);
 	a {
-		display: inline-block;
+		display: none;
 		height: 0.7em;
 		text-decoration: none;
 		color: @fg-light;
-		&:hover { opacity: 0.75; }
+		&:hover { opacity: 0.5; }
 	}
-	.a-1 { margin-left: 8px; }
+	.a1 { margin-right: 8px; }
 	.a-1:hover, .a-1.voted { color: #0000ff; }
 	.a1:hover, .a2:hover, .a1.voted, .a2.voted { color: #ff0000; }
-	.voted { opacity: 1.0 !important; }
+	.voted {
+		display: inline-block;
+		opacity: 0.5 !important;
+	}
 }
 
 .expanded {
@@ -334,7 +343,9 @@ input[type="text"] {
 	.title { .font-heavy; }
 	.loc { color: @fg-light-in-box; }
 	.item > .item-people { display: none; }
-	.extra, .vote { display: block; }
+	.extra { display: block; }
+	.vote a { display: inline-block; }
+	.vote .voted { opacity: 1.0 !important; }
 }
 
 .item-tags { color: @fg-light-in-box; font-size: 0.875em; }
