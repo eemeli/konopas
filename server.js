@@ -12,7 +12,7 @@ function Server(id, stars, opt) {
 	this.prog_server_mtime = 0;
 	this.my_votes_data = {};
 	this.my_votes_mtime = 0;
-	this.pub_votes_data = null;
+	this.pub_votes_data = {};
 	this.el = document.getElementById(this.el_id);
 	this.err_el = false;
 
@@ -96,41 +96,73 @@ Server.prototype.show_my_vote = function(id, v) {
 
 Server.prototype.vote = function(id, v, self) {
 	self = self || this;
+	if (self.pub_votes_data) {
+		var v0 = self.my_votes_data[id];
+		if (v0) --self.pub_votes_data[id][(v0 < 0) ? 0 : v0];
+	}
 	if (self.my_votes_data[id] == v) v = 0;
 	console.log('server vote ' + id + ' ' + v);
 
 	self.my_votes_data[id] = v;
+	if (v && self.pub_votes_data) {
+		++self.pub_votes_data[id][(v < 0) ? 0 : v];
+	}
 	self.show_my_vote(id, v);
+	self.show_pub_votes(id);
 	self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
 }
 
 Server.prototype.vote_click = function(ev, self) {
 	ev = ev || window.event;
-	ev.preventDefault();
-	ev.cancelBubble = true;
-	ev.stopPropagation();
 
+	var bubble = false;
 	var v = 0;
 	switch (ev.target.classList[0]) {
 		case 'a2':  v =  2; break;
 		case 'a1':  v =  1; break;
 		case 'a-1': v = -1; break;
 	}
-	if (v) self.vote(ev.target.parentNode.id.substr(1), v, self);
+	if (v) {
+		var p = ev.target.parentNode;
+		if (p.parentNode.parentNode.classList.contains('expanded')) {
+			self.vote(p.id.substr(1), v, self);
+		} else {
+			bubble = true;
+		}
+	}
 
-	return false;
+	if (bubble) return true;
+	else {
+		ev.preventDefault();
+		ev.cancelBubble = true;
+		ev.stopPropagation();
+		return false;
+	}
 }
 
-Server.prototype.show_votes = function(el, id) {
+Server.prototype.show_votes = function(id, el) {
 	if (!this.connected) return;
-	el.innerHTML += '<div class="vote" id="v' + id + '">'
-		+ '<a class="a2" title="doubleplusgood">&laquo;</a>'
-		+ '<a class="a1" title="good">&lsaquo;</a>'
-		+ '<a class="a-1" title="not so good">&rsaquo;</a>'
-		+ '</div>';
+	var v_id = 'v' + id;
+	if (!document.getElementById(v_id)) {
+		el = el || document.getElementById('p' + id);
+		el.innerHTML += '<div class="vote" id="' + v_id + '">'
+			+ '<a class="a2" title="doubleplusgood">&laquo;</a>'
+			+ '<a class="a1" title="good">&lsaquo;</a>'
+			+ '<a class="a-1" title="not so good">&rsaquo;</a>'
+			+ '</div>';
+	}
 	var self = this;
-	document.getElementById('v' + id).onclick = function(ev) { self.vote_click(ev, self); };
-	if (id in this.my_votes_data) this.show_my_vote(id, this.my_votes_data[id]);
+	document.getElementById(v_id).onclick = function(ev) { self.vote_click(ev, self); };
+	this.show_my_vote(id, this.my_votes_data[id]);
+}
+
+Server.prototype.show_pub_votes = function(id) {
+	var v = this.pub_votes_data[id];
+	var p_el = v && document.getElementById('p' + id);
+	var pa = p_el && p_el.getElementsByClassName('pub_votes');
+	if (pa && pa.length) pa[0].innerHTML = (v[0] || v[1] || v[2])
+		? '+' + (v[1] + 2 * v[2]) + ' / -' + v[0]
+		: '';
 }
 
 Server.prototype.url = function(cmd) {
@@ -244,11 +276,12 @@ Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
 	this.my_votes_mtime = v.mtime;
-	for (var id in v.votes) this.show_my_vote(id, v.votes[id]);
+	for (var id in v.votes) this.show_votes(id);
 }
 
 // callback for public vote data
 Server.prototype.cb_pub_votes = function(v) {
 	console.log("server pub_votes: " + JSON.stringify(v));
 	this.pub_votes_data = v;
+	for (var id in v) this.show_pub_votes(id);
 }

@@ -294,8 +294,16 @@ input[type="text"] {
 	clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 5px; cursor: pointer;
 	> div { margin-left: 40px; }
 	.title { margin: 3px 0 3px 40px; }
+	.pub_votes {
+		display: inline-block;
+		margin-left: 10px;
+		color: @fg-lighter;
+		font-size: 0.875em;
+	}
 	.loc, > .item-people {
-		color: @fg-light; font-size: 0.875em;
+		display: inline-block;
+		color: @fg-light;
+		font-size: 0.875em;
 		a { color: @fg-light; }
 	}
 }
@@ -341,7 +349,7 @@ input[type="text"] {
 	background: @bg-highlight;
 	.item_star { background: @bg-highlight-more; }
 	.title { .font-heavy; }
-	.loc { color: @fg-light-in-box; }
+	.pub_votes, .loc { color: @fg-light-in-box; }
 	.item > .item-people { display: none; }
 	.extra { display: block; }
 	.vote a { display: inline-block; }

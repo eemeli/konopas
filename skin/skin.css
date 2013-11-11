@@ -599,6 +599,12 @@ input[type="text"]:valid + #q_ctrl input {
 .item .title {
   margin: 3px 0 3px 40px;
 }
+.item .pub_votes {
+  display: inline-block;
+  margin-left: 10px;
+  color: #ccc5bb;
+  font-size: 0.875em;
+}
 .item .loc,
 .item > .item-people {
   display: inline-block;
@@ -672,6 +678,7 @@ input[type="text"]:valid + #q_ctrl input {
 .expanded .title {
   font-weight: 500;
 }
+.expanded .pub_votes,
 .expanded .loc {
   color: #736f68;
 }

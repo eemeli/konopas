@@ -306,7 +306,7 @@ function show_info(item, id) {
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	item.innerHTML += '<div class="extra" id="e' + id + '">' + html + '</div>';
-	if (server) server.show_votes(item, id);
+	if (server) server.show_votes(id, item);
 }
 
 function show_prog_list(ls) {
@@ -330,7 +330,7 @@ function show_prog_list(ls) {
 		list.push('<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 				+ '<div class="title">' + ls[i].title + '</div>'
-				+ _item_loc(ls[i])
+				+ _item_loc(ls[i]) + '<div class="pub_votes"></div>'
 				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
 			+ '</div>');
 	}
@@ -339,14 +339,16 @@ function show_prog_list(ls) {
 	var items = EL("prog_ls").getElementsByClassName("item");
 	for (var i = 0, l = items.length; i < l; ++i) {
 		items[i].onclick = function() {
-			if (this.parentNode.classList.contains("expanded")) {
-				this.parentNode.classList.remove("expanded");
-			} else {
-				this.parentNode.classList.add("expanded");
+			if (this.parentNode.classList.toggle("expanded")) {
 				show_info(this, this.id.substr(1));
 			}
 			return true;
 		};
+		var id = items[i].id.substr(1);
+		if (server) {
+			if (id in server.my_votes_data) server.show_votes(id, items[i]);
+			server.show_pub_votes(id);
+		}
 	}
 
 	var star_els = EL("prog_ls").getElementsByClassName("item_star");
