@@ -606,10 +606,10 @@ input[type="text"]:valid + #q_ctrl input {
   font-size: 0.875em;
 }
 .item .pub_votes .pv_neg.voted {
-  color: #0000ff;
+  color: #9e9ee7;
 }
 .item .pub_votes .pv_pos.voted {
-  color: #ff0000;
+  color: #e79e9e;
 }
 .item .loc,
 .item > .item-people {
@@ -656,24 +656,22 @@ input[type="text"]:valid + #q_ctrl input {
   text-decoration: none;
   color: #88847d;
 }
-.vote a:hover {
-  opacity: 0.5;
-}
 .vote .a1 {
   margin-right: 8px;
 }
-.vote .a-1:hover,
-.vote .a-1.voted {
-  color: #0000ff;
+.vote .a-1:hover {
+  color: #9992c9;
 }
 .vote .a1:hover,
-.vote .a2:hover,
+.vote .a2:hover {
+  color: #e29280;
+}
+.vote .a-1.voted {
+  color: #3d3dce !important;
+}
 .vote .a1.voted,
 .vote .a2.voted {
-  color: #ff0000;
-}
-.vote .voted {
-  opacity: 1.0 !important;
+  color: #ce3d3d !important;
 }
 .expanded {
   background: #f5e6c3;

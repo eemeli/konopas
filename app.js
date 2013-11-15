@@ -541,7 +541,7 @@ function show_star_view(opt) {
 				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
-			var html = '<p>&raquo; ' + set_link + 'Export selection via URL</a>';
+			var html = '<p>&raquo; ' + set_link + 'Export selection</a>';
 			switch (stars_len) {
 				case 1:  html += ' (1 item)'; break;
 				default: html += ' (' + stars_len + ' items)';
