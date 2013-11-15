@@ -497,6 +497,7 @@ function show_star_view(opt) {
 		if (set_len) {
 			if (arrays_equal(set, star_list)) {
 				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection.<p>For easier sharing, you can also generate a <a href="' + link_to_short_url(location.href) + '">shorter link</a> or a <a href="' + link_to_qr_code(location.href) + '">QR code</a>.';
+				if (server) server.show_ical_link(view);
 			} else {
 				var n_same = array_overlap(set, star_list);
 				var n_new = set_len - n_same;

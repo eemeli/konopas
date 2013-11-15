@@ -8,6 +8,7 @@ function Server(id, stars, opt) {
 	this.err_el_id = opt.err_el_id || 'server_error';
 
 	this.connected = false;
+	this.ical = localStorage.getItem('konopas.'+this.id+'.ical_link') || false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
 	this.my_votes_data = {};
@@ -182,6 +183,31 @@ Server.prototype.show_pub_votes = function(id) {
 		: '';
 }
 
+Server.prototype.show_ical_link = function(p_el) {
+	var html = '';
+	console.log(this);
+	if (!this.connected) {
+		html = 'For other export options, please login.'
+	} else if (this.ical) {
+		if (typeof this.ical == 'string') {
+			html = 'Your selection is available as an iCal (.ics) calendar at:<br><a href="' + this.ical + '">' + this.ical + '</a><br>'
+				+ '<span class="hint">Note that changes you make in this guide may take some time to show in your external calendar software.</span>';
+		} else {
+			html = 'To make your selection viewable in your calendar app, you may also <a id="ical_link" class="js-link">make it available</a> in iCal (.ics) calendar format';
+		}
+	}
+	if (p_el) p_el.innerHTML += '<p id="ical_text">' + html;
+	else {
+		var i_el = document.getElementById('ical_text');
+		if (i_el) i_el.innerHTML = html;
+	}
+	var a = document.getElementById('ical_link');
+	if (a) {
+		var self = this;
+		a.onclick = function() { self.exec('ical_link'); };
+	}
+}
+
 Server.prototype.url = function(cmd) {
 	return this.host + (cmd[0] == '/' ? '' : '/' + this.id + '/') + cmd;
 }
@@ -258,7 +284,10 @@ Server.prototype.cb_info = function(v) {
 	this.connected = true;
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
-	if (v.links) html += '<ul id="server_links">' + "\n<li>" + v.links.join("\n<li>") + "\n</ul>";
+	if (v.ical) {
+		this.ical = this.ical || true;
+		this.show_ical_link(false);
+	}
 	html += '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a>';
 	this.el.innerHTML = html;
 	document.getElementById('server_logout').onclick = this.logout;
@@ -301,4 +330,10 @@ Server.prototype.cb_pub_votes = function(v) {
 	console.log("server pub_votes: " + JSON.stringify(v));
 	this.pub_votes_data = v;
 	for (var id in v) this.show_pub_votes(id);
+}
+
+Server.prototype.cb_ical_link = function(url) {
+	this.ical = url;
+	localStorage.setItem('konopas.'+this.id+'.ical_link', url);
+	this.show_ical_link(false);
 }

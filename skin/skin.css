@@ -701,6 +701,10 @@ input[type="text"]:valid + #q_ctrl input {
 a {
   color: #000000;
 }
+.js-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
 .info #time,
 .info #scroll {
   display: none !important;
