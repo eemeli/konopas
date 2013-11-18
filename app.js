@@ -367,30 +367,42 @@ function show_prog_list(ls) {
 // ------------------------------------------------------------------------------------------------ next view
 
 function update_next_select(t_off) {
+	var ts = EL("next_time_select");
+	if (!ts) return;
+
 	var t = new Date();
-	var h_now = t.getHours();
+	t.setMinutes(Math.floor(t.getMinutes()/15) * 15);
 	var lt = [];
-	t.setHours(h_now - 12);
-	for (var i = -12; i <= 12; ++i) {
-		lt.push('<option value="' + i + '"' + (i == t_off ? ' selected' : '') + '>' + weekday(t, false) + ', ' + pretty_time(t, false) + '</option>');
-		t.setHours(t.getHours() + 1);
+	var t_step = 30;
+	var t_range = [-12 * t_step, 12 * t_step];
+	t.setMinutes(t.getMinutes() + t_range[0]);
+	for (var m = t_range[0]; m <= t_range[1]; m += t_step) {
+		var value = ' value="' + m + '"' + (m == t_off ? ' selected' : '');
+		var now = m ? '' : ' id="next_time_select_now"';
+		var txt = weekday(t, false) + ', ' + pretty_time(t, false);
+		lt.push('<option' + value + now + '>' + txt + '</option>');
+		t.setMinutes(t.getMinutes() + t_step);
 	}
-	var ts = EL("next_time");
 	ts.innerHTML = lt.join("\n");
-	ts.onchange = update_next_list;
+
+	ts.onchange = function() { update_next_list(selected_id("next_type")); }
+	var tb = EL("next_earlier");
+	if (tb) tb.onclick = function() { ts.selectedIndex = Math.max(ts.selectedIndex - 1, 0); ts.onchange(); };
+	var ta = EL("next_later");
+	if (ta) ta.onclick = function() { ts.selectedIndex = Math.min(ts.selectedIndex + 1, ts.length - 1); ts.onchange(); };
 }
 
 function update_next_list(next_type) {
-	var ls = EL("next_time");
+	var ls = EL("next_time_select");
 	var t_off = (ls.selectedIndex >= 0) ? parseInt(ls[ls.selectedIndex].value) : 0;
 	if (!t_off) t_off = 0;
 	update_next_select(t_off);
 
 	var t = new Date();
-	t.setHours(t.getHours() + t_off);
-	var now_str = string_time(t);
-	var now_date = now_str.substr(0, 10);
-	var now_time = now_str.substr(11);
+	t.setMinutes(Math.floor(t.getMinutes()/15) * 15 + t_off);
+	var t_str = string_time(t);
+	var t_date = t_str.substr(0, 10);
+	var t_time = t_str.substr(11);
 
 	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
 
@@ -400,11 +412,11 @@ function update_next_list(next_type) {
 	var n = 0;
 	for (var i = 0, l = program.length; i < l; ++i) {
 		var it = program[i];
-		if (it.date < now_date) continue;
-		if ((it.date == now_date) && (it.time < now_time)) continue;
+		if (it.date < t_date) continue;
+		if ((it.date == t_date) && (it.time < t_time)) continue;
 
 		var ms_it = Date.parse(it.date + 'T' + it.time);
-		if (!ms_next || (ms_it < ms_next)) ms_next = ms_it;
+		if ((!ms_next || (ms_it < ms_next)) && (ms_it > ms_max)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
 			if (next[it.loc[0]]) {
@@ -420,24 +432,23 @@ function update_next_list(next_type) {
 	var next_prog = [];
 	for (var k in next) next_prog.push(next[k]);
 
-	var start_str = '';
-	if (ms_next) {
-		var min_next = Math.floor((ms_next - t) / 60000);
-		if (min_next < 1) start_str = 'right now';
-		else {
-			start_str = 'in ';
-			var h_next = Math.floor(min_next / 60);
-			if (h_next >= 1) {
-				min_next -= h_next * 60;
-				start_str += h_next + ' hour' + ((h_next == 1) ? '' : 's') + ' and ';
-			}
-			start_str += min_next + ' minute' + ((min_next == 1) ? '' : 's');
+	if (next_prog.length > 0) {
+		EL("next_start_note").innerHTML = '';
+	} else if (ms_next) {
+		var start_str = '';
+		var t0 = new Date();
+		t0.setMinutes(t0.getMinutes() + t_off - t0.getTimezoneOffset());
+		var min_next = Math.floor((ms_next - t0) / 60000);
+		var h_next = Math.floor(min_next / 60);
+		if (h_next >= 1) {
+			min_next -= h_next * 60;
+			start_str += h_next + ' hour' + ((h_next == 1) ? '' : 's') + ' and ';
 		}
+		start_str += min_next + ' minute' + ((min_next == 1) ? '' : 's');
+		EL("next_start_note").innerHTML = 'The next program item starts in ' + start_str + ' after the set time.';
+	} else {
+		EL("next_start_note").innerHTML = 'There are no more program items scheduled.';
 	}
-
-	EL("next_start_note").innerHTML = start_str
-		? 'The next program item starts ' + start_str + '.'
-		: 'There are no more program items scheduled.';
 
 	show_prog_list(next_prog);
 }

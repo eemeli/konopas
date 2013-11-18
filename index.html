@@ -33,13 +33,18 @@
 
 <div id="next_view" class="view">
 	<div id="next_filters" class="filters">
-	It is now
-	<select id="next_time"></select>
 
-	<ul id="next_type">
-	<li id="next_by_hour">List items starting in the next hour
-	<li id="next_by_room">List the next item for each location
+	&raquo; List items by:<ul id="next_type">
+	<li id="next_by_hour">Time
+	<li id="next_by_room">Location
 	</ul>
+
+	<div id="next_time">
+		Show items starting after:
+		<a id="next_earlier" class="next_arrow" title="earlier">&lsaquo;</a>
+		<select id="next_time_select"></select>
+		<a id="next_later" class="next_arrow" title="later">&rsaquo;</a>
+	</div>
 
 	<div id="next_start_note"></div>
 

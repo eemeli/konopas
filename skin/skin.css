@@ -306,14 +306,51 @@ hr {
 #next_filters > * {
   padding-left: 0;
 }
-#next_time {
-  margin: -4px 0 20px 4px;
+#next_type {
+  display: inline-block;
+  margin: 5px 0 20px 0;
+  padding: 0;
+}
+#next_type li {
+  display: inline-block;
+  margin-left: 20px;
+}
+.next_arrow {
+  position: absolute;
+  cursor: pointer;
+  color: #800000;
+  font-size: 2.5em;
+  margin-top: -20px;
+  padding: 0 3px;
+}
+.next_arrow:hover:after {
+  position: absolute;
+}
+#next_earlier {
+  margin-left: 2px;
+}
+#next_later {
+  margin-left: 0;
+}
+#next_earlier:hover:after {
+  content: '\2039';
+  right: 8px;
+}
+#next_later:hover:after {
+  content: '\203A';
+  left: 8px;
+}
+#next_time_select {
+  margin: -4px 0 0 20px;
   border: 2px solid #800000;
   padding: 2px 4px;
   -webkit-appearance: none;
   -webkit-border-radius: 0;
   background: #ffffff;
   font-size: 1em;
+}
+#next_time_select_now {
+  background: #f5e6c3;
 }
 #next_start_note {
   margin-top: 20px;
