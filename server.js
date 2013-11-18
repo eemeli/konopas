@@ -309,10 +309,11 @@ Server.prototype.cb_login = function(v) {
 }
 
 // callback for setting starred items
-Server.prototype.cb_my_prog = function(prog) {
-	console.log("server my_prog: " + JSON.stringify(prog));
-	this.prog_data = prog;
-	if (this.stars) this.stars.sync(prog);
+Server.prototype.cb_my_prog = function(v) {
+	console.log("server my_prog: " + JSON.stringify(v));
+	this.prog_data = v.prog;
+	if (v.t0) for (var id in this.prog_data) { this.prog_data[id][1] += v.t0; }
+	if (this.stars) this.stars.sync(this.prog_data);
 	else console.warn("Server.stars required for prog sync");
 }
 
