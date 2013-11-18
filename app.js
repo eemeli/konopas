@@ -26,7 +26,8 @@ var ko = {
 	'default_duration': 60,
 	'time_show_am_pm': false,
 	'abbrev_00_minutes': true, // only for am/pm time
-	'always_show_participants': false
+	'always_show_participants': false,
+	'expand_all_max_items': 100
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
@@ -350,7 +351,10 @@ function show_prog_list(ls) {
 				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
 			+ '</div>');
 	}
-	EL("prog_ls").innerHTML = list.join('</div>');
+	if (ls.length < ko.expand_all_max_items) {
+		list.unshift('<div class="item_expander">&raquo; <a class="js-link" id="item_expander_link">Expand all items</a>');
+	}
+	EL("prog_ls").innerHTML = list.join("</div>\n");
 
 	var items = EL("prog_ls").getElementsByClassName("item");
 	for (var i = 0, l = items.length; i < l; ++i) {
@@ -366,6 +370,23 @@ function show_prog_list(ls) {
 			if (id in server.my_votes_data) server.show_votes(id, items[i]);
 		}
 	}
+
+	var expand_all = EL("item_expander_link");
+	if (expand_all) expand_all.onclick = function() {
+		var exp = expand_all.innerHTML == 'Expand all items';
+		if (expand_all.innerHTML == 'Expand all items') {
+			for (var i = 0, l = items.length; i < l; ++i) {
+				items[i].parentNode.classList.add("expanded");
+				show_info(items[i], items[i].id.substr(1));
+			}
+			expand_all.innerHTML = 'Collapse all items';
+		} else {
+			for (var i = 0, l = items.length; i < l; ++i) {
+				items[i].parentNode.classList.remove("expanded");
+			}
+			expand_all.innerHTML = 'Expand all items';
+		}
+	};
 
 	var star_els = EL("prog_ls").getElementsByClassName("item_star");
 	for (var i = 0, l = star_els.length; i < l; ++i) {
