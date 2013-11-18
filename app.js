@@ -295,6 +295,20 @@ function _item_loc(it) {
 	return !s ? '' : '<div class="loc">' + s + '</div>\n';
 }
 
+function _item_sort(a, b) {
+	if (a.date < b.date) return -1;
+	if (a.date > b.date) return  1;
+	if (a.time < b.time) return -1;
+	if (a.time > b.time) return  1;
+	if (a.loc.length < b.loc.length) return -1;
+	if (a.loc.length > b.loc.length) return  1;
+	for (var i = a.loc.length - 1; i >= 0; --i) {
+		if (a.loc[i] < b.loc[i]) return -1;
+		if (a.loc[i] > b.loc[i]) return  1;
+	}
+	return 0;
+}
+
 function show_info(item, id) {
 	if (EL("e" + id)) return;
 
@@ -314,6 +328,7 @@ function show_prog_list(ls) {
 	var prev_date = "", day_str = "", prev_time = "";
 	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
+			if (ls[i].date < prev_date) { show_prog_list(ls.sort(_item_sort)); return; }
 			prev_date = ls[i].date;
 			prev_time = "";
 
@@ -323,6 +338,7 @@ function show_prog_list(ls) {
 		}
 
 		if (ls[i].time != prev_time) {
+			if (ls[i].time < prev_time) { show_prog_list(ls.sort(_item_sort)); return; }
 			prev_time = ls[i].time;
 			list.push('<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time));
 		}
