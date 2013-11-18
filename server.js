@@ -185,7 +185,6 @@ Server.prototype.show_pub_votes = function(id) {
 
 Server.prototype.show_ical_link = function(p_el) {
 	var html = '';
-	console.log(this);
 	if (!this.connected) {
 		html = 'For other export options, please login.'
 	} else if (this.ical) {

@@ -21,7 +21,7 @@
 
 var ko = {
 	// these are default values, use konopas_set to override
-	'id': '', //location.pathname.split('/').filter(function(p) { return p; }).join('-'),
+	'id': '',
 	'full_version': !navigator.userAgent.match(/Android [12]/),
 	'default_duration': 60,
 	'time_show_am_pm': false,
@@ -75,13 +75,14 @@ function make_popup_menu(root_id, disable_id) {
 
 function pre0(n) { return (n < 10 ? '0' : '') + n; }
 
+function string_date(t) {
+	if (!t) t = new Date();
+	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
+}
+
 function string_time(t) {
 	if (!t) t = new Date();
-	return t.getFullYear()
-		+ '-' + pre0(t.getMonth() + 1)
-		+ '-' + pre0(t.getDate())
-		+ ' ' + pre0(t.getHours())
-		+ ':' + pre0(t.getMinutes());
+	return pre0(t.getHours()) + ':' + pre0(t.getMinutes());
 }
 
 function weekday(t, utc) {
@@ -437,9 +438,8 @@ function update_next_list(next_type) {
 
 	var t = new Date();
 	t.setMinutes(Math.floor(t.getMinutes()/15) * 15 + t_off);
-	var t_str = string_time(t);
-	var t_date = t_str.substr(0, 10);
-	var t_time = t_str.substr(11);
+	var t_date = string_date(t);
+	var t_time = string_time(t);
 
 	t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); // to match Date.parse() time below
 
@@ -749,7 +749,7 @@ function default_prog_day() {
 		if (!day_start || (d < day_start)) day_start = d;
 		if (!day_end || (d > day_end)) day_end = d;
 	}
-	var day_now = string_time().substr(0, 10);
+	var day_now = string_date();
 
 	var day = (day_now < day_start) ? ''
 	        : (day_now > day_end) ? ''
