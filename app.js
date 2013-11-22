@@ -352,7 +352,7 @@ function show_prog_list(ls) {
 				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
 			+ '</div>');
 	}
-	if (ls.length < ko.expand_all_max_items) {
+	if ((ls.length > 0) && (ls.length < ko.expand_all_max_items)) {
 		list.unshift('<div class="item_expander">&raquo; <a class="js-link" id="item_expander_link">Expand all items</a>');
 	}
 	EL("prog_ls").innerHTML = list.join("</div>\n");
