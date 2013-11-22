@@ -342,7 +342,6 @@ input[type="text"] {
 .vote {
 	position: absolute;
 	display: none;
-	overflow: hidden;
 	top: 45px;
 	left: 38px;
 	margin: 0 !important;
@@ -357,16 +356,23 @@ input[type="text"] {
 		-ms-transform: rotate(90deg);
 			transform: rotate(90deg);
 	a {
-		display: inline-block;
+		display: block;
+		position: absolute;
+		overflow: hidden;
 		height: 0.7em;
 		text-decoration: none;
 		color: @fg-light;
 	}
-	.a1 { margin-right: 8px; }
+	.a1, .a2 { right: -20px; text-align: right; }
+	.a-1 { left: 25px; }
+	.a1 { padding-left: 7px; }
 	.a-1:hover { color: mix(@vote-neg, @bg-highlight, @vote-fade); }
 	.a1:hover, .a2:hover { color: mix(@vote-pos, @bg-highlight, @vote-fade); }
 	.a-1.voted { color: @vote-neg !important; }
 	.a1.voted, .a2.voted { color: @vote-pos !important; }
+	.a2, .a2.voted + .a1 { display: none; }
+	.a2.voted { display: inline; }
+	.a1.voted:hover:before { position: absolute; left: 0; content: "‹"; color: mix(@vote-pos, @bg-highlight, @vote-fade); }
 }
 
 .expanded {

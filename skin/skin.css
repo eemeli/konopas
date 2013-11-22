@@ -672,7 +672,6 @@ input[type="text"]:valid + #q_ctrl input {
 .vote {
   position: absolute;
   display: none;
-  overflow: hidden;
   top: 45px;
   left: 38px;
   margin: 0 !important;
@@ -688,13 +687,23 @@ input[type="text"]:valid + #q_ctrl input {
   transform: rotate(90deg);
 }
 .vote a {
-  display: inline-block;
+  display: block;
+  position: absolute;
+  overflow: hidden;
   height: 0.7em;
   text-decoration: none;
   color: #88847d;
 }
+.vote .a1,
+.vote .a2 {
+  right: -20px;
+  text-align: right;
+}
+.vote .a-1 {
+  left: 25px;
+}
 .vote .a1 {
-  margin-right: 8px;
+  padding-left: 7px;
 }
 .vote .a-1:hover {
   color: #9992c9;
@@ -709,6 +718,19 @@ input[type="text"]:valid + #q_ctrl input {
 .vote .a1.voted,
 .vote .a2.voted {
   color: #ce3d3d !important;
+}
+.vote .a2,
+.vote .a2.voted + .a1 {
+  display: none;
+}
+.vote .a2.voted {
+  display: inline;
+}
+.vote .a1.voted:hover:before {
+  position: absolute;
+  left: 0;
+  content: "‹";
+  color: #e29280;
 }
 .expanded {
   background: #f5e6c3;

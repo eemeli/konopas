@@ -114,7 +114,7 @@ Server.prototype.vote = function(id, v, self) {
 		var v0 = self.my_votes_data[id];
 		if (v0) --self.pub_votes_data[id][(v0 < 0) ? 0 : v0];
 	}
-	if (self.my_votes_data[id] == v) v = 0;
+	if (self.my_votes_data[id] == v) v = (v == 1) ? 2 : 0;
 	console.log('server vote ' + id + ' ' + v);
 
 	self.my_votes_data[id] = v;
