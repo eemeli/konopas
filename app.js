@@ -348,7 +348,7 @@ function show_prog_list(ls) {
 		list.push('<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
 			+ '<div class="item" id="p' + ls[i].id + '">'
 				+ '<div class="title">' + ls[i].title + '</div>'
-				+ _item_loc(ls[i]) + '<div class="pub_votes"></div>'
+				+ _item_loc(ls[i]) + '<div class="votes" id="v' + ls[i].id + '"></div>'
 				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
 			+ '</div>');
 	}
@@ -368,7 +368,7 @@ function show_prog_list(ls) {
 		var id = items[i].id.substr(1);
 		if (server) {
 			server.show_pub_votes(id);
-			if (id in server.my_votes_data) server.show_votes(id, items[i]);
+			if (id in server.my_votes_data) server.show_my_vote(id, server.my_votes_data[id]);
 		}
 	}
 
@@ -1030,7 +1030,7 @@ if (EL("scroll_link")) {
 	var prev_scroll = { "i": 0, "top": 0 };
 	var n = 0;
 	if (ko.full_version) { window.onscroll = function() {
-		var st = document.body.scrollTop || document.documentElement.scrollTop;
+		var st = document.documentElement.scrollTop || document.body.scrollTop;
 
 		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 

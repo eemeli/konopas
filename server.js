@@ -83,27 +83,21 @@ Server.prototype.set_prog = function(star_list) {
 }
 
 Server.prototype.show_my_vote = function(id, v) {
-	var mv_el = document.getElementById('v' + id);
-	if (mv_el) {
-		var items = mv_el.getElementsByTagName('a');
-		for (var i = 0, l = items.length; i < l; ++i) {
-			var cl = items[i].classList;
-			if (cl.contains('a' + v)) cl.add("voted");
-			else cl.remove("voted");
-		}
-	}
-	var p_el = document.getElementById('p' + id);
-	if (p_el) {
-		var spans = p_el.getElementsByTagName('span');
-		for (var i = 0, l = spans.length; i < l; ++i) {
-			var cl = spans[i].classList;
-			if (cl.contains('pv_pos')) {
-				if (v > 0) cl.add('voted');
-				else cl.remove('voted');
-			} else if (cl.contains('pv_neg')) {
-				if (v < 0) cl.add('voted');
-				else cl.remove('voted');
+	var v_el = document.getElementById('v' + id);
+	if (!v_el) return;
+
+	var a = v_el.getElementsByTagName('a');
+	for (var i = 0, l = a.length; i < l; ++i) {
+		var cl = a[i].classList;
+		if (cl.contains('v_pos')) {
+			switch (v) {
+				case  2:  cl.add('voted');     cl.add('v2');     a[i].title = "doubleplusgood";  break;
+				case  1:  cl.add('voted');     cl.remove('v2');  a[i].title = "good";            break;
+				default:  cl.remove('voted');  cl.remove('v2');  a[i].title = "good";
 			}
+		} else if (cl.contains('v_neg')) {
+			if (v < 0)  cl.add('voted');
+			else        cl.remove('voted');
 		}
 	}
 }
@@ -114,7 +108,11 @@ Server.prototype.vote = function(id, v, self) {
 		var v0 = self.my_votes_data[id];
 		if (v0) --self.pub_votes_data[id][(v0 < 0) ? 0 : v0];
 	}
-	if (self.my_votes_data[id] == v) v = (v == 1) ? 2 : 0;
+	switch (self.my_votes_data[id]) {
+		case -1: if (v < 0) v = 0; break;
+		case  1: if (v > 0) v = 2; break;
+		case  2: if (v > 0) v = 0; break;
+	}
 	console.log('server vote ' + id + ' ' + v);
 
 	self.my_votes_data[id] = v;
@@ -133,9 +131,8 @@ Server.prototype.vote_click = function(ev, self) {
 	var bubble = false;
 	var v = 0;
 	switch (ev.target.classList[0]) {
-		case 'a2':  v =  2; break;
-		case 'a1':  v =  1; break;
-		case 'a-1': v = -1; break;
+		case 'v_pos': v =  1; break;
+		case 'v_neg': v = -1; break;
 	}
 	if (v) {
 		var p = ev.target.parentNode;
@@ -157,15 +154,8 @@ Server.prototype.vote_click = function(ev, self) {
 
 Server.prototype.show_votes = function(id, el) {
 	if (!this.connected) return;
+
 	var v_id = 'v' + id;
-	if (!document.getElementById(v_id)) {
-		el = el || document.getElementById('p' + id);
-		if (el) el.innerHTML += '<div class="vote" id="' + v_id + '">'
-			+ '<a class="a2" title="doubleplusgood">&laquo;</a>'
-			+ '<a class="a1" title="good">&lsaquo;</a>'
-			+ '<a class="a-1" title="not so good">&rsaquo;</a>'
-			+ '</div>';
-	}
 	var v_el = document.getElementById(v_id);
 	if (v_el) {
 		var self = this;
@@ -175,12 +165,19 @@ Server.prototype.show_votes = function(id, el) {
 }
 
 Server.prototype.show_pub_votes = function(id) {
+	var v_el = document.getElementById('v' + id);
+	if (!v_el) return;
+
 	var v = this.pub_votes_data[id];
-	var p_el = v && document.getElementById('p' + id);
-	var pa = p_el && p_el.getElementsByClassName('pub_votes');
-	if (pa && pa.length) pa[0].innerHTML = (v[0] || v[1] || v[2])
-		? '<span class="pv_pos">+' + (v[1] + 2 * v[2]) + '</span> / <span class="pv_neg">-' + v[0] + '</span>'
-		: '';
+	if (v && (v[0] || v[1] || v[2])) {
+		v_el.classList.add("has_votes");
+	} else {
+		v_el.classList.remove("has_votes");
+		if (!v) v = [0, 0, 0];
+	}
+	v_el.innerHTML = '<a class="v_pos" title="good">' + '+' + (v[1] + 2 * v[2]) + '</a>'
+				   + ' / '
+				   + '<a class="v_neg" title="not so good">' + '-' + v[0] + '</a>';
 }
 
 Server.prototype.show_ical_link = function(p_el) {
@@ -246,6 +243,8 @@ Server.prototype.cb_ok = function(v) {
 			this.disconnect();
 			this.prog_data = {};
 			this.prog_server_mtime = 0;
+			this.my_votes_data = {};
+			this.my_votes_mtime = 0;
 			if (this.stars) {
 				this.stars.data = {};
 				this.stars.write();
@@ -322,7 +321,7 @@ Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
 	this.my_votes_mtime = v.mtime;
-	for (var id in v.votes) this.show_votes(id);
+	for (var id in v.votes) this.show_my_vote(id, v.votes[id]);
 }
 
 // callback for public vote data
