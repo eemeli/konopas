@@ -32,11 +32,9 @@ Server.prototype.disconnect = function() {
 }
 
 Server.prototype.logout = function(ev) {
-	ev = ev || window.event;
 	console.log("server logout");
 	server.exec('/logout');
-	ev.preventDefault();
-	return false;
+	(ev || window.event).preventDefault();
 }
 
 Server.prototype.error = function(msg, url, server_ptr) {
@@ -143,12 +141,10 @@ Server.prototype.vote_click = function(ev, self) {
 		}
 	}
 
-	if (bubble) return true;
-	else {
-		ev.preventDefault();
+	if (!bubble) {
 		ev.cancelBubble = true;
+		ev.preventDefault();
 		ev.stopPropagation();
-		return false;
 	}
 }
 
@@ -218,10 +214,10 @@ Server.prototype.exec = function(cmd) {
 	var script = document.createElement('script'),
 		done = false,
 		url = this.url(cmd),
-		server_ptr = this;
+		self = this;
 	script.src = url;
 	script.async = true;
-	script.onerror = function(ev) { server_ptr.error('', ev.target.src || window.event.target.src, server_ptr); };
+	script.onerror = function(ev) { self.error('', (ev || window.event).target.src, self); };
 
 	script.onload = script.onreadystatechange = function() {
 		if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
