@@ -20,8 +20,10 @@
 @page-margin: 8px;
 @side-width: 200px;
 @side-margin: 20px;
-@main-width: 600px;
 @time-width: 45px;
+@star-width: 40px;
+@main-width: 600px;
+@full-width: (@time-width + @star-width + @main-width);
 
 @icon-url: url('icons.png');
 .icon(@x, @y, @w, @h) {
@@ -84,12 +86,14 @@ a { color: @fg-plain; }
 .js-link { text-decoration: underline; cursor: pointer; }
 
 form { position: relative; clear: left; z-index: 1; }
-input { margin: 0 4px 4px 0; border: @border-light; border-radius: @border-radius; padding: 3px; background: @bg-plain; }
-input[type="text"] {
-	border: @border-light; box-shadow: none !important;
-	&:valid { background: @bg-highlight; }
-	&:valid + #q_ctrl input { border-color: @fg-highlight; }
+input {
+	margin: 0 4px 4px 0;
+	border: @border-light;
+	border-radius: @border-radius;
+	padding: 3px;
+	background: @bg-plain;
 }
+input[type="text"] { box-shadow: none !important; }
 
 
 .disabled { color: @fg-lighter !important; cursor: auto !important; }
@@ -98,6 +102,7 @@ input[type="text"] {
 	position: relative;
 	z-index: 3;
 	clear: left;
+	max-width: @full-width;
 	background: @bg-plain;
 	color: @fg-light;
 	font-size: 0.8em;
@@ -146,11 +151,14 @@ input[type="text"] {
 }
 
 @import "head.less";
+@import "item.less";
+
+#main p { max-width: @main-width; }
+
+.view { display: none; }
 
 @import "next.less";
 @import "star.less";
 @import "prog.less";
 @import "part.less";
 @import "info.less";
-
-@import "item.less";

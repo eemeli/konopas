@@ -9,6 +9,8 @@
 
 #q, #q_ctrl { display: block; float: left; }
 #q_ctrl input, #q_fix { cursor: pointer; }
+#q:valid { background: @bg-highlight; }
+#q:valid + #q_ctrl input { border-color: @fg-highlight; }
 #q_fix b { color: @fg-highlight; }
 #q_clear { margin-left: 14px !important; }
 
@@ -16,7 +18,7 @@
 
 #filter_sum {
 	clear: left;
-	max-width: @main-width;
+	max-width: (@full-width - 24px);
 	margin: 4px 0 0 @side-margin;
 	border: @border-normal;
 	border-radius: @border-radius;
