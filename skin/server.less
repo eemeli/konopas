@@ -1,0 +1,37 @@
+#login-links {
+	margin-top: 1em;
+	span { text-decoration: underline; cursor: pointer; }
+	.popup { top: 2em; }
+	ul { margin: 5px 0; padding: 0; }
+	li { line-height: 1.0; padding-bottom: 5px; text-align: center; }
+}
+
+#server_info {
+	float: right;
+	top: 1em;
+	color: @fg-lighter;
+	a { color: @fg-light; }
+	a:hover { color: @fg-plain; }
+}
+#server_user {
+	display: inline-block;
+	padding: 0 10px 10px 10px;
+}
+#server_error {
+	display: none;
+	position: fixed;
+	z-index: 6;
+	top: 2px;
+	left: 50%;
+	> div {
+		position: relative;
+		left: -50%;
+		background: #ffbaba;
+		color: #d80000;
+		border: @border-normal;
+		border-radius: @border-radius;
+		padding: 2px;
+		cursor: pointer;
+		code { font-size: 1.2em; }
+	}
+}
