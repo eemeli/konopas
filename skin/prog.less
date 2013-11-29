@@ -1,0 +1,25 @@
+.prog #prog_view { display: block; }
+
+#prog_filters {
+	margin-left: (-1 * @side-margin);
+	ul { position: relative; display: block; float: left; margin: 0 0 @side-margin 0; z-index: 2; }
+	li { line-height: 1.0; padding-bottom: 5px; }
+	input { margin: 0 4px 0 0; }
+}
+
+#q, #q_ctrl { display: block; float: left; }
+#q_ctrl input, #q_fix { cursor: pointer; }
+#q_fix b { color: @fg-highlight; }
+#q_clear { margin-left: 14px !important; }
+
+#tag2-list ul { right: 0; top: 18px; }
+
+#filter_sum {
+	clear: left;
+	max-width: @main-width;
+	margin: 4px 0 0 @side-margin;
+	border: @border-normal;
+	border-radius: @border-radius;
+	padding: 10px;
+	background: @bg-highlight-more;
+}

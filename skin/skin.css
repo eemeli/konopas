@@ -474,6 +474,19 @@ input[type="text"]:valid + #q_ctrl input {
 #q_clear {
   margin-left: 14px !important;
 }
+#tag2-list ul {
+  right: 0;
+  top: 18px;
+}
+#filter_sum {
+  clear: left;
+  max-width: 600px;
+  margin: 4px 0 0 20px;
+  border: 2px solid #800000;
+  border-radius: 5px;
+  padding: 10px;
+  background: #f0d79d;
+}
 .part #part_view {
   display: block;
 }
@@ -536,19 +549,6 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .part_img img {
   width: 200px;
-}
-#tag2-list ul {
-  right: 0;
-  top: 18px;
-}
-#filter_sum {
-  clear: left;
-  max-width: 600px;
-  margin: 4px 0 0 20px;
-  border: 2px solid #800000;
-  border-radius: 5px;
-  padding: 10px;
-  background: #f0d79d;
 }
 .part_list_link {
   display: block;
