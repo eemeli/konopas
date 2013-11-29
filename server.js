@@ -218,61 +218,6 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 	}
 }
 
-Server.prototype.show_comments = function(id, self) {
-	self = self || this;
-	var c_el = document.getElementById('c' + id);
-	if (!c_el) return;
-
-	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
-
-	var c = self.pub_comments[id];
-
-	if (typeof c == 'undefined') {
-		var ac = c_el.previousSibling;
-		if (ac && (ac.tagName.toLowerCase() == 'a')) {
-			ac.classList.remove('js-link');
-			ac.textContent = 'Loading...';
-		}
-		//c_el.style.display = 'block';
-		//if (f_el.style.display == 'none') af.style.display = 'block';
-		self.exec('comments?id=' + id);
-		return;
-	}
-
-	var n_comments = 0;
-	if (c) for (var i in c) {
-		++n_comments;
-		var d = document.createElement('div');
-		d.className = 'comment';
-		d.innerHTML = '<b>' + c[i].name + '</b> posted:<br>' + c[i].text + '<br><i>on ' + c[i].ctime + '</i>';
-		c_el.appendChild(d);
-	}
-
-	if (self.pub_data) {
-		if (self.pub_data[id]) self.pub_data[id][3] = n_comments;
-		else self.pub_data[id] = [0, 0, 0, n_comments];
-	}
-
-	var ac = c_el.previousSibling;
-	if (ac && (ac.tagName.toLowerCase() == 'a')) {
-		ac.textContent = 'Hide comments';
-		ac.classList.add('js-link');
-		ac.style.display = n_comments ? 'block' : 'none';
-	} else {
-		console.error('ac lookup fail!');
-		console.log(c_el);
-		console.log(ac);
-	}
-
-	if (!n_comments) {
-		var f_el = document.getElementById('f' + id);
-		if (f_el && (f_el.style.display == 'none')) {
-			var af = f_el.previousSibling;
-			if (af && (af.tagName.toLowerCase() == 'a')) af.style.display = 'block';
-		}
-	}
-}
-
 
 Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 	ev = ev || window.event;
@@ -283,6 +228,75 @@ Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 	var af = ev.target;
 	af.style.display = 'none';
 	self.show_comment_form(id, af, f_el, self);
+}
+
+
+Server.prototype.make_comment_div = function(c) {
+	var d = document.createElement('div');
+	d.className = 'comment';
+
+	var n = document.createElement('span');
+	n.className = 'comment-author';
+	n.textContent = c.name;
+	d.appendChild(n);
+
+	var t = document.createElement('span');
+	t.className = 'comment-time';
+	t.textContent = c.ctime;
+	d.appendChild(t);
+
+	var m = document.createElement('div');
+	m.innerHTML = c.text;
+	d.appendChild(m);
+
+	return d;
+}
+
+Server.prototype.show_comments = function(id, self) {
+	self = self || this;
+	var c_el = document.getElementById('c' + id);
+	if (!c_el) return;
+
+	var ac = c_el.previousSibling;
+	if (ac && (ac.tagName.toLowerCase() != 'a')) ac = false;
+
+	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
+
+	var c = self.pub_comments[id];
+
+	if (typeof c == 'undefined') {
+		if (ac) {
+			ac.classList.remove('js-link');
+			ac.textContent = 'Loading...';
+		}
+		self.exec('comments?id=' + id);
+		return;
+	}
+
+	var n_comments = 0;
+	if (c) for (var i in c) {
+		++n_comments;
+		c_el.appendChild(self.make_comment_div(c[i]));
+	}
+
+	if (self.pub_data) {
+		if (self.pub_data[id]) self.pub_data[id][3] = n_comments;
+		else self.pub_data[id] = [0, 0, 0, n_comments];
+	}
+
+	if (ac) {
+		ac.textContent = 'Hide comments';
+		ac.classList.add('js-link');
+		ac.style.display = n_comments ? 'block' : 'none';
+	}
+
+	if (!n_comments) {
+		var f_el = document.getElementById('f' + id);
+		if (f_el && (f_el.style.display == 'none')) {
+			var af = f_el.previousSibling;
+			if (af && (af.tagName.toLowerCase() == 'a')) af.style.display = 'block';
+		}
+	}
 }
 
 
@@ -330,7 +344,8 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 	f_el.style.display = 'block';
 }
 
-Server.prototype.make_comments_div = function(id) {
+
+Server.prototype.make_comments_wrap = function(id) {
 	var ac = document.createElement('a');
 	ac.className = 'js-link discreet';
 
@@ -373,7 +388,7 @@ Server.prototype.show_extras = function(id, p_el) {
 	var self = this;
 
 	if (!document.getElementById('c' + id)) {
-		p_el.appendChild(self.make_comments_div(id));
+		p_el.appendChild(self.make_comments_wrap(id));
 	}
 
 	var v_id = 'v' + id;
