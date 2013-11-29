@@ -653,6 +653,9 @@ input[type="text"]:valid + #q_ctrl input {
 .extra div {
   float: none;
 }
+.extra p {
+  margin-bottom: 0;
+}
 .extra .item-people {
   max-width: 600px;
   margin: 1em 0;
@@ -718,6 +721,9 @@ input[type="text"]:valid + #q_ctrl input {
 .expanded .item_star {
   background: #f0d79d;
 }
+.expanded .item {
+  padding-bottom: 1em;
+}
 .expanded .title {
   font-weight: 500;
 }
@@ -728,12 +734,35 @@ input[type="text"]:valid + #q_ctrl input {
   display: none;
 }
 .expanded .extra,
-.expanded .vote {
+.expanded .vote,
+.expanded .comments_wrap {
   display: block;
 }
-.item-tags {
-  color: #736f68;
+.item-tags,
+.show_comments {
   font-size: 0.875em;
+  color: #736f68;
+}
+.comments_wrap {
+  display: none;
+  margin-top: 1em;
+}
+.add_comment {
+  display: block;
+  max-width: 600px;
+  margin-bottom: 1em;
+}
+.add_comment textarea {
+  width: 100%;
+  width: calc(100% - 6px);
+}
+.add_comment input[type=submit] {
+  float: right;
+  margin: 0;
+}
+.add_comment label {
+  display: block;
+  clear: left;
 }
 a {
   color: #000000;

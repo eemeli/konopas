@@ -13,7 +13,8 @@ function Server(id, stars, opt) {
 	this.prog_server_mtime = 0;
 	this.my_votes_data = {};
 	this.my_votes_mtime = 0;
-	this.pub_votes_data = {};
+	this.pub_data = {};
+	this.pub_comments = {};
 	this.el = document.getElementById(this.el_id);
 	this.err_el = false;
 
@@ -102,9 +103,9 @@ Server.prototype.show_my_vote = function(id, v) {
 
 Server.prototype.vote = function(id, v, self) {
 	self = self || this;
-	if (self.pub_votes_data) {
+	if (self.pub_data) {
 		var v0 = self.my_votes_data[id];
-		if (v0) --self.pub_votes_data[id][(v0 < 0) ? 0 : v0];
+		if (v0) --self.pub_data[id][(v0 < 0) ? 0 : v0];
 	}
 	switch (self.my_votes_data[id]) {
 		case -1: if (v < 0) v = 0; break;
@@ -114,9 +115,9 @@ Server.prototype.vote = function(id, v, self) {
 	console.log('server vote ' + id + ' ' + v);
 
 	self.my_votes_data[id] = v;
-	if (v && self.pub_votes_data) {
-		if (!(id in self.pub_votes_data)) self.pub_votes_data[id] = [0, 0, 0];
-		++self.pub_votes_data[id][(v < 0) ? 0 : v];
+	if (v && self.pub_data) {
+		if (!(id in self.pub_data)) self.pub_data[id] = [0, 0, 0, 0];
+		++self.pub_data[id][(v < 0) ? 0 : v];
 	}
 	self.show_pub_votes(id);
 	self.show_my_vote(id, v);
@@ -148,15 +149,70 @@ Server.prototype.vote_click = function(ev, self) {
 	}
 }
 
-Server.prototype.show_votes = function(id, el) {
+Server.prototype.comment_click = function(ev, id, show_comments, show_form, self) {
+	ev = ev || window.event;
+	var c = document.getElementById('c' + id);
+
+	if (c) c.style.display = show_comments ? 'block' : 'none';
+	self.comment_link_setup(ev.target, id, !show_comments, self);
+
+	if (show_comments) {
+		self.exec('comments?id=' + id);
+		if (show_form) self.show_comment_form(id, c, self);
+	}
+
+	ev.cancelBubble = true;
+	ev.preventDefault();
+	ev.stopPropagation();
+}
+
+Server.prototype.comment_link_setup = function(a, id, to_show, self) {
+	if (to_show) {
+		var p = self.pub_data[id];
+		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
+		switch (n_comments) {
+			case  0: a.textContent = 'Add a comment...'; break;
+			case  1: a.textContent = 'Show 1 comment...'; break;
+			default: a.textContent = 'Show ' + n_comments + ' comments...';
+		}
+		a.onclick = function(ev) { self.comment_click(ev, id, true, (n_comments == 0), self); };
+	} else {
+		a.textContent = 'Hide comments';
+		a.onclick = function(ev) { self.comment_click(ev, id, false, false, self); };
+	}
+}
+
+Server.prototype.show_extras = function(id, p_el) {
 	if (!this.connected) return;
 
-	var v_id = 'v' + id;
-	var v_el = document.getElementById(v_id);
-	if (v_el) {
-		var self = this;
-		v_el.onclick = function(ev) { self.vote_click(ev, self); };
+	var self = this;
+
+	var c_id = 'c' + id;
+	if (!document.getElementById(c_id)) {
+		var h = document.createElement('div');
+		h.className = 'comments_wrap';
+
+		var a = document.createElement('a');
+		a.className = 'js-link show_comments';
+		self.comment_link_setup(a, id, true, self);
+
+		var c = document.createElement('div');
+		c.className = 'comments';
+		c.id = c_id;
+		c.style.display = 'none';
+
+		var pc = document.createElement('div');
+		pc.className = 'prev_comments';
+		c.appendChild(pc);
+
+		h.appendChild(a);
+		h.appendChild(c);
+		p_el.appendChild(h);
 	}
+
+	var v_id = 'v' + id;
+	var v = document.getElementById(v_id);
+	if (v) v.onclick = function(ev) { self.vote_click(ev, self); };
 	this.show_my_vote(id, this.my_votes_data[id]);
 }
 
@@ -164,7 +220,7 @@ Server.prototype.show_pub_votes = function(id) {
 	var v_el = document.getElementById('v' + id);
 	if (!v_el) return;
 
-	var v = this.pub_votes_data[id];
+	var v = this.pub_data[id];
 	if (v && (v[0] || v[1] || v[2])) {
 		v_el.classList.add("has_votes");
 	} else {
@@ -174,6 +230,103 @@ Server.prototype.show_pub_votes = function(id) {
 	v_el.innerHTML = '<a class="v_pos" title="good">' + '+' + (v[1] + 2 * v[2]) + '</a>'
 				   + ' / '
 				   + '<a class="v_neg" title="not so good">' + '-' + v[0] + '</a>';
+}
+
+Server.prototype.show_comments = function(id) {
+	var c_el = document.getElementById('c' + id);
+	if (!c_el) return;
+	var self = this;
+
+	c_el.innerHTML = '';
+
+	var c = this.pub_comments[id];
+	if (c) for (var i in c) {
+		var d = document.createElement('div');
+		d.className = 'comment';
+		d.innerHTML = '<b>' + c[i].name + '</b> posted:<br>' + c[i].text + '<br><i>on ' + c[i].ctime + '</i>';
+		c_el.appendChild(d);
+	}
+
+	var a = document.createElement('a');
+	a.className = 'js-link show_comments';
+	a.textContent = 'Add a comment...';
+	a.onclick = function(ev) {
+		a.style.display = 'none';
+		self.show_comment_form(id, c_el, self);
+
+		ev = ev || window.event;
+		ev.cancelBubble = true;
+		ev.preventDefault();
+		ev.stopPropagation();
+	};
+	c_el.appendChild(a);
+}
+
+Server.prototype.post_comment = function(f, id, self) {
+	var url = self.url('comment');
+	var data = 'id=' + encodeURIComponent(id)
+	      + '&anon=' + (f.anon.checked ? '1' : '0')
+	      + '&hide=' + (f.hide.checked ? '1' : '0')
+	        + '&text=' + encodeURIComponent(f.text.value);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', url, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function () {
+		// do something to response
+		console.log(this.responseText);
+	};
+	xhr.send(data);
+}
+
+Server.prototype.onmessage = function(ev) {
+	ev = ev || window.event;
+	console.log(ev);
+	alert(ev.data);
+}
+
+Server.prototype.show_comment_form = function(id, c, self) {
+	var f_id = 'f' + id;
+	var f = document.getElementById(f_id);
+	if (!f) {
+		if (!document.getElementById('post_comment_iframe')) {
+			var fi = document.createElement('iframe');
+			fi.id = fi.name = 'post_comment_iframe';
+			fi.src = 'javascript:false';
+			fi.style.display = 'none';
+			document.body.appendChild(fi);
+			window.onmessage = self.onmessage;
+		}
+		f = document.createElement('form');
+		f.id = f_id;
+		f.className = 'add_comment';
+		f.method = 'post';
+		f.action = self.url('add_comment?id=' + encodeURIComponent(id));
+		f.target = 'post_comment_iframe';
+		f.innerHTML =
+			  '<textarea name="text" rows="4" placeholder="' + self.connected[0] + ' posted..."></textarea>'
+			+ '<input type="submit" name="submit" value="Post comment">'
+			+ '<label><input type="checkbox" name="anon" value="1"> Post anonymously</label>'
+			+ '<label><input type="checkbox" name="hide" value="1"> Hide from public</label>';
+		f.onsubmit = function(ev) {
+			f.submit.value = 'Posting...';
+			f.submit.disabled = true;
+			if (f.anon.checked) { f.action += '&anon=1'; f.anon.disabled = true; }
+			if (f.hide.checked) { f.action += '&hide=1'; f.hide.disabled = true; }
+		};
+		f.onclick = function(ev) {
+			ev = ev || window.event;
+			ev.cancelBubble = true;
+			ev.stopPropagation();
+		};
+		c.appendChild(f);
+	} else {
+		f.submit.value = 'Post comment';
+		f.submit.disabled = false;
+		f.anon.disabled = false;
+		f.hide.disabled = false;
+	}
+	f.style.display = 'block';
 }
 
 Server.prototype.show_ical_link = function(p_el) {
@@ -275,7 +428,7 @@ Server.prototype.cb_fail = function(v) {
 // callback for setting logged-in info
 Server.prototype.cb_info = function(v) {
 	console.log("server info: " + JSON.stringify(v));
-	this.connected = true;
+	this.connected = [v.name, v.email];
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
 	if (v.ical) {
@@ -321,10 +474,17 @@ Server.prototype.cb_my_votes = function(v) {
 }
 
 // callback for public vote data
-Server.prototype.cb_pub_votes = function(v) {
-	console.log("server pub_votes: " + JSON.stringify(v));
-	this.pub_votes_data = v;
-	for (var id in v) this.show_pub_votes(id);
+Server.prototype.cb_pub_data = function(p) {
+	console.log("server pub_data: " + JSON.stringify(p));
+	this.pub_data = p;
+	for (var id in p) this.show_pub_votes(id);
+}
+
+// callback for public vote data
+Server.prototype.cb_show_comments = function(id, c) {
+	console.log("server show_comments (" + id + "): " + JSON.stringify(c));
+	this.pub_comments[id] = c;
+	this.show_comments(id);
 }
 
 Server.prototype.cb_ical_link = function(url) {

@@ -322,7 +322,7 @@ function show_info(item, id) {
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	item.innerHTML += '<div class="extra" id="e' + id + '">' + html + '</div>';
-	if (server) server.show_votes(id, item);
+	if (server) server.show_extras(id, item);
 }
 
 function show_prog_list(ls) {

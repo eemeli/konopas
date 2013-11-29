@@ -44,6 +44,7 @@
 .font-normal () { font-family: 'Roboto', sans-serif; font-weight: 300; }
 .font-heavy () { font-weight: 500; }
 .font-title () { font-family: 'Oswald'; font-weight: 400; }
+.font-small () { font-size: 0.875em; }
 
 
 @font-face {
@@ -339,7 +340,7 @@ input[type="text"] {
 	.loc, > .item-people {
 		display: inline-block;
 		color: @fg-light;
-		font-size: 0.875em;
+		.font-small();
 		a { color: @fg-light; }
 	}
 }
@@ -347,6 +348,7 @@ input[type="text"] {
 	display: none;
 	clear: left;
 	div { float: none; }
+	p { margin-bottom: 0; }
 	.item-people { max-width: @main-width; margin: 1em 0; }
 }
 
@@ -354,7 +356,7 @@ input[type="text"] {
 	display: none;
 	margin-left: 10px !important;
 	color: @fg-lighter;
-	font-size: 0.875em;
+	.font-small();
 	a { display: inline-block; color: @fg-lighter; }
 }
 .has_votes, .expanded .votes { display: inline-block; }
@@ -382,13 +384,30 @@ input[type="text"] {
 .expanded {
 	background: @bg-highlight;
 	.item_star { background: @bg-highlight-more; }
+	.item { padding-bottom: 1em; }
 	.title { .font-heavy; }
 	.loc { color: @fg-light-in-box !important; }
 	.item > .item-people { display: none; }
-	.extra, .vote { display: block; }
+	.extra, .vote, .comments_wrap { display: block; }
 }
 
-.item-tags { color: @fg-light-in-box; font-size: 0.875em; }
+.item-tags, .show_comments { .font-small(); color: @fg-light-in-box; }
+
+.comments_wrap {
+	display: none;
+	margin-top: 1em;
+}
+.add_comment {
+	display: block;
+	max-width: @main-width;
+	margin-bottom: 1em;
+	textarea { width: 100%; width: ~"calc(100% - 6px)"; }
+	input[type=submit] { float: right; margin: 0; }
+	label { display: block; clear: left; }
+}
+
+
+
 
 a { color: @fg-plain; }
 .js-link { text-decoration: underline; cursor: pointer; }
