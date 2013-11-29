@@ -46,8 +46,7 @@ Server.prototype.error = function(msg, url, self) {
 		msg = 'The command "<code>' + cmd + '</code>" failed.';
 	}
 	if (!self.err_el) {
-		var el = document.createElement('div');
-		el.id = self.err_el_id;
+		var el = _new_elem('div', self.err_el_id);
 		el.title = 'Click to close';
 		el.onclick = function(ev) { self.err_el.style.display = 'none'; };
 		document.body.appendChild(el);
@@ -232,20 +231,16 @@ Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 
 
 Server.prototype.make_comment_div = function(c) {
-	var d = document.createElement('div');
-	d.className = 'comment';
+	var d = _new_elem('div', '', 'comment');
 
-	var n = document.createElement('span');
-	n.className = 'comment-author';
-	n.textContent = c.name;
+	var n = _new_elem('span', '', 'comment-author', c.name);
 	d.appendChild(n);
 
-	var t = document.createElement('span');
-	t.className = 'comment-time';
-	t.textContent = c.ctime;
+	var t = _new_elem('span', '', 'comment-time', c.ctime);
+	//t.textContent = c.ctime;
 	d.appendChild(t);
 
-	var m = document.createElement('div');
+	var m = _new_elem('div');
 	m.innerHTML = c.text;
 	d.appendChild(m);
 
@@ -346,20 +341,10 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 
 
 Server.prototype.make_comments_wrap = function(id) {
-	var ac = document.createElement('a');
-	ac.className = 'js-link discreet';
-
-	var c_el = document.createElement('div');
-	c_el.className = 'comments';
-	c_el.id = 'c' + id;
-
-	var af = document.createElement('a');
-	af.className = 'js-link discreet';
-	af.textContent = 'Add a comment';
-
-	var f_el = document.createElement('form');
-	f_el.className = 'empty';
-	f_el.id = 'f' + id;
+	var ac = _new_elem('a', '', 'js-link discreet');
+	var c_el = _new_elem('div', 'c' + id, 'comments');
+	var af = _new_elem('a', '', 'js-link discreet', 'Add a comment');
+	var f_el = _new_elem('form', 'f' + id, 'empty');
 
 	var self = this;
 	ac.onclick = function(ev) { self.onclick_show_comments(ev, id, c_el, af, f_el, self); };
@@ -369,8 +354,7 @@ Server.prototype.make_comments_wrap = function(id) {
 	ac.textContent = 'Hide';
 	ac.click();
 
-	var d = document.createElement('div');
-	d.className = 'comments-wrap';
+	var d = _new_elem('div', '', 'comments-wrap');
 	d.appendChild(ac);
 	d.appendChild(c_el);
 	d.appendChild(af);
@@ -589,3 +573,17 @@ Server.prototype.cb_ical_link = function(url) {
 	localStorage.setItem('konopas.'+this.id+'.ical_link', url);
 	this.show_ical_link(false);
 }
+
+
+
+// ------------------------------------------------------------------------------------------------ util
+
+function _new_elem(tag, id, cl, text, hide) {
+	var e = document.createElement(tag);
+	if (id) e.id = id;
+	if (cl) e.className = cl;
+	if (text) e.textContent = text;
+	if (hide) e.style.display = 'none';
+	return e;
+}
+
