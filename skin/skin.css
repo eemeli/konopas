@@ -527,9 +527,6 @@ input[type="text"]:valid + #q_ctrl input {
   padding: 10px;
   background: #f0d79d;
 }
-.ls {
-  clear: both;
-}
 .part_list_link {
   display: block;
   text-decoration: none;
@@ -566,6 +563,55 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .linklist a:hover {
   text-decoration: underline;
+}
+a {
+  color: #000000;
+}
+.js-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.info #time,
+.info #scroll {
+  display: none !important;
+}
+#info_view h3 {
+  margin: 20px 0 5px 0;
+  border-bottom: 2px solid #ccc5bb;
+  padding-bottom: 2px;
+}
+#info_view h3 + p {
+  margin-top: 5px;
+}
+#info_view h2 {
+  font-size: 2.0em;
+  margin-top: 40px;
+  border-bottom: 2px solid #800000;
+}
+#info_view img {
+  width: 600px;
+  margin: 5px 0;
+}
+#info_view table {
+  width: 600px;
+}
+#info_view tr:hover {
+  background: #f5e6c3;
+}
+#info_view td {
+  text-align: center;
+}
+#info_view td:first-child {
+  text-align: left;
+}
+#info_view h3 {
+  margin-bottom: 5px;
+}
+#info_view ol {
+  margin: 5px 0;
+}
+.ls {
+  clear: both;
 }
 .new_day {
   padding-top: 40px;
@@ -678,6 +724,29 @@ input[type="text"]:valid + #q_ctrl input {
 .v_neg.voted {
   color: #9e9ee7;
 }
+.expanded {
+  background: #f5e6c3;
+}
+.expanded .item_star {
+  background: #f0d79d;
+}
+.expanded .item {
+  padding-bottom: 1em;
+}
+.expanded .title {
+  font-weight: 500;
+}
+.expanded .loc {
+  color: #736f68 !important;
+}
+.expanded .item > .item-people {
+  display: none;
+}
+.expanded .extra,
+.expanded .vote,
+.expanded .comments_wrap {
+  display: block;
+}
 .expanded .votes {
   color: #736f68 !important;
 }
@@ -713,29 +782,6 @@ input[type="text"]:valid + #q_ctrl input {
   color: #3d3dce;
   font-weight: 500;
 }
-.expanded {
-  background: #f5e6c3;
-}
-.expanded .item_star {
-  background: #f0d79d;
-}
-.expanded .item {
-  padding-bottom: 1em;
-}
-.expanded .title {
-  font-weight: 500;
-}
-.expanded .loc {
-  color: #736f68 !important;
-}
-.expanded .item > .item-people {
-  display: none;
-}
-.expanded .extra,
-.expanded .vote,
-.expanded .comments_wrap {
-  display: block;
-}
 .item-tags,
 .show_comments {
   font-size: 0.875em;
@@ -761,50 +807,4 @@ input[type="text"]:valid + #q_ctrl input {
 .add_comment label {
   display: block;
   clear: left;
-}
-a {
-  color: #000000;
-}
-.js-link {
-  text-decoration: underline;
-  cursor: pointer;
-}
-.info #time,
-.info #scroll {
-  display: none !important;
-}
-#info_view h3 {
-  margin: 20px 0 5px 0;
-  border-bottom: 2px solid #ccc5bb;
-  padding-bottom: 2px;
-}
-#info_view h3 + p {
-  margin-top: 5px;
-}
-#info_view h2 {
-  font-size: 2.0em;
-  margin-top: 40px;
-  border-bottom: 2px solid #800000;
-}
-#info_view img {
-  width: 600px;
-  margin: 5px 0;
-}
-#info_view table {
-  width: 600px;
-}
-#info_view tr:hover {
-  background: #f5e6c3;
-}
-#info_view td {
-  text-align: center;
-}
-#info_view td:first-child {
-  text-align: left;
-}
-#info_view h3 {
-  margin-bottom: 5px;
-}
-#info_view ol {
-  margin: 5px 0;
 }
