@@ -86,6 +86,9 @@ a { color: @fg-plain; }
 
 @import "head.less";
 
+.next #next_view, .star #star_view, .prog #prog_view, .part #part_view, .info #info_view { display: block; }
+.filters, #part_view, .hint { position: relative; z-index: 3; background: @bg-plain; padding-top: 0; }
+
 
 #login-links {
 	margin-top: 1em;
@@ -124,9 +127,6 @@ a { color: @fg-plain; }
 		code { font-size: 1.2em; }
 	}
 }
-
-.view { display: none; }
-.next #next_view, .star #star_view, .prog #prog_view, .part #part_view, .info #info_view { display: block; }
 
 .filters {
 	display: none; clear: both; padding: 20px 0;
@@ -265,3 +265,5 @@ input[type="text"] {
 
 
 @import "item.less";
+
+.star #prog_ls .new_day:first-child { padding-top: 20px; }

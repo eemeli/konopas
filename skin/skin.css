@@ -102,10 +102,7 @@ a {
   color: #ccc5bb;
   text-decoration: none;
 }
-#banner,
-.filters,
-#part_view,
-.hint {
+#banner {
   position: relative;
   z-index: 3;
   background: #ffffff;
@@ -149,6 +146,9 @@ a {
 }
 #main p {
   max-width: 600px;
+}
+.view {
+  display: none;
 }
 @media (max-width: 699px) {
   #time,
@@ -233,6 +233,21 @@ a {
     right: 10px;
   }
 }
+.next #next_view,
+.star #star_view,
+.prog #prog_view,
+.part #part_view,
+.info #info_view {
+  display: block;
+}
+.filters,
+#part_view,
+.hint {
+  position: relative;
+  z-index: 3;
+  background: #ffffff;
+  padding-top: 0;
+}
 #login-links {
   margin-top: 1em;
 }
@@ -286,16 +301,6 @@ a {
 }
 #server_error > div code {
   font-size: 1.2em;
-}
-.view {
-  display: none;
-}
-.next #next_view,
-.star #star_view,
-.prog #prog_view,
-.part #part_view,
-.info #info_view {
-  display: block;
 }
 .filters {
   display: none;
@@ -652,9 +657,6 @@ input[type="text"]:valid + #q_ctrl input {
   background: transparent -ms-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
   background: transparent linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
 }
-.star #prog_ls .new_day:first-child {
-  padding-top: 20px;
-}
 .item_frame {
   position: relative;
   margin: 0 0 10px 45px;
@@ -819,4 +821,7 @@ input[type="text"]:valid + #q_ctrl input {
 .add_comment label {
   display: block;
   clear: left;
+}
+.star #prog_ls .new_day:first-child {
+  padding-top: 20px;
 }
