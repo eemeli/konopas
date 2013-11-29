@@ -13,6 +13,7 @@ function Server(id, stars, opt) {
 	this.prog_server_mtime = 0;
 	this.my_votes_data = {};
 	this.my_votes_mtime = 0;
+	this.vote_timers = {};
 	this.pub_data = {};
 	this.pub_comments = {};
 	this.el = document.getElementById(this.el_id);
@@ -143,7 +144,10 @@ Server.prototype.vote = function(id, v, self) {
 	}
 	self.show_pub_votes(id);
 	self.show_my_vote(id, v);
-	self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
+	if (self.vote_timers[id]) window.clearTimeout(self.vote_timers[id]);
+	self.vote_timers[id] = window.setTimeout(function() {
+		self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
+	}, 1000);
 }
 
 Server.prototype.vote_click = function(ev, self) {
