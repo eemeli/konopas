@@ -378,7 +378,7 @@ input[type="text"] {
   cursor: pointer;
 }
 .item > div {
-  margin-left: 10px;
+  margin: 0 10px;
 }
 .item .title {
   margin: 3px 0 3px 10px;
@@ -426,6 +426,11 @@ input[type="text"] {
 .v_neg.voted {
   color: #9e9ee7;
 }
+.num-comments {
+  display: inline-block;
+  color: #ccc5bb;
+  font-size: 0.875em;
+}
 .expanded {
   background: #f5e6c3;
 }
@@ -448,6 +453,9 @@ input[type="text"] {
 .expanded .vote,
 .expanded .comments-wrap {
   display: block;
+}
+.expanded .num-comments {
+  display: none;
 }
 .expanded .votes {
   color: #736f68 !important;
@@ -486,7 +494,7 @@ input[type="text"] {
 }
 .comments-wrap {
   display: none;
-  margin-top: 1em;
+  margin-top: 1em !important;
 }
 .comments-wrap form {
   display: block;
@@ -506,8 +514,36 @@ input[type="text"] {
   display: block;
   clear: left;
 }
+.comments {
+  margin-bottom: 1em;
+}
+.comment {
+  border-bottom: 1px solid #ccc5bb;
+  padding: 1em 0;
+  font-size: 0.875em;
+}
+.comment > span {
+  color: #736f68;
+}
+.comment > div {
+  margin-top: 0.5em;
+  max-width: 600px;
+  white-space: pre-line;
+}
+.comment-author {
+  font-weight: 500;
+}
+.comment-author:after {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  content: " posted ";
+}
+.comment-time:after {
+  content: ":";
+}
 #main p {
   max-width: 600px;
+  white-space: pre-line;
 }
 .view {
   display: none;

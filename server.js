@@ -184,11 +184,21 @@ Server.prototype.show_pub_votes = function(id) {
 		v_el.classList.add("has_votes");
 	} else {
 		v_el.classList.remove("has_votes");
-		if (!v) v = [0, 0, 0];
+		if (!v) v = [0, 0, 0, 0];
 	}
 	v_el.innerHTML = '<a class="v_pos" title="good">' + '+' + (v[1] + 2 * v[2]) + '</a>'
 				   + ' / '
 				   + '<a class="v_neg" title="not so good">' + '-' + v[0] + '</a>';
+
+	var n = v_el.nextSibling;
+	if (n && n.classList.contains('num-comments')) {
+		v_el.parentNode.removeChild(n);
+		n = v_el.nextSibling;
+	}
+	if (v && v[3]) {
+		var c = _new_elem('div', '', 'num-comments', v[3] + ' comment' + (v[3] == 1 ? '' : 's'));
+		v_el.parentNode.insertBefore(c, n);
+	}
 }
 
 
@@ -240,8 +250,9 @@ Server.prototype.make_comment_div = function(c) {
 	var n = _new_elem('span', '', 'comment-author', c.name);
 	d.appendChild(n);
 
-	var t = _new_elem('span', '', 'comment-time', c.ctime);
-	//t.textContent = c.ctime;
+	var t = _new_elem('span', '', 'comment-time', _time_str(c.ctime));
+	var dt = new Date(c.ctime * 1000);
+	t.title = dt.toLocaleString();
 	d.appendChild(t);
 
 	var m = _new_elem('div');
@@ -266,7 +277,7 @@ Server.prototype.show_comments = function(id, self) {
 	if (typeof c == 'undefined') {
 		if (ac) {
 			ac.classList.remove('js-link');
-			ac.textContent = 'Loading...';
+			ac.textContent = 'Loading comments...';
 		}
 		self.exec('comments?id=' + id);
 		return;
@@ -510,7 +521,6 @@ Server.prototype.cb_fail = function(v) {
 
 // ------------------------------------------------------------------------------------------------ callback
 
-// callback for setting logged-in info
 Server.prototype.cb_info = function(v) {
 	console.log("server info: " + JSON.stringify(v));
 	this.connected = [v.name, v.email];
@@ -525,7 +535,6 @@ Server.prototype.cb_info = function(v) {
 	document.getElementById('server_logout').onclick = this.logout;
 }
 
-// callback for showing login options
 Server.prototype.cb_login = function(v) {
 	console.log("server login: " + JSON.stringify(v));
 	var links = [];
@@ -541,7 +550,6 @@ Server.prototype.cb_login = function(v) {
 	make_popup_menu("login-links", "login-disable-bg");
 }
 
-// callback for setting starred items
 Server.prototype.cb_my_prog = function(v) {
 	console.log("server my_prog: " + JSON.stringify(v));
 	this.prog_data = v.prog;
@@ -550,7 +558,6 @@ Server.prototype.cb_my_prog = function(v) {
 	else console.warn("Server.stars required for prog sync");
 }
 
-// callback for setting user's own votes
 Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
@@ -558,16 +565,15 @@ Server.prototype.cb_my_votes = function(v) {
 	for (var id in v.votes) this.show_my_vote(id, v.votes[id]);
 }
 
-// callback for public vote data
 Server.prototype.cb_pub_data = function(p) {
 	console.log("server pub_data: " + JSON.stringify(p));
 	this.pub_data = p;
 	for (var id in p) this.show_pub_votes(id);
 }
 
-// callback for public vote data
 Server.prototype.cb_show_comments = function(id, c) {
 	console.log("server show_comments (" + id + "): " + JSON.stringify(c));
+	c.sort(function(a, b) { return a.ctime - b.ctime; });
 	this.pub_comments[id] = c;
 	this.show_comments(id, this);
 }
@@ -591,3 +597,12 @@ function _new_elem(tag, id, cl, text, hide) {
 	return e;
 }
 
+function _time_str(ts) {
+	var diff = ( new Date() ) / 1e3 - ts,
+		u = [ "seconds", "minutes", "hours", "days", "weeks", "months", "years" ],
+		s = [ 1, 60, 60, 24, 7, 4.333, 12, 1e9],
+		tense = ( diff<0 ? " from now" : " ago" );
+	diff = Math.abs(diff);
+	if (diff<20) return "just now";
+	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
+}
