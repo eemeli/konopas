@@ -79,6 +79,10 @@ input {
 input[type="text"] {
   box-shadow: none !important;
 }
+.discreet {
+  font-size: 0.875em;
+  color: #736f68;
+}
 .disabled {
   color: #ccc5bb !important;
   cursor: auto !important;
@@ -442,7 +446,7 @@ input[type="text"] {
 }
 .expanded .extra,
 .expanded .vote,
-.expanded .comments_wrap {
+.expanded .comments-wrap {
   display: block;
 }
 .expanded .votes {
@@ -480,29 +484,25 @@ input[type="text"] {
   color: #3d3dce;
   font-weight: 500;
 }
-.item-tags,
-.show_comments {
-  font-size: 0.875em;
-  color: #736f68;
-}
-.comments_wrap {
+.comments-wrap {
   display: none;
   margin-top: 1em;
 }
-.add_comment {
+.comments-wrap form {
   display: block;
   max-width: 600px;
   margin-bottom: 1em;
 }
-.add_comment textarea {
+.comments-wrap form textarea {
   width: 100%;
   width: calc(100% - 6px);
 }
-.add_comment input[type=submit] {
+.comments-wrap form input[type=submit],
+.comments-wrap form input[type=reset] {
   float: right;
-  margin: 0;
+  margin: 0 0 0 4px;
 }
-.add_comment label {
+.comments-wrap form label {
   display: block;
   clear: left;
 }

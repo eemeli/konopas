@@ -38,25 +38,44 @@ Server.prototype.logout = function(ev) {
 	(ev || window.event).preventDefault();
 }
 
-Server.prototype.error = function(msg, url, server_ptr) {
+Server.prototype.error = function(msg, url, self) {
 	console.error('server error ' + msg + ', url: ' + url);
-	server_ptr = server_ptr || this;
+	self = self || this;
 	if (msg =='') {
-		var cmd = url.replace(server_ptr.host, '').replace('/' + server_ptr.id + '/', '');
+		var cmd = url.replace(self.host, '').replace('/' + self.id + '/', '');
 		msg = 'The command "<code>' + cmd + '</code>" failed.';
 	}
-	if (!server_ptr.err_el) {
+	if (!self.err_el) {
 		var el = document.createElement('div');
-		el.id = server_ptr.err_el_id;
+		el.id = self.err_el_id;
 		el.title = 'Click to close';
-		el.onclick = function(ev) { server_ptr.err_el.style.display = 'none'; };
+		el.onclick = function(ev) { self.err_el.style.display = 'none'; };
 		document.body.appendChild(el);
-		server_ptr.err_el = el;
+		self.err_el = el;
 	}
-	server_ptr.err_el.innerHTML = '<div>Server error: <b>' + msg + '</b></div>';
-	server_ptr.err_el.style.display = 'block';
+	self.err_el.innerHTML = '<div>Server error: <b>' + msg + '</b></div>';
+	self.err_el.style.display = 'block';
 	return true;
 }
+
+Server.prototype.onmessage = function(ev, self) {
+	ev = ev || window.event;
+	if (ev.origin != self.host) {
+		console.error('Got an unexpected message from ' + ev.origin);
+		console.log(ev);
+		return;
+	}
+	JSON.parse(ev.data, function(k, v) {
+		switch (k) {
+			case 'ok':    self.cb_ok(v, self);      break;
+			case 'fail':  self.error('', v, self);  break;
+		}
+	});
+}
+
+
+
+// ------------------------------------------------------------------------------------------------ prog
 
 Server.prototype.prog_mtime = function() {
 	var mtime = this.prog_server_mtime;
@@ -80,6 +99,10 @@ Server.prototype.set_prog = function(star_list) {
 		+ '?set=' + star_list.join(',')
 		+ '&t=' + this.prog_mtime());
 }
+
+
+
+// ------------------------------------------------------------------------------------------------ vote
 
 Server.prototype.show_my_vote = function(id, v) {
 	var v_el = document.getElementById('v' + id);
@@ -149,73 +172,6 @@ Server.prototype.vote_click = function(ev, self) {
 	}
 }
 
-Server.prototype.comment_click = function(ev, id, show_comments, show_form, self) {
-	ev = ev || window.event;
-	var c = document.getElementById('c' + id);
-
-	if (c) c.style.display = show_comments ? 'block' : 'none';
-	self.comment_link_setup(ev.target, id, !show_comments, self);
-
-	if (show_comments) {
-		self.exec('comments?id=' + id);
-		if (show_form) self.show_comment_form(id, c, self);
-	}
-
-	ev.cancelBubble = true;
-	ev.preventDefault();
-	ev.stopPropagation();
-}
-
-Server.prototype.comment_link_setup = function(a, id, to_show, self) {
-	if (to_show) {
-		var p = self.pub_data[id];
-		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
-		switch (n_comments) {
-			case  0: a.textContent = 'Add a comment...'; break;
-			case  1: a.textContent = 'Show 1 comment...'; break;
-			default: a.textContent = 'Show ' + n_comments + ' comments...';
-		}
-		a.onclick = function(ev) { self.comment_click(ev, id, true, (n_comments == 0), self); };
-	} else {
-		a.textContent = 'Hide comments';
-		a.onclick = function(ev) { self.comment_click(ev, id, false, false, self); };
-	}
-}
-
-Server.prototype.show_extras = function(id, p_el) {
-	if (!this.connected) return;
-
-	var self = this;
-
-	var c_id = 'c' + id;
-	if (!document.getElementById(c_id)) {
-		var h = document.createElement('div');
-		h.className = 'comments_wrap';
-
-		var a = document.createElement('a');
-		a.className = 'js-link show_comments';
-		self.comment_link_setup(a, id, true, self);
-
-		var c = document.createElement('div');
-		c.className = 'comments';
-		c.id = c_id;
-		c.style.display = 'none';
-
-		var pc = document.createElement('div');
-		pc.className = 'prev_comments';
-		c.appendChild(pc);
-
-		h.appendChild(a);
-		h.appendChild(c);
-		p_el.appendChild(h);
-	}
-
-	var v_id = 'v' + id;
-	var v = document.getElementById(v_id);
-	if (v) v.onclick = function(ev) { self.vote_click(ev, self); };
-	this.show_my_vote(id, this.my_votes_data[id]);
-}
-
 Server.prototype.show_pub_votes = function(id) {
 	var v_el = document.getElementById('v' + id);
 	if (!v_el) return;
@@ -232,102 +188,203 @@ Server.prototype.show_pub_votes = function(id) {
 				   + '<a class="v_neg" title="not so good">' + '-' + v[0] + '</a>';
 }
 
-Server.prototype.show_comments = function(id) {
+
+
+// ------------------------------------------------------------------------------------------------ comment
+
+Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) {
+	ev = ev || window.event;
+	ev.cancelBubble = true;
+	ev.preventDefault();
+	ev.stopPropagation();
+
+	var ac = ev.target;
+	switch (ac.textContent.substr(0, 4)) {
+		case 'Show':
+			c_el.style.display = 'block';
+			if (f_el.style.display == 'none') af.style.display = 'block';
+			self.show_comments(id, self);
+			break;
+
+		case 'Hide':
+			var p = self.pub_data[id];
+			var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
+			ac.textContent = 'Show ' + n_comments + ' comment' + ((n_comments == 1) ? '' : 's');
+			ac.style.display = n_comments ? 'block' : 'none';
+			c_el.style.display = 'none';
+			af.style.display = n_comments ? 'none' : 'block';
+			f_el.style.display = 'none';
+			break;
+	}
+}
+
+Server.prototype.show_comments = function(id, self) {
+	self = self || this;
 	var c_el = document.getElementById('c' + id);
 	if (!c_el) return;
-	var self = this;
 
-	c_el.innerHTML = '';
+	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
 
-	var c = this.pub_comments[id];
+	var c = self.pub_comments[id];
+
+	if (typeof c == 'undefined') {
+		var ac = c_el.previousSibling;
+		if (ac && (ac.tagName.toLowerCase() == 'a')) {
+			ac.classList.remove('js-link');
+			ac.textContent = 'Loading...';
+		}
+		//c_el.style.display = 'block';
+		//if (f_el.style.display == 'none') af.style.display = 'block';
+		self.exec('comments?id=' + id);
+		return;
+	}
+
+	var n_comments = 0;
 	if (c) for (var i in c) {
+		++n_comments;
 		var d = document.createElement('div');
 		d.className = 'comment';
 		d.innerHTML = '<b>' + c[i].name + '</b> posted:<br>' + c[i].text + '<br><i>on ' + c[i].ctime + '</i>';
 		c_el.appendChild(d);
 	}
 
-	var a = document.createElement('a');
-	a.className = 'js-link show_comments';
-	a.textContent = 'Add a comment...';
-	a.onclick = function(ev) {
-		a.style.display = 'none';
-		self.show_comment_form(id, c_el, self);
+	if (self.pub_data) {
+		if (self.pub_data[id]) self.pub_data[id][3] = n_comments;
+		else self.pub_data[id] = [0, 0, 0, n_comments];
+	}
 
-		ev = ev || window.event;
-		ev.cancelBubble = true;
-		ev.preventDefault();
-		ev.stopPropagation();
-	};
-	c_el.appendChild(a);
+	var ac = c_el.previousSibling;
+	if (ac && (ac.tagName.toLowerCase() == 'a')) {
+		ac.textContent = 'Hide comments';
+		ac.classList.add('js-link');
+		ac.style.display = n_comments ? 'block' : 'none';
+	} else {
+		console.error('ac lookup fail!');
+		console.log(c_el);
+		console.log(ac);
+	}
+
+	if (!n_comments) {
+		var f_el = document.getElementById('f' + id);
+		if (f_el && (f_el.style.display == 'none')) {
+			var af = f_el.previousSibling;
+			if (af && (af.tagName.toLowerCase() == 'a')) af.style.display = 'block';
+		}
+	}
 }
 
-Server.prototype.post_comment = function(f, id, self) {
-	var url = self.url('comment');
-	var data = 'id=' + encodeURIComponent(id)
-	      + '&anon=' + (f.anon.checked ? '1' : '0')
-	      + '&hide=' + (f.hide.checked ? '1' : '0')
-	        + '&text=' + encodeURIComponent(f.text.value);
 
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', url, true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onload = function () {
-		// do something to response
-		console.log(this.responseText);
-	};
-	xhr.send(data);
-}
-
-Server.prototype.onmessage = function(ev) {
+Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 	ev = ev || window.event;
-	console.log(ev);
-	alert(ev.data);
+	ev.cancelBubble = true;
+	ev.preventDefault();
+	ev.stopPropagation();
+
+	var af = ev.target;
+	af.style.display = 'none';
+	self.show_comment_form(id, af, f_el, self);
 }
 
-Server.prototype.show_comment_form = function(id, c, self) {
-	var f_id = 'f' + id;
-	var f = document.getElementById(f_id);
-	if (!f) {
+
+Server.prototype.show_comment_form = function(id, af, f_el, self) {
+	if (f_el.classList.contains('empty')) {
 		if (!document.getElementById('post_comment_iframe')) {
 			var fi = document.createElement('iframe');
 			fi.id = fi.name = 'post_comment_iframe';
 			fi.src = 'javascript:false';
 			fi.style.display = 'none';
 			document.body.appendChild(fi);
-			window.onmessage = self.onmessage;
+			window.onmessage = function(ev) { self.onmessage(ev, self); };
 		}
-		f = document.createElement('form');
-		f.id = f_id;
-		f.className = 'add_comment';
-		f.method = 'post';
-		f.action = self.url('add_comment?id=' + encodeURIComponent(id));
-		f.target = 'post_comment_iframe';
-		f.innerHTML =
+		f_el.method = 'post';
+		f_el.action = self.url('add_comment?id=' + encodeURIComponent(id));
+		f_el.target = 'post_comment_iframe';
+		f_el.innerHTML =
 			  '<textarea name="text" rows="4" placeholder="' + self.connected[0] + ' posted..."></textarea>'
-			+ '<input type="submit" name="submit" value="Post comment">'
-			+ '<label><input type="checkbox" name="anon" value="1"> Post anonymously</label>'
-			+ '<label><input type="checkbox" name="hide" value="1"> Hide from public</label>';
-		f.onsubmit = function(ev) {
-			f.submit.value = 'Posting...';
-			f.submit.disabled = true;
-			if (f.anon.checked) { f.action += '&anon=1'; f.anon.disabled = true; }
-			if (f.hide.checked) { f.action += '&hide=1'; f.hide.disabled = true; }
-		};
-		f.onclick = function(ev) {
+			+ '<input type="submit" name="submit">'
+			+ '<input type="reset" value="Cancel">'
+			+ '<label><input type="checkbox" name="anon"> Post anonymously</label>'
+			+ '<label><input type="checkbox" name="hide"> Hide from public</label>';
+		f_el.onclick = function(ev) {
 			ev = ev || window.event;
 			ev.cancelBubble = true;
 			ev.stopPropagation();
 		};
-		c.appendChild(f);
+		f_el.onsubmit = function(ev) {
+			f_el.submit.value = 'Posting...';
+			f_el.submit.disabled = true;
+			if (f_el.anon.checked) { f_el.action += '&anon=1'; f_el.anon.disabled = true; }
+			if (f_el.hide.checked) { f_el.action += '&hide=1'; f_el.hide.disabled = true; }
+		};
+		f_el.onreset = function(ev) {
+			af.style.display = 'block';
+			f_el.style.display = 'none';
+		};
+		f_el.classList.remove('empty');
 	} else {
-		f.submit.value = 'Post comment';
-		f.submit.disabled = false;
-		f.anon.disabled = false;
-		f.hide.disabled = false;
+		f_el.submit.disabled = false;
+		f_el.anon.disabled = false;
+		f_el.hide.disabled = false;
 	}
-	f.style.display = 'block';
+	f_el.submit.value = 'Post comment';
+	f_el.style.display = 'block';
 }
+
+Server.prototype.make_comments_div = function(id) {
+	var ac = document.createElement('a');
+	ac.className = 'js-link discreet';
+
+	var c_el = document.createElement('div');
+	c_el.className = 'comments';
+	c_el.id = 'c' + id;
+
+	var af = document.createElement('a');
+	af.className = 'js-link discreet';
+	af.textContent = 'Add a comment';
+
+	var f_el = document.createElement('form');
+	f_el.className = 'empty';
+	f_el.id = 'f' + id;
+
+	var self = this;
+	ac.onclick = function(ev) { self.onclick_show_comments(ev, id, c_el, af, f_el, self); };
+	af.onclick = function(ev) { self.onclick_show_comment_form(ev, id, f_el, self); };
+
+	f_el.style.display = 'none';
+	ac.textContent = 'Hide';
+	ac.click();
+
+	var d = document.createElement('div');
+	d.className = 'comments-wrap';
+	d.appendChild(ac);
+	d.appendChild(c_el);
+	d.appendChild(af);
+	d.appendChild(f_el);
+
+	return d;
+}
+
+
+// ------------------------------------------------------------------------------------------------ item extras
+
+Server.prototype.show_extras = function(id, p_el) {
+	if (!this.connected) return;
+
+	var self = this;
+
+	if (!document.getElementById('c' + id)) {
+		p_el.appendChild(self.make_comments_div(id));
+	}
+
+	var v_id = 'v' + id;
+	var v = document.getElementById(v_id);
+	if (v) v.onclick = function(ev) { self.vote_click(ev, self); };
+	this.show_my_vote(id, this.my_votes_data[id]);
+}
+
+
+
+// ------------------------------------------------------------------------------------------------ ical
 
 Server.prototype.show_ical_link = function(p_el) {
 	var html = '';
@@ -352,6 +409,10 @@ Server.prototype.show_ical_link = function(p_el) {
 		a.onclick = function() { self.exec('ical_link'); };
 	}
 }
+
+
+
+// ------------------------------------------------------------------------------------------------ exec
 
 Server.prototype.url = function(cmd) {
 	return this.host + (cmd[0] == '/' ? '' : '/' + this.id + '/') + cmd;
@@ -384,35 +445,52 @@ Server.prototype.exec = function(cmd) {
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
+
+
+// ------------------------------------------------------------------------------------------------ cb ok/fail
+
 // callback for successful logout, prog, vote
-Server.prototype.cb_ok = function(v) {
-	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?([^?]*))?/.exec(v);
-	switch (m[2]) {
+Server.prototype.cb_ok = function(v, self) {
+	self = self || this;
+	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?(.*))?/.exec(v);
+	var cmd = m[2] || '';
+	var query = m[3] || '';
+	switch (cmd) {
 		case 'logout':
-			this.disconnect();
-			this.prog_data = {};
-			this.prog_server_mtime = 0;
-			this.my_votes_data = {};
-			this.my_votes_mtime = 0;
-			if (this.stars) {
-				this.stars.data = {};
-				this.stars.write();
+			self.disconnect();
+			self.prog_data = {};
+			self.prog_server_mtime = 0;
+			self.my_votes_data = {};
+			self.my_votes_mtime = 0;
+			if (self.stars) {
+				self.stars.data = {};
+				self.stars.write();
 				init_view();
 			}
-			this.exec('info');
+			self.exec('info');
 			console.log("server ok (logout): " + JSON.stringify(v));
 			break;
 
 		case 'prog':
-			var t = /&server_mtime=(\d+)/.exec(m[3]);
-			if (t) this.prog_server_mtime = parseInt(t[1], 10);
+			var t = /&server_mtime=(\d+)/.exec(query);
+			if (t) self.prog_server_mtime = parseInt(t[1], 10);
 			console.log("server ok (prog): " + JSON.stringify(v));
 			break;
 
 		case 'vote':
-			var t = /&server_mtime=(\d+)/.exec(m[3]);
-			if (t) this.my_votes_mtime = parseInt(t[1], 10);
+			var t = /&server_mtime=(\d+)/.exec(query);
+			if (t) self.my_votes_mtime = parseInt(t[1], 10);
 			console.log("server ok (vote): " + JSON.stringify(v));
+			break;
+
+		case 'add_comment':
+			var id = /\bid=([^&]+)/.exec(query);
+			if (id) {
+				self.exec('comments?id=' + id[1]);
+				var f_el = document.getElementById('f' + id[1]);
+				if (f_el) f_el.reset();
+			}
+			console.log("server ok (add_comment): " + JSON.stringify(v));
 			break;
 
 		default:
@@ -424,6 +502,10 @@ Server.prototype.cb_ok = function(v) {
 Server.prototype.cb_fail = function(v) {
 	this.error(v.msg, v.url, this);
 }
+
+
+
+// ------------------------------------------------------------------------------------------------ callback
 
 // callback for setting logged-in info
 Server.prototype.cb_info = function(v) {
@@ -484,7 +566,7 @@ Server.prototype.cb_pub_data = function(p) {
 Server.prototype.cb_show_comments = function(id, c) {
 	console.log("server show_comments (" + id + "): " + JSON.stringify(c));
 	this.pub_comments[id] = c;
-	this.show_comments(id);
+	this.show_comments(id, this);
 }
 
 Server.prototype.cb_ical_link = function(url) {

@@ -281,7 +281,7 @@ function _item_tags(it) {
 	var a = it.tags.map(function(t) {
 		return '<a href="#prog/tag:' + t + '">' + t + '</a>';
 	});
-	return '<div class="item-tags">Tracks: ' + a.join(', ') + '</div>\n';
+	return '<div class="discreet">Tracks: ' + a.join(', ') + '</div>\n';
 }
 
 function _item_loc(it) {

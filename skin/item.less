@@ -75,7 +75,7 @@
 	.title { .font-heavy; }
 	.loc { color: @fg-light-in-box !important; }
 	.item > .item-people { display: none; }
-	.extra, .vote, .comments_wrap { display: block; }
+	.extra, .vote, .comments-wrap { display: block; }
 
 	.votes { color: @fg-light-in-box !important; }
 	.votes a {
@@ -95,18 +95,15 @@
 	.v_neg.voted { color: @vote-neg; .font-heavy(); }
 }
 
-.item-tags, .show_comments { .font-small(); color: @fg-light-in-box; }
-
-.comments_wrap {
+.comments-wrap {
 	display: none;
 	margin-top: 1em;
-}
-
-.add_comment {
-	display: block;
-	max-width: @main-width;
-	margin-bottom: 1em;
-	textarea { width: 100%; width: ~"calc(100% - 6px)"; }
-	input[type=submit] { float: right; margin: 0; }
-	label { display: block; clear: left; }
+	form {
+		display: block;
+		max-width: @main-width;
+		margin-bottom: 1em;
+		textarea { width: 100%; width: ~"calc(100% - 6px)"; }
+		input[type=submit], input[type=reset] { float: right; margin: 0 0 0 4px; }
+		label { display: block; clear: left; }
+	}
 }
