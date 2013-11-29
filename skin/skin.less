@@ -334,9 +334,14 @@ input[type="text"] {
 }
 
 .item {
-	clear: both; display: block; overflow: auto; padding-top: 5px; padding-left: 0; margin-bottom: 5px; cursor: pointer;
-	> div { margin-left: 40px; }
-	.title { margin: 3px 0 3px 40px; }
+	clear: both;
+	display: block;
+	overflow: auto;
+	padding: 5px 10px 0 30px;
+	margin-bottom: 5px;
+	cursor: pointer;
+	> div { margin-left: 10px; }
+	.title { margin: 3px 0 3px 10px; }
 	.loc, > .item-people {
 		display: inline-block;
 		color: @fg-light;
@@ -354,7 +359,6 @@ input[type="text"] {
 
 .votes {
 	display: none;
-	margin-left: 10px !important;
 	color: @fg-lighter;
 	.font-small();
 	a { display: inline-block; color: @fg-lighter; }

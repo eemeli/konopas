@@ -625,16 +625,15 @@ input[type="text"]:valid + #q_ctrl input {
   clear: both;
   display: block;
   overflow: auto;
-  padding-top: 5px;
-  padding-left: 0;
+  padding: 5px 10px 0 30px;
   margin-bottom: 5px;
   cursor: pointer;
 }
 .item > div {
-  margin-left: 40px;
+  margin-left: 10px;
 }
 .item .title {
-  margin: 3px 0 3px 40px;
+  margin: 3px 0 3px 10px;
 }
 .item .loc,
 .item > .item-people {
@@ -662,7 +661,6 @@ input[type="text"]:valid + #q_ctrl input {
 }
 .votes {
   display: none;
-  margin-left: 10px !important;
   color: #ccc5bb;
   font-size: 0.875em;
 }
