@@ -51,6 +51,8 @@ function link_to_qr_code(url) {
 
 function EL(id) { return document.getElementById(id); }
 
+function _set_class(el, cl, set) { el.classList[set ? 'add' : 'remove'](cl); }
+
 function selected_id(parent_id) {
 	var par = EL(parent_id); if (!par) return "";
 	var sel = par.getElementsByClassName("selected"); if (!sel.length) return "";
@@ -494,8 +496,7 @@ function update_next_filters(next_type) {
 	if (next_type != "next_by_room") next_type = "next_by_hour";
 	var ul = EL("next_type").getElementsByTagName("li");
 	for (var i = 0, l = ul.length; i < l; ++i) {
-		if (ul[i].id == next_type) ul[i].classList.add("selected");
-		else ul[i].classList.remove("selected");
+		_set_class(ul[i], 'selected', (ul[i].id == next_type));
 	}
 
 	storage_set('next', { 'next_type': next_type })
@@ -686,13 +687,11 @@ function update_prog_list(day, area, tag, freetext) {
 	var dh = EL("q_hint");
 	if (dh) {
 		if (re_hint) {
-			//dh.classList.add('hint');
 			dh.innerHTML = "<b>Hint:</b> search is for full words, but you may also use * and ? as wildcards or \"quoted words\" for exact phrases.";
 			if (hint) dh.innerHTML += " For example, "
 				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"EL('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
 				+ "searching for <b>" + glob_hint + "</b> would also match <b>" + hint + "</b></span>";
 		} else {
-			//dh.classList.remove('hint');
 			dh.innerHTML = "";
 		}
 	}
@@ -704,20 +703,17 @@ function update_prog_filters(day, area, tag, freetext) {
 	var dt = "d" + day;
 	var dc = EL("day").getElementsByTagName("li");
 	for (var i = 0, l = dc.length; i < l; ++i) {
-		if (dc[i].id == dt) dc[i].classList.add("selected");
-		else dc[i].classList.remove("selected");
+		_set_class(dc[i], 'selected', (dc[i].id == dt));
 	}
-	if (!ko.full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
-		EL("d").classList.add("disabled");
-	} else {
-		EL("d").classList.remove("disabled");
+	var da = EL("d");
+	if (da) {
+		_set_class(da, 'disabled', (!ko.full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext));
 	}
 
 	var ft = area || "everywhere";
 	var fc = EL("area").getElementsByTagName("li");
 	for (var i = 0, l = fc.length; i < l; ++i) {
-		if (fc[i].id == ft) fc[i].classList.add("selected");
-		else fc[i].classList.remove("selected");
+		_set_class(fc[i], 'selected', (fc[i].id == ft));
 	}
 
 	var tt = tag || "all_tags";
@@ -734,8 +730,7 @@ function update_prog_filters(day, area, tag, freetext) {
 	var qc = EL("q");
 	if (qc) {
 		qc.value = freetext;
-		if (qc.value) qc.classList.add("selected");
-		else qc.classList.remove("selected");
+		_set_class(qc, 'selected', qc.value);
 	}
 }
 
@@ -898,8 +893,7 @@ function update_part_view(name_range, participant) {
 	if (el_nr) {
 		var ll = el_nr.getElementsByTagName('li');
 		for (var i = 0, l = ll.length; i < l; ++i) {
-			if (ll[i].getAttribute('data-range') == name_range) ll[i].classList.add('selected');
-			else ll[i].classList.remove('selected');
+			_set_class(ll[i], 'selected', (ll[i].getAttribute('data-range') == name_range));
 		}
 	}
 
