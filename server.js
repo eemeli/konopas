@@ -250,7 +250,7 @@ Server.prototype.make_comment_div = function(c) {
 	var n = _new_elem('span', '', 'comment-author', c.name);
 	d.appendChild(n);
 
-	var t = _new_elem('span', '', 'comment-time', _time_str(c.ctime));
+	var t = _new_elem('span', '', 'comment-time', pretty_time_diff(c.ctime));
 	var dt = new Date(c.ctime * 1000);
 	t.title = dt.toLocaleString();
 	d.appendChild(t);
@@ -595,14 +595,4 @@ function _new_elem(tag, id, cl, text, hide) {
 	if (text) e.textContent = text;
 	if (hide) e.style.display = 'none';
 	return e;
-}
-
-function _time_str(ts) {
-	var diff = ( new Date() ) / 1e3 - ts,
-		u = [ "seconds", "minutes", "hours", "days", "weeks", "months", "years" ],
-		s = [ 1, 60, 60, 24, 7, 4.333, 12, 1e9],
-		tense = ( diff<0 ? " from now" : " ago" );
-	diff = Math.abs(diff);
-	if (diff<20) return "just now";
-	for (var i in s) if ( (diff/=s[i]) < 2 ) return ~~(diff*=s[i])+" "+u[i-1]+tense;
 }
