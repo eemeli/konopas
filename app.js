@@ -79,7 +79,6 @@ function make_popup_menu(root_id, disable_id) {
 			EL(disable_id).style.display = "block";
 			el.classList.add("show_box");
 		}
-		ev.stopPropagation();
 	};
 }
 
@@ -331,7 +330,10 @@ function show_info(item, id) {
 		html = _item_tags(a[0]) + _item_people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
-	item.innerHTML += '<div class="extra" id="e' + id + '">' + html + '</div>';
+	var extra = _new_elem('div', 'extra');
+	extra.id = 'e' + id;
+	extra.innerHTML = html;
+	item.appendChild(extra);
 	if (server) server.show_extras(id, item);
 }
 
@@ -1007,7 +1009,7 @@ if (sf) {
 }
 EL("q").onblur = prog_filter;
 
-make_popup_menu("tag2-list", "tag2-disable-bg");
+make_popup_menu('tag2-list', 'tag2-disable-bg');
 
 
 // init part view
@@ -1032,7 +1034,7 @@ if (EL("scroll_link")) {
 	var prev_scroll = { "i": 0, "top": 0 };
 	var n = 0;
 	if (ko.full_version) { window.onscroll = function() {
-		var st = document.documentElement.scrollTop || document.body.scrollTop;
+		var st = document.documentElement.scrollTop;
 
 		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 

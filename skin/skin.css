@@ -689,6 +689,9 @@ input[type="text"] {
   display: block;
   float: left;
 }
+#q {
+  max-width: 150px;
+}
 #q_ctrl input,
 #q_fix {
   cursor: pointer;

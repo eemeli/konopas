@@ -187,9 +187,18 @@ Server.prototype.show_pub_votes = function(id) {
 		v_el.classList.remove("has_votes");
 		if (!v) v = [0, 0, 0, 0];
 	}
-	v_el.innerHTML = '<a class="v_pos" title="good">' + '+' + (v[1] + 2 * v[2]) + '</a>'
-				   + ' / '
-				   + '<a class="v_neg" title="not so good">' + '-' + v[0] + '</a>';
+
+	while (v_el.firstChild) v_el.removeChild(v_el.firstChild);
+
+	var a_pos = _new_elem('a', 'v_pos', '+' + (v[1] + 2 * v[2]));
+	a_pos.title = 'good';
+
+	var a_neg = _new_elem('a', 'v_neg', '-' + v[0]);
+	a_neg.title = 'not so good';
+
+	v_el.appendChild(a_pos);
+	v_el.appendChild(document.createTextNode(' / '));
+	v_el.appendChild(a_neg);
 
 	var n = v_el.nextSibling;
 	if (n && n.classList.contains('num-comments')) {
