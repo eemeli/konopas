@@ -536,10 +536,7 @@ input[type="text"] {
 .comment-author:after {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  content: " posted ";
-}
-.comment-time:after {
-  content: ":";
+  content: " | ";
 }
 #main p {
   max-width: 600px;
