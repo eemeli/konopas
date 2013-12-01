@@ -297,7 +297,7 @@ function _item_tags(it) {
 function _item_loc_str(it) {
 	var s = '';
 	if (it.loc && it.loc.length) {
-		s = it.loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
+		s = it.loc[0];//.replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
 		if (it.loc.length > 1) s += ' (' + it.loc.slice(1).join(', ') + ')';
 	}
 	if (it.mins && (it.mins != ko.default_duration)) {
@@ -397,6 +397,7 @@ function item_show_list(ls) {
 
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
+		var items = LS.getElementsByClassName("item");
 		var exp = expand_all.textContent == 'Expand all items';
 		if (expand_all.textContent == 'Expand all items') {
 			for (var i = 0, l = items.length; i < l; ++i) {
@@ -1066,7 +1067,7 @@ make_popup_menu('tag2-list', 'tag2-disable-bg');
 
 // init part view
 for (var i = 0, l = people.length; i < l; ++i) {
-	people[i].sortname = (people[i].name[1] + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
+	people[i].sortname = ((people[i].name[1] || '') + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
 }
 people.sort(function(a, b) {
 		 if (a.sortname < b.sortname) return -1;
