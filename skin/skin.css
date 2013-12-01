@@ -68,6 +68,7 @@ form {
   position: relative;
   clear: left;
   z-index: 1;
+  overflow: auto;
 }
 input {
   margin: 0 4px 4px 0;
