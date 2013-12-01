@@ -344,9 +344,9 @@ function show_info(item, id) {
 	var title = item.appendChild(_new_elem('div', 'title'));
 	var loc   = item.appendChild(_new_elem('div', 'loc'));
 	var votes = item.appendChild(_new_elem('div', 'votes'));
-	votes.appendChild(_new_elem('a', 'v_pos')).title = 'good';
+	votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
 	votes.appendChild(document.createTextNode(' / '));
-	votes.appendChild(_new_elem('a', 'v_neg')).title = 'not so good';
+	votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
 
 	this.item_el = function(it) {
 		star.id = 's' + it.id;
@@ -359,7 +359,6 @@ function show_info(item, id) {
 })();
 
 function show_prog_list(ls) {
-console.time('list build');
 	var frag = document.createDocumentFragment();
 	var prev_date = "", day_str = "", prev_time = "";
 	if ((ls.length > 0) && (ls.length < ko.expand_all_max_items)) {
@@ -388,24 +387,12 @@ console.time('list build');
 
 		frag.appendChild(item_el(ls[i]));
 	}
-console.timeEnd('list build');
 
 	var LS = EL('prog_ls');
-console.time('list show');
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
 	LS.appendChild(frag);
-console.timeEnd('list show');
 
-	if (server) window.setTimeout(function() {
-console.time('list server');
-		var items = LS.getElementsByClassName("item");
-		for (var i = 0, l = items.length; i < l; ++i) {
-			var id = items[i].id.substr(1);
-			server.show_pub_votes(id);
-			if (id in server.my_votes_data) server.show_my_vote(id, server.my_votes_data[id]);
-		}
-console.timeEnd('list server');
-	}, 1);
+	if (server) server.decorate_list(LS);
 
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {

@@ -105,23 +105,21 @@ Server.prototype.set_prog = function(star_list) {
 
 // ------------------------------------------------------------------------------------------------ vote
 
-Server.prototype.show_my_vote = function(id, v) {
-	var v_el = document.getElementById('v' + id);
+Server.prototype.show_my_vote = function(id, v_el, v) {
+	v_el = v_el || document.getElementById('v' + id);
 	if (!v_el) return;
 
-	var a = v_el.getElementsByTagName('a');
-	for (var i = 0, l = a.length; i < l; ++i) {
-		var cl = a[i].classList;
-		if (cl.contains('v_pos')) {
+	if (typeof v == 'undefined') v = this.my_votes_data[id];
+
+	for (var a = v_el.firstChild; a != null; a = a.nextSibling) {
+		if (a.nodeType != 1) continue;
+		if (a.classList.contains('v_pos')) {
 			switch (v) {
-				case  2:  cl.add('voted');     cl.add('v2');     a[i].title = "doubleplusgood";  break;
-				case  1:  cl.add('voted');     cl.remove('v2');  a[i].title = "good";            break;
-				default:  cl.remove('voted');  cl.remove('v2');  a[i].title = "good";
+				case  2:  a.classList.add('voted');     a.classList.add('v2');     a.title = 'doubleplusgood';  break;
+				case  1:  a.classList.add('voted');     a.classList.remove('v2');  a.title = 'good';            break;
+				default:  a.classList.remove('voted');  a.classList.remove('v2');  a.title = 'good';
 			}
-		} else if (cl.contains('v_neg')) {
-			if (v < 0)  cl.add('voted');
-			else        cl.remove('voted');
-		}
+		} else _set_class(a, 'voted', (v < 0)); // v_neg
 	}
 }
 
@@ -144,7 +142,7 @@ Server.prototype.vote = function(id, v, self) {
 		++self.pub_data[id][(v < 0) ? 0 : v];
 	}
 	self.show_pub_votes(id);
-	self.show_my_vote(id, v);
+	self.show_my_vote(id, null, v);
 	if (self.vote_timers[id]) window.clearTimeout(self.vote_timers[id]);
 	self.vote_timers[id] = window.setTimeout(function() {
 		self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
@@ -176,41 +174,43 @@ Server.prototype.vote_click = function(ev, self) {
 	}
 }
 
-Server.prototype.show_pub_votes = function(id) {
-	var v_el = document.getElementById('v' + id);
+Server.prototype.show_pub_votes = function(id, v_el) {
+	v_el = v_el || document.getElementById('v' + id);
 	if (!v_el) return;
 
 	var v = this.pub_data[id];
-	if (v && (v[0] || v[1] || v[2])) {
-		v_el.classList.add("has_votes");
-	} else {
+	if (!v) {
 		v_el.classList.remove("has_votes");
-		if (!v) v = [0, 0, 0, 0];
+		return;
 	}
 
-	while (v_el.firstChild) v_el.removeChild(v_el.firstChild);
+	_set_class(v_el, 'has_votes', (v[0] || v[1] || v[2]));
 
-	var a_pos = _new_elem('a', 'v_pos', '+' + (v[1] + 2 * v[2]));
-	a_pos.title = 'good';
-
-	var a_neg = _new_elem('a', 'v_neg', '-' + v[0]);
-	a_neg.title = 'not so good';
-
-	v_el.appendChild(a_pos);
-	v_el.appendChild(document.createTextNode(' / '));
-	v_el.appendChild(a_neg);
-
-	var n = v_el.nextSibling;
-	if (n && n.classList.contains('num-comments')) {
-		v_el.parentNode.removeChild(n);
-		n = v_el.nextSibling;
+	for (var e = v_el.firstChild; e != null; e = e.nextSibling) {
+		if (e.nodeType == 1) e.textContent = e.classList.contains('v_pos')
+			? '+' + (v[1] + 2 * v[2])
+			: '-' + v[0]; // v_neg
 	}
-	if (v && v[3]) {
-		var c = _new_elem('div', 'num-comments', v[3] + ' comment' + (v[3] == 1 ? '' : 's'));
-		v_el.parentNode.insertBefore(c, n);
+
+	var c = v_el.nextSibling;
+	if (!c || !c.classList.contains('num-comments')) {
+		if (v[3]) {
+			var n = _new_elem('div', 'num-comments', v[3] + (v[3] == 1 ? ' comment' : ' comments'));
+			v_el.parentNode.insertBefore(n, c);
+		}
+	} else {
+		c.textContent = v[3] + (v[3] == 1 ? ' comment' : ' comments');
 	}
 }
 
+Server.prototype.decorate_list = function(ls) {
+	var votes = ls.getElementsByClassName("votes");
+	for (var i = 0, l = votes.length; i < l; ++i) {
+		var id = votes[i].id.substr(1);
+		this.show_pub_votes(id, votes[i]);
+		if (id in this.my_votes_data) this.show_my_vote(id, votes[i]);
+	}
+}
 
 
 // ------------------------------------------------------------------------------------------------ comment
@@ -400,9 +400,9 @@ Server.prototype.show_extras = function(id, p_el) {
 	}
 
 	var v_id = 'v' + id;
-	var v = document.getElementById(v_id);
-	if (v) v.onclick = function(ev) { self.vote_click(ev, self); };
-	this.show_my_vote(id, this.my_votes_data[id]);
+	var v_el = document.getElementById(v_id);
+	if (v_el) v_el.onclick = function(ev) { self.vote_click(ev, self); };
+	this.show_my_vote(id, v_el);
 }
 
 
@@ -571,7 +571,7 @@ Server.prototype.cb_my_votes = function(v) {
 	console.log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
 	this.my_votes_mtime = v.mtime;
-	for (var id in v.votes) this.show_my_vote(id, v.votes[id]);
+	for (var id in v.votes) this.show_my_vote(id);
 }
 
 Server.prototype.cb_pub_data = function(p) {
