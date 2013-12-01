@@ -293,7 +293,7 @@ function _item_tags(it) {
 	return '<div class="discreet">Tracks: ' + a.join(', ') + '</div>\n';
 }
 
-function _item_loc(it) {
+function _item_loc_str(it) {
 	var s = '';
 	if (it.loc && it.loc.length) {
 		s = it.loc[0].replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
@@ -303,7 +303,7 @@ function _item_loc(it) {
 		if (s) s += ', ';
 		s += pretty_time(it.time) + ' - ' + pretty_time(time_sum(it.time, it.mins));
 	}
-	return !s ? '' : '<div class="loc">' + s + '</div>\n';
+	return s;
 }
 
 function _item_sort(a, b) {
@@ -337,9 +337,36 @@ function show_info(item, id) {
 	if (server) server.show_extras(id, item);
 }
 
+(function() {
+	var frame = _new_elem('div', 'item_frame');
+	var star = frame.appendChild(_new_elem('div', 'item_star'));
+	var item = frame.appendChild(_new_elem('div', 'item'));
+	var title = item.appendChild(_new_elem('div', 'title'));
+	var loc   = item.appendChild(_new_elem('div', 'loc'));
+	var votes = item.appendChild(_new_elem('div', 'votes'));
+	votes.appendChild(_new_elem('a', 'v_pos')).title = 'good';
+	votes.appendChild(document.createTextNode(' / '));
+	votes.appendChild(_new_elem('a', 'v_neg')).title = 'not so good';
+
+	this.item_el = function(it) {
+		star.id = 's' + it.id;
+		item.id = 'p' + it.id;
+		title.textContent = it.title;
+		loc.textContent = _item_loc_str(it);
+		votes.id = 'v' + it.id;
+		return frame.cloneNode(true);
+	};
+})();
+
 function show_prog_list(ls) {
-	var list = [];
+console.time('list build');
+	var frag = document.createDocumentFragment();
 	var prev_date = "", day_str = "", prev_time = "";
+	if ((ls.length > 0) && (ls.length < ko.expand_all_max_items)) {
+		frag.appendChild(_new_elem('div', 'item_expander', '» '))
+			.appendChild(_new_elem('a', 'js-link', 'Expand all items'))
+			.id = 'item_expander_link';
+	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
 			if (ls[i].date < prev_date) { show_prog_list(ls.sort(_item_sort)); return; }
@@ -348,41 +375,37 @@ function show_prog_list(ls) {
 
 			var t = new Date(ls[i].date);
 			day_str = pretty_date(t);
-			list.push('<div class="new_day">' + day_str);
+			frag.appendChild(_new_elem('div', 'new_day', day_str));
 		}
 
 		if (ls[i].time != prev_time) {
 			if (ls[i].time < prev_time) { show_prog_list(ls.sort(_item_sort)); return; }
 			prev_time = ls[i].time;
-			list.push('<hr /><div class="new_time" data-day="' + day_str.substr(0,3) + '">' + pretty_time(ls[i].time));
+			frag.appendChild(document.createElement('hr'));
+			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time)))
+				.setAttribute('data-day', day_str.substr(0,3));
 		}
 
-		list.push('<div class="item_frame"><div class="item_star" id="s' + ls[i].id + '"></div>'
-			+ '<div class="item" id="p' + ls[i].id + '">'
-				+ '<div class="title">' + ls[i].title + '</div>'
-				+ _item_loc(ls[i]) + '<div class="votes" id="v' + ls[i].id + '"></div>'
-				+ (ko.always_show_participants ? _item_people(ls[i]) : '')
-			+ '</div>');
+		frag.appendChild(item_el(ls[i]));
 	}
-	if ((ls.length > 0) && (ls.length < ko.expand_all_max_items)) {
-		list.unshift('<div class="item_expander">&raquo; <a class="js-link" id="item_expander_link">Expand all items</a>');
-	}
-	EL("prog_ls").innerHTML = list.join("</div>\n");
+console.timeEnd('list build');
 
-	var items = EL("prog_ls").getElementsByClassName("item");
-	for (var i = 0, l = items.length; i < l; ++i) {
-		items[i].onclick = function() {
-			if (this.parentNode.classList.toggle("expanded")) {
-				show_info(this, this.id.substr(1));
-			}
-			return true;
-		};
-		var id = items[i].id.substr(1);
-		if (server) {
+	var LS = EL('prog_ls');
+console.time('list show');
+	while (LS.firstChild) LS.removeChild(LS.firstChild);
+	LS.appendChild(frag);
+console.timeEnd('list show');
+
+	if (server) window.setTimeout(function() {
+console.time('list server');
+		var items = LS.getElementsByClassName("item");
+		for (var i = 0, l = items.length; i < l; ++i) {
+			var id = items[i].id.substr(1);
 			server.show_pub_votes(id);
 			if (id in server.my_votes_data) server.show_my_vote(id, server.my_votes_data[id]);
 		}
-	}
+console.timeEnd('list server');
+	}, 1);
 
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
@@ -401,7 +424,7 @@ function show_prog_list(ls) {
 		}
 	};
 
-	var star_els = EL("prog_ls").getElementsByClassName("item_star");
+	var star_els = LS.getElementsByClassName("item_star");
 	for (var i = 0, l = star_els.length; i < l; ++i) {
 		star_els[i].onclick = function() { stars.toggle(this, this.id.substr(1)); return false; };
 	}
@@ -629,208 +652,232 @@ function show_star_view(opt) {
 
 // ------------------------------------------------------------------------------------------------ program view
 
-function update_prog_list(day, area, tag, freetext) {
-	var re_t, re_q, re_hint, glob_hint = '', hint = '';
-	if (tag) {
-		var t = EL(tag) && EL(tag).getAttribute("data-regexp");
-		if (t) re_t = new RegExp(t);
-	}
-	if (freetext) {
-		re_q = GlobToRE(freetext);
-		if (!freetext.match(/[?*"]/)) {
-			glob_hint = freetext + '*';
-			re_hint = GlobToRE(glob_hint);
-		}
-	}
-
-	var ls = program.filter(function(it) {
-		if (day && it.date != day) return false;
-
-		if (area) switch (area) {
-			case "everywhere": break;
-			//case "other areas": if (it.loc.length > 1) return false; else break;
-			default: if (it.loc.indexOf(area) < 0) return false;
-		}
-
-		if (tag && (tag != 'all_tags')) {
-			if (re_t) {
-				if (!re_t.test(it.title)) return false;
-			} else {
-				if (!it.tags || (it.tags.indexOf(tag) < 0)) return false;
-			}
-		}
-
-		if (freetext) {
-			var sa = [ it.title, it.desc, it.loc[0] ];
-			if (it.people) for (var j = 0, l = it.people.length; j < l; ++j) sa.push(it.people[j].name);
-			var sa_str = sa.join("\t");
-			if (!sa_str.match(re_q)) {
-				if (re_hint && !hint) {
-					var r = sa_str.match(re_hint);
-					if (r && r[0].match(/\S+/)) hint = r[0].match(/\S+/)[0];
-				}
-				return false;
-			}
-		}
-
-		return true;
-	});
-
-	var fs = EL('filter_sum');
-	if (fs) {
-		var ls_all = true;
-		var ft = 'item'; if (ls.length != 1) ft += 's';
-		if (tag && (tag != 'all_tags')) { ft = '<b>' + tag + '</b> ' + ft; ls_all = false; }
-		if (day) {
-			var dt = new Date(day);
-			ft += ' on <b>' + weekday(dt, true) + '</b>';
-			ls_all = false;
-		}
-		if (area && (area != 'everywhere')) { ft += ' in <b>' + area + '</b>'; ls_all = false; }
-		if (freetext) { ft += ' matching the query <b>' + freetext + '</b>'; ls_all = false; }
-
-		fs.innerHTML = 'Listing ' + (ls_all ? '<b>all</b> ' : '') + ls.length + ' ' + ft;
-	}
-
-	show_prog_list(ls);
-
-	var dh = EL("q_hint");
-	if (dh) {
-		if (re_hint) {
-			dh.innerHTML = "<b>Hint:</b> search is for full words, but you may also use * and ? as wildcards or \"quoted words\" for exact phrases.";
-			if (hint) dh.innerHTML += " For example, "
-				+ "<span href=\"#\" id=\"q_fix\" onmouseup=\"EL('q').value = '" + glob_hint + "'; prog_filter(); return true;\">"
-				+ "searching for <b>" + glob_hint + "</b> would also match <b>" + hint + "</b></span>";
-		} else {
-			dh.innerHTML = "";
-		}
-	}
-
-	storage_set('prog', { 'day': day, 'area': area, 'tag': tag, 'freetext': freetext });
-}
-
-function update_prog_filters(day, area, tag, freetext) {
-	var dt = "d" + day;
-	var dc = EL("day").getElementsByTagName("li");
-	for (var i = 0, l = dc.length; i < l; ++i) {
-		_set_class(dc[i], 'selected', (dc[i].id == dt));
-	}
-	var da = EL("d");
-	if (da) {
-		_set_class(da, 'disabled', (!ko.full_version && (area == "everywhere") && tag.match(/tags$/) && !freetext));
-	}
-
-	var ft = area || "everywhere";
-	var fc = EL("area").getElementsByTagName("li");
-	for (var i = 0, l = fc.length; i < l; ++i) {
-		_set_class(fc[i], 'selected', (fc[i].id == ft));
-	}
-
-	var tt = tag || "all_tags";
-	var tc = EL("tag").getElementsByTagName("li");
-	var t2_title = "More...";
-	for (var i = 0, l = tc.length; i < l; ++i) {
-		if (tc[i].id == tt) {
-			tc[i].classList.add("selected");
-			if (tc[i].parentNode.id == "tag2") t2_title = "<b>"+tc[i].innerHTML.trim()+"...</b>";
-		} else tc[i].classList.remove("selected");
-	}
-	var t2t = EL("tag2-title"); if (t2t) t2t.innerHTML = t2_title;
-
-	var qc = EL("q");
-	if (qc) {
-		qc.value = freetext;
-		_set_class(qc, 'selected', qc.value);
-	}
-}
-
 function default_prog_day() {
 	var day_start = '', day_end = '';
 	var el_dl = EL("day"); if (!el_dl) return '';
 	var dl = el_dl.getElementsByTagName("li"); if (!dl || !dl.length) return '';
 	for (var i = 0, l = dl.length; i < l; ++i) {
+		if (d == 'all_days') continue;
 		var d = dl[i].id.substr(1);
-		if (!d.length) continue;
+		if (!d) continue;
 		if (!day_start || (d < day_start)) day_start = d;
 		if (!day_end || (d > day_end)) day_end = d;
 	}
 	var day_now = string_date();
 
-	var day = (day_now < day_start) ? ''
-	        : (day_now > day_end) ? ''
-	        : day_now;
+	var day = (day_now > day_start) && (day_now <= day_end) ? day_now : day_start;
 
 	return day;
 }
 
-function update_prog(day, area, tag, freetext) {
-	if (!ko.full_version && !day && (area == "everywhere") && tag.match(/tags$/) && !freetext) {
-		day = default_prog_day();
+
+function prog_get_filters() {
+	var filters = { 'day':'', 'area':'', 'tag':'', 'query':'' };
+	var h = window.location.hash;
+	var h_set = false;
+	if (h.substr(0, 5) == '#prog') {
+		var p = h.substr(6).split('/');
+		for (var i = 0; i < p.length; ++i) {
+			var s = p[i].split(':');
+			if ((s.length == 2) && s[0] && s[1]) {
+				filters[s[0]] = s[1];
+				h_set = true;
+			}
+		}
 	}
-
-	var parts_out = ['#prog'];
-	if (day) parts_out.push('day:' + day);
-	if (area && (area != 'everywhere')) parts_out.push('area:' + area);
-	if (tag && (tag != 'all_tags')) parts_out.push('tag:' + tag);
-	if (freetext) parts_out.push('query:' + freetext);
-	var hash_out = parts_out.join('/');
-
-	if (window.location.hash != hash_out) {
-		window.location.hash = hash_out;
-		return;
-	}
-
-	update_prog_list(day, area, tag, freetext);
-	update_prog_filters(day, area, tag, freetext);
-}
-
-function prog_filter(ctrl, item) {
-	var day = selected_id("day");
-	var area = selected_id("area");
-	var tag = selected_id("tag");
-	var freetext = EL("q").value;
-
-	if (item && !EL(item).classList.contains("disabled")) switch (ctrl) {
-		case "day":  day = item; break;
-		case "area": area = item; break;
-		case "tag":  tag = item; break;
-		case "tag2": tag = item; break;
-	}
-
-	day = day.substr(1);
-
-	update_prog(day, area, tag, freetext);
-}
-
-function show_prog_view(opt) {
-	var day = default_prog_day(), area = "everywhere", tag = "all_tags", freetext = "";
-
-	if (!document.body.classList.contains("prog")) {
-		set_view("prog");
-
+	if (!h_set) {
 		var store = storage_get('prog');
-		if (store) {
-			if ('day' in store) day = store.day;
-			if ('area' in store) area = store.area;
-			if ('tag' in store) tag = store.tag;
-			if ('freetext' in store) freetext = store.freetext;
+		if (store) for (var k in store) {
+			if (filters.hasOwnProperty(k)) filters[k] = store[k];
+		}
+	}
+	return filters;
+}
+
+function prog_set_filters(f) {
+	storage_set('prog', f);
+
+	var p = ['#prog'];
+	for (var k in f) if (k && f[k]) {
+		if ((k == 'area') && (f[k] == 'all_areas')) continue;
+		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
+		p.push(k + ':' + f[k]);
+	}
+	var h = p.join('/');
+	if (window.location.hash != h) {
+		window.location.hash = h;
+		return true;
+	}
+
+	return false;
+}
+
+
+function prog_filter(it) {
+	if (this.day && it.date != this.day) return false;
+
+	if (this.area && it.loc.indexOf(this.area) < 0) return false;
+
+	if (this.tag) {
+		if (this.tag instanceof RegExp) {
+			if (!this.tag.test(it.title)) return false;
+		} else {
+			if (!it.tags || (it.tags.indexOf(this.tag) < 0)) return false;
 		}
 	}
 
-	if (opt) {
-		var parts_in = opt.split('/');
-		for (var i = 0, l = parts_in.length; i < l; ++i) {
-			var s = parts_in[i].split(':');
-			if (s.length >= 2) switch (s[0]) {
-				case 'day':   day = s[1]; break;
-				case 'area':  area = s[1]; break;
-				case 'tag':   tag = s[1]; break;
-				case 'query': freetext = s[1]; break;
+	if (this.query) {
+		var found = false;
+		var sa = [ it.title, it.desc, it.loc[0] ];
+		for (var i = 0; i < sa.length; ++i) {
+			if (this.query.test(sa[i])) { found = true; break; }
+		}
+		if (!found && it.people) {
+			for (var i = 0; i < it.people.length; ++i) {
+				if (this.query.test(it.people[i])) { found = true; break; }
+			}
+		}
+		if (!found) return false;
+	}
+
+	return true;
+}
+
+function prog_show_list(f) {
+	var tag_str = f.tag || '';
+	if (f.tag && EL(f.tag)) {
+		var t = EL(f.tag).getAttribute("data-regexp");
+		if (t) f.tag = new RegExp(t);
+	}
+
+	var query_str = f.query || '';
+	if (f.query) f.query = GlobToRE(f.query);
+
+	var ls = program.filter(prog_filter, f);
+
+	if (f.tag) f.tag = tag_str;
+	if (f.query) f.query = query_str;
+
+	var fs = EL('filter_sum');
+	if (fs) {
+		var ls_all = true;
+		var ft = 'item'; if (ls.length != 1) ft += 's';
+		if (f.tag) { ft = '<b>' + f.tag + '</b> ' + ft; ls_all = false; }
+		if (f.day) {
+			var dt = new Date(f.day);
+			ft += ' on <b>' + weekday(dt, true) + '</b>';
+			ls_all = false;
+		}
+		if (f.area) { ft += ' in <b>' + f.area + '</b>'; ls_all = false; }
+		if (f.query) { ft += ' matching the query <b>' + f.query + '</b>'; ls_all = false; }
+
+		fs.innerHTML = 'Listing ' + (ls_all ? '<b>all</b> ' : '') + ls.length + ' ' + ft;
+	}
+
+	show_prog_list(ls);
+}
+
+
+function prog_show_filters(f) {
+	console.log(f);
+	var prev = EL('prog_filters').getElementsByClassName('selected');
+	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
+		var cl = prev[i].classList;
+		if (cl.contains('popup-title')) prev[i].textContent = 'More...';
+		cl.remove('selected');
+	}
+
+	for (var k in f) {
+		if (k == 'query') {
+			var q = EL("q");
+			if (q) {
+				q.value = f.query;
+				if (f.query) q.classList.add('selected');
+			}
+		} else {
+			var id = f[k];
+			if (!id) id = 'all_' + k + 's';
+			else if (id.match(/^[^a-zA-Z]/)) id = k[0] + id;
+			var el = EL(id);
+			if (el) {
+				el.classList.add('selected');
+				if (el.parentNode.id.match(/\d+$/)) {
+					var p = el.parentNode.parentNode.firstChild;
+					p.classList.add('selected');
+					p.textContent = el.textContent;
+				}
 			}
 		}
 	}
 
-	update_prog(day, area, tag, freetext);
+	var qh = EL('q_hint');
+	if (qh) {
+		if (f.query) {
+			var ex = EL('q_hint_example');
+			if (ex) {
+				var glob_hint = f.query.match(/[?*"]/) ? '' : f.query + '*';
+				if (glob_hint) {
+					ex.textContent = glob_hint;
+					ex.parentNode.onmouseup = function() { EL('q').value = glob_hint; EL('q').focus(); EL('q').blur(); };
+					ex.parentNode.style.display = 'inline';
+					ex.parentNode.style.cursor = 'pointer';
+				} else {
+					ex.parentNode.style.display = 'none';
+				}
+			}
+		}
+		qh.style.display = f.query ? 'block' : 'none';
+	}
+}
+
+
+
+
+// hashchange -> read filters from url + store -> set filters in html + store -> list items
+function show_prog_view() {
+	set_view("prog");
+	var f = prog_get_filters();
+	if (prog_set_filters(f)) return;
+
+	prog_show_filters(f);
+
+	for (var k in f) {
+		if (!k || !f[k] || (f[k] == 'all_' + k + 's')) { delete f[k]; continue; }
+	}
+
+	prog_show_list(f);
+}
+
+
+
+
+// read filters from url + ev -> set new hash
+function prog_filter_change(ev) {
+	ev = ev || window.event;
+
+	var key, value;
+	switch (ev.type) {
+		case 'click':
+			if (ev.target.tagName.toLowerCase() != 'li') return;
+			key = ev.target.parentNode.id.replace(/\d+$/, '');
+			value = ev.target.id;
+			if (key == 'day') value = value.replace(/^d/, '');
+			break;
+
+		case 'submit':
+			ev.preventDefault();
+			// fallthrough
+		case 'blur':
+			key = 'query';
+			value = EL("q").value;
+			break;
+
+		default: return;
+	}
+
+	var filters = prog_get_filters();
+	filters[key] = value;
+	if (prog_set_filters(filters)) ev.stopPropagation();
 }
 
 
@@ -998,16 +1045,13 @@ if (EL("next_filters")) {
 
 
 // init prog view
-var dc = EL("prog_filters").getElementsByTagName("li");
-for (var i = 0, l = dc.length; i < l; ++i) {
-	dc[i].onclick = function(ev) { prog_filter(this.parentNode.id, this.id); return true; };
-}
-var sf = EL("search");
+EL('prog_filters').onclick = prog_filter_change;
+var sf = EL('search');
 if (sf) {
-	sf.onsubmit = function() { prog_filter(); return false; };
-	sf.onreset = function() { EL("q").value = ""; window.location.hash = '#prog'; return true; };
+	sf.onsubmit = prog_filter_change;
+	EL('q').onblur = prog_filter_change;
+	sf.onreset = function() { prog_set_filters({}); };
 }
-EL("q").onblur = prog_filter;
 
 make_popup_menu('tag2-list', 'tag2-disable-bg');
 
@@ -1068,6 +1112,25 @@ if (EL("scroll_link")) {
 }
 
 
+// init item expansion
+EL('prog_ls').onclick = function(ev) {
+	ev = ev || window.event;
+
+	var el = ev.target;
+	while (!/\bitem(_|$)/.test(el.className)) {
+		if (el.id == 'prog_ls') return;
+		if ((el.tagName.toLowerCase() == 'a') && el.href) return;
+		el = el.parentNode;
+	}
+	if (!el.id || el.id[0] != 'p') return;
+
+	if (el.parentNode.classList.toggle("expanded")) {
+		show_info(el, el.id.substr(1));
+	}
+};
+
+
+
 // init info view
 var lu = EL('last-updated');
 if (lu && (location.protocol == 'http:')) {
@@ -1089,7 +1152,7 @@ function init_view() {
 		case 'star': show_star_view(opt.substr(4)); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'info': show_info_view(); break;
-		case 'prog': show_prog_view(opt.substr(4)); break;
+		case 'prog': show_prog_view(); break;
 		default:     show_prog_view(); break;
 	}
 
