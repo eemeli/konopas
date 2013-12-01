@@ -1148,12 +1148,16 @@ function init_view() {
 init_view();
 window.onhashchange = init_view;
 
-window.addEventListener('load', function(e) {
-	window.applicationCache.addEventListener('updateready', function(e) {
-		if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-			window.applicationCache.swapCache();
-			var r = EL('refresh');
-			if (r) { r.classList.add('enabled'); r.onclick = function() { window.location.reload(); }; }
+
+if (EL('refresh')) window.addEventListener('load', function() {
+	var cache = window.applicationCache;
+	cache.addEventListener('updateready', function() {
+		if (cache.status == cache.UPDATEREADY) {
+			EL('refresh').classList.add('enabled');
+			EL('refresh').onclick = function() { window.location.reload(); };
 		}
 	}, false);
+	if (cache.status != cache.UNCACHED) {
+		window.setInterval(function() { cache.update(); }, 360000);
+	}
 }, false);
