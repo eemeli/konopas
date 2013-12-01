@@ -27,7 +27,8 @@ var ko = {
 	'time_show_am_pm': false,
 	'abbrev_00_minutes': true, // only for am/pm time
 	'always_show_participants': false,
-	'expand_all_max_items': 100
+	'expand_all_max_items': 100,
+	'show_all_days_by_default': false
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
@@ -639,21 +640,18 @@ function show_star_view(opt) {
 
 // ------------------------------------------------------------------------------------------------ program view
 
-function default_prog_day() {
+function prog_default_day() {
 	var day_start = '', day_end = '';
 	var el_dl = EL("day"); if (!el_dl) return '';
 	var dl = el_dl.getElementsByTagName("li"); if (!dl || !dl.length) return '';
 	for (var i = 0, l = dl.length; i < l; ++i) {
-		if (d == 'all_days') continue;
 		var d = dl[i].id.substr(1);
-		if (!d) continue;
+		if (!d || d == 'll_days') continue;
 		if (!day_start || (d < day_start)) day_start = d;
 		if (!day_end || (d > day_end)) day_end = d;
 	}
 	var day_now = string_date();
-
 	var day = (day_now > day_start) && (day_now <= day_end) ? day_now : day_start;
-
 	return day;
 }
 
@@ -766,7 +764,6 @@ function prog_show_list(f) {
 
 
 function prog_show_filters(f) {
-	console.log(f);
 	var prev = EL('prog_filters').getElementsByClassName('selected');
 	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 		var cl = prev[i].classList;
@@ -825,6 +822,8 @@ function show_prog_view() {
 	set_view("prog");
 	var f = prog_get_filters();
 	if (prog_set_filters(f)) return;
+
+	if (!f.day && !ko.show_all_days_by_default) f.day = prog_default_day();
 
 	prog_show_filters(f);
 
