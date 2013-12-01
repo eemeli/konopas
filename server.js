@@ -47,7 +47,8 @@ Server.prototype.error = function(msg, url, self) {
 		msg = 'The command "<code>' + cmd + '</code>" failed.';
 	}
 	if (!self.err_el) {
-		var el = _new_elem('div', self.err_el_id);
+		var el = document.createElement('div');
+		el.id = self.err_el_id;
 		el.title = 'Click to close';
 		el.onclick = function(ev) { self.err_el.style.display = 'none'; };
 		document.body.appendChild(el);
@@ -196,7 +197,7 @@ Server.prototype.show_pub_votes = function(id) {
 		n = v_el.nextSibling;
 	}
 	if (v && v[3]) {
-		var c = _new_elem('div', '', 'num-comments', v[3] + ' comment' + (v[3] == 1 ? '' : 's'));
+		var c = _new_elem('div', 'num-comments', v[3] + ' comment' + (v[3] == 1 ? '' : 's'));
 		v_el.parentNode.insertBefore(c, n);
 	}
 }
@@ -245,18 +246,17 @@ Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 
 
 Server.prototype.make_comment_div = function(c) {
-	var d = _new_elem('div', '', 'comment');
+	var d = _new_elem('div', 'comment');
 
-	var n = _new_elem('span', '', 'comment-author', c.name);
+	var n = _new_elem('span', 'comment-author', c.name);
 	d.appendChild(n);
 
-	var t = _new_elem('span', '', 'comment-time', pretty_time_diff(c.ctime));
+	var t = _new_elem('span', 'comment-time', pretty_time_diff(1000 * c.ctime));
 	var dt = new Date(c.ctime * 1000);
 	t.title = dt.toLocaleString();
 	d.appendChild(t);
 
-	var m = _new_elem('div');
-	m.innerHTML = c.text;
+	var m = _new_elem('div', '', c.text);
 	d.appendChild(m);
 
 	return d;
@@ -356,10 +356,10 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 
 
 Server.prototype.make_comments_wrap = function(id) {
-	var ac = _new_elem('a', '', 'js-link discreet');
-	var c_el = _new_elem('div', 'c' + id, 'comments');
-	var af = _new_elem('a', '', 'js-link discreet', 'Add a comment');
-	var f_el = _new_elem('form', 'f' + id, 'empty');
+	var ac = _new_elem('a', 'js-link discreet');
+	var c_el = _new_elem('div', 'comments'); c_el.id = 'c' + id;
+	var af = _new_elem('a', 'js-link discreet', 'Add a comment');
+	var f_el = _new_elem('form', 'empty'); f_el.id = 'f' + id;
 
 	var self = this;
 	ac.onclick = function(ev) { self.onclick_show_comments(ev, id, c_el, af, f_el, self); };
@@ -369,7 +369,7 @@ Server.prototype.make_comments_wrap = function(id) {
 	ac.textContent = 'Hide';
 	ac.click();
 
-	var d = _new_elem('div', '', 'comments-wrap');
+	var d = _new_elem('div', 'comments-wrap');
 	d.appendChild(ac);
 	d.appendChild(c_el);
 	d.appendChild(af);
@@ -582,17 +582,4 @@ Server.prototype.cb_ical_link = function(url) {
 	this.ical = url;
 	localStorage.setItem('konopas.'+this.id+'.ical_link', url);
 	this.show_ical_link(false);
-}
-
-
-
-// ------------------------------------------------------------------------------------------------ util
-
-function _new_elem(tag, id, cl, text, hide) {
-	var e = document.createElement(tag);
-	if (id) e.id = id;
-	if (cl) e.className = cl;
-	if (text) e.textContent = text;
-	if (hide) e.style.display = 'none';
-	return e;
 }

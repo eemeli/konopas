@@ -51,6 +51,14 @@ function link_to_qr_code(url) {
 
 function EL(id) { return document.getElementById(id); }
 
+function _new_elem(tag, cl, text, hide) {
+	var e = document.createElement(tag);
+	if (cl) e.className = cl;
+	if (text) e.textContent = text;
+	if (hide) e.style.display = 'none';
+	return e;
+}
+
 function _set_class(el, cl, set) { el.classList[set ? 'add' : 'remove'](cl); }
 
 function selected_id(parent_id) {
