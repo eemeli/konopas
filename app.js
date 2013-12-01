@@ -1122,13 +1122,23 @@ if (EL("scroll_link")) {
 
 // init info view
 var lu = EL('last-updated');
-if (lu && (location.protocol == 'http:')) {
+var cache_manifest = document.body.parentNode.getAttribute('manifest');
+if (lu && cache_manifest && (location.protocol == 'http:')) {
 	var x = new XMLHttpRequest();
 	x.onload = function() {
 		var t = new Date(this.getResponseHeader("Last-Modified"));
-		lu.innerHTML = 'Program and participant data were last updated <span style="border-bottom: 1px dotted; cursor: pointer;" onclick="var tmp = this.title; this.title = this.innerHTML; this.innerHTML = tmp;" title="' + t.toLocaleString() + '">' + pretty_time_diff(t) + '</span>.';
+		var span = lu.getElementsByTagName('span')[0];
+		span.textContent = pretty_time_diff(t);
+		span.title = t.toLocaleString();
+		span.onclick = function(ev) {
+			var self = (ev || window.event).target;
+			var tmp = self.title;
+			self.title = self.textContent;
+			self.textContent = tmp;
+		};
+		lu.style.display = 'block';
 	};
-	x.open('GET', 'cache.manifest', true);
+	x.open('GET', cache_manifest, true);
 	x.send();
 }
 

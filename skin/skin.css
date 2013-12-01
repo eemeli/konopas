@@ -861,3 +861,10 @@ input[type="text"] {
 #info_view ol {
   margin: 5px 0;
 }
+#info_view #last-updated {
+  display: none;
+}
+#info_view #last-updated span {
+  border-bottom: 1px dotted;
+  cursor: pointer;
+}
