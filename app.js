@@ -715,7 +715,7 @@ function _prog_set_filters(f) {
 }
 
 
-function prog_filter(it) {
+function _prog_filter(it) {
 	if (this.day && it.date != this.day) return false;
 
 	if (this.area && it.loc.indexOf(this.area) < 0) return false;
@@ -745,7 +745,7 @@ function prog_filter(it) {
 	return true;
 }
 
-function prog_show_list(f) {
+function _prog_show_list(f) {
 	var tag_str = f.tag || '';
 	if (f.tag && EL(f.tag)) {
 		var t = EL(f.tag).getAttribute("data-regexp");
@@ -755,7 +755,7 @@ function prog_show_list(f) {
 	var query_str = f.query || '';
 	if (f.query) f.query = GlobToRE(f.query);
 
-	var ls = program.filter(prog_filter, f);
+	var ls = program.filter(_prog_filter, f);
 
 	if (f.tag) f.tag = tag_str;
 	if (f.query) f.query = query_str;
@@ -780,7 +780,7 @@ function prog_show_list(f) {
 }
 
 
-function prog_show_filters(f) {
+function _prog_show_filters(f) {
 	var prev = EL('prog_filters').getElementsByClassName('selected');
 	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 		var cl = prev[i].classList;
@@ -842,13 +842,13 @@ function show_prog_view() {
 
 	if (!f.day && !ko.show_all_days_by_default) f.day = _prog_default_day();
 
-	prog_show_filters(f);
+	_prog_show_filters(f);
 
 	for (var k in f) {
 		if (!k || !f[k] || (f[k] == 'all_' + k + 's')) { delete f[k]; continue; }
 	}
 
-	prog_show_list(f);
+	_prog_show_list(f);
 }
 
 
