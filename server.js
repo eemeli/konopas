@@ -111,8 +111,7 @@ Server.prototype.show_my_vote = function(id, v_el, v) {
 
 	if (typeof v == 'undefined') v = this.my_votes_data[id];
 
-	for (var a = v_el.firstChild; a != null; a = a.nextSibling) {
-		if (a.nodeType != 1) continue;
+	for (var a = v_el.firstElementChild; a != null; a = a.nextElementSibling) {
 		if (a.classList.contains('v_pos')) {
 			switch (v) {
 				case  2:  a.classList.add('voted');     a.classList.add('v2');     a.title = 'doubleplusgood';  break;
@@ -186,8 +185,8 @@ Server.prototype.show_pub_votes = function(id, v_el) {
 
 	_set_class(v_el, 'has_votes', (v[0] || v[1] || v[2]));
 
-	for (var e = v_el.firstChild; e != null; e = e.nextSibling) {
-		if (e.nodeType == 1) e.textContent = e.classList.contains('v_pos')
+	for (var e = v_el.firstElementChild; e != null; e = e.nextElementSibling) {
+		e.textContent = e.classList.contains('v_pos')
 			? '+' + (v[1] + 2 * v[2])
 			: '-' + v[0]; // v_neg
 	}
