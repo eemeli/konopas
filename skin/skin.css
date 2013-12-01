@@ -726,8 +726,9 @@ input[type="text"] {
 #part_view {
   position: relative;
   z-index: 3;
-  background: #ffffff;
   padding-top: 0;
+  margin-bottom: 1em;
+  background: #ffffff;
 }
 #name_sort li {
   display: inline-block;
