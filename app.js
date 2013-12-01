@@ -281,7 +281,7 @@ function array_overlap(a, b) {
 function _item_people(it) {
 	if (!it.people || !it.people.length) return '';
 	var a = it.people.map(function(p) {
-		return "<a href=\"#part/" + p.id + "\">" + p.name + "</a>";
+		return "<a href=\"#part/" + encodeURIComponent(p.id) + "\">" + p.name + "</a>";
 	});
 	return '<div class="item-people">' + a.join(', ') + '</div>\n';
 }
@@ -289,7 +289,7 @@ function _item_people(it) {
 function _item_tags(it) {
 	if (!it.tags || !it.tags.length) return '';
 	var a = it.tags.map(function(t) {
-		return '<a href="#prog/tag:' + t + '">' + t + '</a>';
+		return '<a href="#prog/tag:' + encodeURIComponent(t) + '">' + t + '</a>';
 	});
 	return '<div class="discreet">Tracks: ' + a.join(', ') + '</div>\n';
 }
@@ -683,7 +683,7 @@ function _prog_get_filters() {
 		for (var i = 0; i < p.length; ++i) {
 			var s = p[i].split(':');
 			if ((s.length == 2) && s[0] && s[1]) {
-				filters[s[0]] = s[1];
+				filters[s[0]] = decodeURIComponent(s[1]);
 				h_set = true;
 			}
 		}
@@ -704,7 +704,7 @@ function _prog_set_filters(f) {
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
 		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
-		p.push(k + ':' + f[k]);
+		p.push(k + ':' + encodeURIComponent(f[k]));
 	}
 	var h = p.join('/');
 	if (window.location.hash != h) {
@@ -942,7 +942,7 @@ function show_participant_list(name_range) {
 	});
 
 	EL('part_names').innerHTML = lp.map(function(p) {
-		return '<li><a href="#part/' + p.id + '">' + clean_name(p, true) + '</a></li>';
+		return '<li><a href="#part/' + encodeURIComponent(p.id) + '">' + clean_name(p, true) + '</a></li>';
 	}).join('');
 
 	EL('part_info').innerHTML = '';
@@ -1000,7 +1000,7 @@ function show_part_view(opt) {
 	}
 
 	if (opt) {
-		var p_id = opt.substr(1);
+		var p_id = decodeURIComponent(opt.substr(1));
 		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
