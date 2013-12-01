@@ -397,18 +397,18 @@ function item_show_list(ls) {
 
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
-		var exp = expand_all.innerHTML == 'Expand all items';
-		if (expand_all.innerHTML == 'Expand all items') {
+		var exp = expand_all.textContent == 'Expand all items';
+		if (expand_all.textContent == 'Expand all items') {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.add("expanded");
 				_item_show_extra(items[i], items[i].id.substr(1));
 			}
-			expand_all.innerHTML = 'Collapse all items';
+			expand_all.textContent = 'Collapse all items';
 		} else {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.remove("expanded");
 			}
-			expand_all.innerHTML = 'Expand all items';
+			expand_all.textContent = 'Expand all items';
 		}
 	};
 
@@ -448,20 +448,20 @@ function update_next_select(t_off) {
 	var ts = EL("next_time_select");
 	if (!ts) return;
 
-	var t = new Date();
-	t.setMinutes(Math.floor(t.getMinutes()/15) * 15);
-	var lt = [];
 	var t_step = 30;
 	var t_range = [-12 * t_step, 12 * t_step];
-	t.setMinutes(t.getMinutes() + t_range[0]);
+	var t = new Date();
+	t.setMinutes(Math.floor(t.getMinutes()/15) * 15 + t_range[0]);
+	ts.options.length = 0;
 	for (var m = t_range[0]; m <= t_range[1]; m += t_step) {
-		var value = ' value="' + m + '"' + (m == t_off ? ' selected' : '');
-		var now = m ? '' : ' id="next_time_select_now"';
-		var txt = weekday(t, false) + ', ' + pretty_time(t, false);
-		lt.push('<option' + value + now + '>' + txt + '</option>');
+		var opt = document.createElement('option');
+		opt.value = m;
+		opt.text = weekday(t, false) + ', ' + pretty_time(t, false);
+		if (m == t_off) opt.selected = true;
+		if (!m) opt.id = 'next_time_select_now';
+		ts.add(opt);
 		t.setMinutes(t.getMinutes() + t_step);
 	}
-	ts.innerHTML = lt.join("\n");
 
 	ts.onchange = function() { update_next_list(selected_id("next_type")); }
 	var tb = EL("next_earlier");
@@ -510,7 +510,7 @@ function update_next_list(next_type) {
 	for (var k in next) next_prog.push(next[k]);
 
 	if (next_prog.length > 0) {
-		EL("next_start_note").innerHTML = '';
+		EL("next_start_note").textContent = '';
 	} else if (ms_next) {
 		var start_str = '';
 		var t0 = new Date();
@@ -522,9 +522,9 @@ function update_next_list(next_type) {
 			start_str += h_next + ' hour' + ((h_next == 1) ? '' : 's') + ' and ';
 		}
 		start_str += min_next + ' minute' + ((min_next == 1) ? '' : 's');
-		EL("next_start_note").innerHTML = 'The next program item starts in ' + start_str + ' after the set time.';
+		EL("next_start_note").textContent = 'The next program item starts in ' + start_str + ' after the set time.';
 	} else {
-		EL("next_start_note").innerHTML = 'There are no more program items scheduled.';
+		EL("next_start_note").textContent = 'There are no more program items scheduled.';
 	}
 
 	item_show_list(next_prog);
@@ -1110,7 +1110,7 @@ if (EL("scroll_link")) {
 
 			prev_scroll.i = i;
 			prev_scroll.top = tl[i].offsetTop;
-			te.innerHTML = tl[i].getAttribute("data-day") + "<br />" + tl[i].innerHTML;
+			te.textContent = tl[i].getAttribute('data-day') + '\n' + tl[i].textContent;
 			te.style.display = "block";
 		}
 	};} else {

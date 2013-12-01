@@ -180,6 +180,7 @@ input[type="text"] {
 }
 #time {
   top: 8px;
+  white-space: pre;
 }
 #scroll {
   bottom: 8px;
