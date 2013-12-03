@@ -291,7 +291,7 @@ function _item_tags(it) {
 	var a = it.tags.map(function(t) {
 		return '<a href="#prog/tag:' + encodeURIComponent(t) + '">' + t + '</a>';
 	});
-	return '<div class="discreet">Tracks: ' + a.join(', ') + '</div>\n';
+	return '<div class="discreet">Tags: ' + a.join(', ') + '</div>\n';
 }
 
 function _item_loc_str(it) {
@@ -497,11 +497,13 @@ function update_next_list(next_type) {
 		if ((!ms_next || (ms_it < ms_next)) && (ms_it > ms_max)) ms_next = ms_it;
 
 		if (next_type == "next_by_room") {
-			if (next[it.loc[0]]) {
-				if (next[it.loc[0]].date < it.date) continue;
-				if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) continue;
+			if (it.loc) {
+				if (next[it.loc[0]]) {
+					if (next[it.loc[0]].date < it.date) continue;
+					if ((next[it.loc[0]].date == it.date) && (next[it.loc[0]].time < it.loc[0])) continue;
+				}
+				next[it.loc[0]] = it;
 			}
-			next[it.loc[0]] = it;
 		} else {
 			if (ms_it <= ms_max) next['n' + (++n)] = it;
 		}
@@ -719,7 +721,7 @@ function _prog_set_filters(f) {
 function _prog_filter(it) {
 	if (this.day && it.date != this.day) return false;
 
-	if (this.area && it.loc.indexOf(this.area) < 0) return false;
+	if (this.area && (!it.loc || it.loc.indexOf(this.area) < 0)) return false;
 
 	if (this.tag) {
 		if (this.tag instanceof RegExp) {
@@ -1066,18 +1068,20 @@ make_popup_menu('tag2-list', 'tag2-disable-bg');
 
 
 // init part view
-for (var i = 0, l = people.length; i < l; ++i) {
-	people[i].sortname = ((people[i].name[1] || '') + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
-}
-people.sort(function(a, b) {
-		 if (a.sortname < b.sortname) return -1;
-	else if (a.sortname > b.sortname) return 1;
-	else                              return 0;
-});
+if (typeof people != 'undefined') {
+	for (var i = 0, l = people.length; i < l; ++i) {
+		people[i].sortname = ((people[i].name[1] || '') + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
+	}
+	people.sort(function(a, b) {
+			 if (a.sortname < b.sortname) return -1;
+		else if (a.sortname > b.sortname) return 1;
+		else                              return 0;
+	});
 
-var pc = EL("part_filters").getElementsByTagName("li");
-for (var i = 0, l = pc.length; i < l; ++i) {
-	pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
+	var pc = EL("part_filters").getElementsByTagName("li");
+	for (var i = 0, l = pc.length; i < l; ++i) {
+		pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
+	}
 }
 
 
