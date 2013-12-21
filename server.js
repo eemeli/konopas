@@ -22,7 +22,7 @@ function Server(id, stars, opt) {
 	this.disconnect();
 	if (this.stars) this.stars.server = this;
 	if (this.el && this.id) this.exec('info');
-	else console.warn("server init failed");
+	else _log("server init failed", 'warn');
 
 	var m = /#server_error=(.+)/.exec(window.location.hash);
 	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href, this);
@@ -34,13 +34,13 @@ Server.prototype.disconnect = function() {
 }
 
 Server.prototype.logout = function(ev) {
-	console.log("server logout");
+	_log("server logout");
 	server.exec('/logout');
 	(ev || window.event).preventDefault();
 }
 
 Server.prototype.error = function(msg, url, self) {
-	console.error('server error ' + msg + ', url: ' + url);
+	_log('server error ' + msg + ', url: ' + url, 'error');
 	self = self || this;
 	if (msg =='') {
 		var cmd = url.replace(self.host, '').replace('/' + self.id + '/', '');
@@ -62,8 +62,8 @@ Server.prototype.error = function(msg, url, self) {
 Server.prototype.onmessage = function(ev, self) {
 	ev = ev || window.event;
 	if (ev.origin != self.host) {
-		console.error('Got an unexpected message from ' + ev.origin);
-		console.log(ev);
+		_log('Got an unexpected message from ' + ev.origin, 'error');
+		_log(ev);
 		return;
 	}
 	JSON.parse(ev.data, function(k, v) {
@@ -88,14 +88,14 @@ Server.prototype.prog_mtime = function() {
 
 Server.prototype.add_prog = function(id, add_star) {
 	if (id instanceof Array) id = id.join(',');
-	console.log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
+	_log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
 	this.exec('prog'
 		+ (add_star ? '?add=' : '?rm=') + id
 		+ '&t=' + this.prog_mtime());
 }
 
 Server.prototype.set_prog = function(star_list) {
-	console.log('server set_prog "' + star_list);
+	_log('server set_prog "' + star_list);
 	this.exec('prog'
 		+ '?set=' + star_list.join(',')
 		+ '&t=' + this.prog_mtime());
@@ -133,7 +133,7 @@ Server.prototype.vote = function(id, v, self) {
 		case  1: if (v > 0) v = 2; break;
 		case  2: if (v > 0) v = 0; break;
 	}
-	console.log('server vote ' + id + ' ' + v);
+	_log('server vote ' + id + ' ' + v);
 
 	self.my_votes_data[id] = v;
 	if (v && self.pub_data) {
@@ -443,7 +443,7 @@ Server.prototype.url = function(cmd) {
 // based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
 Server.prototype.exec = function(cmd) {
 	if (/^(prog|vote)/.test(cmd) && !this.connected) {
-		console.warn('server not connected: ' + cmd);
+		_log('server not connected: ' + cmd, 'warn');
 		return;
 	}
 
@@ -490,19 +490,19 @@ Server.prototype.cb_ok = function(v, self) {
 				init_view();
 			}
 			self.exec('info');
-			console.log("server ok (logout): " + JSON.stringify(v));
+			_log("server ok (logout): " + JSON.stringify(v));
 			break;
 
 		case 'prog':
 			var t = /&server_mtime=(\d+)/.exec(query);
 			if (t) self.prog_server_mtime = parseInt(t[1], 10);
-			console.log("server ok (prog): " + JSON.stringify(v));
+			_log("server ok (prog): " + JSON.stringify(v));
 			break;
 
 		case 'vote':
 			var t = /&server_mtime=(\d+)/.exec(query);
 			if (t) self.my_votes_mtime = parseInt(t[1], 10);
-			console.log("server ok (vote): " + JSON.stringify(v));
+			_log("server ok (vote): " + JSON.stringify(v));
 			break;
 
 		case 'add_comment':
@@ -512,11 +512,11 @@ Server.prototype.cb_ok = function(v, self) {
 				var f_el = document.getElementById('f' + id[1]);
 				if (f_el) f_el.reset();
 			}
-			console.log("server ok (add_comment): " + JSON.stringify(v));
+			_log("server ok (add_comment): " + JSON.stringify(v));
 			break;
 
 		default:
-			console.warn("server ok (???): " + JSON.stringify(v));
+			_log("server ok (???): " + JSON.stringify(v), 'warn');
 	}
 }
 
@@ -530,7 +530,7 @@ Server.prototype.cb_fail = function(v) {
 // ------------------------------------------------------------------------------------------------ callback
 
 Server.prototype.cb_info = function(v) {
-	console.log("server info: " + JSON.stringify(v));
+	_log("server info: " + JSON.stringify(v));
 	this.connected = [v.name, v.email];
 	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
 	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
@@ -544,7 +544,7 @@ Server.prototype.cb_info = function(v) {
 }
 
 Server.prototype.cb_login = function(v) {
-	console.log("server login: " + JSON.stringify(v));
+	_log("server login: " + JSON.stringify(v));
 	var links = [];
 	for (var cmd in v) {
 		links.push('<a href="' + this.url(cmd) + '">' + v[cmd] + '</a>');
@@ -559,28 +559,28 @@ Server.prototype.cb_login = function(v) {
 }
 
 Server.prototype.cb_my_prog = function(v) {
-	console.log("server my_prog: " + JSON.stringify(v));
+	_log("server my_prog: " + JSON.stringify(v));
 	this.prog_data = v.prog;
 	if (v.t0) for (var id in this.prog_data) { this.prog_data[id][1] += v.t0; }
 	if (this.stars) this.stars.sync(this.prog_data);
-	else console.warn("Server.stars required for prog sync");
+	else _log("Server.stars required for prog sync", 'warn');
 }
 
 Server.prototype.cb_my_votes = function(v) {
-	console.log("server my_votes: " + JSON.stringify(v));
+	_log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
 	this.my_votes_mtime = v.mtime;
 	for (var id in v.votes) this.show_my_vote(id);
 }
 
 Server.prototype.cb_pub_data = function(p) {
-	console.log("server pub_data: " + JSON.stringify(p));
+	_log("server pub_data: " + JSON.stringify(p));
 	this.pub_data = p;
 	for (var id in p) this.show_pub_votes(id);
 }
 
 Server.prototype.cb_show_comments = function(id, c) {
-	console.log("server show_comments (" + id + "): " + JSON.stringify(c));
+	_log("server show_comments (" + id + "): " + JSON.stringify(c));
 	c.sort(function(a, b) { return a.ctime - b.ctime; });
 	this.pub_comments[id] = c;
 	this.show_comments(id, this);

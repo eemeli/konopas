@@ -58,13 +58,10 @@ Stars.prototype.toggle = function(el, id) {
 }
 
 Stars.prototype.sync = function(new_data) {
-	//console.log("old data: " + JSON.stringify(this.data));
-	//console.log("new data: " + JSON.stringify(new_data));
-
 	var local_mod = [], redraw = false;
 	for (var id in new_data) {
 		if (new_data[id].length != 2) {
-			console.warn('Stars.sync: invalid input ' + id + ': ' + JSON.stringify(new_data[id]));
+			_log('Stars.sync: invalid input ' + id + ': ' + JSON.stringify(new_data[id]), 'warn');
 			continue;
 		}
 		if (!(id in this.data) || (new_data[id][1] > this.data[id][1])) {
@@ -74,7 +71,7 @@ Stars.prototype.sync = function(new_data) {
 		}
 	}
 	if (local_mod.length) {
-		console.log('Stars.sync: local changes: ' + local_mod + (redraw ? ' -> redraw' : ''));
+		_log('Stars.sync: local changes: ' + local_mod + (redraw ? ' -> redraw' : ''));
 		this.write();
 		if (redraw) init_view();
 	}
@@ -88,16 +85,16 @@ Stars.prototype.sync = function(new_data) {
 			}
 		}
 		if (server_add.length) {
-			console.log('Stars.sync: server add: ' + server_add);
+			_log('Stars.sync: server add: ' + server_add);
 			this.server.add_prog(server_add, true);
 		}
 		if (server_rm.length) {
-			console.log('Stars.sync: server rm: ' + server_rm);
+			_log('Stars.sync: server rm: ' + server_rm);
 			this.server.add_prog(server_rm, false);
 		}
 
 		if (!local_mod.length && !server_add.length && !server_rm.length) {
-			console.log('Stars.sync: no changes');
+			_log('Stars.sync: no changes');
 		}
 	}
 }

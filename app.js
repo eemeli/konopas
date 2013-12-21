@@ -29,7 +29,8 @@ var ko = {
 	'always_show_participants': false,
 	'expand_all_max_items': 100,
 	'show_all_days_by_default': false,
-	'use_server': false
+	'use_server': false,
+	'log_messages': true
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
@@ -49,6 +50,14 @@ function link_to_short_url(url) {
 
 function link_to_qr_code(url) {
 	return 'http://chart.apis.google.com/chart?cht=qr&chs=350x350&chl=' + encodeURIComponent(url.replace(/^http:\/\//, ''));
+}
+
+function _log(msg, lvl) {
+	if (ko.log_messages && console) switch (lvl) {
+		case 'error': console.error(msg); break;
+		case 'warn':  console.warn(msg); break;
+		default:      console.log(msg);
+	}
 }
 
 function EL(id) { return document.getElementById(id); }
