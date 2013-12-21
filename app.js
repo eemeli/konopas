@@ -732,11 +732,7 @@ function _prog_filter(it) {
 	}
 
 	if (this.query) {
-		var found = false;
-		var sa = [ it.title, it.desc, it.loc[0] ];
-		for (var i = 0; i < sa.length; ++i) {
-			if (this.query.test(sa[i])) { found = true; break; }
-		}
+		var found = this.query.test(it.title) || this.query.test(it.desc) || (it.loc && this.query.test(it.loc[0]));
 		if (!found && it.people) {
 			for (var i = 0; i < it.people.length; ++i) {
 				if (this.query.test(it.people[i])) { found = true; break; }

@@ -33,16 +33,16 @@ function parse() {
 	days.sort();
 
 
-	var area_levels = Math.max.apply(null, program.map(function(p) { return p.loc.length; }));
+	var area_levels = Math.max.apply(null, program.map(function(p) { return p.loc && p.loc.length || 0; }));
 	var areas = [];
 	var areas_counted = {};
 	for (var i = 0; i < area_levels; ++i) {
-		areas.push(program.map(function(p) { return p.loc[i]; }).filter(unique));
+		areas.push(program.map(function(p) { return p.loc && p.loc[i] || ''; }).filter(unique));
 		areas[i].sort();
 	}
 
 
-	var tags = [].concat.apply([], program.map(function(p) { return p.tags; })).filter(unique);
+	var tags = [].concat.apply([], program.map(function(p) { return p.tags || []; })).filter(unique);
 	tags.sort();
 
 
