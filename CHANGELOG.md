@@ -1,3 +1,35 @@
+# 0.5.0
+
+2013-12-21
+
+  * added server access in server.js, featuring:
+    - login using OAuth2/OpenID authenticated e-mail addresses
+    - sync between browsers & devices
+    - iCal (.ics) URL export for external calendars
+    - commenting & voting on individual programme items
+    - new ko.use_server flag, defaulting to "false"
+  * moved raw js files to src/; using minified output
+  * less strict input processing:
+    - allowing for items missing tags, loc, people
+    - program now sorted by date, time, location if necesary
+  * less non-code data in javascript files
+  * added hourly app cache update check
+  * added ko.show_all_days_by_default, default false: shows
+    current or first day if unspecified
+  * javascript speed & legibility improvements
+  * split skin/skin.less into multiple files
+  * added "Expand all" link whenever fewer than
+    ko.expand_all_max_items items are listed
+  * next view: clearer text, smarter time picker
+  * added QR code link, using chart.apis.google.com
+  * refactored star functions into Stars class & separated it
+    into stars.js
+  * added util/config.html, a basic tool for parsing program.js
+    for index.html
+  * consolidated logging to go through _log(), which also checks
+    new ko.log_messages (default true) & console existence
+  * a pile of CSS & JS bugfixes & cleanup
+
 # 0.4.1
 
 2013-10-10

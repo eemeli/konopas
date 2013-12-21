@@ -21,6 +21,7 @@ A mobile-friendly guide for conventions, with all sorts of spiffy features.
 	arising out of or in connection with the use or performance of this 
 	software.
 
+
 Description
 -----------
 KonOpas is a front end for the programme of a convention or any other multi-track event. It's written in JavaScript, and it works in practically all modern browsers, including those on mobile phones. It can use HTML5 caching to make itself available even without a live net connection, and it remembers your item selections across sessions.
@@ -29,23 +30,42 @@ Its server requirements can be minimal, as all the processing is done by the bro
 
 [1]: http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5
 
+
 Files
 -----
 
 Here are the main files needed to make KonOpas work:
 
-> `app.s` — The full JavaScript source of KonOpas.
+> ``cache.manifest`` — Makes the HTML5 caching work, if referred to in the <html> tag in `index.html`. Not used by default to make testing and development less of a hassle. This needs to change when your programme database is updated, or browsers won't even look to update their contents.
 > 
-> `cache.manifest` — Required to make the HTML5 caching work, it's by default not referred to by the <html> tag in index.html to make testing and development less of a hassle. This needs to change when your programme database is updated, or browsers won't even look to update their contents.
-> 
-> ``data/people.js`` and `data/program.js` — The programme database, in a format defined [here][2]. These can be served from elsewhere as well, even across domains as long as you don't use HTTPS and remember to update the cache manifest.
-> 
-> `classList.js` — For backwards compatibility to enable use of element.classList in all browsers
-> 
-> `FileSaver.min.js` — iCal calendar export is a work-in-progress, and requires this. Not actually used at the moment.
+> ``data/people.js`` and `data/program.js` — Your programme database, in a format defined [here][2]. These can be served from elsewhere as well, even across domains as long as you don't use HTTPS and remember to update the cache manifest.
 > 
 > `index.html` — The single HTML page served to the browser, this defines what programme filters and other views to use, as well as any extra information to include under the "Info" view
 > 
-> `skin/skin.css` — Styling for KonOpas. Should be modified to suit your site.
+> ``konopas.min.js`` — The minified JavaScript source of KonOpas, generated from `src/*.js`
+> 
+> ``skin/skin.css`` — Styling for KonOpas, generated from `skin/*.less`. Should be modified to suit your site.
 
 [2]: https://github.com/eemeli/konopas/wiki/JSON-data-schemes
+
+
+Compilation
+-----------
+
+You're encouraged to go and poke at the internals of KonOpas, in particular to make its styling more in accordance with the rest of your site. The source style files are [LESS][3] files in ``skin/``, which allow for nifty things like the variables defined at the top of `skin/main.less` that make changing the colour scheme of KonOpas much easier than it would be in raw CSS.
+
+So, to generate ``skin/skin.css`` from `skin/*.less`, install the LESS compiler (instructions [here][3]) and run:
+
+```bash
+lessc skin/main.less skin/skin.css
+```
+
+Similarly, the raw JavaScript files have been minified as follows:
+
+```bash
+cat src/{polyfill,server,stars,app}.js > konopas.js
+curl -X POST -s --data-urlencode 'input@konopas.js' http://javascript-minifier.com/raw > konopas.min.js
+rm konopas.js
+```
+
+[3]: http://lesscss.org/
