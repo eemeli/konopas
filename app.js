@@ -28,7 +28,8 @@ var ko = {
 	'abbrev_00_minutes': true, // only for am/pm time
 	'always_show_participants': false,
 	'expand_all_max_items': 100,
-	'show_all_days_by_default': false
+	'show_all_days_by_default': false,
+	'use_server': false
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
 if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
@@ -39,7 +40,7 @@ if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map 
 
 
 var stars = new Stars(ko.id);
-var server = new Server(ko.id, stars);
+var server = ko.use_server && new Server(ko.id, stars);
 
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_short_url(url) {
@@ -344,10 +345,12 @@ function _item_show_extra(item, id) {
 	var item = frame.appendChild(_new_elem('div', 'item'));
 	var title = item.appendChild(_new_elem('div', 'title'));
 	var loc   = item.appendChild(_new_elem('div', 'loc'));
-	var votes = item.appendChild(_new_elem('div', 'votes'));
-	votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
-	votes.appendChild(document.createTextNode(' / '));
-	votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
+	var votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
+	if (ko.use_server) {
+		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
+		votes.appendChild(document.createTextNode(' / '));
+		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
+	}
 
 	this._item_el = function(it) {
 		star.id = 's' + it.id;
