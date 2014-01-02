@@ -78,19 +78,41 @@ function selected_id(parent_id) {
 	return sel[0].id;
 }
 
-function make_popup_menu(root_id, disable_id) {
-	var el = EL(root_id);
-	if (!el) return;
+function make_popup_menu(root, bg) {
+	if (typeof root == 'string') {
+		root = EL(root);
+		if (!root) return;
+	}
+	if (typeof bg == 'string') {
+		if (bg) bg = EL(bg);
+		if (!bg) {
+			bg = _new_elem('div', 'popup-bg');
+			root.appendChild(bg);
+		}
+	}
 
-	el.onclick = function(ev) {
-		if (el.classList.contains("show_box")) {
-			EL(disable_id).style.display = "none";
-			el.classList.remove("show_box");
+	root.onclick = function(ev) {
+		if (root.classList.contains("show_box")) {
+			bg.style.display = "none";
+			root.classList.remove("show_box");
 		} else {
-			EL(disable_id).style.display = "block";
-			el.classList.add("show_box");
+			bg.style.display = "block";
+			root.classList.add("show_box");
 		}
 	};
+}
+
+function popup_boxify(root) {
+	var a = root.getElementsByTagName('a');
+	for (var i = a.length - 1; i >= 0; --i) {
+		if (/\.(gif|jpe?g|png)$/i.test(a[i].href)) {
+			var b = _new_elem('div', 'popup-wrap');
+			b.innerHTML = '<span>' + a[i].innerText + '</span>'
+			            + '<img class="popup" src="' + a[i].href + '">';
+			a[i].parentNode.replaceChild(b, a[i]);
+			make_popup_menu(b, '');
+		}
+	}
 }
 
 function pre0(n) { return (n < 10 ? '0' : '') + n; }
@@ -1154,6 +1176,9 @@ if (lu && cache_manifest && (location.protocol == 'http:')) {
 	x.open('GET', cache_manifest, true);
 	x.send();
 }
+
+var pb = document.getElementsByClassName('popup-boxify');
+for (var i = 0, l = pb.length; i < l; ++i) popup_boxify(pb[i]);
 
 
 
