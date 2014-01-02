@@ -702,7 +702,7 @@ function _prog_get_filters() {
 			}
 		}
 	}
-	if (!h_set) {
+	if (!h_set && !document.body.classList.contains('prog')) {
 		var store = storage_get('prog');
 		if (store) for (var k in store) {
 			if (filters.hasOwnProperty(k)) filters[k] = store[k];
