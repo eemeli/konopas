@@ -6,13 +6,16 @@
 
 <body>
 
-<div id="form">
-URL #1 <input type="text" id="url0"><br>
-URL #2 <input type="text" id="url1"><br>
-<input type="button" value="Go" id="go">
-</div>
+<h1>KonOpas Configurator</h1>
 
-<pre id="result" style="white-space: pre-wrap;"></pre>
+<form id="form">
+<p>Please enter the URL for the file containing your <kbd> var program = [...];</kbd> definition:</p>
+<input type="text" id="url0" size="80" placeholder="http://..."><br>
+<input type="submit" value="Generate HTML for filters">
+</form>
+
+<input type="button" id="reset" value="Reset" style="display: none;">
+<pre id="result" style="white-space: pre-wrap; display: none;"></pre>
 
 <script>
 var program = false, people = false;
@@ -125,14 +128,13 @@ function load_script(url) {
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-document.getElementById('go').onclick = function() {
-	n_scripts = 0;
-	n_loaded = 0;
-	[document.getElementById('url0').value].forEach(function(url) {
-		if (!url) return;
-		++n_scripts;
-		load_script(url);
-	});
+document.getElementById('form').onsubmit = function(ev) {
+	document.location.hash = '#' + document.getElementById('url0').value;
+	(ev || window.event).preventDefault();
+};
+
+document.getElementById('reset').onclick = function(ev) {
+	document.location.hash = '';
 };
 
 function init() {
@@ -141,6 +143,14 @@ function init() {
 		n_loaded = 0;
 		load_script(document.location.hash.substr(1));
 		document.getElementById('form').style.display = 'none';
+		document.getElementById('reset').style.display = 'block';
+		document.getElementById('result').style.display = 'block';
+	} else {
+		document.getElementById('form').style.display = 'inline';
+		document.getElementById('reset').style.display = 'none';
+		var r = document.getElementById('result');
+		r.style.display = 'none';
+		r.innerText = 'Loading...';
 	}
 }
 init();
