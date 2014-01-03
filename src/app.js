@@ -107,7 +107,7 @@ function popup_boxify(root) {
 	for (var i = a.length - 1; i >= 0; --i) {
 		if (/\.(gif|jpe?g|png)$/i.test(a[i].href)) {
 			var b = _new_elem('div', 'popup-wrap');
-			b.innerHTML = '<span>' + a[i].innerText + '</span>'
+			b.innerHTML = '<span>' + a[i].textContent + '</span>'
 			            + '<img class="popup" src="' + a[i].href + '">';
 			a[i].parentNode.replaceChild(b, a[i]);
 			make_popup_menu(b, '');
