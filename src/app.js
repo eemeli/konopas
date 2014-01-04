@@ -1171,7 +1171,7 @@ if (lu && cache_manifest && (location.protocol == 'http:')) {
 			self.title = self.textContent;
 			self.textContent = tmp;
 		};
-		lu.style.display = 'block';
+		lu.style.display = 'inline';
 	};
 	x.open('GET', cache_manifest, true);
 	x.send();
