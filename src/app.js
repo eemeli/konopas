@@ -712,7 +712,7 @@ function _prog_default_day() {
 
 function _prog_get_filters() {
 	var filters = { 'day':'', 'area':'', 'tag':'', 'query':'' };
-	var h = window.location.toString().split('#')[1];
+	var h = window.location.toString().split('#')[1] || '';
 	var h_set = false;
 	if (h.substr(0, 4) == 'prog') {
 		var p = h.substr(5).split('/');
@@ -743,7 +743,8 @@ function _prog_set_filters(f) {
 		p.push(k + ':' + encodeURIComponent(f[k]));
 	}
 	var h = p.join('/');
-	if (window.location.toString().split('#')[1] != h) {
+	var h_cur = window.location.toString().split('#')[1] || '';
+	if (h_cur != h) {
 		window.location.hash = '#' + h;
 		return true;
 	}
