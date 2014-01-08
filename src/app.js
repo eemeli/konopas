@@ -79,11 +79,11 @@ function selected_id(parent_id) {
 }
 
 function make_popup_menu(root, bg) {
-	if (typeof root == 'string') {
+	if (!root || (root.nodeType != 1)) {
 		root = EL(root);
 		if (!root) return;
 	}
-	if (typeof bg == 'string') {
+	if (!bg || (bg.nodeType != 1)) {
 		if (bg) bg = EL(bg);
 		if (!bg) {
 			bg = _new_elem('div', 'popup-bg');
@@ -95,11 +95,18 @@ function make_popup_menu(root, bg) {
 		if (root.classList.contains("show_box")) {
 			bg.style.display = "none";
 			root.classList.remove("show_box");
+			var z = parseInt(getComputedStyle(root.parentNode)['z-index'] || '2');
+			root.parentNode.style.zIndex = z - 1;
 		} else {
 			bg.style.display = "block";
 			root.classList.add("show_box");
+			var z = parseInt(getComputedStyle(root.parentNode)['z-index'] || '1');
+			root.parentNode.style.zIndex = z + 1;
 		}
 	};
+
+	var title = root.getElementsByClassName('popup-title');
+	if (title.length) title[0].setAttribute('data-title', title[0].textContent);
 }
 
 function popup_boxify(root) {
@@ -110,7 +117,7 @@ function popup_boxify(root) {
 			b.innerHTML = '<span>' + a[i].textContent + '</span>'
 			            + '<img class="popup" src="' + a[i].href + '">';
 			a[i].parentNode.replaceChild(b, a[i]);
-			make_popup_menu(b, '');
+			make_popup_menu(b);
 		}
 	}
 }
@@ -818,7 +825,7 @@ function _prog_show_filters(f) {
 	var prev = EL('prog_filters').getElementsByClassName('selected');
 	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 		var cl = prev[i].classList;
-		if (cl.contains('popup-title')) prev[i].textContent = 'More...';
+		if (cl.contains('popup-title')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
 		cl.remove('selected');
 	}
 
@@ -898,7 +905,10 @@ function prog_filter_change(ev) {
 			if (ev.target.tagName.toLowerCase() != 'li') return;
 			key = ev.target.parentNode.id.replace(/\d+$/, '');
 			value = ev.target.id;
-			if (key == 'day') value = value.replace(/^d/, '');
+			switch (key) {
+				case 'day':  value = value.replace(/^d/, ''); break;
+				case 'area': value = value.replace(/^a([^a-zA-Z])/, '$1'); break;
+			}
 			break;
 
 		case 'submit':
@@ -1087,7 +1097,8 @@ if (EL("next_filters")) {
 
 
 // init prog view
-EL('prog_filters').onclick = prog_filter_change;
+var pf = EL('prog_filters');
+pf.onclick = prog_filter_change;
 var sf = EL('search');
 if (sf) {
 	sf.onsubmit = prog_filter_change;
@@ -1095,7 +1106,8 @@ if (sf) {
 	sf.onreset = function() { _prog_set_filters({}); };
 }
 
-make_popup_menu('tag2-list', 'tag2-disable-bg');
+var pl = pf.getElementsByClassName('popup-wrap');
+for (var i = 0; i < pl.length; ++i) make_popup_menu(pl[i]);
 
 
 // init part view
