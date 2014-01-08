@@ -712,10 +712,10 @@ function _prog_default_day() {
 
 function _prog_get_filters() {
 	var filters = { 'day':'', 'area':'', 'tag':'', 'query':'' };
-	var h = window.location.hash;
+	var h = window.location.toString().split('#')[1];
 	var h_set = false;
-	if (h.substr(0, 5) == '#prog') {
-		var p = h.substr(6).split('/');
+	if (h.substr(0, 4) == 'prog') {
+		var p = h.substr(5).split('/');
 		for (var i = 0; i < p.length; ++i) {
 			var s = p[i].split(':');
 			if ((s.length == 2) && s[0] && s[1]) {
@@ -736,15 +736,15 @@ function _prog_get_filters() {
 function _prog_set_filters(f) {
 	storage_set('prog', f);
 
-	var p = ['#prog'];
+	var p = ['prog'];
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
 		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
 		p.push(k + ':' + encodeURIComponent(f[k]));
 	}
 	var h = p.join('/');
-	if (window.location.hash != h) {
-		window.location.hash = h;
+	if (window.location.toString().split('#')[1] != h) {
+		window.location.hash = '#' + h;
 		return true;
 	}
 
