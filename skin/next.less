@@ -6,6 +6,10 @@
 	li { display: inline-block; margin-left: 20px; }
 }
 
+@media (max-width: 699px) {
+	#next_time span { display: block; clear: left; margin-top: 8px; }
+}
+
 .next_arrow {
 	position: absolute;
 	cursor: pointer;
@@ -16,11 +20,11 @@
 	&:hover:after { position: absolute; }
 }
 #next_earlier { margin-left: 2px; }
-#next_later { margin-left: 0; }
+#next_later { margin-left: -20px; }
 #next_earlier:hover:after { content: '\2039'; right: 8px; }
 #next_later:hover:after { content: '\203A'; left: 8px; }
 #next_time_select {
-	margin: -4px 0 0 20px;
+	margin: -4px 20px 0 20px;
 	border: @border-normal;
 	padding: 2px 4px;
 	-webkit-appearance: none;

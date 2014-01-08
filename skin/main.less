@@ -20,7 +20,7 @@
 @page-margin: 8px;
 @side-width: 200px;
 @side-margin: 20px;
-@time-width: 45px;
+@time-width: 65px;
 @star-width: 40px;
 @main-width: 600px;
 @full-width: (@time-width + @star-width + @main-width);
@@ -69,7 +69,7 @@
 }
 
 
-html { .font-normal; color: @fg-plain; background: @bg-plain; width: 100%; }
+html { .font-normal; color: @fg-plain; background: @bg-plain; width: 100%; overflow-y: scroll; }
 body { margin: @page-margin; }
 
 strong, b { .font-heavy; }
@@ -142,9 +142,11 @@ input[type="text"] { box-shadow: none !important; }
 
 .filters {
 	position: relative;
-	z-index: 3;
+	z-index: 4;
 	clear: both;
 	padding: 20px 0;
+	max-width: @full-width;
+	text-align: center;
 	background: @bg-plain;
 	> * { padding-left: @side-margin; }
 	ul { list-style-type: none; margin-top: 0; }

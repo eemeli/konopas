@@ -22,6 +22,7 @@ html {
   color: #000000;
   background: #ffffff;
   width: 100%;
+  overflow-y: scroll;
 }
 body {
   margin: 8px;
@@ -96,7 +97,7 @@ input[type="text"] {
   position: relative;
   z-index: 3;
   clear: left;
-  max-width: 685px;
+  max-width: 705px;
   background: #ffffff;
   color: #88847d;
   font-size: 0.8em;
@@ -138,9 +139,11 @@ input[type="text"] {
 }
 .filters {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   clear: both;
   padding: 20px 0;
+  max-width: 705px;
+  text-align: center;
   background: #ffffff;
 }
 .filters > * {
@@ -174,7 +177,7 @@ input[type="text"] {
   position: fixed;
   z-index: 2;
   margin: 0;
-  min-width: 45px;
+  min-width: 65px;
   text-align: center;
   color: #ccc5bb;
 }
@@ -185,7 +188,7 @@ input[type="text"] {
 #scroll {
   bottom: 8px;
   display: none;
-  max-width: 45px;
+  max-width: 65px;
   font-size: 0.8em;
 }
 #scroll a {
@@ -244,8 +247,9 @@ input[type="text"] {
     top: 10px;
     left: 170px;
   }
-  #title-small {
-    width: 148px;
+  #banner {
+    text-align: center;
+    margin: 10px 0;
   }
   #title {
     display: none !important;
@@ -288,11 +292,8 @@ input[type="text"] {
   }
   #title {
     display: block !important;
-    width: 167px;
-    margin: 10px 0 0 25px;
   }
   #tabs {
-    margin-top: 46px !important;
     font-size: 1.2em;
   }
   #tabs li {
@@ -320,6 +321,14 @@ input[type="text"] {
 .ls {
   clear: both;
 }
+.item_expander {
+  width: calc(100% - 16px);
+  max-width: 685px;
+  text-align: right;
+  position: absolute;
+  z-index: 3;
+  padding-top: 50px;
+}
 .new_day {
   padding-top: 40px;
   background: #ffffff;
@@ -339,7 +348,7 @@ input[type="text"] {
   padding: 13px 0 0 0;
   height: 70px;
   margin-bottom: -78px;
-  width: 45px;
+  width: 65px;
   text-align: center;
   background: #ffffff;
   background: transparent -webkit-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0));
@@ -349,7 +358,7 @@ input[type="text"] {
 }
 .item_frame {
   position: relative;
-  margin: 0 0 10px 45px;
+  margin: 0 0 10px 65px;
 }
 .item_star {
   position: absolute;
@@ -544,6 +553,9 @@ input[type="text"] {
   max-width: 600px;
   white-space: pre-line;
 }
+#info_view p {
+  white-space: initial;
+}
 .view {
   display: none;
 }
@@ -562,6 +574,13 @@ input[type="text"] {
   display: inline-block;
   margin-left: 20px;
 }
+@media (max-width: 699px) {
+  #next_time span {
+    display: block;
+    clear: left;
+    margin-top: 8px;
+  }
+}
 .next_arrow {
   position: absolute;
   cursor: pointer;
@@ -577,7 +596,7 @@ input[type="text"] {
   margin-left: 2px;
 }
 #next_later {
-  margin-left: 0;
+  margin-left: -20px;
 }
 #next_earlier:hover:after {
   content: '\2039';
@@ -588,7 +607,7 @@ input[type="text"] {
   left: 8px;
 }
 #next_time_select {
-  margin: -4px 0 0 20px;
+  margin: -4px 20px 0 20px;
   border: 2px solid #800000;
   padding: 2px 4px;
   -webkit-appearance: none;
@@ -671,10 +690,15 @@ input[type="text"] {
 }
 #prog_filters ul {
   position: relative;
-  display: block;
-  float: left;
-  margin: 0 0 20px 0;
   z-index: 2;
+  display: inline-block;
+  margin: 0 0 20px 0;
+  padding-left: 20px;
+  text-align: left;
+  vertical-align: top;
+}
+#prog_filters ul:focus {
+  z-index: 3;
 }
 #prog_filters li {
   line-height: 1.0;
@@ -685,8 +709,7 @@ input[type="text"] {
 }
 #q,
 #q_ctrl {
-  display: block;
-  float: left;
+  display: inline-block;
 }
 #q {
   max-width: 150px;
@@ -707,18 +730,15 @@ input[type="text"] {
 #q_clear {
   margin-left: 14px !important;
 }
-#tag2-list ul {
-  right: 0;
-  top: 18px;
-}
 #filter_sum {
   clear: left;
-  max-width: 661px;
-  margin: 4px 0 0 20px;
+  max-width: 681px;
+  margin: 20px 0 0 20px;
   border: 2px solid #800000;
   border-radius: 5px;
   padding: 10px;
   background: #f0d79d;
+  text-align: center;
 }
 .part #part_view {
   display: block;
@@ -801,7 +821,7 @@ input[type="text"] {
   margin-bottom: 0;
 }
 .linklist {
-  max-width: 685px;
+  max-width: 705px;
 }
 .linklist dt {
   float: left;
@@ -823,6 +843,7 @@ input[type="text"] {
 }
 .info #info_view {
   display: block;
+  max-width: 600px;
 }
 .info #time,
 .info #scroll {
@@ -842,11 +863,11 @@ input[type="text"] {
   border-bottom: 2px solid #800000;
 }
 #info_view img {
-  width: 685px;
+  width: 705px;
   margin: 5px 0;
 }
 #info_view table {
-  width: 685px;
+  width: 705px;
 }
 #info_view tr:hover {
   background: #f5e6c3;

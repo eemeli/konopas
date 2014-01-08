@@ -2,12 +2,21 @@
 
 #prog_filters {
 	margin-left: (-1 * @side-margin);
-	ul { position: relative; display: block; float: left; margin: 0 0 @side-margin 0; z-index: 2; }
+	ul {
+		position: relative;
+		z-index: 2;
+		display: inline-block;
+		margin: 0 0 @side-margin 0;
+		padding-left: @side-margin;
+		text-align: left;
+		vertical-align: top;
+		&:focus { z-index: 3; }
+	}
 	li { line-height: 1.0; padding-bottom: 5px; }
 	input { margin: 0 4px 0 0; }
 }
 
-#q, #q_ctrl { display: block; float: left; }
+#q, #q_ctrl { display: inline-block; }
 #q { max-width: 150px; }
 #q_ctrl input, #q_fix { cursor: pointer; }
 #q:valid { background: @bg-highlight; }
@@ -18,9 +27,10 @@
 #filter_sum {
 	clear: left;
 	max-width: (@full-width - 24px);
-	margin: 4px 0 0 @side-margin;
+	margin: @side-margin 0 0 @side-margin;
 	border: @border-normal;
 	border-radius: @border-radius;
 	padding: 10px;
 	background: @bg-highlight-more;
+	text-align: center;
 }
