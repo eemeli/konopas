@@ -398,7 +398,7 @@ function item_show_list(ls) {
 	var prev_date = "", day_str = "", prev_time = "";
 	if ((ls.length > 0) && (ls.length < ko.expand_all_max_items)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
-			.appendChild(_new_elem('a', 'js-link', 'Expand all items'))
+			.appendChild(_new_elem('a', 'js-link', 'Expand all'))
 			.id = 'item_expander_link';
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
@@ -432,18 +432,18 @@ function item_show_list(ls) {
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
 		var items = LS.getElementsByClassName("item");
-		var exp = expand_all.textContent == 'Expand all items';
-		if (expand_all.textContent == 'Expand all items') {
+		var exp = expand_all.textContent == 'Expand all';
+		if (expand_all.textContent == 'Expand all') {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.add("expanded");
 				_item_show_extra(items[i], items[i].id.substr(1));
 			}
-			expand_all.textContent = 'Collapse all items';
+			expand_all.textContent = 'Collapse all';
 		} else {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.remove("expanded");
 			}
-			expand_all.textContent = 'Expand all items';
+			expand_all.textContent = 'Expand all';
 		}
 	};
 
