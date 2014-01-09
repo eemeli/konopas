@@ -477,15 +477,17 @@ input[type="text"] {
   color: #736f68 !important;
 }
 .expanded .votes a {
-  background-image: url('icons.png');
   background-repeat: no-repeat;
   height: 15px;
-  padding-left: 18px;
   opacity: 0.5;
   color: #000000;
 }
-.expanded .votes a.voted,
-.expanded .votes a:hover {
+.logged-in .expanded .votes a {
+  background-image: url('icons.png');
+  padding-left: 18px;
+}
+.logged-in .expanded .votes a.voted,
+.logged-in .expanded .votes a:hover {
   opacity: 1.0;
 }
 .expanded .v_pos {

@@ -31,6 +31,7 @@ function Server(id, stars, opt) {
 Server.prototype.disconnect = function() {
 	this.connected = false;
 	if (this.el) this.el.innerHTML = '<div id="server_info">Not connected</div>';
+	document.body.classList.remove('logged-in');
 }
 
 Server.prototype.logout = function(ev) {
@@ -541,6 +542,7 @@ Server.prototype.cb_info = function(v) {
 	html += '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a>';
 	this.el.innerHTML = html;
 	document.getElementById('server_logout').onclick = this.logout;
+	document.body.classList.add('logged-in');
 }
 
 Server.prototype.cb_login = function(v) {

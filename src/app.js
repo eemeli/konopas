@@ -227,7 +227,8 @@ function GlobToRE(pat) {
 
 var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
-	document.body.className = new_view;
+	for (var i = 0; i < views.length; ++i) document.body.classList.remove(views[i]);
+	document.body.classList.add(new_view);
 	storage_set('view', new_view);
 }
 

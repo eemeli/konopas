@@ -95,12 +95,14 @@
 
 	.votes { color: @fg-light-in-box !important; }
 	.votes a {
-		background-image: @icon-url;
 		background-repeat: no-repeat;
 		height: 15px;
-		padding-left: 18px;
 		opacity: 0.5;
 		color: @fg-plain;
+	}
+	.logged-in & .votes a {
+		background-image: @icon-url;
+		padding-left: 18px;
 		&.voted, &:hover { opacity: 1.0; }
 	}
 	.v_pos { background-position: 0 -32px; }
