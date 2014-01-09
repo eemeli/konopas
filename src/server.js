@@ -533,14 +533,14 @@ Server.prototype.cb_fail = function(v) {
 Server.prototype.cb_info = function(v) {
 	_log("server info: " + JSON.stringify(v));
 	this.connected = [v.name, v.email];
-	var n = (v.name == v.email) ? v.email : v.name + ' &lt;' + v.email + '&gt;';
-	var html = '<div id="server_info"><span id="server_user">' + n + '</span>';
+	this.el.innerHTML = '<div id="server_info">'
+	                  + '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a> '
+	                  + '<span id="server_user" title="' + ((v.name != v.email) ? v.email : '') + '">' + v.name
+	                  + '</span></div>';
 	if (v.ical) {
 		this.ical = this.ical || true;
 		this.show_ical_link(false);
 	}
-	html += '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a>';
-	this.el.innerHTML = html;
 	document.getElementById('server_logout').onclick = this.logout;
 	document.body.classList.add('logged-in');
 }
@@ -554,7 +554,7 @@ Server.prototype.cb_login = function(v) {
 	this.el.innerHTML = '<div id="login-links" class="popup-wrap">'
 		+ "\n&raquo; <span>Login to sync your data</span>\n"
 		+ '<div id="login-disable-bg" class="popup-bg"></div>'
-		+ '<div class="popup">Once you\'ve verified your e-mail address, you\'ll be able to sync your data between different browsers and devices.'
+		+ '<div class="popup">Once you\'ve verified your e-mail address, you\'ll be able to sync your data between different clients (including external calendars), as well as vote & comment on items.'
 		+ "\n<ul>\n<li>" + links.join("\n<li>")
 		+ "\n</ul></div></div>";
 	make_popup_menu("login-links", "login-disable-bg");

@@ -2,24 +2,31 @@
 
 .star #prog_ls .new_day:first-child { padding-top: 20px; }
 
+#star_links { text-align: center; }
+
 #login-links {
-	margin-top: 1em;
-	span { text-decoration: underline; cursor: pointer; }
-	.popup { top: 2em; }
+	color: @fg-light;
+	span {
+		text-decoration: underline;
+		cursor: pointer;
+		&:hover { color: @fg-plain; }
+	}
+	.popup { top: 2em; text-align: left; }
 	ul { margin: 5px 0; padding: 0; }
 	li { line-height: 1.0; padding-bottom: 5px; text-align: center; }
 }
 
+#server_connect {
+	font-size: 14px;
+	text-align: center;
+	margin: 10px 0;
+}
 #server_info {
-	float: right;
-	top: 1em;
 	color: @fg-lighter;
 	a { color: @fg-light; }
 	a:hover { color: @fg-plain; }
 }
 #server_user {
-	display: inline-block;
-	padding: 0 10px 10px 10px;
 }
 #server_error {
 	display: none;
