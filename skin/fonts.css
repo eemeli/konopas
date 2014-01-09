@@ -34,3 +34,9 @@
   font-weight: 400;
   src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(RobotoCondensed400.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'PT Sans Narrow';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Narrow Bold'), local('PTSans-NarrowBold'), url(PTSansNarrow700.ttf) format('truetype');
+}
