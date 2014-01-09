@@ -745,6 +745,13 @@ input[type="text"] {
   background: #f0d79d;
   text-align: center;
 }
+#filter_sum a {
+  font-weight: 500;
+  text-decoration: none;
+}
+#filter_sum a:hover {
+  text-decoration: line-through;
+}
 .part #part_view {
   display: block;
 }

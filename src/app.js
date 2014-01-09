@@ -760,17 +760,26 @@ function _prog_get_filters(hash_only) {
 	return filters;
 }
 
-function _prog_set_filters(f, silent) {
-	if (silent && !(history && history.replaceState)) return false;
-	storage_set('prog', f);
-
+function _prog_hash(f0, fx) {
+	var f = fx ? {} : f0;
+	if (fx) {
+		for (var k in f0) f[k] = f0[k];
+		for (var k in fx) f[k] = fx[k];
+	}
 	var p = ['prog'];
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
 		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
 		p.push(k + ':' + hash_encode(f[k]));
 	}
-	var h = p.join('/');
+	return p.join('/');
+}
+
+function _prog_set_filters(f, silent) {
+	if (silent && !(history && history.replaceState)) return false;
+	storage_set('prog', f);
+
+	var h = _prog_hash(f);
 	var h_cur = window.location.toString().split('#')[1] || '';
 	if (h_cur != h) {
 		if (silent) {
@@ -846,25 +855,30 @@ function _prog_show_list(f) {
 
 	var fs = EL('filter_sum');
 	if (fs) {
+		var f0 = {};
+		for (var k in f) f0[k] = f[k];
+		f0['id'] = '';
+		if (!f0['day']) f0['day'] = 'all_days';
+
 		if (id_only) {
 			if (ls.length == 1) {
-				fs.innerHTML = 'Listing 1 item: <b>' + ls[0].title + '</b>';
+				fs.innerHTML = 'Listing 1 item: <a href="#' + _prog_hash(f0) + '">' + ls[0].title + '</a>';
 			} else {
-				fs.innerHTML = 'Listing ' + ls.length + ' items with id <b>' + f.id + '</b>';
+				fs.innerHTML = 'Listing ' + ls.length + ' items with id <a href="#' + _prog_hash(f0) + '">' + f.id + '</a>';
 			}
 		} else {
 			var ls_all = true;
 			var ft = 'item'; if (ls.length != 1) ft += 's';
-			if (f.tag) { ft = '<b>' + f.tag + '</b> ' + ft; ls_all = false; }
+			if (f.tag) { ft = '<a href="#' + _prog_hash(f0, {'tag':''}) + '">' + f.tag + '</a> ' + ft; ls_all = false; }
 			if (f.day) {
 				var dt = new Date(f.day);
-				ft += ' on <b>' + weekday(dt, true) + '</b>';
+				ft += ' on <a href="#' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt, true) + '</a>';
 				ls_all = false;
 			}
-			if (f.area) { ft += ' in <b>' + f.area + '</b>'; ls_all = false; }
-			if (f.query) { ft += ' matching the query <b>' + f.query + '</b>'; ls_all = false; }
+			if (f.area) { ft += ' in <a href="#' + _prog_hash(f0, {'area':''}) + '">' + f.area + '</a>'; ls_all = false; }
+			if (f.query) { ft += ' matching the query <a href="#' + _prog_hash(f0, {'query':''}) + '">' + f.query + '</a>'; ls_all = false; }
 
-			fs.innerHTML = 'Listing ' + (ls_all ? '<b>all</b> ' : '') + ls.length + ' ' + ft;
+			fs.innerHTML = 'Listing ' + (ls_all ? '<a href="#' + _prog_hash({}) + '">all</a> ' : '') + ls.length + ' ' + ft;
 		}
 	}
 
