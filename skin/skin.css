@@ -903,3 +903,27 @@ input[type="text"] {
   border-bottom: 1px dotted;
   cursor: pointer;
 }
+.compact-dl {
+  padding-top: 10px;
+}
+.compact-dl dt {
+  width: 165px;
+  float: left;
+  clear: left;
+  text-align: right;
+  color: #88847d;
+}
+.compact-dl dd {
+  margin-left: 175px;
+  padding-bottom: 10px;
+}
+.ios_share_icon {
+  background: url('icons.png') 0px -67px no-repeat;
+  width: 10px;
+  height: 14px;
+  background-size: 25px;
+  display: inline-block;
+  width: 10px !important;
+  vertical-align: baseline;
+  margin: 0 3px !important;
+}
