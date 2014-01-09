@@ -321,6 +321,11 @@ input[type="text"] {
 .ls {
   clear: both;
 }
+.ls_loading {
+  width: calc(100% - 16px);
+  max-width: 685px;
+  text-align: center;
+}
 .item_expander {
   width: calc(100% - 16px);
   max-width: 685px;
