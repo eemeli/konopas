@@ -78,6 +78,10 @@ function selected_id(parent_id) {
 	return sel[0].id;
 }
 
+function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
+
+function hash_decode(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
+
 function make_popup_menu(root, bg) {
 	if (!root || (root.nodeType != 1)) {
 		root = EL(root);
@@ -320,7 +324,7 @@ function array_overlap(a, b) {
 function _item_people(it) {
 	if (!it.people || !it.people.length) return '';
 	var a = it.people.map(function(p) {
-		return "<a href=\"#part/" + encodeURIComponent(p.id) + "\">" + p.name + "</a>";
+		return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>";
 	});
 	return '<div class="item-people">' + a.join(', ') + '</div>\n';
 }
@@ -328,7 +332,7 @@ function _item_people(it) {
 function _item_tags(it) {
 	if (!it.tags || !it.tags.length) return '';
 	var a = it.tags.map(function(t) {
-		return '<a href="#prog/tag:' + encodeURIComponent(t) + '">' + t + '</a>';
+		return '<a href="#prog/tag:' + hash_encode(t) + '">' + t + '</a>';
 	});
 	return '<div class="discreet">Tags: ' + a.join(', ') + '</div>\n';
 }
@@ -726,7 +730,7 @@ function _prog_get_filters() {
 		for (var i = 0; i < p.length; ++i) {
 			var s = p[i].split(':');
 			if ((s.length == 2) && s[0] && s[1]) {
-				filters[s[0]] = decodeURIComponent(s[1]);
+				filters[s[0]] = hash_decode(s[1]);
 				h_set = true;
 			}
 		}
@@ -747,7 +751,7 @@ function _prog_set_filters(f) {
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
 		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
-		p.push(k + ':' + encodeURIComponent(f[k]));
+		p.push(k + ':' + hash_encode(f[k]));
 	}
 	var h = p.join('/');
 	var h_cur = window.location.toString().split('#')[1] || '';
@@ -985,7 +989,7 @@ function show_participant_list(name_range) {
 	});
 
 	EL('part_names').innerHTML = lp.map(function(p) {
-		return '<li><a href="#part/' + encodeURIComponent(p.id) + '">' + clean_name(p, true) + '</a></li>';
+		return '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>';
 	}).join('');
 
 	EL('part_info').innerHTML = '';
@@ -1043,7 +1047,7 @@ function show_part_view(opt) {
 	}
 
 	if (opt) {
-		var p_id = decodeURIComponent(opt.substr(1));
+		var p_id = hash_decode(opt.substr(1));
 		var pa = people.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
