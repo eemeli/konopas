@@ -60,7 +60,7 @@ function _log(msg, lvl) {
 	}
 }
 
-function EL(id) { return document.getElementById(id); }
+function EL(id) { return id && document.getElementById(id); }
 
 function _new_elem(tag, cl, text, hide) {
 	var e = document.createElement(tag);
@@ -695,7 +695,7 @@ function show_star_view(opt) {
 			}
 		}
 	} else {
-		view.innerHTML = "<p>To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."
+		view.innerHTML = "<p>To \"star\" a program item, click on the square next to its title. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty.";
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -881,8 +881,8 @@ function _prog_show_filters(f) {
 
 // hashchange -> read filters from url + store -> set filters in html + store -> list items
 function show_prog_view() {
-	set_view("prog");
 	var f = _prog_get_filters();
+	set_view("prog");
 	if (_prog_set_filters(f)) return;
 
 	if (!f.day && !ko.show_all_days_by_default) f.day = _prog_default_day();
@@ -972,6 +972,8 @@ function show_participant(p) {
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
 	item_show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
+
+	EL("top").scrollIntoView();
 }
 
 function _name_in_range(n0, range) {
@@ -1138,7 +1140,7 @@ if (EL("scroll_link")) {
 	var prev_scroll = { "i": 0, "top": 0 };
 	var n = 0;
 	if (ko.full_version) { window.onscroll = function() {
-		var st = document.documentElement.scrollTop;
+		var st = window.pageYOffset;
 
 		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 
