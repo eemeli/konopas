@@ -22,19 +22,28 @@
 #refresh { display: none; }
 #refresh.enabled {
 	display: inline-block;
+	position: fixed;
 	border: @border-normal;
 	border-radius: @border-radius;
-	padding: 5px 5px 5px 50px;
+	background: @bg-plain;
+	padding: 5px;
 	height: 40px;
-	background: url(refresh.png) 5px 5px no-repeat;
 	line-height: 40px;
 	cursor: pointer;
+	opacity: 0.5;
+	&:hover { opacity: 1.0; }
+}
+.refresh_icon {
+	.icon-refresh();
+	display: inline-block;
+	vertical-align: top;
+	padding-right: 5px;
 }
 
 
 @media (max-width: 699px) {
 	#time, #scroll { left: @page-margin; }
-	#refresh.enabled { position: absolute; top: 10px; left: 170px; }
+	#refresh.enabled { bottom: 20px; right: 20px; }
 	#banner { text-align: center; margin: 10px 0; }
 	#title { display: none !important; }
 	#tabs {
@@ -51,7 +60,7 @@
 
 @media (min-width: 700px) {
 	#time, #scroll { left: (@page-margin + @side-width + @side-margin); }
-	#refresh.enabled { position: relative; top: auto; left: auto; margin: 20px 0 0 30px; }
+	#refresh.enabled { bottom: 20px; left: 20px; }
 	#banner { width: @side-width; float: left; }
 	#title-small { display: none; }
 	#title { display: block !important; }

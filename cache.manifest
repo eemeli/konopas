@@ -2,17 +2,17 @@ CACHE MANIFEST
 # [insert mod-timestamp here]
 
 CACHE:
+data/program.js
+data/people.js
+konopas.min.js
 skin/skin.css
-skin/refresh.png
+skin/icons.png
 skin/Roboto300.ttf
 skin/Roboto500.ttf
 skin/Oswald400.ttf
 data/favicon.ico
 data/title-small.png
 data/title.png
-data/program.js
-data/people.js
-konopas.min.js
 
 NETWORK:
 *

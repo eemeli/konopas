@@ -229,13 +229,26 @@ input[type="text"] {
 }
 #refresh.enabled {
   display: inline-block;
+  position: fixed;
   border: 2px solid #800000;
   border-radius: 5px;
-  padding: 5px 5px 5px 50px;
+  background: #ffffff;
+  padding: 5px;
   height: 40px;
-  background: url(refresh.png) 5px 5px no-repeat;
   line-height: 40px;
   cursor: pointer;
+  opacity: 0.5;
+}
+#refresh.enabled:hover {
+  opacity: 1.0;
+}
+.refresh_icon {
+  background: url('icons.png') 0px -94px no-repeat;
+  width: 39px;
+  height: 40px;
+  display: inline-block;
+  vertical-align: top;
+  padding-right: 5px;
 }
 @media (max-width: 699px) {
   #time,
@@ -243,9 +256,8 @@ input[type="text"] {
     left: 8px;
   }
   #refresh.enabled {
-    position: absolute;
-    top: 10px;
-    left: 170px;
+    bottom: 20px;
+    right: 20px;
   }
   #banner {
     text-align: center;
@@ -278,10 +290,8 @@ input[type="text"] {
     left: 228px;
   }
   #refresh.enabled {
-    position: relative;
-    top: auto;
-    left: auto;
-    margin: 20px 0 0 30px;
+    bottom: 20px;
+    left: 20px;
   }
   #banner {
     width: 200px;
