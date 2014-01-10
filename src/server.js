@@ -418,7 +418,7 @@ Server.prototype.show_ical_link = function(p_el) {
 			html = 'Your selection is available as an iCal (.ics) calendar at:<br><a href="' + this.ical + '">' + this.ical + '</a><br>'
 				+ '<span class="hint">Note that changes you make in this guide may take some time to show in your external calendar software.</span>';
 		} else {
-			html = 'To make your selection viewable in your calendar app, you may also <a id="ical_link" class="js-link">make it available</a> in iCal (.ics) calendar format';
+			html = 'To view your selection in your calendar app, you may also <br class="wide-only"><a id="ical_link" class="js-link">make it available</a> in iCal (.ics) calendar format';
 		}
 	}
 	if (p_el) p_el.innerHTML += '<p id="ical_text">' + html;

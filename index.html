@@ -1,16 +1,20 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html><!-- manifest="cache.manifest" -->
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="skin/skin.css">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="data/favicon.ico">
-<title>LoneStarCon 3 Guide</title>
-<link rel="stylesheet" href="skin/skin.css">
-<style>
-#title-small { width: 148px; }
-#title { width: 167px; margin: 10px 0 46px 25px; }
-</style>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--
+<link rel="apple-touch-icon"                 href="data/icon_ios.60.png">
+<link rel="apple-touch-icon" sizes="76x76"   href="data/icon_ios.76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="data/icon_ios.120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="data/icon_ios.152.png">
+<link rel="shortcut icon"    sizes="196x196" href="data/icon.196.png">
+-->
+<title>KonOpas Sample Guide</title>
 
 <body><div id="top"></div>
 <div id="load_disable"></div>
@@ -19,7 +23,11 @@
 <div id="scroll"><a href="#top" id="scroll_link">Scroll up</a></div>
 
 <div id="banner">
-<h1><a href="#info"><img id="title-small" src="data/title-small.png" alt="LoneStarCon 3"><img id="title" src="data/title.png" alt="LoneStarCon 3"></a></h1>
+<div id="server_connect"></div>
+
+<h1><a href="#info"><!-- alt="CONVENTION" title="CONVENTION" -->
+<img id="title-small" src="data/title-small.png" style="width: 148px;">
+<img id="title" src="data/title.png" style="width: 167px; margin: 10px 0 46px 25px;"></a></h1>
 
 <ul id="tabs">
 <li id="tab_next"><a href="#next">Next</a>
@@ -44,9 +52,11 @@
 
 	<div id="next_time">
 		Show items starting after:
+		<span>
 		<a id="next_earlier" class="next_arrow" title="earlier">&lsaquo;</a>
 		<select id="next_time_select"></select>
 		<a id="next_later" class="next_arrow" title="later">&rsaquo;</a>
+		</span>
 	</div>
 
 	<div id="next_start_note"></div>
@@ -56,9 +66,7 @@
 
 
 <div id="star_view" class="view">
-	<div id="server_connect"></div>
 	<div id="star_data"></div>
-	<!--<div id="ical_link">&raquo; Export to calendar</div>-->
 </div>
 
 
@@ -152,11 +160,9 @@
 
 
 <div id="info_view" class="view">
-<p>This is the program guide for <a href="http://www.lonestarcon3.org/">LoneStarCon 3</a>. It should be suitable for use on most browsers and devices, and will be made accessible with additional functionality and information during the con itself.
+<p>This is the program guide for <a href="http://example.com/">CONVENTION</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
 
-<p>Program and participant data will be kept updated as final changes and corrections are made. Also, the contents of this "Info" view will be updated with more information.
-
-<div id="last-updated">Program and participant data were last updated <span></span>.</div>
+<p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
 
 <div id="install-instructions">
 <p>This guide will work in your browser even when you don't have an internet connection. You can also install it as a home screen app:
@@ -171,39 +177,39 @@
 if (window.navigator && window.navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
 </script>
 
+
 <h2>Start and end times for various areas</h2>
 <table class="compact_list">
-<tr><th><th>Thu<th>Fri<th>Sat<th>Sun<th>Mon
-<tr><td>Registration<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;1pm
-<tr><td>Information<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;3pm
-<tr><td>Exhibit Hall<td>noon&ndash;10pm<td>9am&ndash;10pm<td>9am&ndash;9pm<td>9am&ndash;9pm<td>9am&ndash;4pm
-<tr><td>Dealers' Room<td>noon&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;3pm
-<tr><td>Art Show<td>noon&ndash;6pm<td>10am&ndash;10pm<td>10am&ndash;6pm<td>10am&ndash;noon<td>
+<tr><th><th>Thu<th>Fri<th>Sat<th>Sun
+<tr><td>Registration<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm<td>9am&ndash;7pm
+<tr><td>Information<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm<td>9am&ndash;6pm
+<tr><td>Exhibit Hall<td>noon&ndash;10pm<td>9am&ndash;10pm<td>9am&ndash;9pm<td>9am&ndash;9pm
+<tr><td>Dealers' Room<td>noon&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm<td>10am&ndash;6pm
+<tr><td>Art Show<td>noon&ndash;6pm<td>10am&ndash;10pm<td>10am&ndash;6pm<td>10am&ndash;noon
 </table>
 
 <p>Registration is also open on Wednesday before the convention from 9am to 7pm.
 
-<p>Please consult the <a href="http://www.lonestarcon3.org/schedule/index.shtml">schedule</a> for further information.
 
 <h2>Publications</h2>
 <ul>
-<li><a href="http://www.lonestarcon3.org/newsletter/index.shtml">Newsletter</a>
-<li><a href="http://www.lonestarcon3.org/publications/restaurant-guide.pdf">Restaurant Guide</a> (PDF, 6MB)
-<li><a href="http://www.lonestarcon3.org/publications/pr5.shtml">Progress Report 5</a> (web page)
-<li><a href="http://www.lonestarcon3.org/memberships/Code%20of%20Conduct.pdf">Code of Conduct</a> (PDF)
+<li><a href="http://example.com/">Newsletter</a>
+<li><a href="http://example.com/">Restaurant Guide</a> (PDF, 6MB)
+<li><a href="http://example.com/">Progress Report 5</a> (web page)
+<li><a href="http://example.com/">Code of Conduct</a> (PDF)
 </ul>
 
-<h2>What is this?</h2>
-<p>This guide is an instance of <a href="https://github.com/eemeli/konopas">KonOpas</a>, an open-source project I started to provide conventions with easy-to-use mobile-friendly guides. My name is Eemeli Aro, and you can reach me at <a href="mailto:eemeli@gmail.com">eemeli@gmail.com</a>. I do a few other fannish things as well, like chair a bid for a Worldcon: Helsinki in 2015!
 </div>
 
 
-<div id="prog_ls" class="ls"><br>Loading ...</div>
+<div id="prog_ls" class="ls"><br>Loading programme data&hellip;</div>
 
 </div><!-- /main -->
 
-<script>
-	var konopas_set = { 'id': 'lsc3', 'time_show_am_pm': true, 'use_server': true };
+<script> var konopas_set = {
+	'id': 'lsc3',
+	'time_show_am_pm': true,
+	'use_server': true };
 </script>
 <script src="data/program.js"></script>
 <script src="data/people.js"></script>

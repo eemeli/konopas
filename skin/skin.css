@@ -251,6 +251,9 @@ input[type="text"] {
   padding-right: 5px;
 }
 @media (max-width: 699px) {
+  .wide-only {
+    display: none;
+  }
   #time,
   #scroll {
     left: 8px;
@@ -326,6 +329,9 @@ input[type="text"] {
     top: 0;
     left: 228px;
     right: 10px;
+  }
+  #main p {
+    max-width: 600px;
   }
 }
 .ls {
@@ -567,7 +573,6 @@ input[type="text"] {
   content: " | ";
 }
 #main p {
-  max-width: 600px;
   white-space: pre-line;
 }
 #info_view p {
@@ -645,7 +650,8 @@ input[type="text"] {
 .star #prog_ls .new_day:first-child {
   padding-top: 20px;
 }
-#star_links {
+#star_links,
+#star_data {
   text-align: center;
 }
 #login-links {
@@ -893,11 +899,11 @@ input[type="text"] {
   border-bottom: 2px solid #800000;
 }
 #info_view img {
-  width: 705px;
+  width: 100%;
   margin: 5px 0;
 }
 #info_view table {
-  width: 705px;
+  width: 100%;
 }
 #info_view tr:hover {
   background: #f5e6c3;

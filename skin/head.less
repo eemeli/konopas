@@ -42,6 +42,7 @@
 
 
 @media (max-width: 699px) {
+	.wide-only { display: none; }
 	#time, #scroll { left: @page-margin; }
 	#refresh.enabled { bottom: 20px; right: 20px; }
 	#banner { text-align: center; margin: 10px 0; }
@@ -75,4 +76,5 @@
 		border-bottom-left-radius: @border-radius;
 	}
 	#main { position: absolute; top: 0; left: (@page-margin + @side-width + @side-margin); right: 10px; }
+	#main p { max-width: @main-width; }
 }

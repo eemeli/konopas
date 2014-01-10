@@ -646,10 +646,10 @@ function show_star_view(opt) {
 	star_list.sort();
 	var stars_len = star_list.length;
 	if (stars_len || set_len) {
-		var set_link = '<a href="#star/set:' + star_list.join(',') + '" target="_blank">';
+		var set_link = '#star/set:' + star_list.join(',');
 		if (set_len) {
 			if (arrays_equal(set, star_list)) {
-				view.innerHTML = '<p>Your current selection is encoded in ' + set_link + 'this page\'s URL</a>, which you may open elsewhere to share your selection.<p>For easier sharing, you can also generate a <a href="' + link_to_short_url(location.href) + '">shorter link</a> or a <a href="' + link_to_qr_code(location.href) + '">QR code</a>.';
+				view.innerHTML = '<p>Your current selection is encoded in <a href="' + set_link + '" target="_blank">this page\'s URL</a>, which you may open elsewhere to share your selection.<p>For easier sharing, you can also generate a <a href="' + link_to_short_url(location.href) + '">shorter link</a> or a <a href="' + link_to_qr_code(location.href) + '">QR code</a>.';
 				if (server) server.show_ical_link(view);
 			} else {
 				var n_same = array_overlap(set, star_list);
@@ -695,7 +695,7 @@ function show_star_view(opt) {
 				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
-			var html = '<p id="star_links">&raquo; ' + set_link + 'Export selection</a>';
+			var html = '<p id="star_links">&raquo; <a href="' + set_link + '">Export selection</a>';
 			switch (stars_len) {
 				case 1:  html += ' (1 item)'; break;
 				default: html += ' (' + stars_len + ' items)';
