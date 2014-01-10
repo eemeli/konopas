@@ -73,9 +73,9 @@ function _new_elem(tag, cl, text, hide) {
 function _set_class(el, cl, set) { el.classList[set ? 'add' : 'remove'](cl); }
 
 function selected_id(parent_id) {
-	var par = EL(parent_id); if (!par) return "";
-	var sel = par.getElementsByClassName("selected"); if (!sel.length) return "";
-	return sel[0].id;
+	var par = EL(parent_id); if (!par) return '';
+	var sel = par.getElementsByClassName('selected');
+	return sel.length ? sel[0].id : '';
 }
 
 function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
@@ -606,17 +606,6 @@ function update_next_filters(next_type) {
 	storage_set('next', { 'next_type': next_type })
 }
 
-function next_filter(ctrl, item) {
-	var next_type = selected_id("next_type");
-
-	switch (ctrl) {
-		case "next_type": next_type = item; break;
-	}
-
-	update_next_list(next_type);
-	update_next_filters(next_type);
-}
-
 
 function show_next_view() {
 	set_view("next");
@@ -629,6 +618,16 @@ function show_next_view() {
 	update_next_list(next_type);
 	update_next_filters(next_type);
 }
+
+
+function next_filter_click(ev) {
+	var el = (ev || window.event).target;
+	if (el.parentNode.id == 'next_type') {
+		update_next_list(el.id);
+		update_next_filters(el.id);
+	}
+}
+
 
 
 // ------------------------------------------------------------------------------------------------ "my con" view
@@ -1084,11 +1083,6 @@ function update_part_view(name_range, participant) {
 	storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
-function part_filter(ctrl, el) {
-	var name_range = (ctrl == 'name_range') ? el.getAttribute("data-range") : '';
-	update_part_view(name_range, '');
-}
-
 function find_name_range(name) {
 	var n0 = name[0].toUpperCase(); if (!n0) return '';
 	var par = EL('name_range'); if (!par) return '';
@@ -1101,16 +1095,11 @@ function find_name_range(name) {
 }
 
 function show_part_view(opt) {
-	var name_range ='', participant = '';
-
 	var store = storage_get('part') || {};
-	if ('name_range' in store) name_range = store.name_range;
+	var name_range = store.name_range || '';
+	var participant = !document.body.classList.contains('part') && store.participant || '';
 
-	if (!document.body.classList.contains("part")) {
-		set_view("part");
-
-		if ('participant' in store) participant = store.participant;
-	}
+	set_view('part');
 
 	if (opt) {
 		var p_id = hash_decode(opt.substr(1));
@@ -1136,6 +1125,17 @@ function show_part_view(opt) {
 }
 
 
+function part_filter_click(ev) {
+	var el = (ev || window.event).target;
+	if (el.parentNode.id == 'name_range') {
+		var name_range = el.getAttribute("data-range") || '';
+		storage_set('part', { 'name_range': name_range, 'participant': '' });
+		window.location.hash = '#part';
+		update_part_view(name_range, '');
+	}
+}
+
+
 
 // ------------------------------------------------------------------------------------------------ info view
 
@@ -1150,20 +1150,9 @@ function show_info_view() {
 // ------------------------------------------------------------------------------------------------ init
 
 
-// init item expansion
 EL('prog_ls').onclick = item_list_click;
 
-
-// init next view
-if (EL("next_filters")) {
-	var ul = EL("next_filters").getElementsByTagName("li");
-	for (var i = 0, l = ul.length; i < l; ++i) {
-		ul[i].onclick = function() { next_filter(this.parentNode.id, this.id); return true; };
-	}
-}
-
-
-// init star view
+EL('next_filters').onclick = next_filter_click;
 
 
 // init prog view
@@ -1171,8 +1160,7 @@ var pf = EL('prog_filters');
 pf.onclick = prog_filter_change;
 var sf = EL('search');
 if (sf) {
-	sf.onsubmit = prog_filter_change;
-	EL('q').onblur = prog_filter_change;
+	sf.onsubmit = EL('q').onblur = prog_filter_change;
 	sf.onreset = function() { _prog_set_filters({}); };
 }
 
@@ -1191,10 +1179,7 @@ if (typeof people != 'undefined') {
 		else                              return 0;
 	});
 
-	var pc = EL("part_filters").getElementsByTagName("li");
-	for (var i = 0, l = pc.length; i < l; ++i) {
-		pc[i].onclick = function() { part_filter(this.parentNode.id, this); return true; };
-	}
+	EL("part_filters").onclick = part_filter_click;
 }
 
 
