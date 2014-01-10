@@ -935,7 +935,21 @@ input[type="text"] {
   vertical-align: baseline;
   margin: 0 3px !important;
 }
+.android_menu_icon {
+  display: inline-block;
+  position: relative;
+  left: 5px;
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.android_menu_icon:before {
+  content: "…";
+}
 .ie_menu_icon {
   position: relative;
   bottom: 4px;
+}
+.ie_menu_icon:before {
+  content: "…";
 }
