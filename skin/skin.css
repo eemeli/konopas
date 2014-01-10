@@ -1,13 +1,13 @@
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
-  font-weight: 300;
+  font-weight: normal;
   src: local('Roboto Light'), local('Roboto-Light'), url(Roboto300.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   src: local('Roboto Medium'), local('Roboto-Medium'), url(Roboto500.ttf) format('truetype');
 }
 @font-face {
@@ -18,7 +18,7 @@
 }
 html {
   font-family: 'Roboto', sans-serif;
-  font-weight: 300;
+  font-weight: normal;
   color: #000000;
   background: #ffffff;
   width: 100%;
@@ -29,7 +29,7 @@ body {
 }
 strong,
 b {
-  font-weight: 500;
+  font-weight: bold;
 }
 h1,
 h2,
@@ -90,7 +90,7 @@ input[type="text"] {
   cursor: auto !important;
 }
 .selected {
-  font-weight: 500;
+  font-weight: bold;
   border-color: #800000 !important;
 }
 .hint {
@@ -221,7 +221,7 @@ input[type="text"] {
 .prog #tab_prog,
 .part #tab_part,
 .info #tab_info {
-  font-weight: 500;
+  font-weight: bold;
   border: 2px solid #800000;
 }
 #refresh {
@@ -457,7 +457,7 @@ input[type="text"] {
   padding-bottom: 1em;
 }
 .expanded .title {
-  font-weight: 500;
+  font-weight: bold;
 }
 .expanded .loc {
   color: #736f68 !important;
@@ -504,11 +504,11 @@ input[type="text"] {
 }
 .expanded .v_pos.voted {
   color: #ce3d3d;
-  font-weight: 500;
+  font-weight: bold;
 }
 .expanded .v_neg.voted {
   color: #3d3dce;
-  font-weight: 500;
+  font-weight: bold;
 }
 .comments-wrap {
   display: none;
@@ -549,11 +549,11 @@ input[type="text"] {
   white-space: pre-line;
 }
 .comment-author {
-  font-weight: 500;
+  font-weight: bold;
 }
 .comment-author:after {
   font-family: 'Roboto', sans-serif;
-  font-weight: 300;
+  font-weight: normal;
   content: " | ";
 }
 #main p {
@@ -754,7 +754,7 @@ input[type="text"] {
   text-align: center;
 }
 #filter_sum a {
-  font-weight: 500;
+  font-weight: bold;
   text-decoration: none;
 }
 #filter_sum a:hover {
@@ -856,7 +856,7 @@ input[type="text"] {
 }
 .linklist a {
   text-decoration: none;
-  font-weight: 500;
+  font-weight: bold;
 }
 .linklist a:hover {
   text-decoration: underline;
