@@ -227,9 +227,10 @@ function GlobToRE(pat) {
 
 var views = [ "next", "star", "prog", "part", "info" ];
 function set_view(new_view) {
-	for (var i = 0; i < views.length; ++i) document.body.classList.remove(views[i]);
-	document.body.classList.add(new_view);
-	storage_set('view', new_view);
+	var cl = document.body.classList;
+	for (var i = 0; i < views.length; ++i) {
+		cl[new_view == views[i] ? 'add' : 'remove'](views[i]);
+	}
 }
 
 function clean_name(p, span_parts) {
@@ -767,13 +768,13 @@ function _prog_hash(f0, fx) {
 		for (var k in f0) f[k] = f0[k];
 		for (var k in fx) f[k] = fx[k];
 	}
-	var p = ['prog'];
+	var p = ['#prog'];
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
 		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
 		p.push(k + ':' + hash_encode(f[k]));
 	}
-	return p.join('/');
+	return p.length > 1 ? p.join('/') : '#';
 }
 
 function _prog_set_filters(f, silent) {
@@ -782,12 +783,12 @@ function _prog_set_filters(f, silent) {
 
 	var h = _prog_hash(f);
 	var h_cur = window.location.toString().split('#')[1] || '';
-	if (h_cur != h) {
+	if (h_cur != h.substr(1)) {
 		if (silent) {
-			var loc = window.location.toString().split('#')[0] + '#' + h;
+			var loc = window.location.toString().split('#')[0] + h;
 			history.replaceState({}, document.title, loc);
 		} else {
-			window.location.hash = '#' + h;
+			window.location.hash = h;
 		}
 		return true;
 	}
@@ -863,23 +864,23 @@ function _prog_show_list(f) {
 
 		if (id_only) {
 			if (ls.length == 1) {
-				fs.innerHTML = 'Listing 1 item: <a href="#' + _prog_hash(f0) + '">' + ls[0].title + '</a>';
+				fs.innerHTML = 'Listing 1 item: <a href="' + _prog_hash(f0) + '">' + ls[0].title + '</a>';
 			} else {
-				fs.innerHTML = 'Listing ' + ls.length + ' items with id <a href="#' + _prog_hash(f0) + '">' + f.id + '</a>';
+				fs.innerHTML = 'Listing ' + ls.length + ' items with id <a href="' + _prog_hash(f0) + '">' + f.id + '</a>';
 			}
 		} else {
 			var ls_all = true;
 			var ft = 'item'; if (ls.length != 1) ft += 's';
-			if (f.tag) { ft = '<a href="#' + _prog_hash(f0, {'tag':''}) + '">' + f.tag + '</a> ' + ft; ls_all = false; }
+			if (f.tag) { ft = '<a href="' + _prog_hash(f0, {'tag':''}) + '">' + f.tag + '</a> ' + ft; ls_all = false; }
 			if (f.day) {
 				var dt = new Date(f.day);
-				ft += ' on <a href="#' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt, true) + '</a>';
+				ft += ' on <a href="' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt, true) + '</a>';
 				ls_all = false;
 			}
-			if (f.area) { ft += ' in <a href="#' + _prog_hash(f0, {'area':''}) + '">' + f.area + '</a>'; ls_all = false; }
-			if (f.query) { ft += ' matching the query <a href="#' + _prog_hash(f0, {'query':''}) + '">' + f.query + '</a>'; ls_all = false; }
+			if (f.area) { ft += ' in <a href="' + _prog_hash(f0, {'area':''}) + '">' + f.area + '</a>'; ls_all = false; }
+			if (f.query) { ft += ' matching the query <a href="' + _prog_hash(f0, {'query':''}) + '">' + f.query + '</a>'; ls_all = false; }
 
-			fs.innerHTML = 'Listing ' + (ls_all ? '<a href="#' + _prog_hash({}) + '">all</a> ' : '') + ls.length + ' ' + ft;
+			fs.innerHTML = 'Listing ' + (ls_all ? '<a href="' + _prog_hash({}) + '">all</a> ' : '') + ls.length + ' ' + ft;
 		}
 	}
 
@@ -1267,14 +1268,11 @@ for (var i = 0, l = pb.length; i < l; ++i) popup_boxify(pb[i]);
 
 function init_view() {
 	var opt = window.location.hash.substr(1);
-	if (opt.length < 4) opt = storage_get('view');
-	if (!opt) opt = 'prog';
 	switch (opt.substr(0,4)) {
 		case 'next': show_next_view(); break;
 		case 'star': show_star_view(opt.substr(4)); break;
 		case 'part': show_part_view(opt.substr(4)); break;
 		case 'info': show_info_view(); break;
-		case 'prog': show_prog_view(); break;
 		default:     show_prog_view(); break;
 	}
 
