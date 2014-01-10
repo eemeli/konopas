@@ -935,3 +935,7 @@ input[type="text"] {
   vertical-align: baseline;
   margin: 0 3px !important;
 }
+.ie_menu_icon {
+  position: relative;
+  bottom: 4px;
+}
