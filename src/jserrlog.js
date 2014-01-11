@@ -57,13 +57,13 @@ jsErrLog.guid = function() { // http://www.ietf.org/rfc/rfc4122.txt section 4.4
 
 
 // Respond to an error being raised in the javascript
-window.onerror = function(msg, file_loc, line_no) {
+window.onerror = function(msg, file_loc, line_no, col_no) {
 	var src = jsErrLog.url
 	        + "?i=" + (++jsErrLog.err_i)
 	        + "&sn=" + escape(document.URL)
 	        + "&fl=" + file_loc
 	        + "&ln=" + line_no
-	        + "&err=" + msg.substr(0, 1024)
+	        + "&err=" + (col_no ? '[Col:' + col_no + '] ' + msg : msg ).substr(0, 1024)
 	        + "&ui=" + jsErrLog.guid();
 	if (jsErrLog.info) src += "&info=" + escape(jsErrLog.info.substr(0, 512));
 	jsErrLog.appendScript(jsErrLog.err_i, src);
