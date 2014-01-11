@@ -60,6 +60,7 @@ hr {
 }
 a {
   color: #000000;
+  outline: 0;
 }
 .js-link {
   text-decoration: underline;
@@ -925,10 +926,6 @@ ul.popup li,
   margin-top: 40px;
   border-bottom: 2px solid #800000;
 }
-#info_view img {
-  width: 100%;
-  margin: 5px 0;
-}
 #info_view table {
   width: 100%;
 }
@@ -940,9 +937,6 @@ ul.popup li,
 }
 #info_view td:first-child {
   text-align: left;
-}
-#info_view h3 {
-  margin-bottom: 5px;
 }
 #info_view ol {
   margin: 5px 0;
