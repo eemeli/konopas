@@ -551,13 +551,12 @@ Server.prototype.cb_login = function(v) {
 	for (var cmd in v) {
 		links.push('<a href="' + this.url(cmd) + '">' + v[cmd] + '</a>');
 	}
-	this.el.innerHTML = '<div id="login-links" class="popup-wrap">'
-		+ "\n&raquo; <span>Login to sync your data</span>\n"
-		+ '<div id="login-disable-bg" class="popup-bg"></div>'
-		+ '<div class="popup">Once you\'ve verified your e-mail address, you\'ll be able to sync your data between different clients (including external calendars), as well as vote & comment on items.'
+	this.el.innerHTML = '<div id="login-links">'
+		+ '\n&raquo; <span class="popup-link" id="login-popup-link">Login to sync your data</span>\n'
+		+ '<div class="popup" id="login-popup">Once you\'ve verified your e-mail address, you\'ll be able to sync your data between different clients (including external calendars), as well as vote & comment on items.'
 		+ "\n<ul>\n<li>" + links.join("\n<li>")
 		+ "\n</ul></div></div>";
-	make_popup_menu("login-links", "login-disable-bg");
+	EL('login-popup-link').onclick = popup_open;
 }
 
 Server.prototype.cb_my_prog = function(v) {

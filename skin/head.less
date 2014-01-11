@@ -9,6 +9,52 @@
 
 #banner { position: relative; z-index: 5; background: @bg-plain; padding-top: 0; }
 
+#login-links {
+	color: @fg-light;
+	span {
+		text-decoration: underline;
+		cursor: pointer;
+		&:hover { color: @fg-plain; }
+	}
+}
+#login-popup {
+	width: 300px;
+	padding-left: 8px;
+	ul { margin: 5px 0; padding: 0; }
+	li { line-height: 1.0; padding-bottom: 5px; text-align: center; }
+}
+
+#server_connect {
+	font-size: 14px;
+	text-align: center;
+	margin: 10px 0;
+}
+#server_info {
+	color: @fg-lighter;
+	a { color: @fg-light; }
+	a:hover { color: @fg-plain; }
+}
+#server_user {
+}
+#server_error {
+	display: none;
+	position: fixed;
+	z-index: 6;
+	top: 2px;
+	left: 50%;
+	> div {
+		position: relative;
+		left: -50%;
+		background: #ffbaba;
+		color: #d80000;
+		border: @border-normal;
+		border-radius: @border-radius;
+		padding: 2px;
+		cursor: pointer;
+		code { font-size: 1.2em; }
+	}
+}
+
 #tabs {
 	list-style-type: none; padding: 0; margin: 0;
 	li { padding: 0; margin: 0; cursor: pointer; }

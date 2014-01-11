@@ -82,49 +82,35 @@ function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
 
 function hash_decode(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
 
-function make_popup_menu(root, bg) {
-	if (!root || (root.nodeType != 1)) {
-		root = EL(root);
-		if (!root) return;
-	}
-	if (!bg || (bg.nodeType != 1)) {
-		if (bg) bg = EL(bg);
-		if (!bg) {
-			bg = _new_elem('div', 'popup-bg');
-			root.appendChild(bg);
-		}
+
+function popup_open(ev) {
+	ev = ev || window.event;
+	if (ev.which != 1) return;
+	var src_el = ev.target;
+	var pop_el = src_el.nextElementSibling;
+	if (!pop_el || !pop_el.classList.contains('popup')) {
+		if (src_el.href && /\.(gif|jpe?g|png)$/i.test(src_el.href)) {
+			pop_el = _new_elem('img', 'popup');
+			pop_el.src = src_el.href;
+			src_el.parentNode.insertBefore(pop_el, src_el.nextSibling);
+		} else return;
 	}
 
-	root.onclick = function(ev) {
-		if (root.classList.contains("show_box")) {
-			bg.style.display = "none";
-			root.classList.remove("show_box");
-			var z = parseInt(getComputedStyle(root.parentNode)['z-index'] || '2');
-			root.parentNode.style.zIndex = z - 1;
-		} else {
-			bg.style.display = "block";
-			root.classList.add("show_box");
-			var z = parseInt(getComputedStyle(root.parentNode)['z-index'] || '1');
-			root.parentNode.style.zIndex = z + 1;
-		}
+	var wrap_el = _new_elem('div', 'popup-wrap');
+	wrap_el.onclick = function() {
+		pop_el.parentNode.removeChild(pop_el);
+		wrap_el.parentNode.removeChild(wrap_el);
+		src_el.parentNode.insertBefore(pop_el, src_el.nextSibling);
 	};
+	var pop_title = pop_el.getAttribute('data-title') || '';
+	if (pop_title) wrap_el.appendChild(_new_elem('div', 'popup-title', pop_title));
+	pop_el.parentNode.removeChild(pop_el);
+	wrap_el.appendChild(pop_el);
+	document.body.appendChild(wrap_el);
 
-	var title = root.getElementsByClassName('popup-title');
-	if (title.length) title[0].setAttribute('data-title', title[0].textContent);
+	if (src_el.href) ev.preventDefault();
 }
 
-function popup_boxify(root) {
-	var a = root.getElementsByTagName('a');
-	for (var i = a.length - 1; i >= 0; --i) {
-		if (/\.(gif|jpe?g|png)$/i.test(a[i].href)) {
-			var b = _new_elem('div', 'popup-wrap');
-			b.innerHTML = '<span>' + a[i].textContent + '</span>'
-			            + '<img class="popup" src="' + a[i].href + '">';
-			a[i].parentNode.replaceChild(b, a[i]);
-			make_popup_menu(b);
-		}
-	}
-}
 
 function pre0(n) { return (n < 10 ? '0' : '') + n; }
 
@@ -891,7 +877,7 @@ function _prog_show_filters(f) {
 	var prev = EL('prog_filters').getElementsByClassName('selected');
 	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 		var cl = prev[i].classList;
-		if (cl.contains('popup-title')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
+		if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
 		cl.remove('selected');
 	}
 
@@ -991,7 +977,7 @@ function prog_filter_change(ev) {
 	var filters = _prog_get_filters();
 	filters[key] = value;
 	if (filters['id'] && (key != 'id')) filters['id'] = '';
-	if (_prog_set_filters(filters)) ev.stopPropagation();
+	_prog_set_filters(filters);
 }
 
 
@@ -1158,14 +1144,18 @@ EL('next_filters').onclick = next_filter_click;
 // init prog view
 var pf = EL('prog_filters');
 pf.onclick = prog_filter_change;
+
+var pl = pf.getElementsByClassName('popup-link');
+for (var i = 0; i < pl.length; ++i){
+	pl[i].setAttribute('data-title', pl[i].textContent);
+	pl[i].nextElementSibling.onclick = prog_filter_change;
+}
+
 var sf = EL('search');
 if (sf) {
 	sf.onsubmit = EL('q').onblur = prog_filter_change;
 	sf.onreset = function() { _prog_set_filters({}); };
 }
-
-var pl = pf.getElementsByClassName('popup-wrap');
-for (var i = 0; i < pl.length; ++i) make_popup_menu(pl[i]);
 
 
 // init part view
@@ -1245,9 +1235,10 @@ if (lu && cache_manifest && (location.protocol == 'http:')) {
 	x.send();
 }
 
-var pb = document.getElementsByClassName('popup-boxify');
-for (var i = 0, l = pb.length; i < l; ++i) popup_boxify(pb[i]);
 
+
+var pl = document.getElementsByClassName('popup-link');
+for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
 
 
 
