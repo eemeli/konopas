@@ -535,7 +535,7 @@ Server.prototype.cb_info = function(v) {
 	this.connected = [v.name, v.email];
 	this.el.innerHTML = '<div id="server_info">'
 	                  + '<a id="server_logout" href="' + this.url(v.logout) + '">Logout</a> '
-	                  + '<span id="server_user" title="' + ((v.name != v.email) ? v.email : '') + '">' + v.name
+	                  + '<span id="server_user" title="' + ((v.name != v.email) ? v.email : '') + '">' + v.name.replace(/@.*/, '')
 	                  + '</span></div>';
 	if (v.ical) {
 		this.ical = this.ical || true;

@@ -423,17 +423,23 @@ ul.popup li,
   clear: both;
 }
 .ls_loading {
-  width: calc(100% - 16px);
+  width: 100%;
   max-width: 685px;
   text-align: center;
 }
 .item_expander {
-  width: calc(100% - 16px);
+  width: 100%;
   max-width: 685px;
   text-align: right;
   position: absolute;
   z-index: 3;
   padding-top: 50px;
+}
+@media (max-width: 699px) {
+  .ls_loading,
+  .item_expander {
+    margin-left: -16px;
+  }
 }
 .new_day {
   padding-top: 40px;
