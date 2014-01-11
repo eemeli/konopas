@@ -1272,6 +1272,6 @@ if (EL('refresh')) window.addEventListener('load', function() {
 		}
 	}, false);
 	if (cache.status != cache.UNCACHED) {
-		window.setInterval(function() { cache.update(); }, 360000);
+		window.setInterval(function() { cache.update(); }, 3600000);
 	}
 }, false);
