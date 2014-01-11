@@ -124,8 +124,8 @@ function string_time(t) {
 	return pre0(t.getHours()) + ':' + pre0(t.getMinutes());
 }
 
-function weekday(t, utc) {
-	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][utc ? t.getUTCDay() : t.getDay()];
+function weekday(t) {
+	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getDay()];
 }
 
 function _pretty_time(h, m) {
@@ -137,9 +137,9 @@ function _pretty_time(h, m) {
 		return pre0(h) + ':' + pre0(m);
 	}
 }
-function pretty_time(t, utc) {
+function pretty_time(t) {
 	if (t instanceof Date) {
-		return utc ? _pretty_time(t.getUTCHours(), t.getUTCMinutes()) : _pretty_time(t.getHours(), t.getMinutes());
+		return _pretty_time(t.getHours(), t.getMinutes());
 	} else if (typeof t == 'string' || t instanceof String) {
 		if (ko.time_show_am_pm) {
 			var a = t.split(':'); // hh:mm
@@ -162,14 +162,19 @@ function pretty_time_diff(t) {
 	}
 }
 
-function pretty_date(t) {
-	var s = weekday(t, true);
-	var td = t - Date.now();
-	if ((td < 0) || (td > 1000*3600*24*6)) {
-		s += ', ' + t.getUTCDate() + ' ' + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getUTCMonth()];
-		if (Math.abs(td) > 1000*3600*24*60) s += ' ' + t.getUTCFullYear();
-	}
+function parse_date(day_str) {
+	var a = day_str.match(/(\d+)/g); if (a.length < 3) return false;
+	var y = parseInt(a[0], 10), m = parseInt(a[1], 10), d = parseInt(a[2], 10);
+	if (!y || !m || !d) return false;
+	return new Date(y, m - 1, d);
+}
 
+function pretty_date(day_str) {
+	var t = parse_date(day_str); if (!t) return day_str;
+	var s = weekday(t);
+	s += ', ' + t.getDate() + ' '
+	  + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getMonth()];
+	if (Math.abs(t - Date.now()) > 1000*3600*24*60) s += ' ' + t.getFullYear();
 	return s;
 }
 
@@ -406,8 +411,7 @@ function item_show_list(ls, show_id) {
 			prev_date = ls[i].date;
 			prev_time = "";
 
-			var t = new Date(ls[i].date);
-			day_str = pretty_date(t);
+			day_str = pretty_date(ls[i].date);
 			frag.appendChild(_new_elem('div', 'new_day', day_str));
 		}
 
@@ -506,7 +510,7 @@ function update_next_select(t_off) {
 	for (var m = t_range[0]; m <= t_range[1]; m += t_step) {
 		var opt = document.createElement('option');
 		opt.value = m;
-		opt.text = weekday(t, false) + ', ' + pretty_time(t, false);
+		opt.text = weekday(t) + ', ' + pretty_time(t);
 		if (m == t_off) opt.selected = true;
 		if (!m) opt.id = 'next_time_select_now';
 		ts.add(opt);
@@ -858,8 +862,8 @@ function _prog_show_list(f) {
 			var ft = 'item'; if (ls.length != 1) ft += 's';
 			if (f.tag) { ft = '<a href="' + _prog_hash(f0, {'tag':''}) + '">' + f.tag + '</a> ' + ft; ls_all = false; }
 			if (f.day) {
-				var dt = new Date(f.day);
-				ft += ' on <a href="' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt, true) + '</a>';
+				var dt = parse_date(f.day);
+				ft += ' on <a href="' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt) + '</a>';
 				ls_all = false;
 			}
 			if (f.area) { ft += ' in <a href="' + _prog_hash(f0, {'area':''}) + '">' + f.area + '</a>'; ls_all = false; }
