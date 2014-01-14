@@ -11,28 +11,31 @@ js_tgt="konopas.min.js"
 precache_files="$js_tgt $lessc_tgt skin/*.ttf"
 
 
-do_lessc=true
-do_js_min=true
+do_lessc=false
+do_js_min=false
 do_precache=false
 
 usage="usage: $0 [options]
-  -c  DON'T use lessc to compile CSS
-  -j  DON'T minify JavaScript
-  -p  DO generate precache files: $precache_files"
+  -c  use lessc to compile $lessc_src to $lessc_tgt
+  -j  minify JavaScript from src/ to $js_tgt
+  -p  generate precache files: $precache_files
+  -h  display this helpful text and exit"
 
 while getopts "hcjp" OPT; do case $OPT in
-	c) do_lessc=false;;
-	j) do_js_min=false;;
+	c) do_lessc=true;;
+	j) do_js_min=true;;
 	p) do_precache=true;;
 	h) echo "$usage"; exit 0;;
 	*) echo "$usage"; exit 1;;
 esac; done
 
+done=false
+
 if $do_lessc; then
 	echo -n "Compiling $lessc_src to $lessc_tgt... "
 	$lessc_cmd $lessc_opt "$lessc_src" "$lessc_tgt"
 	if [ $? -ne 0 ]; then echo "lessc error!"; exit 1; fi
-	echo "done."
+	echo "ok."; done=true
 fi
 
 if $do_js_min; then
@@ -44,18 +47,20 @@ if $do_js_min; then
 	curl -X POST -s --data-urlencode "input@$tmp" http://javascript-minifier.com/raw > "$js_tgt"
 	if [ $? -ne 0 ]; then echo "cURL error!"; rm "$tmp"; exit 1; fi
 	rm "$tmp"
-	echo "done."
+	echo "ok."; done=true
 fi
 
 if $do_precache; then
-	echo -n "Pre-caching files: "
+	echo "Pre-caching files:"
 	for f in $precache_files; do
-		echo -n "$f... "
+		echo "  $f..."
 		gzip -c "$f" > "$f.gz"
 		if [ $? -ne 0 ]; then echo "gzip error!"; exit 1; fi
 	done
-	echo "done."
+	echo "  ok."; done=true
 fi
 
-echo "All done."
+if $done; then echo "All done."
+else echo "$usage"; fi
+
 exit 0
