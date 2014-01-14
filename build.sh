@@ -1,8 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-opt_lessc="--yui-compress"
+lessc_cmd="lessc"
+lessc_opt="--yui-compress"
+lessc_src="skin/main.less"
+lessc_tgt="skin/skin.css"
 
-precache_files="konopas.min.js skin/skin.css skin/*.ttf"
+js_src_files="src/polyfill.js src/server.js src/stars.js src/app.js"
+js_tgt="konopas.min.js"
+
+precache_files="$js_tgt $lessc_tgt skin/*.ttf"
 
 
 do_lessc=true
@@ -23,18 +29,19 @@ while getopts "hcjp" OPT; do case $OPT in
 esac; done
 
 if $do_lessc; then
-	echo -n "Compiling skin/*.less to skin/skin.css... "
-	lessc $opt_lessc skin/main.less skin/skin.css
+	echo -n "Compiling $lessc_src to $lessc_tgt... "
+	$lessc_cmd $lessc_opt "$lessc_src" "$lessc_tgt"
 	if [ $? -ne 0 ]; then echo "lessc error!"; exit 1; fi
 	echo "done."
 fi
 
 if $do_js_min; then
-	echo -n "Minifying JS from src/ to konopas.min.js... "
+	echo -n "Minifying JS from src/ to $js_tgt... "
 	tmp=$(tempfile -p 'ko-')
 	if [ $? -ne 0 ]; then echo "tempfile error!"; exit 1; fi
-	cat src/{polyfill,server,stars,app}.js > "$tmp"
-	curl -X POST -s --data-urlencode "input@$tmp" http://javascript-minifier.com/raw > konopas.min.js
+	cat $js_src_files > "$tmp"
+	if [ $? -ne 0 ]; then echo "cat error!"; exit 1; fi
+	curl -X POST -s --data-urlencode "input@$tmp" http://javascript-minifier.com/raw > "$js_tgt"
 	if [ $? -ne 0 ]; then echo "cURL error!"; rm "$tmp"; exit 1; fi
 	rm "$tmp"
 	echo "done."
