@@ -23,6 +23,7 @@ var ko = {
 	// these are default values, use konopas_set to override
 	'id': '',
 	'full_version': !navigator.userAgent.match(/Android [12]/),
+	'tag_categories': false,
 	'default_duration': 60,
 	'time_show_am_pm': false,
 	'abbrev_00_minutes': true, // only for am/pm time
@@ -324,10 +325,18 @@ function _item_people(it) {
 
 function _item_tags(it) {
 	if (!it.tags || !it.tags.length) return '';
-	var a = it.tags.map(function(t) {
-		return '<a href="#prog/tag:' + hash_encode(t) + '">' + t + '</a>';
+	var o = {};
+	it.tags.forEach(function(t) {
+		var cat = 'tags';
+		var tgt = _prog_hash({'tag': t});
+		var a = t.split(':');
+		if (a.length > 1) { cat = a.shift(); t = a.join(':'); }
+		var link = '<a href="' + tgt + '">' + t + '</a>'
+		if (o[cat]) o[cat].push(link);
+		else o[cat] = [link];
 	});
-	return '<div class="discreet">Tags: ' + a.join(', ') + '</div>\n';
+	var a = []; for (var k in o) a.push(k.charAt(0).toUpperCase() + k.substr(1) + ': ' + o[k].join(', '));
+	return '<div class="discreet">' + a.join('<br>') + '</div>\n';
 }
 
 function _item_loc_str(it) {
@@ -737,6 +746,13 @@ function _prog_get_filters(hash_only) {
 		for (var i = 0; i < p.length; ++i) {
 			var s = p[i].split(':');
 			if ((s.length == 2) && s[0] && s[1]) {
+				if (ko.tag_categories) for (var j = 0; j < ko.tag_categories.length; ++j) {
+					if (s[0] == ko.tag_categories[j]) {
+						s[1] = s[0] + ':' + s[1];
+						s[0] = 'tag';
+						break;
+					}
+				}
 				filters[s[0]] = hash_decode(s[1]);
 				h_set = true;
 			}
@@ -752,15 +768,25 @@ function _prog_get_filters(hash_only) {
 }
 
 function _prog_hash(f0, fx) {
-	var f = fx ? {} : f0;
-	if (fx) {
-		for (var k in f0) f[k] = f0[k];
-		for (var k in fx) f[k] = fx[k];
-	}
+	var f = {}; for (var k in f0) f[k] = f0[k];
+	if (fx)     for (var k in fx) f[k] = fx[k];
 	var p = ['#prog'];
 	for (var k in f) if (k && f[k]) {
 		if ((k == 'area') && (f[k] == 'all_areas')) continue;
-		if ((k == 'tag')  && (f[k] == 'all_tags'))  continue;
+		if (k == 'tag') {
+			if (f[k] == 'all_tags') continue;
+			if (ko.tag_categories && (f[k].indexOf(':') !== -1)) {
+				var s = f[k].split(':');
+				for (var j = 0; j < ko.tag_categories.length; ++j) {
+					if (s[0] == ko.tag_categories[j]) {
+						k = s[0];
+						f[k] = s[1];
+						break;
+					}
+				}
+			}
+		}
+
 		p.push(k + ':' + hash_encode(f[k]));
 	}
 	return p.length > 1 ? p.join('/') : '#';
