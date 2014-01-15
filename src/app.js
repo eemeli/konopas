@@ -485,25 +485,23 @@ function item_show_list(ls, show_id) {
 }
 
 function item_list_click(ev) {
-	ev = ev || window.event;
-
-	var el = ev.target;
+	var el = (ev || window.event).target;
+	var is_link = false;
 	while (!/\bitem(_|$)/.test(el.className)) {
 		if (el.id == 'prog_ls') return;
-		if ((el.tagName.toLowerCase() == 'a') && el.href) return;
+		if ((el.tagName.toLowerCase() == 'a') && el.href) is_link = true;
 		el = el.parentNode;
 	}
 	if (!el.id || el.id[0] != 'p') return;
 
-	if (el.parentNode.classList.toggle("expanded")) {
-		var it_id = el.id.substr(1);
-		_item_show_extra(el, it_id);
-		if (history && history.replaceState && document.body.classList.contains('prog')) {
-			var f = _prog_get_filters(true);
-			if (!f['day']) f['day'] = _prog_default_day();
-			f['id'] = it_id;
-			_prog_set_filters(f, true);
-		}
+	var it_id = el.id.substr(1);
+	var in_prog_view = document.body.classList.contains('prog');
+	if (is_link) {
+		if (in_prog_view) _prog_set_location_id(it_id);
+	} else {
+		var open = el.parentNode.classList.toggle("expanded");
+		if (open) _item_show_extra(el, it_id);
+		if (in_prog_view) _prog_set_location_id(open ? it_id : '');
 	}
 }
 
@@ -813,6 +811,13 @@ function _prog_set_filters(f, silent) {
 	}
 
 	return false;
+}
+
+function _prog_set_location_id(id) {
+	var f = _prog_get_filters(true);
+	if (id && !f['day']) f['day'] = _prog_default_day();
+	f['id'] = id;
+	return _prog_set_filters(f, true);
 }
 
 
