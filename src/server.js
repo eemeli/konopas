@@ -1,3 +1,5 @@
+"use strict";
+
 function Server(id, stars, opt) {
 	this.id = id;
 	this.stars = stars;

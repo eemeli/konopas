@@ -1,3 +1,5 @@
+"use strict";
+
 function Stars(id, opt) {
 	this.name = 'konopas.' + id + '.stars';
 

@@ -19,6 +19,8 @@
  */
 
 
+"use strict";
+
 var ko = {
 	// these are default values, use konopas_set to override
 	'id': '',
@@ -383,7 +385,7 @@ function _item_show_extra(item, id) {
 	if (server) server.show_extras(id, item);
 }
 
-(function() {
+var _item_el = (function() {
 	var frame = _new_elem('div', 'item_frame');
 	var star = frame.appendChild(_new_elem('div', 'item_star'));
 	var item = frame.appendChild(_new_elem('div', 'item'));
@@ -396,7 +398,7 @@ function _item_show_extra(item, id) {
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
 	}
 
-	this._item_el = function(it) {
+	return function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;

@@ -1,3 +1,5 @@
+"use strict";
+
 if (!String.prototype.trim) {
 	String.prototype.trim = function () {
 		return this.replace(/^\s+|\s+$/g, '');
@@ -21,8 +23,6 @@ if (!String.prototype.trim) {
 if (typeof document !== "undefined" && !("classList" in document.createElement("a"))) {
  
 (function (view) {
- 
-"use strict";
  
 var
 	  classListProp = "classList"
