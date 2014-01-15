@@ -172,8 +172,9 @@ function parse_date(day_str) {
 	return new Date(y, m - 1, d);
 }
 
-function pretty_date(day_str) {
-	var t = parse_date(day_str); if (!t) return day_str;
+function pretty_date(d) {
+	var t = (d instanceof Date) ? d : parse_date(d);
+	if (!t) return d;
 	var s = weekday(t);
 	s += ', ' + t.getDate() + ' '
 	  + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getMonth()];
