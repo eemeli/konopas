@@ -599,6 +599,7 @@ ul.popup li,
 }
 .expanded .v_pos {
   background-position: 0 -32px;
+  margin-left: 3px;
 }
 .expanded .v_neg {
   background-position: 0 -48px;

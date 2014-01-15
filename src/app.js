@@ -394,6 +394,7 @@ var _item_el = (function() {
 	var loc   = item.appendChild(_new_elem('div', 'loc'));
 	var votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
 	if (ko.use_server) {
+		votes.textContent = 'Votes: ';
 		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
 		votes.appendChild(document.createTextNode(' / '));
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
