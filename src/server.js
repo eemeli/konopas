@@ -127,6 +127,8 @@ Server.prototype.show_my_vote = function(id, v_el, v) {
 
 Server.prototype.vote = function(id, v, self) {
 	self = self || this;
+	if (!self.connected) return false;
+
 	if (self.pub_data) {
 		var v0 = self.my_votes_data[id];
 		if (v0) --self.pub_data[id][(v0 < 0) ? 0 : v0];
@@ -149,6 +151,8 @@ Server.prototype.vote = function(id, v, self) {
 	self.vote_timers[id] = window.setTimeout(function() {
 		self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
 	}, 1000);
+
+	return true;
 }
 
 Server.prototype.vote_click = function(ev, self) {
@@ -163,7 +167,7 @@ Server.prototype.vote_click = function(ev, self) {
 	if (v) {
 		var p = ev.target.parentNode;
 		if (p.parentNode.parentNode.classList.contains('expanded')) {
-			self.vote(p.id.substr(1), v, self);
+			bubble = !self.vote(p.id.substr(1), v, self);
 		} else {
 			bubble = true;
 		}
@@ -227,7 +231,7 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 	switch (ac.textContent.substr(0, 4)) {
 		case 'Show':
 			c_el.style.display = 'block';
-			if (f_el.style.display == 'none') af.style.display = 'block';
+			if ((f_el.style.display == 'none') && self.connected) af.style.display = 'block';
 			self.show_comments(id, self);
 			break;
 
@@ -322,6 +326,7 @@ Server.prototype.show_comments = function(id, self) {
 
 
 Server.prototype.show_comment_form = function(id, af, f_el, self) {
+	if (!self.connected) return;
 	if (f_el.classList.contains('empty')) {
 		if (!document.getElementById('post_comment_iframe')) {
 			var fi = document.createElement('iframe');
@@ -367,24 +372,32 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 
 
 Server.prototype.make_comments_wrap = function(id) {
+	var p = this.pub_data[id],
+	    n_comments = (p && (p[3] > 0)) ? p[3] : 0,
+	    d = _new_elem('div', 'comments-wrap');
+
 	var ac = _new_elem('a', 'js-link discreet');
-	var c_el = _new_elem('div', 'comments'); c_el.id = 'c' + id;
+	ac.textContent = 'Show ' + n_comments + ' comment' + ((n_comments == 1) ? '' : 's');
+	ac.style.display = n_comments ? 'block' : 'none';
+	d.appendChild(ac);
+
+	var c_el = _new_elem('div', 'comments');
+	c_el.id = 'c' + id;
+	c_el.style.display = 'none';
+	d.appendChild(c_el);
+
 	var af = _new_elem('a', 'js-link discreet', 'Add a comment');
-	var f_el = _new_elem('form', 'empty'); f_el.id = 'f' + id;
+	af.style.display = n_comments || !this.connected ? 'none' : 'block';
+	d.appendChild(af);
+
+	var f_el = _new_elem('form', 'empty');
+	f_el.id = 'f' + id;
+	f_el.style.display = 'none';
+	d.appendChild(f_el);
 
 	var self = this;
 	ac.onclick = function(ev) { self.onclick_show_comments(ev, id, c_el, af, f_el, self); };
 	af.onclick = function(ev) { self.onclick_show_comment_form(ev, id, f_el, self); };
-
-	f_el.style.display = 'none';
-	ac.textContent = 'Hide';
-	ac.click();
-
-	var d = _new_elem('div', 'comments-wrap');
-	d.appendChild(ac);
-	d.appendChild(c_el);
-	d.appendChild(af);
-	d.appendChild(f_el);
 
 	return d;
 }
@@ -393,7 +406,9 @@ Server.prototype.make_comments_wrap = function(id) {
 // ------------------------------------------------------------------------------------------------ item extras
 
 Server.prototype.show_extras = function(id, p_el) {
-	if (!this.connected) return;
+	var pub_data_empty = true;
+	for (var k in this.pub_data) { pub_data_empty = false; break; }
+	if (pub_data_empty) return;
 
 	var self = this;
 
@@ -581,6 +596,11 @@ Server.prototype.cb_pub_data = function(p) {
 	_log("server pub_data: " + JSON.stringify(p));
 	this.pub_data = p;
 	for (var id in p) this.show_pub_votes(id);
+	var open_items = document.getElementsByClassName('expanded');
+	for (var i = 0; i < open_items.length; ++i) {
+		var it = open_items[i].getElementsByClassName('item');
+		if (it) this.show_extras(it[0].id.substr(1), it[0]);
+	}
 }
 
 Server.prototype.cb_show_comments = function(id, c) {
