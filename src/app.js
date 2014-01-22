@@ -994,6 +994,8 @@ function prog_filter_change(ev) {
 	switch (ev.type) {
 		case 'click':
 			if (ev.target.tagName.toLowerCase() != 'li') return;
+			var popups = ev.target.getElementsByClassName('popup');
+			if (popups && popups.length) return;
 			key = ev.target.parentNode.id.replace(/\d+$/, '');
 			value = ev.target.id;
 			switch (key) {
