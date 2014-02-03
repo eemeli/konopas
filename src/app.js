@@ -838,7 +838,7 @@ function _prog_filter(it) {
 		var found = this.query.test(it.title) || this.query.test(it.desc) || (it.loc && this.query.test(it.loc[0]));
 		if (!found && it.people) {
 			for (var i = 0; i < it.people.length; ++i) {
-				if (this.query.test(it.people[i])) { found = true; break; }
+				if (this.query.test(it.people[i].name)) { found = true; break; }
 			}
 		}
 		if (!found) return false;
