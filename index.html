@@ -39,7 +39,7 @@
 <div id="load_disable"></div>
 
 <div id="time"></div>
-<div id="scroll"><a href="#top" id="scroll_link">Scroll up</a></div>
+<div id="scroll"><a href="#top" id="scroll_link" data-txt>Scroll up</a></div>
 
 <div id="banner">
 <div id="server_connect"></div>
@@ -49,14 +49,14 @@
 <img id="title" src="data/title.png" style="width: 145px; margin: 27px;"></a></h1>
 
 <ul id="tabs">
-<li id="tab_next"><a href="#next">Next</a>
-<li id="tab_star"><a href="#star">My con</a>
-<li id="tab_prog"><a href="#">Program</a>
-<li id="tab_part"><a href="#part">People</a>
-<li id="tab_info"><a href="#info">Info</a>
+<li id="tab_next"><a href="#next" data-txt>Next</a>
+<li id="tab_star"><a href="#star" data-txt>My con</a>
+<li id="tab_prog"><a href="#" data-txt>Program</a>
+<li id="tab_part"><a href="#part" data-txt>People</a>
+<li id="tab_info"><a href="#info" data-txt>Info</a>
 </ul>
 
-<div id="refresh"><i class="refresh_icon"></i>Refresh data</div>
+<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
 </div>
 
 <div id="main">
@@ -64,17 +64,17 @@
 <div id="next_view" class="view">
 	<div id="next_filters" class="filters">
 
-	&raquo; List items by:<ul id="next_type">
-	<li id="next_by_hour">Time
-	<li id="next_by_room">Location
+	&raquo; <span data-txt>List items by:</span><ul id="next_type">
+	<li id="next_by_hour" data-txt>Time
+	<li id="next_by_room" data-txt>Location
 	</ul>
 
 	<div id="next_time">
-		Show items starting after:
+		<span data-txt>Show items starting after:</span>
 		<span>
-		<a id="next_earlier" class="next_arrow" title="earlier">&lsaquo;</a>
+		<a id="next_earlier" class="next_arrow" data-txt="earlier" data-txt-attr="title">&lsaquo;</a>
 		<select id="next_time_select"></select>
-		<a id="next_later" class="next_arrow" title="later">&rsaquo;</a>
+		<a id="next_later" class="next_arrow" data-txt="later" data-txt-attr="title">&rsaquo;</a>
 		</span>
 	</div>
 
@@ -110,7 +110,7 @@
 		<li id="a2">Lobby (2)
 		<li id="a1W">Concourse (1W)
 		<li id="a1E">Galleria (1E)
-		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More...</div>
+		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More…</div>
 		<ul id="area2" class="popup" data-title="Room">
 			<li id="Adams">Adams
 			<li id="Alcott">Alcott
@@ -145,7 +145,7 @@
 		<ul id="tag" style="min-width: 140px;">
 		<li id="all_tags">All tracks &amp; types
 		<li id="Featured">Featured items
-		<li id="track-list"><div class="popup-link">Choose track...</div>
+		<li id="track-list"><div class="popup-link">Choose track…</div>
 		<ul id="tag2" class="popup" data-title="Track">
 			<li id="track:Anime">Anime
 			<li id="track:Art">Art
@@ -167,7 +167,7 @@
 			<li id="track:Writing">Writing
 			<li id="track:Trackless events">Trackless events
 		</ul>
-		<li id="type-list"><div class="popup-link">Choose type...</div>
+		<li id="type-list"><div class="popup-link">Choose type…</div>
 		<ul id="tag3" class="popup" data-title="Type">
 			<li id="type:Concert">Concert
 			<li id="type:Drama">Drama
@@ -186,12 +186,12 @@
 	</div>
 
 	<form name="search" id="search">
-	<input type="text" id="q" placeholder="Search" required>
+	<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
 	<div id="q_ctrl">
-	<input type="submit" id="q_submit" value="Go">
-	<input type="reset" id="q_clear" value="Clear all">
+	<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+	<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
 	</div>
-	<div id="q_hint" class="hint"><b>Hint:</b> search is for full words in the item title, description, room, and participants. You may use * and ? as wildcards and "quoted words" for exact phrases. <span>For example, you could try <b id="q_hint_example"></b></span></div>
+	<div id="q_hint" class="hint" data-txt>search_hint</div>
 	</form>
 
 	<div id="filter_sum"></div>
@@ -207,7 +207,7 @@
 #part_names .ln { display: inline; width: auto; float: none; }
 </style>
 	<div id="part_filters" class="filters">
-	&raquo; All participants by first name:
+	&raquo; <span style="padding:0" data-txt data-txt-var="T:first">part_filter</span>
 	<ul id="name_range">
 		<li data-range="AD">A - D
 		<li data-range="EJ">E - J

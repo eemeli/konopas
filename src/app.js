@@ -24,6 +24,7 @@
 var ko = {
 	// these are default values, use konopas_set to override
 	'id': '',
+	'lc': 'en',
 	'full_version': !navigator.userAgent.match(/Android [12]/),
 	'tag_categories': false,
 	'default_duration': 60,
@@ -36,15 +37,14 @@ var ko = {
 	'log_messages': true
 };
 if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
-if (!ko.id) alert("No ID set! Please assign konopas_set.id a unique identifier.");
 
+var txt = function(key){ return key; };
+if (typeof i18n != 'undefined') { txt = i18n.get(ko.lc) || txt; i18n.fill(ko.lc, 'data-txt'); }
 
-if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window))
-	alert("Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.");
-
-
+if (!ko.id) alert(txt('no_ko_id'));
+if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window)) alert(txt('old_browser'));
 var stars = new Stars(ko.id);
-var server = ko.use_server && new Server(ko.id, stars);
+var server = ko.use_server && window.Server && new Server(ko.id, stars);
 
 // ------------------------------------------------------------------------------------------------ utilities
 function link_to_short_url(url) {
@@ -128,7 +128,7 @@ function string_time(t) {
 }
 
 function weekday(t) {
-	return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.getDay()];
+	return txt('weekday_n', {'N':t.getDay()});
 }
 
 function _pretty_time(h, m) {
@@ -154,14 +154,12 @@ function pretty_time(t) {
 }
 
 function pretty_time_diff(t) {
-	var diff = (Date.now() - t) / 1e3,
-	       u = ["seconds", "minutes", "hours", "days", "weeks", "months", "years"],
-	       s = [1, 60, 60, 24, 7, 4.333, 12, 1e9],
-	   tense = (diff < 0 ? " from now" : " ago");
-	diff = Math.abs(diff);
-	if (diff < 20) return "just now";
+	var d = (Date.now() - t) / 1e3,
+	    a = Math.abs(diff);
+	    s = [1, 60, 60, 24, 7, 4.333, 12, 1e9];
+	if (a < 20) return txt('just now');
 	for (var i = 0, l = s.length; i < l; ++i) {
-		if ((diff /= s[i]) < 2) return ~~(diff *= s[i]) + " " + u[i-1] + tense;
+		if ((a /= s[i]) < 2) return txt('time_diff', {'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d<0 });
 	}
 }
 
@@ -175,9 +173,7 @@ function parse_date(day_str) {
 function pretty_date(d) {
 	var t = (d instanceof Date) ? d : parse_date(d);
 	if (!t) return d;
-	var s = weekday(t);
-	s += ', ' + t.getDate() + ' '
-	  + ['January','February','March','April','May','June','July','August','September','October','November','December'][t.getMonth()];
+	var s = weekday(t) + ', ' + t.getDate() + ' ' + txt('month_n', { 'N':t.getMonth() });
 	if (Math.abs(t - Date.now()) > 1000*3600*24*60) s += ' ' + t.getFullYear();
 	return s;
 }
@@ -201,7 +197,7 @@ function storage_set(name, value) {
 	} catch (e) {
 		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
 			if (!private_browsing_noted) {
-				alert("It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.");
+				alert(txt('private_mode'));
 				private_browsing_noted = true;
 			}
 		} else throw e;
@@ -374,7 +370,7 @@ function _item_show_extra(item, id) {
 
 	var html = "";
 	var a = program.filter(function(el) { return el.id == id; });
-	if (a.length < 1) html = "Program id <b>" + id + "</b> not found!";
+	if (a.length < 1) html = txt('item_not_found', {'ID':id});
 	else {
 		html = _item_tags(a[0]) + _item_people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
@@ -394,7 +390,7 @@ var _item_el = (function() {
 	var loc   = item.appendChild(_new_elem('div', 'loc'));
 	var votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
 	if (ko.use_server) {
-		votes.textContent = 'Votes: ';
+		votes.textContent = txt('Votes') + ': ';
 		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
 		votes.appendChild(document.createTextNode(' / '));
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
@@ -415,7 +411,7 @@ function item_show_list(ls, show_id) {
 	var prev_date = "", day_str = "", prev_time = "";
 	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
-			.appendChild(_new_elem('a', 'js-link', 'Expand all'))
+			.appendChild(_new_elem('a', 'js-link', txt('Expand all')))
 			.id = 'item_expander_link';
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
@@ -448,18 +444,18 @@ function item_show_list(ls, show_id) {
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
 		var items = LS.getElementsByClassName("item");
-		var exp = expand_all.textContent == 'Expand all';
-		if (expand_all.textContent == 'Expand all') {
+		var exp_txt = txt('Expand all');
+		if (expand_all.textContent == exp_txt) {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.add("expanded");
 				_item_show_extra(items[i], items[i].id.substr(1));
 			}
-			expand_all.textContent = 'Collapse all';
+			expand_all.textContent = txt('Collapse all');
 		} else {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.remove("expanded");
 			}
-			expand_all.textContent = 'Expand all';
+			expand_all.textContent = exp_txt;
 		}
 	};
 
@@ -579,19 +575,14 @@ function update_next_list(next_type) {
 	if (next_prog.length > 0) {
 		EL("next_start_note").textContent = '';
 	} else if (ms_next) {
-		var start_str = '';
 		var t0 = new Date();
 		t0.setMinutes(t0.getMinutes() + t_off - t0.getTimezoneOffset());
 		var min_next = Math.floor((ms_next - t0) / 60000);
 		var h_next = Math.floor(min_next / 60);
-		if (h_next >= 1) {
-			min_next -= h_next * 60;
-			start_str += h_next + ' hour' + ((h_next == 1) ? '' : 's') + ' and ';
-		}
-		start_str += min_next + ' minute' + ((min_next == 1) ? '' : 's');
-		EL("next_start_note").textContent = 'The next program item starts in ' + start_str + ' after the set time.';
+		if (h_next >= 1) min_next -= h_next * 60;
+		EL("next_start_note").textContent = txt('next_start', { 'H':h_next, 'M':min_next });
 	} else {
-		EL("next_start_note").textContent = 'There are no more program items scheduled.';
+		EL("next_start_note").textContent = txt('next_ended');
 	}
 
 	item_show_list(next_prog);
@@ -649,45 +640,28 @@ function show_star_view(opt) {
 		var set_link = '#star/set:' + star_list.join(',');
 		if (set_len) {
 			if (arrays_equal(set, star_list)) {
-				view.innerHTML = '<p>Your current selection is encoded in <a href="' + set_link + '" target="_blank">this page\'s URL</a>, which you may open elsewhere to share your selection.<p>For easier sharing, you can also generate a <a href="' + link_to_short_url(location.href) + '">shorter link</a> or a <a href="' + link_to_qr_code(location.href) + '">QR code</a>.';
+				view.innerHTML = txt('star_export', {
+					'THIS':set_link, 'SHORT':link_to_short_url(location.href), 'QR':link_to_qr_code(location.href)
+				});
 				if (server) server.show_ical_link(view);
 			} else {
 				var n_same = array_overlap(set, star_list);
 				var n_new = set_len - n_same;
-				var html = '<p>Your previously selected items are shown with a highlighted interior, while those imported via <a href="' + location.href + '">this link</a> have a highlighted border.';
-				html += '\n<p>Your previous selection ';
-				switch (stars_len) {
-					case 0:  html += 'was empty'; break;
-					case 1:  html += 'had 1 item'; break;
-					default: html += 'had ' + stars_len + ' items';
-				}
-				html += ', and the imported selection has ';
-				switch (n_new) {
-					case 0:  html += 'no new items'; break;
-					case 1:  html += '1 new item'; break;
-					default: html += n_new + ' new items';
-				};
-				switch (n_same) {
-					case 0:         html += '.'; break;
-					case stars_len: html += '.'; break;
-					case 1:         html += ' and 1 which was already selected.'; break;
-					default:        html += ' and ' + n_same + ' which were already selected.';
-				}
-				if (set_len != set_raw.length) {
-					var n_bad = set_raw.length - set_len;
-					html += ' ' + n_bad + ' of the imported items had ' + (n_bad > 1 ? 'invalid IDs.' : 'an invalid ID.');
-				}
+				var n_bad = set_raw.length - set_len;
+				var html = txt('star_import', {
+					'THIS':location.href, 'PREV':stars_len, 'NEW':n_new, 'SAME':n_same, 'BAD':n_bad
+				});
 				if (!stars_len || (n_same != stars_len)) {
-					html += '<p>&raquo; <a href="#star" id="star_set_set">Set my selection to the imported selection</a>';
+					html += '<p>&raquo; <a href="#star" id="star_set_set">' + txt('star_set') + '</a>';
 				}
 				if (stars_len) {
 					if (n_same != stars_len) {
 						var d = [];
-						if (n_new) d.push('add ' + n_new);
-						d.push('discard ' + (stars_len - n_same));
+						if (n_new) d.push(txt('add_n', {'N':n_new}));
+						d.push(txt('discard_n', {'N':stars_len - n_same}));
 						html += ' (' + d.join(', ') + ')';
 					}
-					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">Add the ' + (n_new > 1 ? n_new + ' new items' : 'new item') + ' to my selection</a>';
+					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">' + txt('star_add', {'N':n_new}) + '</a>';
 				}
 				view.innerHTML = html;
 
@@ -695,12 +669,7 @@ function show_star_view(opt) {
 				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
-			var html = '<p id="star_links">&raquo; <a href="' + set_link + '">Export selection</a>';
-			switch (stars_len) {
-				case 1:  html += ' (1 item)'; break;
-				default: html += ' (' + stars_len + ' items)';
-			}
-			view.innerHTML = html;
+			view.innerHTML = '<p id="star_links">&raquo; ' + txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 		}
 		var ls = program.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 		item_show_list(ls);
@@ -713,7 +682,7 @@ function show_star_view(opt) {
 			}
 		}
 	} else {
-		view.innerHTML = "<p>To \"star\" a program item, click on the square next to its title. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty.";
+		view.innerHTML = txt('star_hint');
 		EL("prog_ls").innerHTML = '';
 	}
 }
@@ -887,24 +856,16 @@ function _prog_show_list(f) {
 		if (!f0['day']) f0['day'] = 'all_days';
 
 		if (id_only) {
-			if (ls.length == 1) {
-				fs.innerHTML = 'Listing 1 item: <a href="' + _prog_hash(f0) + '">' + ls[0].title + '</a>';
-			} else {
-				fs.innerHTML = 'Listing ' + ls.length + ' items with id <a href="' + _prog_hash(f0) + '">' + f.id + '</a>';
-			}
+			fs.innerHTML = txt('filter_sum_id', { 'N':ls.length, 'URL':_prog_hash(f0), 'TITLE':ls[0].title, 'ID':f.id });
 		} else {
-			var ls_all = true;
-			var ft = 'item'; if (ls.length != 1) ft += 's';
-			if (f.tag) { ft = '<a href="' + _prog_hash(f0, {'tag':''}) + '">' + f.tag + '</a> ' + ft; ls_all = false; }
-			if (f.day) {
-				var dt = parse_date(f.day);
-				ft += ' on <a href="' + _prog_hash(f0, {'day':'all_days'}) + '">' + weekday(dt) + '</a>';
-				ls_all = false;
-			}
-			if (f.area) { ft += ' in <a href="' + _prog_hash(f0, {'area':''}) + '">' + f.area + '</a>'; ls_all = false; }
-			if (f.query) { ft += ' matching the query <a href="' + _prog_hash(f0, {'query':''}) + '">' + f.query + '</a>'; ls_all = false; }
-
-			fs.innerHTML = 'Listing ' + (ls_all ? '<a href="' + _prog_hash({}) + '">all</a> ' : '') + ls.length + ' ' + ft;
+			var _a = function(t, f0, fx) { return '<a href="' + _prog_hash(f0, fx) + '">' + t + '</a>'; }
+			var d = { 'N':ls.length,
+				'ALL': f.tag || f.day || f.area || f.query ? '' : _a(txt('all'), {}, 0),
+				'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
+			if (f.area) { d['GOT_AREA'] = true; d['AREA'] = _a(f.area, f0, {'area':''}); }
+			if (f.query) {   d['GOT_Q'] = true;    d['Q'] = _a(f.query, f0, {'query':''}); }
+			if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(txt('weekday_n', {'N':parse_date(f.day).getDay()}), f0, {'day':'all_days'}); }
+			fs.innerHTML = txt('filter_sum', d);
 		}
 	}
 
@@ -1046,9 +1007,9 @@ function show_participant(p) {
 					break;
 				case 'img':
 					/*if (navigator.onLine) {
-						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="Photo of ' + p_name + '"></a>';
+						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="' + txt('Photo') + ':' + p_name + '"></a>';
 					} else*/ {
-						links += '<dt>Photo:<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
+						links += '<dt>' + txt('Photo') + ':<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
 					}
 					break;
 				default: links += '<dt>' + type + ':<dd>' + tgt;
