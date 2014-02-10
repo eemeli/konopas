@@ -47,7 +47,7 @@ Server.prototype.error = function(msg, url, self) {
 	self = self || this;
 	if (msg =='') {
 		var cmd = url.replace(self.host, '').replace('/' + self.id + '/', '');
-		msg = txt('server_cmd_fail', {'CMD':cmd});
+		msg = txt('server_cmd_fail', {'CMD':'<code>'+cmd+'</code>'});
 	}
 	if (!self.err_el) {
 		var el = document.createElement('div');
@@ -427,7 +427,12 @@ Server.prototype.show_ical_link = function(p_el) {
 	if (!this.connected) {
 		html = txt('ical_login');
 	} else if (this.ical) {
-		html = (typeof this.ical == 'string') ? txt('ical_link', {'URL':this.ical}) : txt('ical_make');
+		if (typeof this.ical == 'string') {
+			html = txt('ical_link') + '<br><a href="' + this.ical + '">' + this.ical + '</a>'
+				+ '<br><span class="hint">' + txt('ical_hint') + '</span>';
+		} else {
+			html = txt('ical_make', {'A_TAG':'<a id="ical_link" class="js-link">'});
+		}
 	}
 	if (p_el) p_el.innerHTML += '<p id="ical_text">' + html;
 	else {
