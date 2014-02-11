@@ -93,16 +93,18 @@ Server.prototype.prog_mtime = function() {
 Server.prototype.add_prog = function(id, add_star) {
 	if (id instanceof Array) id = id.join(',');
 	_log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
+	var t = this.prog_mtime();
 	this.exec('prog'
 		+ (add_star ? '?add=' : '?rm=') + id
-		+ '&t=' + this.prog_mtime());
+		+ (t ? '&t=' + t : ''));
 }
 
 Server.prototype.set_prog = function(star_list) {
 	_log('server set_prog "' + star_list);
+	var t = this.prog_mtime();
 	this.exec('prog'
 		+ '?set=' + star_list.join(',')
-		+ '&t=' + this.prog_mtime());
+		+ (t ? '&t=' + t : ''));
 }
 
 
@@ -458,7 +460,7 @@ Server.prototype.url = function(cmd) {
 
 // based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
 Server.prototype.exec = function(cmd) {
-	if (/^(prog|vote)/.test(cmd) && !this.connected) {
+	if (/^vote/.test(cmd) && !this.connected) {
 		_log('server not connected: ' + cmd, 'warn');
 		return;
 	}
