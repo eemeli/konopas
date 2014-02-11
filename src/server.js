@@ -10,6 +10,7 @@ function Server(id, stars, opt) {
 	this.err_el_id = opt.err_el_id || 'server_error';
 
 	this.connected = false;
+	this.token = localStorage.getItem('konopas.token') || false;
 	this.ical = localStorage.getItem('konopas.'+this.id+'.ical_link') || false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
@@ -451,6 +452,7 @@ Server.prototype.show_ical_link = function(p_el) {
 // ------------------------------------------------------------------------------------------------ exec
 
 Server.prototype.url = function(cmd) {
+	if (this.token) cmd += (cmd.indexOf('?') != -1 ? '&' : '?') + 'k=' + encodeURIComponent(this.token);
 	return this.host + (cmd[0] == '/' ? '' : '/' + this.id + '/') + cmd;
 }
 
@@ -494,6 +496,8 @@ Server.prototype.cb_ok = function(v, self) {
 	switch (cmd) {
 		case 'logout':
 			self.disconnect();
+			self.token = false;
+			localStorage.removeItem('konopas.token');
 			self.prog_data = {};
 			self.prog_server_mtime = 0;
 			self.my_votes_data = {};
@@ -557,6 +561,12 @@ Server.prototype.cb_info = function(v) {
 	document.getElementById('server_logout').onclick = this.logout;
 	document.body.classList.add('logged-in');
 	if (jsErrLog) jsErrLog.info = v.name.replace(/[ @].*/, '');
+}
+
+Server.prototype.cb_token = function(token) {
+	_log("server token: " + token);
+	this.token = token;
+	localStorage.setItem('konopas.token', token);
 }
 
 Server.prototype.cb_login = function(v) {
