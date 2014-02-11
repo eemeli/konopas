@@ -1,0 +1,32 @@
+#!/bin/sed -rnf
+
+1 {
+	h
+	s/.*/{/
+	x
+}
+
+/^$/ {
+	x
+	p
+}
+
+/^msgid / {
+	s/^msgid //
+	x
+	p
+}
+
+/^msgstr / {
+	s/^msgstr //
+	s/$/,/
+	H;g
+	s/\n/: /
+	h
+}
+
+$ {
+	g
+	s/,$/\n}/
+	p
+}
