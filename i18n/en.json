@@ -22,7 +22,7 @@
 "discard_n": "discard {N}",
 "star_add": "Add the {N, plural, one{new item} other{# new items}} to my selection",
 "star_export_link": "<a href=\"{URL}\">Export selection</a> ({N, plural, one{one item} other{# items}})",
-"star_hint": "To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty.",
+"star_hint": "To \"star\" a program item, click on the square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty.",
 "filter_sum_id": "Listing {N, plural, one{one item: {TITLE}} other{# items with id {ID}}}",
 "filter_sum": "Listing {N, plural, one{one {TAG} item} other{{ALL} # {TAG} items}} {GOT_DAY, select, true{on {DAY}} other{}} {GOT_AREA, select, true{in {AREA}} other{}} {GOT_Q, select, true{matching the query {Q}} other{}}",
 

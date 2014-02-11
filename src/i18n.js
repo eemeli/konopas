@@ -2,7 +2,7 @@
 var MessageFormat = { locale: {} };
 MessageFormat.locale.en=function(n){return n===1?"one":"other"}
 window.i18n.get = function(n, k, d) {
-  var m = this[n], f = function(k, d) { return typeof m[k] == "function" ? m[k](d) : m[k] || k; };
+  var m = this[n], f = function(k, d){return typeof m[k] == "function" ? m[k](d) : k in m ? m[k] : k};
   return !m ? null
     : (typeof k == "undefined") ? f
     : (typeof d == "undefined") ? typeof m[k] == "function" ? m[k] : function(){return m[k]}
@@ -23,8 +23,8 @@ var
 c=function(d){if(!d)throw new Error("MessageFormat: No data passed to function.")},
 n=function(d,k,o){if(isNaN(d[k]))throw new Error("MessageFormat: `"+k+"` isnt a number.");return d[k]-(o||0)},
 v=function(d,k){c(d);return d[k]},
-p=function(d,k,o,l,p){c(d);return p[d[k]]||p[MessageFormat.locale[l](d[k]-o)]||p.other},
-s=function(d,k,p){c(d);return p[d[k]]||p.other};
+p=function(d,k,o,l,p){c(d);return d[k] in p?p[d[k]]:(k=MessageFormat.locale[l](d[k]-o),k in p?p[k]:p.other)},
+s=function(d,k,p){c(d);return d[k] in p?p[d[k]]:p.other};
 window.i18n["en"] = {
 "weekday_n":function(d){return p(d,"N",0,"en",{"0":"Sunday","1":"Monday","2":"Tuesday","3":"Wednesday","4":"Thursday","5":"Friday","6":"Saturday","other":"???"})},
 "month_n":function(d){return p(d,"N",0,"en",{"0":"January","1":"February","2":"March","3":"April","4":"May","5":"June","6":"July","7":"August","8":"September","9":"October","10":"November","11":"December","other":"???"})},
@@ -48,7 +48,7 @@ window.i18n["en"] = {
 "discard_n":function(d){return "discard "+v(d,"N")},
 "star_add":function(d){return "Add the "+p(d,"N",0,"en",{"one":"new item","other":n(d,"N")+" new items"})+" to my selection"},
 "star_export_link":function(d){return "<a href=\""+v(d,"URL")+"\">Export selection</a> ("+p(d,"N",0,"en",{"one":"one item","other":n(d,"N")+" items"})+")"},
-"star_hint":function(d){return "To \"star\" a program item, click on the gray square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."},
+"star_hint":function(d){return "To \"star\" a program item, click on the square next to it. Your selections will be remembered, and shown in this view. You currently don't have any program items selected, so this list is empty."},
 "filter_sum_id":function(d){return "Listing "+p(d,"N",0,"en",{"one":"one item: "+v(d,"TITLE"),"other":n(d,"N")+" items with id "+v(d,"ID")})},
 "filter_sum":function(d){return "Listing "+p(d,"N",0,"en",{"one":"one "+v(d,"TAG")+" item","other":v(d,"ALL")+" "+n(d,"N")+" "+v(d,"TAG")+" items"})+" "+s(d,"GOT_DAY",{"true":"on "+v(d,"DAY"),"other":""})+" "+s(d,"GOT_AREA",{"true":"in "+v(d,"AREA"),"other":""})+" "+s(d,"GOT_Q",{"true":"matching the query "+v(d,"Q"),"other":""})},
 "server_cmd_fail":function(d){return "The command \""+v(d,"CMD")+"\" failed."},
