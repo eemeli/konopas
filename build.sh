@@ -1,9 +1,9 @@
 #!/bin/sh
 
 lessc_cmd="lessc"
-lessc_opt="--yui-compress"
+lessc_opt="--clean-css"
 lessc_src="skin/main.less"
-lessc_tgt="skin/skin.css"
+lessc_tgt="skin/boskone.css"
 
 i18n_cmd="messageformat"
 i18n_dir="i18n"
