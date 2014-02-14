@@ -2,17 +2,18 @@ CACHE MANIFEST
 # [insert mod-timestamp here]
 
 CACHE:
-data/program.js
-data/people.js
+http://boskone.myconferenceplanning.org/program.js
+http://boskone.myconferenceplanning.org/program/participants.js
 konopas.min.js
-skin/skin.css
+skin/boskone.css
 skin/icons.png
 skin/Roboto300.ttf
 skin/Roboto500.ttf
 skin/Oswald400.ttf
 favicon.ico
-data/title-small.png
-data/title.png
+data/sample/favicon.196.png
+data/boskone/logo.svg
+data/boskone/logo.png
 
 NETWORK:
 *

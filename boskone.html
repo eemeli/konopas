@@ -5,34 +5,9 @@
 <link rel="stylesheet" href="skin/boskone.css">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Android + favicon -->
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="shortcut icon" sizes="196x196" href="data/sample/favicon.196.png">
-
-<!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--
-<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
-<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
-<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
-<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
-<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
-<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
--->
-
-<!-- Windows Phone 8.1 -->
-<!--
-<meta name="msapplication-TileColor"         content="#ffffff">
-<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
-<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
-<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
--->
-
 <title>Boskone 51</title>
 
 <body><div id="top"></div>
@@ -154,7 +129,7 @@
 <div id="info_view" class="view">
 <p>This is the program guide for <a href="http://www.boskone.org/">Boskone 51</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
 
-<p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
+<p>Program and participant data will be kept updated as final changes and corrections are made. <span id="last-updated">They were last updated <span></span>.</span>
 
 <div id="install-instructions">
 <p>This guide will work in your browser even when you don't have an internet connection. You can also install it as a home screen app:
@@ -168,31 +143,6 @@
 <script>
 if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
 </script>
-
-<!--
-<style>
-#map { width: 100% !important; }
-#map td { text-align: center !important; padding: 6px 32px; }
-#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
-#map a:hover, #map span:hover { text-decoration: underline; }
-#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
-.quick-ref dt { margin: 6px 0 3px; }
-.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
-.quick-ref td { text-align: left !important; }
-#info_view .quick-ref td.c { text-align: center !important; }
-.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
-.quick-ref td:nth-child(3) { padding-left: 0; }
-</style>
-
-<h2>Maps</h2>
-<table id="map">
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3W.png">Mezzanine Level&nbsp;(3W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3E.png">Conference Level&nbsp;(3E)</a>
-<tr><td colspan="2"><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-2.png">Lobby Level&nbsp;(2)</a>
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1W.png">Concourse Level&nbsp;(1W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1E.png">Galleria Level&nbsp;(1E)</a>
-</table>
--->
 
 <h2>Links</h2>
 <ul style="float: left; margin-top: 0; margin-right: 30px">
@@ -221,7 +171,7 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 	'default_duration': 50,
 	'time_show_am_pm': true,
 	'show_all_days_by_default': false,
-	'use_server': false };
+	'use_server': true };
 
 window.jsErrLog={err_i:0,info:"",url:"http://jserrlog.appspot.com/logger.js"},jsErrLog.ErrorHandler=function(r,e){alert("jsErrLog encountered an unexpected error.\n\nSource: "+r+"\nDescription: "+e.description)},jsErrLog.appendScript=function(r,e){try{var a=document.createElement("script");a.id="script"+r,a.src=e,a.type="text/javascript";var o=document.getElementsByTagName("head")[0];o.appendChild(a)}catch(t){jsErrLog.ErrorHandler("appendScript",t)}},jsErrLog.removeScript=function(r){try{var e=document.getElementById("script"+r),a=document.getElementsByTagName("head")[0];a.removeChild(e)}catch(o){jsErrLog.ErrorHandler("removeScript",o)}},jsErrLog.guid=function(){return"aaaaaaaa-aaaa-4aaa-baaa-aaaaaaaaaaaa".replace(/[ab]/g,function(r){var e=16*Math.random()|0,a="a"==r?e:3&e|8;return a.toString(16)}).toUpperCase()},window.onerror=function(r,e,a,o){var t=jsErrLog.url+"?i="+ ++jsErrLog.err_i+"&sn="+escape(document.URL)+"&fl="+e+"&ln="+a+"&err="+(o?"[Col:"+o+"] "+r:r).substr(0,1024)+"&ui="+jsErrLog.guid();return jsErrLog.info&&(t+="&info="+escape(jsErrLog.info.substr(0,512))),jsErrLog.appendScript(jsErrLog.err_i,t),!1};
 </script>
