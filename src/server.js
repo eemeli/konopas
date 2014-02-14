@@ -17,7 +17,7 @@ function Server(id, stars, opt) {
 	this.my_votes_data = {};
 	this.my_votes_mtime = 0;
 	this.vote_timers = {};
-	this.pub_data = {};
+	this.pub_data = false;
 	this.pub_comments = {};
 	this.el = document.getElementById(this.el_id);
 	this.err_el = false;
@@ -187,7 +187,7 @@ Server.prototype.show_pub_votes = function(id, v_el) {
 	v_el = v_el || document.getElementById('v' + id);
 	if (!v_el) return;
 
-	var v = this.pub_data[id];
+	var v = this.pub_data && this.pub_data[id];
 	if (!v) {
 		v_el.classList.remove("has_votes");
 		return;
@@ -232,7 +232,7 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 
 	var ac = ev.target;
 	if (ac.textContent.substr(0, 4) == txt('Hide comments').substr(0, 4)) {
-		var p = self.pub_data[id];
+		var p = self.pub_data && self.pub_data[id];
 		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
 		ac.textContent = txt('show_comments', {'N':n_comments});
 		ac.style.display = n_comments ? 'block' : 'none';
@@ -371,7 +371,7 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 
 
 Server.prototype.make_comments_wrap = function(id) {
-	var p = this.pub_data[id],
+	var p = this.pub_data && this.pub_data[id],
 	    n_comments = (p && (p[3] > 0)) ? p[3] : 0,
 	    d = _new_elem('div', 'comments-wrap');
 
@@ -405,10 +405,7 @@ Server.prototype.make_comments_wrap = function(id) {
 // ------------------------------------------------------------------------------------------------ item extras
 
 Server.prototype.show_extras = function(id, p_el) {
-	var pub_data_empty = true;
-	for (var k in this.pub_data) { pub_data_empty = false; break; }
-	if (pub_data_empty) return;
-
+	if (!this.pub_data) return;
 	var self = this;
 
 	if (!document.getElementById('c' + id)) {
