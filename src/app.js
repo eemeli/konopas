@@ -33,6 +33,7 @@ var ko = {
 	'always_show_participants': false,
 	'expand_all_max_items': 100,
 	'show_all_days_by_default': false,
+	'non_ascii_people': false, // setting true enables correct but slower sort
 	'use_server': false,
 	'log_messages': true
 };
@@ -1043,7 +1044,9 @@ function show_participant(p) {
 function _name_in_range(n0, range) {
 	switch (range.length) {
 		case 1:  return (n0 == range[0]);
-		case 2:  return ((n0 >= range[0]) && (n0 <= range[1]));
+		case 2:  return ko.non_ascii_people
+			? (n0.localeCompare(range[0], ko.lc) >= 0) && (n0.localeCompare(range[1], ko.lc) <= 0)
+			: ((n0 >= range[0]) && (n0 <= range[1]));
 		default: return (range.indexOf(n0) >= 0);
 	}
 }
@@ -1136,6 +1139,17 @@ function part_filter_click(ev) {
 	}
 }
 
+function part_init() {
+	if (typeof people == 'undefined') return;
+	for (var i = 0, p; p = people[i]; ++i) {
+		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
+	}
+	people.sort(ko.non_ascii_people
+		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
+		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
+	EL("part_filters").onclick = part_filter_click;
+}
+
 
 
 // ------------------------------------------------------------------------------------------------ info view
@@ -1203,18 +1217,7 @@ if (sf) {
 
 
 // init part view
-if (typeof people != 'undefined') {
-	for (var i = 0, l = people.length; i < l; ++i) {
-		people[i].sortname = ((people[i].name[1] || '') + '  ' + people[i].name[0]).toLowerCase().replace(/^ +/, '');
-	}
-	people.sort(function(a, b) {
-			 if (a.sortname < b.sortname) return -1;
-		else if (a.sortname > b.sortname) return 1;
-		else                              return 0;
-	});
-
-	EL("part_filters").onclick = part_filter_click;
-}
+part_init();
 
 
 // set up fixed time display
