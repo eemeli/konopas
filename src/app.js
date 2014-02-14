@@ -155,11 +155,11 @@ function pretty_time(t) {
 
 function pretty_time_diff(t) {
 	var d = (Date.now() - t) / 1e3,
-	    a = Math.abs(diff);
+	    a = Math.abs(d),
 	    s = [1, 60, 60, 24, 7, 4.333, 12, 1e9];
 	if (a < 20) return txt('just now');
 	for (var i = 0, l = s.length; i < l; ++i) {
-		if ((a /= s[i]) < 2) return txt('time_diff', {'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d<0 });
+		if ((a /= s[i]) < 2) return txt('time_diff', {'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d>0 });
 	}
 }
 
@@ -794,7 +794,13 @@ function _prog_set_location_id(id) {
 function _prog_filter(it) {
 	if (this.day && it.date != this.day) return false;
 
-	if (this.area && (!it.loc || it.loc.indexOf(this.area) < 0)) return false;
+	if (this.area) {
+		if (this.area instanceof RegExp) {
+			if (!this.area.test(it.loc.join(';'))) return false;
+		} else {
+			if (!it.loc || (it.loc.indexOf(this.area) < 0)) return false;
+		}
+	}
 
 	if (this.tag) {
 		if (this.tag instanceof RegExp) {
@@ -818,6 +824,12 @@ function _prog_filter(it) {
 }
 
 function _prog_show_list(f) {
+	var area_str = f.area || '';
+	if (f.area && EL(f.area)) {
+		var t = EL(f.area).getAttribute("data-regexp");
+		if (t) f.area = new RegExp(t);
+	}
+
 	var tag_str = f.tag || '';
 	if (f.tag && EL(f.tag)) {
 		var t = EL(f.tag).getAttribute("data-regexp");
@@ -846,6 +858,7 @@ function _prog_show_list(f) {
 		}
 	}
 
+	if (f.area) f.area = area_str;
 	if (f.tag) f.tag = tag_str;
 	if (f.query) f.query = query_str;
 
@@ -1127,9 +1140,38 @@ function part_filter_click(ev) {
 
 // ------------------------------------------------------------------------------------------------ info view
 
+var lu = EL('last-updated'), lu_time = 0;
+
+function init_last_updated() {
+	var cache_manifest = document.body.parentNode.getAttribute('manifest');
+	if (lu && cache_manifest && (location.protocol == 'http:')) {
+		var x = new XMLHttpRequest();
+		x.onload = function() {
+			lu_time = new Date(this.getResponseHeader("Last-Modified"));
+			show_last_updated();
+		};
+		x.open('GET', cache_manifest, true);
+		x.send();
+	}
+}
+
+function show_last_updated() {
+	if (!lu || !lu_time) return;
+	var span = lu.getElementsByTagName('span')[0];
+	span.textContent = pretty_time_diff(lu_time);
+	span.title = lu_time.toLocaleString();
+	span.onclick = function(ev) {
+		var self = (ev || window.event).target;
+		var tmp = self.title;
+		self.title = self.textContent;
+		self.textContent = tmp;
+	};
+	lu.style.display = 'inline';
+}
+
 function show_info_view() {
 	set_view("info");
-
+	show_last_updated();
 	EL("prog_ls").innerHTML = "";
 }
 
@@ -1216,27 +1258,7 @@ if (EL("scroll_link")) {
 
 
 // init info view
-var lu = EL('last-updated');
-var cache_manifest = document.body.parentNode.getAttribute('manifest');
-if (lu && cache_manifest && (location.protocol == 'http:')) {
-	var x = new XMLHttpRequest();
-	x.onload = function() {
-		var t = new Date(this.getResponseHeader("Last-Modified"));
-		var span = lu.getElementsByTagName('span')[0];
-		span.textContent = pretty_time_diff(t);
-		span.title = t.toLocaleString();
-		span.onclick = function(ev) {
-			var self = (ev || window.event).target;
-			var tmp = self.title;
-			self.title = self.textContent;
-			self.textContent = tmp;
-		};
-		lu.style.display = 'inline';
-	};
-	x.open('GET', cache_manifest, true);
-	x.send();
-}
-
+init_last_updated();
 
 
 var pl = document.getElementsByClassName('popup-link');
