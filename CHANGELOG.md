@@ -1,3 +1,19 @@
+# 0.6.0
+
+2014-03-15
+
+  * added internationalization support, with English & Swedish translations (thanks to Karl-Johan Norén)
+  * added build script, see `./build.sh -h` for options
+  * added optional ko.non_ascii_people for correct sorting
+  * added ko.tag_categories; set to eg. ['type','track'] to use tags like 'type:Lecture' cleanly
+  * added mobile homescreen app install instructions
+  * added regexp option to area, acting on loc[].join(';')
+  * programme filter summary terms are links to remove themselves
+  * updated popup menu for 2nd-level area, tags, maps, etc.
+  * switched sample data to that of Arisia 2014
+  * added util/update-cache-manifest.php
+  * a whole big pile of bugfixes
+
 # 0.5.0
 
 2013-12-21

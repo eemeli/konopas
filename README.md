@@ -6,28 +6,31 @@ A mobile-friendly guide for conventions, with all sorts of spiffy features.
 
 **KonOpas** is free, open-source software distributed under the terms of the ISC license:
 
-	Copyright (c) 2013 by Eemeli Aro <eemeli@gmail.com>
+	Copyright (c) 2013-2014 by Eemeli Aro <eemeli@gmail.com>
 
-	Permission to use, copy, modify, and/or distribute this software for 
-	any purpose with or without fee is hereby granted, provided that the 
+	Permission to use, copy, modify, and/or distribute this software for
+	any purpose with or without fee is hereby granted, provided that the
 	above copyright notice and this permission notice appear in all copies.
 
-	The software is provided "as is" and the author disclaims all 
-	warranties with regard to this software including all implied 
-	warranties of merchantability and fitness. In no event shall the author 
-	be liable for any special, direct, indirect, or consequential damages 
-	or any damages whatsoever resulting from loss of use, data or profits, 
-	whether in an action of contract, negligence or other tortious action, 
-	arising out of or in connection with the use or performance of this 
+	The software is provided "as is" and the author disclaims all
+	warranties with regard to this software including all implied
+	warranties of merchantability and fitness. In no event shall the author
+	be liable for any special, direct, indirect, or consequential damages
+	or any damages whatsoever resulting from loss of use, data or profits,
+	whether in an action of contract, negligence or other tortious action,
+	arising out of or in connection with the use or performance of this
 	software.
 
 
 Description
 -----------
-KonOpas is a front end for the programme of a convention or any other multi-track event. It's written in JavaScript, and it works in practically all modern browsers, including those on mobile phones. It can use HTML5 caching to make itself available even without a live net connection, and it remembers your item selections across sessions.
+[KonOpas][0] is a front end for the programme of a convention, conference or any other multi-track event. It's written in JavaScript, and it works in practically all modern browsers, including those on mobile phones. It can use HTML5 caching to make itself available even without a live net connection, and it remembers your item selections across sessions.
 
-Its server requirements can be minimal, as all the processing is done by the browser; all the files are served statically. Some scripting may be required if you require live updates of the programme during the event, as you'll need to update the databases read by KonOpas, as well as the [cache manifest file][1] (all of which are text files).
+The hosting requirements for KonOpas are minimal, as all the processing is done by the browser; all the files are served statically. Some scripting may be required if you require live updates of the programme during the event, as you'll need to update the databases read by KonOpas, as well as the [cache manifest file][1] (all of which are text files).
 
+The open-source KonOpas client can also talk with a dedicated KonOpas server. The server enables item sync across different browsers, devices and calendar apps; item-specific voting and commenting; and allows the event organisers to track which items were the most popular. To enable server access for your event, please get in touch with us at: info@konopas.org
+
+[0]: http://konopas.org/
 [1]: http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5
 
 
@@ -69,3 +72,11 @@ rm konopas.js
 ```
 
 [3]: http://lesscss.org/
+
+
+Discussion
+----------
+
+We have a public [mailing list][4] that you're welcome to join, or just follow online.
+
+[4]: https://groups.google.com/d/forum/konopas-dev

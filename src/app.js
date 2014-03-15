@@ -57,7 +57,7 @@ function link_to_qr_code(url) {
 }
 
 function _log(msg, lvl) {
-	if (ko.log_messages && console) switch (lvl) {
+	if (ko.log_messages && window.console) switch (lvl) {
 		case 'error': console.error(msg); break;
 		case 'warn':  console.warn(msg); break;
 		default:      console.log(msg);

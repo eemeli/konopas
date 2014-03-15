@@ -1,7 +1,7 @@
 #!/bin/sh
 
 lessc_cmd="lessc"
-lessc_opt="--yui-compress"
+lessc_opt="--clean-css"
 lessc_src="skin/main.less"
 lessc_tgt="skin/skin.css"
 
