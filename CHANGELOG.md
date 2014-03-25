@@ -1,3 +1,14 @@
+# 0.6.1
+
+2014-03-25
+
+  * really minor update, mainly to get konopas.org/util/i18n to match latest release
+  * improved & updated README
+  * switched to Makefile from build.sh
+  * mv src/i18n.js i18n/i18n.js
+  * added linebreaks to konopas.min.js & switched lessc to use yui-compress
+
+
 # 0.6.0
 
 2014-03-15
