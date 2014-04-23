@@ -33,7 +33,7 @@ function Server(id, stars, opt) {
 
 Server.prototype.disconnect = function() {
 	this.connected = false;
-	if (this.el) this.el.innerHTML = '<div id="server_info">' + txt('Not connected') + '</div>';
+	if (this.el) this.el.innerHTML = '<div id="server_info">' + i18n_txt('Not connected') + '</div>';
 	document.body.classList.remove('logged-in');
 }
 
@@ -48,17 +48,17 @@ Server.prototype.error = function(msg, url, self) {
 	self = self || this;
 	if (msg =='') {
 		var cmd = url.replace(self.host, '').replace('/' + self.id + '/', '');
-		msg = txt('server_cmd_fail', {'CMD':'<code>'+cmd+'</code>'});
+		msg = i18n_txt('server_cmd_fail', {'CMD':'<code>'+cmd+'</code>'});
 	}
 	if (!self.err_el) {
 		var el = document.createElement('div');
 		el.id = self.err_el_id;
-		el.title = txt('Click to close');
+		el.title = i18n_txt('Click to close');
 		el.onclick = function(ev) { self.err_el.style.display = 'none'; };
 		document.body.appendChild(el);
 		self.err_el = el;
 	}
-	self.err_el.innerHTML = '<div>' + txt('Server error') + ': <b>' + msg + '</b></div>';
+	self.err_el.innerHTML = '<div>' + i18n_txt('Server error') + ': <b>' + msg + '</b></div>';
 	self.err_el.style.display = 'block';
 	return true;
 }
@@ -231,10 +231,10 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 	ev.stopPropagation();
 
 	var ac = ev.target;
-	if (ac.textContent.substr(0, 4) == txt('Hide comments').substr(0, 4)) {
+	if (ac.textContent.substr(0, 4) == i18n_txt('Hide comments').substr(0, 4)) {
 		var p = self.pub_data && self.pub_data[id];
 		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
-		ac.textContent = txt('show_comments', {'N':n_comments});
+		ac.textContent = i18n_txt('show_comments', {'N':n_comments});
 		ac.style.display = n_comments ? 'block' : 'none';
 		c_el.style.display = 'none';
 		af.style.display = n_comments ? 'none' : 'block';
@@ -291,7 +291,7 @@ Server.prototype.show_comments = function(id, self) {
 	if (typeof c == 'undefined') {
 		if (ac) {
 			ac.classList.remove('js-link');
-			ac.textContent = txt('Loading comments…');
+			ac.textContent = i18n_txt('Loading comments…');
 		}
 		self.exec('comments?id=' + id);
 		return;
@@ -309,7 +309,7 @@ Server.prototype.show_comments = function(id, self) {
 	}
 
 	if (ac) {
-		ac.textContent = txt('Hide comments');
+		ac.textContent = i18n_txt('Hide comments');
 		ac.classList.add('js-link');
 		ac.style.display = n_comments ? 'block' : 'none';
 	}
@@ -339,18 +339,18 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 		f_el.action = self.url('add_comment?id=' + encodeURIComponent(id));
 		f_el.target = 'post_comment_iframe';
 		f_el.innerHTML =
-			  '<textarea name="text" rows="4" placeholder="' + txt('post_author', {'N':self.connected[0]}) + '"></textarea>'
+			  '<textarea name="text" rows="4" placeholder="' + i18n_txt('post_author', {'N':self.connected[0]}) + '"></textarea>'
 			+ '<input type="submit" name="submit">'
-			+ '<input type="reset" value="' + txt('Cancel') + '">'
-			+ '<label><input type="checkbox" name="anon"> ' + txt('Post anonymously') + '</label>'
-			+ '<label><input type="checkbox" name="hide"> ' + txt('Hide from public') + '</label>';
+			+ '<input type="reset" value="' + i18n_txt('Cancel') + '">'
+			+ '<label><input type="checkbox" name="anon"> ' + i18n_txt('Post anonymously') + '</label>'
+			+ '<label><input type="checkbox" name="hide"> ' + i18n_txt('Hide from public') + '</label>';
 		f_el.onclick = function(ev) {
 			ev = ev || window.event;
 			ev.cancelBubble = true;
 			ev.stopPropagation();
 		};
 		f_el.onsubmit = function(ev) {
-			f_el.submit.value = txt('Posting…');
+			f_el.submit.value = i18n_txt('Posting…');
 			f_el.submit.disabled = true;
 			if (f_el.anon.checked) { f_el.action += '&anon=1'; f_el.anon.disabled = true; }
 			if (f_el.hide.checked) { f_el.action += '&hide=1'; f_el.hide.disabled = true; }
@@ -365,7 +365,7 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 		f_el.anon.disabled = false;
 		f_el.hide.disabled = false;
 	}
-	f_el.submit.value = txt('Post comment');
+	f_el.submit.value = i18n_txt('Post comment');
 	f_el.style.display = 'block';
 }
 
@@ -376,7 +376,7 @@ Server.prototype.make_comments_wrap = function(id) {
 	    d = _new_elem('div', 'comments-wrap');
 
 	var ac = _new_elem('a', 'js-link discreet');
-	ac.textContent = txt('show_comments', {'N':n_comments});
+	ac.textContent = i18n_txt('show_comments', {'N':n_comments});
 	ac.style.display = n_comments ? 'block' : 'none';
 	d.appendChild(ac);
 
@@ -385,7 +385,7 @@ Server.prototype.make_comments_wrap = function(id) {
 	c_el.style.display = 'none';
 	d.appendChild(c_el);
 
-	var af = _new_elem('a', 'js-link discreet', txt('Add a comment'));
+	var af = _new_elem('a', 'js-link discreet', i18n_txt('Add a comment'));
 	af.style.display = n_comments || !this.connected ? 'none' : 'block';
 	d.appendChild(af);
 
@@ -425,13 +425,13 @@ Server.prototype.show_extras = function(id, p_el) {
 Server.prototype.show_ical_link = function(p_el) {
 	var html = '';
 	if (!this.connected) {
-		html = txt('ical_login');
+		html = i18n_txt('ical_login');
 	} else if (this.ical) {
 		if (typeof this.ical == 'string') {
-			html = txt('ical_link') + '<br><a href="' + this.ical + '">' + this.ical + '</a>'
-				+ '<br><span class="hint">' + txt('ical_hint') + '</span>';
+			html = i18n_txt('ical_link') + '<br><a href="' + this.ical + '">' + this.ical + '</a>'
+				+ '<br><span class="hint">' + i18n_txt('ical_hint') + '</span>';
 		} else {
-			html = txt('ical_make', {'A_TAG':'<a id="ical_link" class="js-link">'});
+			html = i18n_txt('ical_make', {'A_TAG':'<a id="ical_link" class="js-link">'});
 		}
 	}
 	if (p_el) p_el.innerHTML += '<p id="ical_text">' + html;
@@ -550,7 +550,7 @@ Server.prototype.cb_info = function(v) {
 	_log("server info: " + JSON.stringify(v));
 	this.connected = [v.name, v.email];
 	this.el.innerHTML = '<div id="server_info">'
-	                  + '<a id="server_logout" href="' + this.url(v.logout) + '">' + txt('Logout') + '</a> '
+	                  + '<a id="server_logout" href="' + this.url(v.logout) + '">' + i18n_txt('Logout') + '</a> '
 	                  + '<span id="server_user" title="' + ((v.name != v.email) ? v.email : '') + '">' + v.name.replace(/@.*/, '')
 	                  + '</span></div>';
 	if (v.ical) {
@@ -575,8 +575,8 @@ Server.prototype.cb_login = function(v) {
 		links.push('<a href="' + this.url(cmd) + '">' + v[cmd] + '</a>');
 	}
 	this.el.innerHTML = '<div id="login-links">'
-		+ '\n&raquo; <span class="popup-link" id="login-popup-link">' + txt('Login to sync your data') + '</span>\n'
-		+ '<div class="popup" id="login-popup">' + txt('login_why')
+		+ '\n&raquo; <span class="popup-link" id="login-popup-link">' + i18n_txt('Login to sync your data') + '</span>\n'
+		+ '<div class="popup" id="login-popup">' + i18n_txt('login_why')
 		+ "\n<ul>\n<li>" + links.join("\n<li>")
 		+ "\n</ul></div></div>";
 	EL('login-popup-link').onclick = popup_open;

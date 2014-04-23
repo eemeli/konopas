@@ -1,25 +1,10 @@
-(function(){ window.i18n || (window.i18n = {})
-var MessageFormat = { locale: {} };
-MessageFormat.locale.en=function (n){return n===1?"one":"other"}
-window.i18n.get=function(n,k,d){
-var m=this[n],f=function(k,d){return typeof m[k]=="function"?m[k](d):k in m?m[k]:k};
-return !m?null
-:typeof k=="undefined"?f
-:typeof d=="undefined"?typeof m[k]=="function"?m[k]:function(){return m[k]}
-:f(k,d)}
-window.i18n.fill=function(c,s){
-var i,n,k,d,a,g=this.get(c),l=document.querySelectorAll('['+s+']');
-if(g)for(i=0;n=l[i];++i){
-k=n.getAttribute(s)||n.textContent.trim();
-d=n.getAttribute(s+'-var');
-d&&(d=JSON.parse('{'+d.replace(/[^,:]+/g,'"$&"')+'}'));
-a=n.getAttribute(s+'-attr');
-a?n.setAttribute(a,g(k,d)):n.innerHTML=g(k,d)}}
+(function(){window.i18n||(window.i18n={})
 var
+f={"en":function (n){return n===1?"one":"other"}},
 c=function(d){if(!d)throw new Error("MessageFormat: No data passed to function.")},
 n=function(d,k,o){if(isNaN(d[k]))throw new Error("MessageFormat: `"+k+"` isnt a number.");return d[k]-(o||0)},
 v=function(d,k){c(d);return d[k]},
-p=function(d,k,o,l,p){c(d);return d[k] in p?p[d[k]]:(k=MessageFormat.locale[l](d[k]-o),k in p?p[k]:p.other)},
+p=function(d,k,o,l,p){c(d);return d[k] in p?p[d[k]]:(k=f[l](d[k]-o),k in p?p[k]:p.other)},
 s=function(d,k,p){c(d);return d[k] in p?p[d[k]]:p.other};
 window.i18n["en"] = {
 "weekday_n":function(d){return p(d,"N",0,"en",{"0":"Sunday","1":"Monday","2":"Tuesday","3":"Wednesday","4":"Thursday","5":"Friday","6":"Saturday","other":"???"})},
@@ -28,18 +13,18 @@ window.i18n["en"] = {
 "search_hint":function(d){return "<b>Hint:</b> search is for full words in the item title, description, room, and participants. You may use * and ? as wildcards and \"quoted words\" for exact phrases."},
 "search_example":function(d){return "For example, you could try <b>"+v(d,"X")+"</b>"},
 "part_filter":function(d){return s(d,"T",{"first":"All participants by first name:","last":"All participants by last name:","other":"All programme participants"})},
-"no_ko_id":"No ID set! Please assign konopas_set.id a unique identifier.",
-"old_browser":"Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.",
-"private_mode":"It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.",
+"no_ko_id":function(d){return "No ID set! Please assign konopas_set.id a unique identifier."},
+"old_browser":function(d){return "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser."},
+"private_mode":function(d){return "It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience."},
 "item_not_found":function(d){return "Program id <b>"+v(d,"ID")+"</b> not found!"},
-"next_ended":"There are no more program items scheduled.",
+"next_ended":function(d){return "There are no more program items scheduled."},
 "next_start":function(d){return "The next program item starts in "+p(d,"H",0,"en",{"0":"","one":"one hour and","other":n(d,"H")+" hours and"})+" "+p(d,"M",0,"en",{"one":"one minute","other":n(d,"M")+" minutes"})+" after the set time."},
 "star_export_this":function(d){return "Your current selection is encoded in <a href=\""+v(d,"THIS")+"\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection."},
 "star_export_share":function(d){return "For easier sharing, you can also generate a <a href=\""+v(d,"SHORT")+"\">shorter link</a> or a <a href=\""+v(d,"QR")+"\">QR code</a>."},
 "star_import_this":function(d){return "Your previously selected items are shown with a highlighted interior, while those imported via <a href=\""+v(d,"THIS")+"\">this link</a> have a highlighted border."},
 "star_import_diff":function(d){return "Your previous selection "+p(d,"PREV",0,"en",{"0":"was empty","one":"had one item","other":"had "+n(d,"PREV")+" items"})+", and the imported selection has "+p(d,"NEW",0,"en",{"0":"no new items","one":"one new item","other":n(d,"NEW")+" new items"})+p(d,"SAME",0,"en",{"0":"","one":"and one which was already selected","other":"and "+n(d,"SAME")+" which were already selected"})+"."},
 "star_import_bad":function(d){return p(d,"BAD",0,"en",{"0":"","one":"One of the imported items had an invalid ID.","other":n(d,"BAD")+" of the imported items had invalid IDs."})},
-"star_set":"Set my selection to the imported selection",
+"star_set":function(d){return "Set my selection to the imported selection"},
 "add_n":function(d){return "add "+v(d,"N")},
 "discard_n":function(d){return "discard "+v(d,"N")},
 "star_add":function(d){return "Add the "+p(d,"N",0,"en",{"one":"new item","other":n(d,"N")+" new items"})+" to my selection"},
@@ -50,9 +35,9 @@ window.i18n["en"] = {
 "server_cmd_fail":function(d){return "The command \""+v(d,"CMD")+"\" failed."},
 "show_comments":function(d){return "Show "+p(d,"N",0,"en",{"one":"one comment","other":n(d,"N")+" comments"})},
 "post_author":function(d){return v(d,"N")+" posted…"},
-"ical_login":"For other export options, please login.",
-"ical_link":"Your selection is available as an iCal (.ics) calendar at:",
-"ical_hint":"Note that changes you make in this guide may take some time to show in your external calendar software.",
+"ical_login":function(d){return "For other export options, please login."},
+"ical_link":function(d){return "Your selection is available as an iCal (.ics) calendar at:"},
+"ical_hint":function(d){return "Note that changes you make in this guide may take some time to show in your external calendar software."},
 "ical_make":function(d){return "To view your selection in your calendar app, you may also <br class=\"wide-only\">"+v(d,"A_TAG")+"make it available</a> in iCal (.ics) calendar format"},
-"login_why":"Once you've verified your e-mail address, you'll be able to sync your data between different clients (including external calendars), as well as vote & comment on items."}
+"login_why":function(d){return "Once you've verified your e-mail address, you'll be able to sync your data between different clients (including external calendars), as well as vote & comment on items."}}
 })();
