@@ -1,4 +1,7 @@
 tmp/*
-konopas.js
+konopas.*.js
+i18n/i18n.*.js
 smofcon*
 arisia*
+node_modules
+*.log

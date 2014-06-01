@@ -4,7 +4,7 @@ CSS = skin/skin.css
 
 MSGFORMAT = messageformat
 LC ?= en
-I18N_JS = i18n/i18n.js
+I18N_JS = i18n/i18n.$(LC).js
 
 JS_FILES = src/polyfill.js $(I18N_JS) src/server.js src/stars.js src/app.js
 JS_DEV = konopas.js
