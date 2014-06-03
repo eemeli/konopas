@@ -54,7 +54,7 @@ actually manage your programme with a different tool. So far we've got built-in
 integration with at least [Conference Planner]/[Grenadine] and [Zambia], with
 more to come. For smaller events, a simple [PHP script] is included for fetching
 data from a publicly readable Google Drive Spreadsheet and converting it to the
-KonOpas format.
+[KonOpas format][KO-fmt].
 
 Once you've got your programme data in the [proper format][KO-fmt], you can use
 our [configurator][KO-cfg] to get you started with customizing KonOpas for your
@@ -93,33 +93,53 @@ as debugging a bad manifest can be tricky.
 
 ## Compilation & Dependencies
 
+For most use cases, KonOpas should be usable directly. However, if you'd like to
+change things such as the interface language, or if you'd like to just poke
+under the hood in general, you have two options based on different **build
+environments**, [make](#user-content-make) and [gulp](#user-content-gulp).
+
 For **styling**, KonOpas uses [LESS], which requires compilation into CSS if
-modified. This should make it easier for you to tune the default KonOpas skin to
-match your needs.
+modified. This should make it easier for you to tune the default skin to match
+your needs.
 
-For **internationalization**, we use a [custom branch][MF-fill] of Alex Sexton's
-[messageformat.js], with a few features that haven't been included in the master
-(yet). If you'd like to implement your own localization, the easiest way is
-probably to use our [online i18n.js generator][KO-i18n] and to save the output
-as `i18n/i18n.js`. So far localizations include English, Finnish, and Swedish.
-
-For **JavaScript minification**, we use the [javascript-minifier.com] service's
-HTTP API.
-
-For ease of use during development, all of the above are accessible from the
-included `Makefile`. Provided that the above dependencies are installed, `make
-dev` should provide a development version of KonOpas and `make prod` a version
-that ready to deploy. Note that the appropriate `<script>` tag in `index.html`
-will also be updated to reflect the version in use. If you've [Watchman]
-installed, `make watch` will start it with triggers for automatically updating
-the JS & CSS files during development.
+For **internationalization**, we use Alex Sexton's [messageformat.js]. If you'd
+like to implement your own localization, the easiest way is probably to use our
+[online i18n js generator][KO-i18n] and to save the output as `i18n/$LC.js`. So
+far localizations include English, Finnish, and Swedish.
 
 [LESS]: http://lesscss.org/
-[MF-fill]: https://github.com/eemeli/messageformat.js/tree/fill
 [messageformat.js]: https://github.com/SlexAxton/messageformat.js
 [KO-i18n]: http://konopas.org/util/i18n/
+
+
+### make
+
+Using make will require separately installing the [LESS] and [messageformat.js]
+dependencies, but only if you intend to change the styling or localization
+source files.
+
+A `Makefile` is included, with a default target `dev` for a development version
+and `prod`, which minifies the previous using the [javascript-minifier.com]
+service's HTTP API. These targets will also modify the appropriate `<script>`
+tag in `index.html` to reflect the version in use.
+
+If you've [Watchman] installed, `make watch` will start it with triggers for
+automatically updating the JS & CSS files during development.
+
 [javascript-minifier.com]: http://javascript-minifier.com/
 [Watchman]: https://github.com/facebook/watchman
+
+
+### gulp
+
+To automatically install the dependencies required by [gulp.js], run
+`npm install` in the directory in which you've installed KonOpas. Then try
+running `gulp --locale en` to get a list of the available targets.
+
+The gulp.js build system was implemented for KonOpas by [Aarni Koskela][akx].
+
+[gulp.js]: http://gulpjs.com/
+[akx]: https://github.com/akx/
 
 
 ## Discussion

@@ -17,3 +17,7 @@ http://www.konopas.org/util/i18n/en.json
 You are most welcome to contribute your localizations to the project, either by
 adding a GitHub pull request for the .json file or by e-mailing it to:
 info@konopas.org
+
+Two sed scripts, `json2po` and `po2json`, are included to help reformat the
+source translation files to and from GetText .po files, which may be easier to
+handle with conventional translation tools.

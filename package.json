@@ -1,22 +1,19 @@
 {
   "name": "konopas",
-  "version": "0.0.0",
-  "description": "Konopas",
-  "main": "-",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.6.2",
+  "author": "Eemeli Aro <eemeli@gmail.com>",
+  "description": "KonOpas: A mobile-friendly guide for conventions, with all sorts of spiffy features",
+  "keywords": ["convention", "conference", "mobile guide", "programme guide"],
+  "homepage": "http://konopas.org/",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/eemeli/konopas.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/eemeli/konopas/issues"
   },
-  "homepage": "https://github.com/eemeli/konopas",
-  "dependencies": {
+  "devDependencies": {
     "glob": "^4.0.0",
     "gulp": "^3.7.0",
     "gulp-concat": "^2.2.0",

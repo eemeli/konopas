@@ -1,3 +1,16 @@
+# 0.6.2
+
+2014-06-04
+
+  * Added Gulp.js based build system (thanks to [akx](https://github.com/akx/))
+  * Localization improvements:
+    - Added Finnish (again, thanks to akx)
+    - added i18n/README.md for translators
+    - added separate i18n/{en,fi,sv}.js files
+    - relaxed MessageFormat version dependence
+  * allow people array to be missing or empty
+
+
 # 0.6.1
 
 2014-03-25
