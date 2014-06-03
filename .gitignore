@@ -2,3 +2,5 @@ tmp/*
 konopas.js
 smofcon*
 arisia*
+node_modules
+*.log

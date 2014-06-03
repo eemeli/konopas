@@ -1,0 +1,30 @@
+{
+  "name": "konopas",
+  "version": "0.0.0",
+  "description": "Konopas",
+  "main": "-",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eemeli/konopas.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eemeli/konopas/issues"
+  },
+  "homepage": "https://github.com/eemeli/konopas",
+  "dependencies": {
+    "glob": "^4.0.0",
+    "gulp": "^3.7.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-less": "^1.2.3",
+    "gulp-minify-css": "^0.3.4",
+    "gulp-shell": "^0.2.5",
+    "gulp-uglify": "^0.3.0",
+    "messageformat": "^0.1.8",
+    "yargs": "^1.2.2"
+  }
+}
