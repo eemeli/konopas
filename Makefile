@@ -4,7 +4,7 @@ CSS = skin/skin.css
 
 MSGFORMAT = messageformat
 LC ?= en
-I18N_JS = i18n/i18n.$(LC).js
+I18N_JS = i18n/$(LC).js
 
 JS_FILES = src/polyfill.js $(I18N_JS) src/server.js src/stars.js src/app.js
 JS_DEV = konopas.js
@@ -31,7 +31,7 @@ $(CSS): $(wildcard skin/*.less)
 
 
 $(I18N_JS): i18n/$(LC).json
-	cd i18n/ && $(MSGFORMAT) --locale $(LC) --include $(LC).json
+	cd i18n/ && $(MSGFORMAT) --locale $(LC) --include $(LC).json --output $(LC).js
 
 
 $(JS_DEV): $(JS_FILES)

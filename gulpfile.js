@@ -14,7 +14,7 @@ var locales = glob.sync("i18n/*.json").map(function(filename){return filename.sp
 var messageformatExecutable = fs.realpathSync("./node_modules/.bin/messageformat");
 
 locales.forEach(function(locale) {
-	gulp.task("i18n-js:" + locale, shell.task([messageformatExecutable + ' --locale $ --include $.json --output i18n.$.js'.replace(/\$/g, locale)], {cwd: 'i18n'}));
+	gulp.task("i18n-js:" + locale, shell.task([messageformatExecutable + ' --locale $ --include $.json --output $.js'.replace(/\$/g, locale)], {cwd: 'i18n'}));
 });
 
 gulp.task("i18n-js", locales.map(function(l) { return "i18n-js:" + l; }));
@@ -33,11 +33,11 @@ if(locales.indexOf(locale) == -1) {
 	process.exit(1);
 }
 
-console.log("** Locale for Konopas build:", locale);
+console.log("** Locale for KonOpas build:", locale);
 
 var jsFiles = [
 	"src/polyfill.js",
-	"i18n/i18n." + locale + ".js",
+	"i18n/" + locale + ".js",
 	"src/server.js",
 	"src/stars.js",
 	"src/app.js"
@@ -53,8 +53,8 @@ function _jsTask(targetFile, uglifyOptions) {
 	};
 }
 
-gulp.task('js-min', ["i18n-js:" + locale], _jsTask('konopas.' + locale + '.min.js'));
-gulp.task('js-dev', ["i18n-js:" + locale], _jsTask('konopas.' + locale + '.js', {mangle: false, output: {beautify: true}, compress: false}));
+gulp.task('js-min', ["i18n-js:" + locale], _jsTask('konopas.min.js'));
+gulp.task('js-dev', ["i18n-js:" + locale], _jsTask('konopas.js', {mangle: false, output: {beautify: true}, compress: false}));
 
 /******* CSS buildage */
 
@@ -77,8 +77,8 @@ gulp.task('watch', function() {
 
 
 gulp.task('default', function() {
-	console.log("Use the `--locale` switch to build Konopas in a given language.");
-	console.log("* js-min  -- build `konopas.LANG.min.js`, suitable for production");
+	console.log("Use the `--locale` switch to build KonOpas in a given language.");
+	console.log("* js-min  -- build `konopas.min.js`, suitable for production");
 	console.log("* js-dev  -- build `konopas.js`, suitable for development");
 	console.log("* css     -- build `skin/skin.css` from LESS files");
 	console.log("* i18n-js -- build all message catalogs (you shouldn't need to do this by hand)");
