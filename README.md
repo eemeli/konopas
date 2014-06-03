@@ -41,6 +41,9 @@ apps; item-specific voting and commenting; and allows the event organisers to
 track which items were the most popular. To enable server access for your event,
 please get in touch with us at: info@konopas.org
 
+For links to example instances of KonOpas, take a look at the links from our
+[website][KonOpas].
+
 [KonOpas]: http://konopas.org/
 
 
@@ -48,10 +51,10 @@ please get in touch with us at: info@konopas.org
 
 As KonOpas is just a front end for your event's programme, you'll need to
 actually manage your programme with a different tool. So far we've got built-in
-integration with at least [Conference Planner] and [Zambia], with more to come.
-For smaller events, a simple [PHP script] is included for fetching data from a
-publicly readable Google Drive Spreadsheet and converting it to the KonOpas
-format.
+integration with at least [Conference Planner]/[Grenadine] and [Zambia], with
+more to come. For smaller events, a simple [PHP script] is included for fetching
+data from a publicly readable Google Drive Spreadsheet and converting it to the
+KonOpas format.
 
 Once you've got your programme data in the [proper format][KO-fmt], you can use
 our [configurator][KO-cfg] to get you started with customizing KonOpas for your
@@ -79,6 +82,7 @@ development a bit of a hassle. To enable, you should update the contents of
 as debugging a bad manifest can be tricky.
 
 [Conference Planner]: http://sourceforge.net/projects/conferenceplan/
+[Grenadine]: http://events.grenadine.co/
 [Zambia]: http://sourceforge.net/projects/zambia/
 [PHP script]: https://github.com/eemeli/konopas/tree/master/util/gdrive2js
 [KO-fmt]: http://konopas.org/data-fmt
@@ -97,7 +101,7 @@ For **internationalization**, we use a [custom branch][MF-fill] of Alex Sexton's
 [messageformat.js], with a few features that haven't been included in the master
 (yet). If you'd like to implement your own localization, the easiest way is
 probably to use our [online i18n.js generator][KO-i18n] and to save the output
-as `i18n/i18n.js`.
+as `i18n/i18n.js`. So far localizations include English, Finnish, and Swedish.
 
 For **JavaScript minification**, we use the [javascript-minifier.com] service's
 HTTP API.
