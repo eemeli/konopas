@@ -335,9 +335,10 @@ function array_overlap(a, b) {
 
 function _item_people(it) {
 	if (!it.people || !it.people.length) return '';
-	var a = it.people.map(function(p) {
-		return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>";
-	});
+	var a = it.people.map((typeof people == 'undefined') || !people.length
+		? function(p) { return p.name; }
+		: function(p) { return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>"; }
+	);
 	return '<div class="item-people">' + a.join(', ') + '</div>\n';
 }
 
@@ -1117,6 +1118,8 @@ function find_name_range(name) {
 }
 
 function show_part_view(opt) {
+	if ((typeof people == 'undefined') || !people.length) window.location.hash = '';
+
 	var store = storage_get('part') || {};
 	var name_range = store.name_range || '';
 	var participant = !document.body.classList.contains('part') && store.participant || '';
