@@ -559,7 +559,7 @@ Server.prototype.cb_info = function(v) {
 	}
 	document.getElementById('server_logout').onclick = this.logout;
 	document.body.classList.add('logged-in');
-	if (jsErrLog) jsErrLog.info = v.name.replace(/[ @].*/, '');
+	if (typeof jsErrLog == 'object') jsErrLog.info = v.name.replace(/[ @].*/, '');
 }
 
 Server.prototype.cb_token = function(token) {
