@@ -1,4 +1,4 @@
-LESSC = lessc --yui-compress
+LESSC = lessc --clean-css
 LESS_SRC = skin/main.less
 CSS = skin/skin.css
 
