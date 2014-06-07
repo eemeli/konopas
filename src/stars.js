@@ -1,26 +1,32 @@
 "use strict";
 
 function Stars(id, opt) {
-	this.name = 'konopas.' + id + '.stars';
-
 	opt = opt || {};
-	this.store = opt.store || localStorage;
+	this.name = 'konopas.' + id + '.stars';
+	this.store = opt.store || localStorage || sessionStorage || (new (function() {
+		var data = {};
+		this.getItem = function(k) { return data[k]; };
+		this.setItem = function(k, v) { data[k] = v; };
+	})());
 	this.tag = opt.tag || 'has_star';
-
 	this.server = false;
 	this.data = this.read();
 }
 
 Stars.prototype.read = function() {
-	return JSON.parse(this.store.getItem(this.name) || '{}');
+	return JSON.parse(this.store && this.store.getItem(this.name) || '{}');
 }
 
 Stars.prototype.write = function() {
 	try {
-		this.store.setItem(this.name, JSON.stringify(this.data));
+		if (this.store) this.store.setItem(this.name, JSON.stringify(this.data));
 	} catch (e) {
 		if ((e.code != DOMException.QUOTA_EXCEEDED_ERR) || (this.store.length != 0)) { throw e; }
 	}
+}
+
+Stars.prototype.persistent = function() {
+	return this.store && ((this.store == localStorage) || this.server && this.server.connected);
 }
 
 Stars.prototype.list = function() {

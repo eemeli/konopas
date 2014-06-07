@@ -44,6 +44,7 @@
 "star_add": "Lisää {N, plural, one{uusi valinta} other{# uutta valintaa}} valintoihini",
 "star_export_link": "<a href=\"{URL}\">Vie valinnat</a> ({N, plural, one{yksi valinta} other{# valintaa}})",
 "star_hint": "\"Tähdittääksesi\" valinnan, tökkää sen vieressä olevaa neliötä. Valintasi tallennetaan ja näytetään tässä. Et ole vielä valinnut yhtään ohjelmaa, joten lista on tyhjä.",
+"star_no_memory": "Jostain syystä <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. {SERVER, select, true{Ole hyvä ja kirjaudu sisään säilyttääksesi valintasi.} other{}}",
 "filter_sum_id": "Listataan {N, plural, one{yksi ohjelma: {TITLE}} other{# ohjelmaa tunnisteella {ID}}}",
 "filter_sum": "Listataan {N, plural, one{yksi {TAG} ohjelma} other{{ALL} # {TAG} ohjelmaa}} {GOT_DAY, select, true{päivänä {DAY}} other{}} {GOT_AREA, select, true{paikassa {AREA}} other{}} {GOT_Q, select, true{kyselylle {Q}} other{}}",
 

@@ -653,6 +653,7 @@ function show_star_view(opt) {
 	set.sort();
 	var set_len = set.length;
 
+	var html = stars.persistent() ? '' : '<p>' + i18n_txt('star_no_memory', {'SERVER': !!server});
 	var star_list = stars.list();
 	star_list.sort();
 	var stars_len = star_list.length;
@@ -660,7 +661,7 @@ function show_star_view(opt) {
 		var set_link = '#star/set:' + star_list.join(',');
 		if (set_len) {
 			if (arrays_equal(set, star_list)) {
-				view.innerHTML = '<p>' + i18n_txt('star_export_this', {'THIS':set_link})
+				html += '<p>' + i18n_txt('star_export_this', {'THIS':set_link})
 					+ '<p>' + i18n_txt('star_export_share', {
 						'SHORT':link_to_short_url(location.href), 'QR':link_to_qr_code(location.href)
 					});
@@ -669,7 +670,7 @@ function show_star_view(opt) {
 				var n_same = array_overlap(set, star_list);
 				var n_new = set_len - n_same;
 				var n_bad = set_raw.length - set_len;
-				var html = '<p>' + i18n_txt('star_import_this', {'THIS':location.href})
+				html += '<p>' + i18n_txt('star_import_this', {'THIS':location.href})
 					+ '<p>' + i18n_txt('star_import_diff', { 'PREV':stars_len, 'NEW':n_new, 'SAME':n_same });
 				if (n_bad) html += ' ' + i18n_txt('star_import_bad', {'BAD':n_bad});
 				if (!stars_len || (n_same != stars_len)) {
@@ -684,13 +685,11 @@ function show_star_view(opt) {
 					}
 					if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">' + i18n_txt('star_add', {'N':n_new}) + '</a>';
 				}
-				view.innerHTML = html;
-
 				var el_set = EL('star_set_set'); if (el_set) el_set.onclick = function() { stars.set(set); return true; };
 				var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { stars.add(set); return true; };
 			}
 		} else {
-			view.innerHTML = '<p id="star_links">&raquo; ' + i18n_txt('star_export_link', { 'URL':set_link, 'N':stars_len });
+			html += '<p id="star_links">&raquo; ' + i18n_txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 		}
 		var ls = program.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 		item_show_list(ls);
@@ -703,9 +702,10 @@ function show_star_view(opt) {
 			}
 		}
 	} else {
-		view.innerHTML = '<p>' + i18n_txt('star_hint');
+		html += '<p>' + i18n_txt('star_hint');
 		EL("prog_ls").innerHTML = '';
 	}
+	view.innerHTML = html;
 }
 
 

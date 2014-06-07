@@ -4,7 +4,7 @@ n:function(d,k,o){if(isNaN(d[k]))throw new Error("MessageFormat: '"+k+"' isn't a
 v:function(d,k){i18n.c(d,k);return d[k]},
 p:function(d,k,o,l,p){i18n.c(d,k);return d[k] in p?p[d[k]]:(k=i18n.lc[l](d[k]-o),k in p?p[k]:p.other)},
 s:function(d,k,p){i18n.c(d,k);return d[k] in p?p[d[k]]:p.other}}
-i18n["fi"] = {
+i18n["fi"]={
 "Scroll up":function(d){return "Palaa ylös"},
 "Next":function(d){return "Seuraavaksi"},
 "My con":function(d){return "Minun con"},
@@ -48,6 +48,7 @@ i18n["fi"] = {
 "star_add":function(d){return "Lisää "+i18n.p(d,"N",0,"fi",{"one":"uusi valinta","other":i18n.n(d,"N")+" uutta valintaa"})+" valintoihini"},
 "star_export_link":function(d){return "<a href=\""+i18n.v(d,"URL")+"\">Vie valinnat</a> ("+i18n.p(d,"N",0,"fi",{"one":"yksi valinta","other":i18n.n(d,"N")+" valintaa"})+")"},
 "star_hint":function(d){return "\"Tähdittääksesi\" valinnan, tökkää sen vieressä olevaa neliötä. Valintasi tallennetaan ja näytetään tässä. Et ole vielä valinnut yhtään ohjelmaa, joten lista on tyhjä."},
+"star_no_memory":function(d){return "Jostain syystä <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. "+i18n.s(d,"SERVER",{"true":"Ole hyvä ja kirjaudu sisään säilyttääksesi valintasi.","other":""})},
 "filter_sum_id":function(d){return "Listataan "+i18n.p(d,"N",0,"fi",{"one":"yksi ohjelma: "+i18n.v(d,"TITLE"),"other":i18n.n(d,"N")+" ohjelmaa tunnisteella "+i18n.v(d,"ID")})},
 "filter_sum":function(d){return "Listataan "+i18n.p(d,"N",0,"fi",{"one":"yksi "+i18n.v(d,"TAG")+" ohjelma","other":i18n.v(d,"ALL")+" "+i18n.n(d,"N")+" "+i18n.v(d,"TAG")+" ohjelmaa"})+" "+i18n.s(d,"GOT_DAY",{"true":"päivänä "+i18n.v(d,"DAY"),"other":""})+" "+i18n.s(d,"GOT_AREA",{"true":"paikassa "+i18n.v(d,"AREA"),"other":""})+" "+i18n.s(d,"GOT_Q",{"true":"kyselylle "+i18n.v(d,"Q"),"other":""})},
 "Votes":function(d){return "Äänet"},
