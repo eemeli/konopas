@@ -4,7 +4,11 @@ CSS = skin/skin.css
 
 MSGFORMAT = messageformat
 LC ?= en
+comma := ,
+LC_SEP = $(subst $(comma), ,$(LC))
+LC_GLOB = $(if $(findstring $(comma),$(LC)),{$(LC)},$(LC))
 I18N_JS = i18n/$(LC).js
+I18N_JSON = $(addprefix i18n/,$(addsuffix .json,$(LC_SEP)))
 
 JS_FILES = src/polyfill.js $(I18N_JS) src/server.js src/stars.js src/app.js
 JS_DEV = konopas.js
@@ -30,8 +34,8 @@ $(CSS): $(wildcard skin/*.less)
 	$(LESSC) $(LESS_SRC) $@
 
 
-$(I18N_JS): i18n/$(LC).json
-	cd i18n/ && $(MSGFORMAT) --locale $(LC) --include $(LC).json --output $(LC).js
+$(I18N_JS): $(I18N_JSON)
+	$(MSGFORMAT) --locale $(LC) --include '$(LC_GLOB).json' i18n/ $@
 
 
 $(JS_DEV): $(JS_FILES)
@@ -52,7 +56,7 @@ clean:
 	rm -f $(JS_DEV) $(JS_MIN) $(addsuffix .gz, $(PRECACHE_FILES))
 
 realclean: clean
-	rm -f $(I18N_JS) $(CSS)
+	rm -f i18n/*.js $(CSS)
 
 
 .PHONY: dev prod watch precache clean realclean
