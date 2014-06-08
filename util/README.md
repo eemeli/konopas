@@ -1,24 +1,22 @@
-Google Drive Spreadsheet -> KonOpas Javascript converter
-========================================================
+KonOpas Utilities
+=================
 
-A tool for using a Google Drive/Docs spreadsheet as a data source for KonOpas. To use, you'll need non-private spreadsheets for programme and people data, each with appropriate labels on the first row. See here for an example, from Finncon 2013:
+All KonOpas utilities are distributed under the same ISC license as KonOpas itself.
+
+For more online tools to help with KonOpas, see:  http://konopas.org/util/
+
+
+KonOpas cache.manifest updater
+------------------------------
+
+`update-cache-manifest.php` updates the timestamp on the `cache.manifest` file in KonOpas root. That file is used by the HTML5 cache KonOpas uses to indicate changes in data. So if your programme gets updated, you'll want to either run `update_cache_manifest(...)` directly (as `read-from-gdrive.php` does), or do an HTTP GET request for this file.
+
+
+Google Drive Spreadsheet -> KonOpas Javascript converter
+--------------------------------------------------------
+
+`read-from-gdrive.php` is a tool for using a Google Drive/Docs spreadsheet as a data source for KonOpas. To use, you'll need non-private spreadsheets for programme and people data, each with appropriate labels on the first row. See here for an example, from Finncon 2013:
 
 https://docs.google.com/spreadsheet/ccc?key=0Auqwt8Hmhr0pdFRiR0hWWWRqRXVUSDVUY2RFYmRzZ0E
 
-To use, modify the `$data array` to point to your data, and, if using, set `$cache_manifest` accordingly (set to FALSE or '' if not using)
-
-
-	Copyright (c) 2013 by Eemeli Aro <eemeli@gmail.com>
-
-	Permission to use, copy, modify, and/or distribute this software for 
-	any purpose with or without fee is hereby granted, provided that the 
-	above copyright notice and this permission notice appear in all copies.
-
-	The software is provided "as is" and the author disclaims all 
-	warranties with regard to this software including all implied 
-	warranties of merchantability and fitness. In no event shall the author 
-	be liable for any special, direct, indirect, or consequential damages 
-	or any damages whatsoever resulting from loss of use, data or profits, 
-	whether in an action of contract, negligence or other tortious action, 
-	arising out of or in connection with the use or performance of this 
-	software.
+To use, modify the `$data` array in the PHP file to point to your spreadsheet's `key` and `gid`, and set `tgt` to point to the right path for the formatted data. In the source spreadsheet, field names are defined by the first row: a "." indicates sub-objects; use zero-indexed entries to generate arrays rather than objects. The number of sub-objects and array entries are not limited. Don't leave empty rows at the end of the sheets, and in arrays don't leave empty values in the middle.
