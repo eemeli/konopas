@@ -146,10 +146,6 @@ function string_time(t) {
 	return pre0(t.getHours()) + ':' + pre0(t.getMinutes());
 }
 
-function weekday(t) {
-	return i18n_txt('weekday_n', {'N':t.getDay()});
-}
-
 function _pretty_time(h, m) {
 	if (ko.time_show_am_pm) {
 		var h12 = h % 12; if (h12 == 0) h12 = 12;
@@ -190,11 +186,12 @@ function parse_date(day_str) {
 }
 
 function pretty_date(d) {
-	var t = (d instanceof Date) ? d : parse_date(d);
+	var o = { weekday: "long", month: "long", day: "numeric" },
+	    t = (d instanceof Date) ? d : parse_date(d);
 	if (!t) return d;
-	var s = weekday(t) + ', ' + t.getDate() + ' ' + i18n_txt('month_n', { 'N':t.getMonth() });
-	if (Math.abs(t - Date.now()) > 1000*3600*24*60) s += ' ' + t.getFullYear();
-	return s;
+	if (Math.abs(t - Date.now()) > 1000*3600*24*60) o.year = "numeric";
+	var s = t.toLocaleDateString(ko.lc, o);
+	return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function time_sum(t0_str, m_str) {
@@ -428,7 +425,7 @@ var _item_el = (function() {
 
 function item_show_list(ls, show_id) {
 	var frag = document.createDocumentFragment();
-	var prev_date = "", day_str = "", prev_time = "";
+	var prev_date = "", prev_time = "";
 	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
 			.appendChild(_new_elem('a', 'js-link', i18n_txt('Expand all')))
@@ -440,8 +437,7 @@ function item_show_list(ls, show_id) {
 			prev_date = ls[i].date;
 			prev_time = "";
 
-			day_str = pretty_date(ls[i].date);
-			frag.appendChild(_new_elem('div', 'new_day', day_str));
+			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date)));
 		}
 
 		if (ls[i].time != prev_time) {
@@ -449,7 +445,7 @@ function item_show_list(ls, show_id) {
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time)))
-				.setAttribute('data-day', day_str.substr(0,3));
+				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': parse_date(ls[i].date).getDay() }));
 		}
 
 		frag.appendChild(_item_el(ls[i]));
@@ -537,7 +533,7 @@ function update_next_select(t_off) {
 	for (var m = t_range[0]; m <= t_range[1]; m += t_step) {
 		var opt = document.createElement('option');
 		opt.value = m;
-		opt.text = weekday(t) + ', ' + pretty_time(t);
+		opt.text = i18n_txt('weekday_n', {'N':t.getDay()}) + ', ' + pretty_time(t);
 		if (m == t_off) opt.selected = true;
 		if (!m) opt.id = 'next_time_select_now';
 		ts.add(opt);

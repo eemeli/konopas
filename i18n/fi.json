@@ -22,7 +22,8 @@
 "Photo":"Kuva",
 
 "weekday_n": "{N, plural, =0{sunnuntai} =1{maanantai} =2{tiistai} =3{keskiviikko} =4{torstai} =5{perjantai} =6{lauantai} other{???}}",
-"month_n": "{N, plural, =0{tammikuu} =1{helmikuu} =2{maaliskuu} =3{huhtikuu} =4{toukokuu} =5{kesäkuu} =6{heinäkuu} =7{elokuu} =8{syyskuu} =9{lokakuu} =10{marraskuu} =11{joulukuu} other{???}}",
+"weekday_short_n": "{N, plural, =0{Su} =1{Ma} =2{Ti} =3{Ke} =4{To} =5{Pe} =6{La} other{???}}",
+"month_n": "{N, plural, =0{tammikuuta} =1{helmikuuta} =2{maaliskuuta} =3{huhtikuuta} =4{toukokuuta} =5{kesäkuuta} =6{heinäkuuta} =7{elokuuta} =8{syyskuuta} =9{lokakuuta} =10{marraskuuta} =11{joulukuuta} other{???}}",
 "time_diff": "{T} {T_UNIT, plural, =0{sekuntia} =1{minuuttia} =2{tuntia} =3{päivää} =4{viikkoa} =5{kuukautta} =6{vuotta} other{???}} {T_PAST, select, true{sitten} other{tästä hetkestä}}",
 
 "search_hint": "<b>Vinkki:</b> Haku etsii sanoja otsikosta, tiedoista, paikoista ja osanottajista. Voit käyttää * ja ? -merkkejä villikortteina ja \"sanoja lainausmerkeissä\" täsmälliseen hakuun.",

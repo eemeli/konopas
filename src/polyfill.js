@@ -7,6 +7,25 @@ if (!String.prototype.trim) {
 }
 
 
+if ((function(){
+	try { new Date().toLocaleDateString("i"); }
+	catch (e) { return e.name !== "RangeError"; }
+	return true;
+})()) {
+	Date.prototype._orig_toLocaleDateString = Date.prototype.toLocaleDateString;
+	Date.prototype.toLocaleDateString = function(locale, options) {
+		if (!arguments.length || (typeof i18n == 'undefined')) return this._orig_toLocaleDateString();
+		var i = function(key, data){ return key in i18n[locale] ? i18n[locale][key](data) : key; },
+		    w = i('weekday_n', { 'N': this.getDay() }),
+		    d = this.getDate(),
+		    m = i('month_n', { 'N': this.getMonth() }),
+		    s = w + ', ' + d + ' ' + m;
+		if (options && options.year) s += ' ' + t.getFullYear();
+		return s;
+	};
+}
+
+
 /*
  * classList.js: Cross-browser full element.classList implementation.
  * 2011-06-15
@@ -15,15 +34,15 @@ if (!String.prototype.trim) {
  * Public Domain.
  * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
  */
- 
+
 /*global self, document, DOMException */
- 
+
 /*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
- 
+
 if (typeof document !== "undefined" && !("classList" in document.createElement("a"))) {
- 
+
 (function (view) {
- 
+
 var
 	  classListProp = "classList"
 	, protoProp = "prototype"
