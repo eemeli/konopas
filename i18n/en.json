@@ -5,11 +5,12 @@
 
 "search_hint": "<b>Hint:</b> search is for full words in the item title, description, room, and participants. You may use * and ? as wildcards and \"quoted words\" for exact phrases.",
 "search_example": "For example, you could try <b>{X}</b>",
-"part_filter": "{T, select, first{All participants by first name:} last{All participants by last name:} other{All programme participants}}",
+"part_filter": "{T, select, first{All participants by first name} last{All participants by last name} other{All programme participants}}",
 "no_ko_id": "No ID set! Please assign konopas_set.id a unique identifier.",
 "old_browser": "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.",
 "private_mode": "It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.",
 "item_not_found": "Program id <b>{ID}</b> not found!",
+"item_tags": "{T, select, tags{Tags} track{Tracks} type{Types} other{{T}}}",
 "next_ended": "There are no more program items scheduled.",
 "next_start": "The next program item starts in {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}} after the set time.",
 "star_export_this": "Your current selection is encoded in <a href=\"{THIS}\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection.",

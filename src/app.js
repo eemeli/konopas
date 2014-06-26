@@ -354,7 +354,7 @@ function _item_tags(it) {
 		if (o[cat]) o[cat].push(link);
 		else o[cat] = [link];
 	});
-	var a = []; for (var k in o) a.push(k.charAt(0).toUpperCase() + k.substr(1) + ': ' + o[k].join(', '));
+	var a = []; for (var k in o) a.push(i18n_txt('item_tags', {'T':k}) + ': ' + o[k].join(', '));
 	return '<div class="discreet">' + a.join('<br>') + '</div>\n';
 }
 
@@ -805,7 +805,7 @@ function _prog_set_filters(f, silent) {
 
 function _prog_set_location_id(id) {
 	var f = _prog_get_filters(true);
-	if (id && !f['day']) f['day'] = _prog_default_day();
+	if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : _prog_default_day();
 	f['id'] = id;
 	return _prog_set_filters(f, true);
 }
