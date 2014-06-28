@@ -6,34 +6,12 @@
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Android + favicon -->
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="shortcut icon" sizes="196x196" href="data/sample/favicon.196.png">
-
-<!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--
-<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
-<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
-<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
-<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
-<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
-<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
--->
+<link rel="icon" sizes="196x196" href="/favicon.196.png">
+<link rel="apple-touch-icon" href="/favicon.196.png">
 
-<!-- Windows Phone 8.1 -->
-<!--
-<meta name="msapplication-TileColor"         content="#ffffff">
-<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
-<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
-<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
--->
-
-<title>KonOpas Sample Guide</title>
+<title>Detcon1 Guide</title>
 
 <body><div id="top"></div>
 <div id="load_disable"></div>
@@ -44,9 +22,9 @@
 <div id="banner">
 <div id="server_connect"></div>
 
-<h1><a href="#info" alt="CONVENTION" title="CONVENTION">
-<img id="title-small" src="data/title.png" style="width: 240px;">
-<img id="title" src="data/title.png" style="width: 200px;"></a></h1>
+<h1><a href="#info" alt="Detcon1" title="Detcon1">
+<img id="title-small" src="title-top.png" style="max-width: 90%">
+<img id="title" src="title-sidebar.png" style="width: 184px; margin: 20px 8px;"></a></h1>
 
 <ul id="tabs">
 <li id="tab_star"><a href="#star" data-txt>My con</a>
@@ -64,6 +42,10 @@
 	<div id="star_data"></div>
 </div>
 
+<style>
+	#area4 { width: 460px; }
+	#area4 li { width: 230px; }
+</style>
 <div id="prog_view" class="view">
 	<div id="prog_filters" class="filters">
 	<div id="prog_lists"></div>
@@ -89,7 +71,7 @@
 </div>
 
 <div id="info_view" class="view">
-<p>This is the program guide for <a href="http://example.org/">CONVENTION</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+<p>This is the program guide for <a href="http://detcon1.org/">Detcon1</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
 
 <p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
 
@@ -113,12 +95,6 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 #map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
 #map a:hover, #map span:hover { text-decoration: underline; }
 #map tr:hover, .quick-ref tr:hover { background: inherit !important; }
-.quick-ref dt { margin: 6px 0 3px; }
-.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
-.quick-ref td { text-align: left !important; }
-#info_view .quick-ref td.c { text-align: center !important; }
-.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
-.quick-ref td:nth-child(3) { padding-left: 0; }
 </style>
 
 <h2>Maps</h2>
@@ -129,30 +105,17 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1W.png">Concourse Level&nbsp;(1W)</a>
     <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1E.png">Galleria Level&nbsp;(1E)</a>
 </table>
+-->
 
 <h2>Publications</h2>
 <ul>
-<li><a href="http://example.com/">Newsletter</a>
-<li><a href="http://example.com/">Restaurant Guide</a> (PDF, 6MB)
-<li><a href="http://example.com/">Progress Report 5</a> (web page)
-<li><a href="http://example.com/">Code of Conduct</a> (PDF)
+<li><a href="http://detcon1.org/member-resources/publications/progress-report-3/">Progress Report 3</a> (web page)
+<li><a href="http://detcon1.org/docs/PPfinal.pdf">Pocket Program</a> (PDF)
+<li><a href="http://detcon1.org/docs/RestaurantGuide.pdf">Restaurant Guide</a> (PDF)
+<li><a href="http://detcon1.org/docs/FilmFestivalProgram.pdf">Film Festival Guide</a> (PDF)
+<li><a href="http://detcon1.org/docs/maps_Detcon1_RenCen.pdf">RenCen Floor Maps</a> (PDF)
+<li><a href="http://detcon1.org/code-of-conduct">Code of Conduct</a> (web page)
 </ul>
-
-<h2>Quick Reference</h2>
-<dl class="quick-ref">
-<dt><b>Access/Handicapped Services</b>: see Info Desk near elevators
-
-<dt><b>Art Show</b>: Harbor Ballroom II/III (3E)
-<dd><table>
-<tr><td>Friday<td>6pm–<td>9pm
-<tr><td>Saturday<td>10am–<td>6pm, 8pm–10pm
-<tr><td>Sunday<td>10am–<td>1:30pm
-</table>
-<b>Sales Pickup / Artist Checkout</b>: Sunday 3:30pm–7:30pm<br>
-<b>Voice Auction</b>: Sunday 4:30pm<br>
-<b>Sales Pickup / Artist Checkout</b>: Monday 10am–1pm
-</dl>
--->
 
 </div>
 
@@ -162,18 +125,33 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 </div><!-- /main -->
 
 <script> var konopas_set = {
-	'id': '',
-	'default_duration': 0,
+	'id': 'detcon1',
+	'default_duration': 60,
 	'time_show_am_pm': true,
-	'show_all_days_by_default': true,
-	'use_server': false,
+	'show_all_days_by_default': false,
+	'people_per_screen': 90,
+	'use_server': true,
 	'filters': {
 		'day': {},
-		'area': {},
-		'tag': {}
+		'area': {
+			'labels': {
+				'all_areas': 'Everywhere',
+				'area': 'Other locations'
+			},
+			'promote': ['Ambassador Salon 1','Ambassador Salon 2','Mackinac East','Mackinac West'],
+			'exclude': ['^Various Spaces$']
+		},
+		'tag': {
+			'categories': ['track', 'type'],
+			'labels': {
+				'all_tags': 'All tracks & types',
+				'track': 'Choose track',
+				'type': 'Choose type'
+			},
+			'exclude': ['^type:Refresh$']
+		}
 	}
 };
 </script>
-<script src="data/program.js"></script>
-<script src="data/people.js"></script>
+<script src="data.js"></script>
 <script src="konopas.min.js"></script>

@@ -11,7 +11,7 @@
 "old_browser": "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.",
 "private_mode": "It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience.",
 "item_not_found": "Program id <b>{ID}</b> not found!",
-"item_tags": "{T, select, tags{Tags} track{Tracks} type{Types} other{{T}}}",
+"item_tags": "{T, select, tags{Tags} track{Track} type{Type} other{{T}}}",
 "last_ended": "There last program item ended {D, plural, =0{} one{one day and} other{# days and}} {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}} ago.",
 "next_start": "The next program item starts in {D, plural, =0{} one{one day and} other{# days and}} {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}}.",
 "star_export_this": "Your current selection is encoded in <a href=\"{THIS}\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection.",
