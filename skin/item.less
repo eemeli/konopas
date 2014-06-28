@@ -43,6 +43,13 @@
 	&.in_set { border-color: @fg-highlight; }
 }
 
+@media screen and (-ms-high-contrast: active) {
+	.item_star {
+		background: @bg-highlight;
+		&.has_star { background: @fg-highlight !important; }
+	}
+}
+
 
 .item {
 	clear: both;
