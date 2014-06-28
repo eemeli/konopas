@@ -1,9 +1,10 @@
 .info #info_view { display: block; max-width: @main-width; }
 .info #time, .info #scroll { display: none !important; }
 #info_view {
-	h3 { margin: 20px 0 5px 0; border-bottom: @border-light; padding-bottom: 2px; }
-	h3 + p { margin-top: 5px; }
-	h2 { font-size: 2.0em; margin-top: 40px; border-bottom: @border-normal; }
+	h1, h2 { font-size: 1.3em; margin: 15px 0 5px 0; border-bottom: @border-light; padding-bottom: 2px; }
+	h3 { margin-bottom: 2px; }
+	h4 { margin-bottom: 0; }
+	h2 + *, h3 + *, h4 + * { margin-top: 0; }
 	.collapse, .collapse-open {
 		cursor: pointer;
 		&:before { content: "» "; }
@@ -53,4 +54,16 @@
 	&:before { content: "…"; }
 	position: relative;
 	bottom: 4px;
+}
+
+#excel-rooms {
+	th, td { text-align: left; }
+	td:first-child { white-space: nowrap; }
+}
+
+#open-times {
+	tr.th:hover { background: none; }
+	th { padding-top: 1.5em; }
+	td:nth-child(2) { text-align: right; }
+	td:nth-child(3) { text-align: left; }
 }

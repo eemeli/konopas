@@ -195,6 +195,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		e.id = /^[^a-zA-Z]/.test(id) ? par.id[0] + id : id
 		if (!txt) txt = labels[id] || _txt(id);
 		if (/^\s*$/.test(txt)) return;
+		if (/^[a-z]/.test(txt)) txt = txt.charAt(0).toUpperCase() + txt.substr(1);
 		e.textContent = /^[\\^$]/.test(txt) ? txt.substr(1) : txt;
 		if (regexp[id]) e.setAttribute('data-regexp', regexp[id]);
 		par.appendChild(e);
@@ -217,7 +218,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		}
 		return 0;
 	}
-	function _ul2(par, id, name, prefix, list) {
+	function _ul2(par, id, name, prefix, list, no_prefix_in_id) {
 		var title = labels[name] || _txt(name),
 		    root = document.createElement('li'),
 		    link = _new_elem('div', 'popup-link', title + '…'),
@@ -229,7 +230,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		ul.addEventListener('click', KonOpas.Prog.filter_change);
 		for (var i = 0; i < list.length; ++i) {
 			var txt = labels[list[i]] || list[i].replace(prefix, '');
-			_li(ul, list[i], txt);
+			_li(ul, no_prefix_in_id ? list[i].replace(prefix, '') : list[i], txt);
 		}
 		root.appendChild(link);
 		root.appendChild(ul);
@@ -250,7 +251,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 			for (var t in items) if (re.test(t)) delete items[t];
 		}
 		if (o.min_count) {
-			for (var t in items) if (items[t] < o.min_count) delete items[t];
+			for (var t in items) if ((items[t] < o.min_count) && !regexp[t]) delete items[t];
 		}
 		var list = Object.keys(items).sort(_compare);
 		if (o.categories) for (i = 0; i < o.categories.length; ++i) {
@@ -266,7 +267,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 			switch (list_in.length) {
 				case 0:   break;
 				case 1:   _li(ul, prefix + list_in[0]);  break;
-				default:  _ul2(ul, id + i, o.categories[i], prefix, list_in);
+				default:  _ul2(ul, id + i, o.categories[i], prefix, list_in, id=='area');
 			}
 			list = list_out;
 		}
@@ -277,15 +278,44 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 	if (!opt || !filter_el) return;
 	while (filter_el.firstChild) filter_el.removeChild(filter_el.firstChild);
 	var days = {}, areas = {}, tags = {},
-	    lvl = (opt.area && opt.area.loc_level) || 0;
+	    lvl = (opt.area && opt.area.loc_level) || 0,
+ 	    loncon_fix_titles = {'Artists in Residence':1,'Signing':1};
 	for (var i = 0, l = this.list.length; i < l; ++i) {
 		var p = this.list[i];
 		if (opt.day && p.date) days[p.date] = 1;
-		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) areas[p.loc[lvl]] = (areas[p.loc[lvl]] || 0) + 1;
+		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) {
+			var a = p.loc[lvl], a2 = '';
+			switch (/^\S*/.exec(a)[0]) {
+				case 'Auditorium':
+				case 'Fan':
+				case 'Games':
+				case 'Hospitality':
+				case 'London':
+				case 'The':
+					a2 = 'Level 0'; break;
+				case 'Art':
+				case 'Artist':
+				case 'Exhibits':
+				case 'Second':
+					a2 = 'Level 1'; break;
+				case 'Capital':
+					a2 = 'Level 3'; break;
+			}
+			if (a2) {
+				p.loc.push(a2);
+				areas[a2+':'+a] = (areas[a2+':'+a] || 0) + 1;
+				areas[a2+':'+a2] = (areas[a2+':'+a2] || 0) + 1;
+			} else {
+				areas[a] = (areas[a] || 0) + 1;
+			}
+		}
 		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) {
 			var t_s = opt.tag.set_category && opt.tag.set_category[p.tags[j]];
 			if (t_s) p.tags[j] = t_s + ':' + p.tags[j];
 			tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
+		}
+		if (p.people && p.people.length) for (var s in loncon_fix_titles) if (p.title == s) {
+			p.title = s + ': ' + p.people.map(function(p){ return p.name; }).join(', ');
 		}
 	}
 	if (opt.day) {
@@ -477,7 +507,7 @@ KonOpas.Prog.prototype.show = function() {
 
 	var f = KonOpas.Prog.get_filters();
 	if (KonOpas.Prog.set_filters(f)) return;
-	if (!f.day && !f.id && !konopas.show_all_days_by_default) f.day = this.default_day();
+	if (!f.day && !f.id && !f.area && !f.tag && !f.query && !konopas.show_all_days_by_default) f.day = this.default_day();
 	_show_filters(f);
 	for (var k in f) {
 		if (!k || !f[k] || (f[k] == 'all_' + k + 's')) { delete f[k]; continue; }

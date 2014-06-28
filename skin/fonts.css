@@ -1,18 +1,12 @@
 @font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Oswald Regular'), local('Oswald-Regular'), url(Oswald400.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'Roboto';
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url(Roboto300.ttf) format('truetype');
+  src: local('Lato Light'), local('Lato-Light'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/nj47mAZe0mYUIySgfn0wpQ.ttf) format('truetype');
 }
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'Lato';
   font-style: normal;
-  font-weight: 500;
-  src: local('Roboto Medium'), local('Roboto-Medium'), url(Roboto500.ttf) format('truetype');
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/DvlFBScY1r-FMtZSYIYoYw.ttf) format('truetype');
 }

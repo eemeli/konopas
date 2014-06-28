@@ -30,19 +30,15 @@
 
 
 $data = array(
-	'program' => array(
-		'key' => '0Auqwt8Hmhr0pdFRiR0hWWWRqRXVUSDVUY2RFYmRzZ0E',
-		'gid' => '0',
-		'tgt' => '../data/finncon2013/program.js'
-	),
-	'people' => array(
-		'key' => '0Auqwt8Hmhr0pdFRiR0hWWWRqRXVUSDVUY2RFYmRzZ0E',
-		'gid' => '1',
-		'tgt' => '../data/finncon2013/people.js'
+	'displays' => array(
+		'key' => '1n9hljHy0IVKIfoJLoUVVAwVNNMDp1gx5pzTs5yIf7_8',
+		'gid' => '1026288012',
+		'tgt' => '../data/displays.js',
+		'version' => 'd'
 	)
 );
 
-$cache_manifest = '../cache.manifest';  // set to FALSE to disable
+$cache_manifest = '../konopas.appcache';  // set to FALSE to disable
 
 
 // You should not need to change anything below this line.
@@ -51,7 +47,7 @@ require_once('lib/gdrive2json.php');
 require_once('update-cache-manifest.php');
 
 function gdrive2konopas($name, $set) {
-	$json = gdrive2json($set['key'], $set['gid']);
+	$json = gdrive2json($set['key'], $set['gid'], $set['version']);
 	if (strlen($json) == 0) exit("JSON length 0! Error!");
 	$js = "var $name = $json;";
 	$dir = dirname($set['tgt']);

@@ -1,0 +1,19 @@
+CACHE MANIFEST
+# [insert mod-timestamp here]
+
+CACHE:
+http://program.loncon3.org/konopas/program.js
+http://program.loncon3.org/konopas/program/participants.js
+data/displays.js
+konopas.min.js
+readme.html
+skin/skin.css
+skin/icons.png
+skin/Lato300.ttf
+skin/Lato700.ttf
+favicon.ico
+favicon.196.png
+data/title2.png
+
+NETWORK:
+*

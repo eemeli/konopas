@@ -1,39 +1,17 @@
 <!DOCTYPE html>
-<html><!-- manifest="cache.manifest" -->
+<html manifest="konopas.appcache">
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="skin/skin.css">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Android + favicon -->
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="shortcut icon" sizes="196x196" href="data/sample/favicon.196.png">
-
-<!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--
-<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
-<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
-<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
-<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
-<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
-<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
--->
+<link rel="icon" sizes="196x196" href="favicon.196.png">
+<link rel="apple-touch-icon" href="favicon.196.png">
 
-<!-- Windows Phone 8.1 -->
-<!--
-<meta name="msapplication-TileColor"         content="#ffffff">
-<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
-<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
-<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
--->
-
-<title>KonOpas Sample Guide</title>
+<title>Loncon 3 Guide</title>
 
 <body><div id="top"></div>
 <div id="load_disable"></div>
@@ -44,13 +22,13 @@
 <div id="banner">
 <div id="server_connect"></div>
 
-<h1><a href="#info" alt="CONVENTION" title="CONVENTION">
-<img id="title-small" src="data/title.png" style="width: 240px;">
-<img id="title" src="data/title.png" style="width: 200px;"></a></h1>
+<h1><a href="#info" alt="Loncon 3" title="Loncon 3">
+<img id="title-small" src="data/title2.png" style="width: 202px;">
+<img id="title" src="data/title2.png" style="width: 202px; margin: 10px 0 20px;"></a></h1>
 
 <ul id="tabs">
 <li id="tab_star"><a href="#star" data-txt>My con</a>
-<li id="tab_prog"><a href="#" data-txt>Program</a>
+<li id="tab_prog"><a href="#" data-txt>Programme</a>
 <li id="tab_part"><a href="#part" data-txt>People</a>
 <li id="tab_info"><a href="#info" data-txt>Info</a>
 </ul>
@@ -89,12 +67,12 @@
 </div>
 
 <div id="info_view" class="view">
-<p>This is the program guide for <a href="http://example.org/">CONVENTION</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+<p>This is the programme guide for <a href="http://loncon3.org/">Loncon 3</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
 
-<p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
+<p>Programme and participant data will be kept updated as final changes and corrections are made. <span id="last-updated">They were last updated <span></span>.</span>
 
 <div id="install-instructions">
-<p>This guide will work in your browser even when you don't have an internet connection.
+<p>During the convention, this guide will work in your browser even when you don't have an internet connection.
 <h4 class="collapse">You can also install it as a home screen app</h4>
 <dl class="compact-dl">
 <dt>Safari on iPhone/iPad<dd>Tap on <i class="ios_share_icon"></i> (share), then tap <b>Add to Home Screen</b>.
@@ -107,76 +85,83 @@
 if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
 </script>
 
-<!-- SAMPLE SECTIONS FOR "INFO" VIEW, UNCOMMENT TO SEE
-<style>
-#map { width: 100% !important; }
-#map td { text-align: center !important; padding: 6px 32px; }
-#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
-#map a:hover, #map span:hover { text-decoration: underline; }
-#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
-.quick-ref dt { margin: 6px 0 3px; }
-.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
-.quick-ref td { text-align: left !important; }
-#info_view .quick-ref td.c { text-align: center !important; }
-.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
-.quick-ref td:nth-child(3) { padding-left: 0; }
-</style>
+<p>Corrections to the programme can be sent to <a href="mailto:programme@loncon3.org">programme@loncon3.org</a>. Technical issues with this guide should be addressed to <a href="mailto:info@konopas.org">info@konopas.org</a>.
 
-<h2>Sample Maps</h2>
-<table id="map">
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3W.png">Mezzanine Level&nbsp;(3W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3E.png">Conference Level&nbsp;(3E)</a>
-<tr><td colspan="2"><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-2.png">Lobby Level&nbsp;(2)</a>
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1W.png">Concourse Level&nbsp;(1W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1E.png">Galleria Level&nbsp;(1E)</a>
-</table>
+<hr style="background: #ccc5bb">
+<div id="readme" style="margin-top: 40px"></div>
 
-<h2>Sample Links</h2>
-<ul>
-<li><a href="http://example.com/">Newsletter</a>
-<li><a href="http://example.com/">Restaurant Guide</a> (PDF, 6MB)
-<li><a href="http://example.com/">Progress Report 5</a> (web page)
-<li><a href="http://example.com/">Code of Conduct</a> (PDF)
-</ul>
-
-<h2>Sample Quick Reference</h2>
-<dl class="quick-ref">
-<dt><b>Access/Handicapped Services</b>: see Info Desk near elevators
-
-<dt><b>Art Show</b>: Harbor Ballroom II/III (3E)
-<dd><table>
-<tr><td>Friday<td>6pm–<td>9pm
-<tr><td>Saturday<td>10am–<td>6pm, 8pm–10pm
-<tr><td>Sunday<td>10am–<td>1:30pm
-</table>
-<b>Sales Pickup / Artist Checkout</b>: Sunday 3:30pm–7:30pm<br>
-<b>Voice Auction</b>: Sunday 4:30pm<br>
-<b>Sales Pickup / Artist Checkout</b>: Monday 10am–1pm
-
-<dt><b>...</b>
-</dl>
--->
-
+<div class="discreet" style="margin-top: 50px">
+<hr style="background: #ccc5bb">
+<p>“World Science Fiction Society”, “WSFS”, “World Science Fiction Convention”, “Worldcon”, “NASFiC”, and “Hugo Award” are service marks of the World Science Fiction Society, an unincorporated literary society.
+<p>Loncon 3 is the trading name of London 2014 Ltd, a company limited by guarantee and registered in England. Company number: 7989510. Registered Office: 176 Portland Road, Jesmond, Newcastle-upon-Tyne, NE2 1DJ.
+<p>The Restaurant Guide was complied by Kake Pugh, Shana Worthen, Martin Petto, Lizzy Allen, Billy Abbott, and Edward James, and edited by Kake Pugh. The Programme Schedules were produced by the Programme team. General Read Me information was edited by Flick, and proofread by Janice Gelb.
 </div>
 
+</div>
 
 <div id="prog_ls" class="ls"><br><div class="ls_loading">Loading programme data&hellip;</div></div>
 
 </div><!-- /main -->
 
 <script> var konopas_set = {
-	'id': '',
+	'id': 'loncon3',
 	'default_duration': 0,
 	'time_show_am_pm': true,
-	'show_all_days_by_default': true,
-	'use_server': false,
+	'show_all_days_by_default': false,
+	'use_server': true,
+	'expand_all_max_items': 300,
+	'people_per_screen': 200,
+	'tag_categories': ['type'],
 	'filters': {
 		'day': {},
-		'area': {},
-		'tag': {}
+		'area': {
+			'labels': {
+				'all_areas': 'Everywhere',
+				'Level 0:Level 0': '^Level 0',
+				'Level 1:Level 1': '^Level 1',
+				'Level 3:Level 3': '^Level 3',
+				'area': 'Elsewhere'
+			},
+			'categories': ['Level 0','Level 1','Level 3']
+		},
+		'tag': {
+			'min_count': 5,
+			'categories': ['type'],
+			'labels': {
+				'all_tags': 'All tags & types',
+				'tag': 'Select tag',
+				'type': 'Select type',
+				'Guest of Honour': 'Guests of Honour',
+				'Events': 'Special Events',
+				'IIS': 'I4IS',
+				'type:display': 'Displays',
+				'type:Kaffeeklatsch': 'Kaffeeklatsches',
+				'type:Literary Beer': 'Literary Beers',
+				'type:Reading': 'Readings',
+				'type:Signing': 'Signings'
+			},
+			'promote': ['Guest of Honour','Events'],
+			'set_category': {
+				'Artist In Residence': 'type',
+				'Concert': 'type',
+				'Dances': 'type',
+				'Plays': 'type',
+				'TV Screenings': 'type',
+				'Writers Workshop': 'type',
+				'Workshop': 'type'
+			},
+			'regexp': {
+				'type:Kaffeeklatsch': '^Kaffeeklatsch',
+				'type:Literary Beer': '^Literary Beer',
+				'type:Reading': '^Reading:',
+				'type:Signing': '^Signing'
+			}
+		}
 	}
 };
 </script>
-<script src="data/program.js"></script>
-<script src="data/people.js"></script>
+<script src="http://program.loncon3.org/konopas/program.js"></script>
+<script src="http://program.loncon3.org/konopas/program/participants.js"></script>
+<script src="data/displays.js"></script>
+<script> if (window.program && window.displays) program = program.concat(displays); </script>
 <script src="konopas.min.js"></script>

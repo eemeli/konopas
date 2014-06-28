@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html><!-- manifest="cache.manifest" -->
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="skin/skin.css">
+<meta name="HandheldFriendly" content="true">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Android + favicon -->
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="shortcut icon" sizes="196x196" href="favicon.196.png">
+
+<!-- iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--
+<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
+<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
+<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
+<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
+-->
+
+<!-- Windows Phone 8.1 -->
+<!--
+<meta name="msapplication-TileColor"         content="#ffffff">
+<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
+<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
+<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
+-->
+
+<title>Loncon 3 Restaurant Guide</title>
+
+<body><div id="top"></div>
+<div id="load_disable"></div>
+
+<div id="time"></div>
+<div id="scroll"><a href="#top" id="scroll_link" data-txt>Scroll up</a></div>
+
+<div id="banner" style="display:none">
+<div id="server_connect"></div>
+
+<h1><a href="#info" alt="Loncon 3" title="Loncon 3">
+<img id="title-small" src="data/title2.png" style="width: 202px;">
+<img id="title" src="data/title2.png" style="width: 202px; margin: 10px 0 20px;"></a></h1>
+
+<ul id="tabs">
+<li id="tab_next"><a href="#next" data-txt>Next</a>
+<li id="tab_star"><a href="#star" data-txt>My con</a>
+<li id="tab_prog"><a href="#" data-txt>Program</a>
+<li id="tab_part"><a href="#part" data-txt>People</a>
+<li id="tab_info"><a href="#info" data-txt>Info</a>
+</ul>
+
+<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
+</div>
+
+<div id="main">
+
+<div id="next_view" class="view">
+	<div id="next_filters" class="filters">
+
+	&raquo; <span data-txt>List items by:</span><ul id="next_type">
+	<li id="next_by_hour" data-txt>Time
+	<li id="next_by_room" data-txt>Location
+	</ul>
+
+	<div id="next_time">
+		<span data-txt>Show items starting after:</span>
+		<span>
+		<a id="next_earlier" class="next_arrow" data-txt="earlier" data-txt-attr="title">&lsaquo;</a>
+		<select id="next_time_select"></select>
+		<a id="next_later" class="next_arrow" data-txt="later" data-txt-attr="title">&rsaquo;</a>
+		</span>
+	</div>
+
+	<div id="next_start_note"></div>
+
+	</div>
+</div>
+
+
+<div id="star_view" class="view">
+	<div id="star_data"></div>
+</div>
+
+
+<!--
+<style>
+	@media (max-height: 450px) and (min-width: 400px) { #area2 { width: 450px; } }
+</style>
+-->
+<div id="prog_view" class="view">
+	<div id="prog_filters" class="filters">
+	<div id="prog_lists">
+		<ul id="area">
+		<li id="all_areas">Everywhere
+		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">Select area…</div>
+		<ul id="area2" class="popup" data-title="Area">
+			<li id="Bank/Tower Hill">Bank/Tower Hill
+			<li id="Canary Wharf">Canary Wharf
+			<li id="Canning Town">Canning Town
+			<li id="DLR">DLR
+			<li id="District Line">District Line
+			<li id="East Ham">East Ham
+			<li id="East London Line">East London Line
+			<li id="ExCeL">ExCeL
+			<li id="Greenwich">Greenwich
+			<li id="Limehouse">Limehouse
+			<li id="London Bridge">London Bridge
+			<li id="O2">O2
+			<li id="Stratford">Stratford
+			<li id="Whitechapel">Whitechapel
+		</ul>
+		</ul>
+
+		<ul id="tag">
+		<li id="all_tags">All tags
+		<!--
+		<li id="bookings">bookings
+		<li id="byob">byob
+		<li id="delivery">delivery
+		<li id="eat-in">eat-in
+		<li id="just-drink">just-drink
+		<li id="licensed">licensed
+		<li id="takeaway">takeaway
+		-->
+		<li id="cuisine-list"><div class="popup-link">Cuisine…</div>
+		<ul id="tag2" class="popup" data-title="Cuisine">
+			<li id="cuisine:BBQ">BBQ
+			<li id="cuisine:burgers">burgers
+			<li id="cuisine:cake">cake
+			<li id="cuisine:chocolate">chocolate
+			<li id="cuisine:fish and chips">fish and chips
+			<li id="cuisine:global">global
+			<li id="cuisine:grill house">grill house
+			<li id="cuisine:ice cream">ice cream
+			<li id="cuisine:steak">steak
+		</ul>
+		<li id="cuisine-list"><div class="popup-link">Country…</div>
+		<ul id="tag3" class="popup" data-title="Country/region">
+			<li id="cuisine:Albanian">Albanian
+			<li id="cuisine:American">American
+			<li id="cuisine:Argentine">Argentine
+			<li id="cuisine:pan-Asian">Asian
+			<li id="cuisine:Assamese">Assamese
+			<li id="cuisine:Australian">Australian
+			<li id="cuisine:Bangladeshi">Bangladeshi
+			<li id="cuisine:Brazilian">Brazilian
+			<li id="cuisine:British">British
+			<li id="cuisine:Caribbean">Caribbean
+			<li id="cuisine:Chinese">Chinese
+			<li id="cuisine:Eritrean">Eritrean
+			<li id="cuisine:European">European
+			<li id="cuisine:Filipino">Filipino
+			<li id="cuisine:French">French
+			<li id="cuisine:German">German
+			<li id="cuisine:Ghanaian">Ghanaian
+			<li id="cuisine:Indian">Indian
+			<li id="cuisine:Italian">Italian
+			<li id="cuisine:Japanese">Japanese
+			<li id="cuisine:Korean">Korean
+			<li id="cuisine:Lebanese">Lebanese
+			<li id="cuisine:Lithuanian">Lithuanian
+			<li id="cuisine:Malaysian">Malaysian
+			<li id="cuisine:Mediterranean">Mediterranean
+			<li id="cuisine:Mexican">Mexican
+			<li id="cuisine:Middle Eastern">Middle Eastern
+			<li id="cuisine:Moroccan">Moroccan
+			<li id="cuisine:Nigerian">Nigerian
+			<li id="cuisine:Pakistani">Pakistani
+			<li id="cuisine:Peruvian">Peruvian
+			<li id="cuisine:Polish">Polish
+			<li id="cuisine:Portuguese">Portuguese
+			<li id="cuisine:Punjabi">Punjabi
+			<li id="cuisine:Romanian">Romanian
+			<li id="cuisine:Russian">Russian
+			<li id="cuisine:South African">South African
+			<li id="cuisine:South American">South American
+			<li id="cuisine:Spanish">Spanish
+			<li id="cuisine:Sri Lankan">Sri Lankan
+			<li id="cuisine:Tex-Mex">Tex-Mex
+			<li id="cuisine:Thai">Thai
+			<li id="cuisine:Turkish">Turkish
+			<li id="cuisine:Ukrainian">Ukrainian
+			<li id="cuisine:Vietnamese">Vietnamese
+		</ul>
+		<li id="type-list"><div class="popup-link">Type…</div>
+		<ul id="tag4" class="popup" data-title="Type">
+			<li id="type:grocery shop">Grocery shop
+			<li id="type:pub">Pub
+			<li id="type:restaurant">Restaurant
+			<li id="type:takeaway">Takeaway
+			<!-- id="kf" data-regexp="^Kaffeeklatsch">Kaffeeklatsch -->
+		</ul>
+		</ul>
+
+	</div>
+
+	<form name="search" id="search">
+	<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
+	<div id="q_ctrl">
+	<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+	<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+	</div>
+	<div id="q_hint" class="hint"></div>
+	</form>
+
+	<div id="filter_sum"></div>
+	</div>
+</div>
+
+
+<div id="part_view" class="view">
+	<div id="part_filters" class="filters">
+	</div>
+
+	<ul id="part_names"></ul>
+
+	<div id="part_info"></div>
+</div>
+
+
+<div id="info_view" class="view">
+<style>
+#map { width: 100% !important; }
+#map td { text-align: center !important; padding: 6px 32px; }
+#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
+#map a:hover, #map span:hover { text-decoration: underline; }
+#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
+.quick-ref dt { margin: 6px 0 3px; }
+.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
+.quick-ref td { text-align: left !important; }
+#info_view .quick-ref td.c { text-align: center !important; }
+.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
+.quick-ref td:nth-child(3) { padding-left: 0; }
+</style>
+
+<p>This is the restaurant guide for <a href="http://loncon3.org/">Loncon 3</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+
+<p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
+
+<div id="install-instructions">
+<p>This guide will work in your browser even when you don't have an internet connection. You can also install it as a home screen app:
+<dl class="compact-dl">
+<dt>Safari on iPhone/iPad<dd>Tap on <i class="ios_share_icon"></i> (share), then tap <b>Add to Home Screen</b>.
+<dt>Chrome on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Add to Home Screen</b>.
+<dt>Firefox on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Bookmark</b> and select <b>Options</b>, and <b>Add to Home Screen</b>.
+<dt>IE on Windows Phone<dd>Tap on <i class="ie_menu_icon"></i> (menu), then tap <b>Pin to Start</b>
+</dl>
+</div>
+<script>
+if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
+</script>
+
+<h2>Maps</h2>
+<!--
+<table id="map">
+<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3W.png">Mezzanine Level&nbsp;(3W)</a>
+    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3E.png">Conference Level&nbsp;(3E)</a>
+<tr><td colspan="2"><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-2.png">Lobby Level&nbsp;(2)</a>
+<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1W.png">Concourse Level&nbsp;(1W)</a>
+    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1E.png">Galleria Level&nbsp;(1E)</a>
+</table>
+-->
+
+<h2>Publications</h2>
+<!--
+<ul>
+<li><a href="http://example.com/">Newsletter</a>
+<li><a href="http://example.com/">Restaurant Guide</a> (PDF, 6MB)
+<li><a href="http://example.com/">Progress Report 5</a> (web page)
+<li><a href="http://example.com/">Code of Conduct</a> (PDF)
+</ul>
+-->
+
+<div class="discreet" style="margin-top: 50px">
+<hr>
+<p>Loncon 3 is the trading name of London 2014 Ltd, a company limited by guarantee and registered in England. Company number: 7989510. Registered Office: 176 Portland Road, Jesmond, Newcastle-upon-Tyne, NE2 1DJ.
+<p>“World Science Fiction Society”, “WSFS”, “World Science Fiction Convention”, “Worldcon”, “NASFiC”, and “Hugo Award” are service marks of the World Science Fiction Society, an unincorporated literary society.
+</div>
+
+</div>
+
+
+<div id="prog_ls" class="ls"><br><div class="ls_loading">Loading programme data&hellip;</div></div>
+
+</div><!-- /main -->
+
+<script> var konopas_set = {
+	'id': 'loncon3restaurants',
+	'default_duration': 60,
+	'time_show_am_pm': true,
+	'show_all_days_by_default': true,
+	'use_server': false };
+</script>
+<script src="data/restaurants.js"></script>
+<script src="konopas.min.js"></script>

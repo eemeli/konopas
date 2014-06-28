@@ -34,5 +34,18 @@ KonOpas.Info.prototype.show_updated = function() {
 KonOpas.Info.prototype.show = function() {
 	_el("prog_ls").innerHTML = "";
 	this.show_updated();
+	var readme = _el('readme');
+	if (readme && !readme.hasChildNodes()) {
+		var x = new XMLHttpRequest();
+		x.onload = function() {
+			readme.innerHTML = this.responseText;
+			var cl = readme.getElementsByClassName('collapse');
+			for (var i = 0; i < cl.length; ++i) {
+				cl[i].onclick = KonOpas.toggle_collapse;
+			}
+		};
+		x.open('GET', 'readme.html', true);
+		x.send();
+	}
 }
 

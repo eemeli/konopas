@@ -82,8 +82,8 @@ KonOpas.Item.new = function(it) {
 	KonOpas.Item.new = function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
-		title.textContent = it.title;
-		loc.textContent = _loc_str(it);
+		title.innerHTML = it.title;
+		loc.innerHTML = _loc_str(it);
 		votes.id = 'v' + it.id;
 		return frame.cloneNode(true);
 	};
@@ -102,7 +102,10 @@ KonOpas.Item.show_list = function(ls, show_id) {
 		if (ls[i].date != prev_date) {
 			prev_date = ls[i].date;
 			prev_time = "";
-			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, konopas)));
+			var d_txt = ls[i].date
+				? KonOpas.pretty_date(ls[i].date, konopas)
+				: ls[i].tags && (ls[i].tags[0] == 'type:display') ? 'Displays (open all days)' : '???';
+			frag.appendChild(_new_elem('div', 'new_day', d_txt));
 		}
 		if (ls[i].time != prev_time) {
 			prev_time = ls[i].time;
