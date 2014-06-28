@@ -1,16 +1,4 @@
 @font-face {
-  font-family: 'News Cycle';
-  font-style: normal;
-  font-weight: 400;
-  src: local('News Cycle Regular'), local('NewsCycle-Regular'), url(NewsCycle400.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'News Cycle';
-  font-style: normal;
-  font-weight: 700;
-  src: local('News Cycle Bold'), local('NewsCycle-Bold'), url(NewsCycle700.ttf) format('truetype');
-}
-@font-face {
   font-family: 'Oswald';
   font-style: normal;
   font-weight: 400;
