@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+var v = sessionStorage.getItem('konopas.finncon2014.lc'),
+    lc = v ? JSON.parse(v).substr(0,2) : 'fi';
+window.location.pathname = (lc == 'en') ? '/2014/en/' : '/2014/';
+</script>
+
+<body>
+<ul>
+<li><a href="/2014/en/">Continue to the guide in English</a>
+<li><a href="/2014/">Jatka suomenkieliseen oppaseen</a>
+</ul>

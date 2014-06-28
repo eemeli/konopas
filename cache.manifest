@@ -1,18 +1,19 @@
 CACHE MANIFEST
-# [insert mod-timestamp here]
+# 2014-06-27 02:45:21
 
 CACHE:
-data/program.js
-data/people.js
-konopas.min.js
-skin/skin.css
-skin/icons.png
-skin/Roboto300.ttf
-skin/Roboto500.ttf
-skin/Oswald400.ttf
-favicon.ico
-data/title-small.png
-data/title.png
+/2014/
+/2014/en/
+/2014/data/program.js
+/2014/data/people.js
+/2014/konopas.min.js
+/2014/skin/skin.css
+/2014/skin/icons.png
+/2014/skin/Roboto300.ttf
+/2014/skin/Roboto500.ttf
+/2014/skin/Oswald400.ttf
+/2014/favicon.ico
+/2014/data/title.png
 
 NETWORK:
 *

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<html manifest="../cache.manifest">
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="skin/skin.css">
+<link rel="stylesheet" href="../skin/skin.css">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Android + favicon -->
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="shortcut icon" sizes="196x196" href="data/sample/favicon.196.png">
+<link rel="shortcut icon" sizes="196x196" href="../data/sample/favicon.196.png">
 
 <!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,15 +23,16 @@
 
 <div id="banner">
 <div id="lc-links">
-» <a href="en/">Interface in English</a>
+» <a href="../">Käyttöliittymä suomeksi</a>
 </div>
 <div id="server_connect"></div>
 
 <h1><a href="#info" alt="Finncon 2014" title="Finncon 2014">
-<img id="title-small" src="data/title.png" style="width: 279px;">
-<img id="title" src="data/title.png" style="width: 160px; margin: 20px;"></a></h1>
+<img id="title-small" src="../data/title.png" style="width: 279px;">
+<img id="title" src="../data/title.png" style="width: 160px; margin: 20px;"></a></h1>
 
 <ul id="tabs">
+<li id="tab_next"><a href="#next" data-txt>Next</a>
 <li id="tab_star"><a href="#star" data-txt>My con</a>
 <li id="tab_prog"><a href="#" data-txt>Program</a>
 <li id="tab_part"><a href="#part" data-txt>People</a>
@@ -42,6 +43,29 @@
 </div>
 
 <div id="main">
+
+<div id="next_view" class="view">
+	<div id="next_filters" class="filters">
+
+	&raquo; <span data-txt>List items by:</span><ul id="next_type">
+	<li id="next_by_hour" data-txt>Time
+	<li id="next_by_room" data-txt>Location
+	</ul>
+
+	<div id="next_time">
+		<span data-txt>Show items starting after:</span>
+		<span>
+		<a id="next_earlier" class="next_arrow" data-txt="earlier" data-txt-attr="title">&lsaquo;</a>
+		<select id="next_time_select"></select>
+		<a id="next_later" class="next_arrow" data-txt="later" data-txt-attr="title">&rsaquo;</a>
+		</span>
+	</div>
+
+	<div id="next_start_note"></div>
+
+	</div>
+</div>
+
 
 <div id="star_view" class="view">
 	<div id="star_data"></div>
@@ -55,20 +79,20 @@
 	<div id="prog_filters" class="filters">
 	<div id="prog_lists">
 		<ul id="day">
-		<li id="all_days">Kaikki päivät
-		<li id="d2014-07-11">Perjantai
-		<li id="d2014-07-12">Lauantai
-		<li id="d2014-07-13">Sunnuntai
+		<li id="all_days">All days
+		<li id="d2014-07-11">Friday
+		<li id="d2014-07-12">Saturday
+		<li id="d2014-07-13">Sunday
 		</ul>
 
 		<ul id="area">
-		<li id="all_areas">Kaikkialla
+		<li id="all_areas">Everywhere
 		<li id="L209">L209
 		<li id="L302">L302
 		<li id="L303">L303
 		<li id="L304">L304
-		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">Lisää…</div>
-		<ul id="area2" class="popup" data-title="Paikka">
+		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More…</div>
+		<ul id="area2" class="popup" data-title="Room">
 			<li id="206A">206A
 			<li id="207">207
 			<li id="208">208
@@ -79,13 +103,11 @@
 		</ul></ul>
 
 		<ul id="tag" style="min-width: 140px;">
-		<li id="all_tags">Kaikki tagit
-			<li id="In_English">Englanniksi
-			<li id="Guests">Vieraat
-			<li id="Kirjallisuus">Kirjallisuus
-			<li id="Kirjoittaminen">Kirjoittaminen
-			<li id="tag2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">Lisää…</div>
-			<ul id="tag2" class="popup" data-title="Tagit">
+		<li id="all_tags">All tags
+			<li id="In_English">In English
+			<li id="Guests">Guests
+			<li id="tag2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More…</div>
+			<ul id="tag2" class="popup" data-title="Tags">
 				<li id="Askartelu">Askartelu
 				<li id="Avaruusscifi">Avaruusscifi
 				<li id="Elokuvat">Elokuvat
@@ -93,6 +115,8 @@
 				<li id="Huumori">Huumori
 				<li id="Julkistaminen">Julkistaminen
 				<li id="K-18">K-18
+				<li id="Kirjallisuus">Kirjallisuus
+				<li id="Kirjoittaminen">Kirjoittaminen
 				<li id="Käsityöt">Käsityöt
 				<li id="Maksullinen">Maksullinen
 				<li id="Miekkailu">Miekkailu
@@ -120,14 +144,13 @@
 	</form>
 
 	<div id="filter_sum"></div>
-	<div id="next_start_note"></div>
 	</div>
 </div>
 
 
 <div id="part_view" class="view">
 	<div id="part_filters" class="filters">
-	<span>» <a href="#part" data-txt data-txt-var="T:last">part_filter</a></span>
+	<span>» <a href="#part">All participants by last name</a></span>
 	</div>
 
 	<ul id="part_names"></ul>
@@ -177,13 +200,13 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 
 <script> var konopas_set = {
 	'id': 'finncon2014',
-	'lc': 'fi',
+	'lc': 'en',
 	'default_duration': 60,
 	'time_show_am_pm': false,
 	'show_all_days_by_default': true,
 	'use_server': true };
 </script>
-<script src="data/program.js"></script>
-<script src="data/people.js"></script>
-<script src="konopas.min.js"></script>
+<script src="../data/program.js"></script>
+<script src="../data/people.js"></script>
+<script src="../konopas.min.js"></script>
 <script> storage_set('lc', ko.lc); </script>
