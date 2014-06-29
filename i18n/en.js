@@ -6,15 +6,17 @@ p:function(d,k,o,l,p){i18n.c(d,k);return d[k] in p?p[d[k]]:(k=i18n.lc[l](d[k]-o)
 s:function(d,k,p){i18n.c(d,k);return d[k] in p?p[d[k]]:p.other}}
 i18n["en"]={
 "weekday_n":function(d){return i18n.p(d,"N",0,"en",{"0":"Sunday","1":"Monday","2":"Tuesday","3":"Wednesday","4":"Thursday","5":"Friday","6":"Saturday","other":"???"})},
+"weekday_short_n":function(d){return i18n.p(d,"N",0,"en",{"0":"Sun","1":"Mon","2":"Tue","3":"Wed","4":"Thu","5":"Fri","6":"Sat","other":"???"})},
 "month_n":function(d){return i18n.p(d,"N",0,"en",{"0":"January","1":"February","2":"March","3":"April","4":"May","5":"June","6":"July","7":"August","8":"September","9":"October","10":"November","11":"December","other":"???"})},
 "time_diff":function(d){return i18n.v(d,"T")+" "+i18n.p(d,"T_UNIT",0,"en",{"0":"seconds","1":"minutes","2":"hours","3":"days","4":"weeks","5":"months","6":"years","other":"???"})+" "+i18n.s(d,"T_PAST",{"true":"ago","other":"from now"})},
 "search_hint":function(d){return "<b>Hint:</b> search is for full words in the item title, description, room, and participants. You may use * and ? as wildcards and \"quoted words\" for exact phrases."},
 "search_example":function(d){return "For example, you could try <b>"+i18n.v(d,"X")+"</b>"},
-"part_filter":function(d){return i18n.s(d,"T",{"first":"All participants by first name:","last":"All participants by last name:","other":"All programme participants"})},
+"part_filter":function(d){return i18n.s(d,"T",{"first":"All participants by first name","last":"All participants by last name","other":"All programme participants"})},
 "no_ko_id":function(d){return "No ID set! Please assign konopas_set.id a unique identifier."},
 "old_browser":function(d){return "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser."},
 "private_mode":function(d){return "It looks like you're using an iOS or Safari browser in private mode, which disables localStorage. This will result in a suboptimal KonOpas experience."},
 "item_not_found":function(d){return "Program id <b>"+i18n.v(d,"ID")+"</b> not found!"},
+"item_tags":function(d){return i18n.s(d,"T",{"tags":"Tags","track":"Tracks","type":"Types","other":i18n.v(d,"T")})},
 "next_ended":function(d){return "There are no more program items scheduled."},
 "next_start":function(d){return "The next program item starts in "+i18n.p(d,"H",0,"en",{"0":"","one":"one hour and","other":i18n.n(d,"H")+" hours and"})+" "+i18n.p(d,"M",0,"en",{"one":"one minute","other":i18n.n(d,"M")+" minutes"})+" after the set time."},
 "star_export_this":function(d){return "Your current selection is encoded in <a href=\""+i18n.v(d,"THIS")+"\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection."},

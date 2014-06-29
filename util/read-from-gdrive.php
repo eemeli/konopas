@@ -31,14 +31,14 @@
 
 $data = array(
 	'program' => array(
-		'key' => '0Auqwt8Hmhr0pdFRiR0hWWWRqRXVUSDVUY2RFYmRzZ0E',
+		'key' => '163xkXuKiq8AbSsHw1GqXWsYr5KBFWT5iw4m8nMlFQOw',
 		'gid' => '0',
-		'tgt' => '../data/finncon2013/program.js'
+		'tgt' => '../data/program.js'
 	),
 	'people' => array(
-		'key' => '0Auqwt8Hmhr0pdFRiR0hWWWRqRXVUSDVUY2RFYmRzZ0E',
-		'gid' => '1',
-		'tgt' => '../data/finncon2013/people.js'
+		'key' => '163xkXuKiq8AbSsHw1GqXWsYr5KBFWT5iw4m8nMlFQOw',
+		'gid' => '751387406',
+		'tgt' => '../data/people.js'
 	)
 );
 

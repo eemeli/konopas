@@ -10,9 +10,9 @@ skin/icons.png
 skin/Roboto300.ttf
 skin/Roboto500.ttf
 skin/Oswald400.ttf
-favicon.ico
-data/title-small.png
-data/title.png
+#favicon.ico
+#data/title-small.png
+#data/title.png
 
 NETWORK:
 *

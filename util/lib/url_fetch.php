@@ -37,6 +37,7 @@ function url_fetch($url, &$data, $headers=FALSE, $cookiefile=FALSE) {
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($curl_handle, CURLOPT_MAXREDIRS, 8);
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, FALSE);
 		if ($headers && is_array($headers)) curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $headers);
 		if ($cookiefile && file_exists($cookiefile)) {
 			curl_setopt($curl_handle, CURLOPT_COOKIEFILE, $cookiefile);
