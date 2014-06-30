@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# [insert mod-timestamp here]
+# 0
 
 CACHE:
 data/program.js
@@ -10,9 +10,9 @@ skin/icons.png
 skin/Roboto300.ttf
 skin/Roboto500.ttf
 skin/Oswald400.ttf
-#favicon.ico
-#data/title-small.png
-#data/title.png
+data/title-small.png
+data/title.png
+data/favicon.196.png
 
 NETWORK:
 *
