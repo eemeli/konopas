@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 0
+# 1
 
 CACHE:
 data/program.js
@@ -13,6 +13,8 @@ skin/Oswald400.ttf
 data/title-small.png
 data/title.png
 data/favicon.196.png
+data/map-main.png
+data/map-2nd.png
 
 NETWORK:
 *
