@@ -37,12 +37,12 @@
 require_once('url_fetch.php');
 require_once('parsecsv.lib.php');
 
-function gdrive2json($key, $gid = '0') {
+function gdrive2json($key, $gid = '0', $version = 'ccc') {
 	if (!$key) exit("'key' parameter is required.");
 
-	$url_root = 'https://docs.google.com/spreadsheet/ccc?output=csv';
-
-	$url = "$url_root&key=$key&gid=$gid";
+	$url = ($version == 'ccc')
+	     ? "https://docs.google.com/spreadsheet/ccc?output=csv&key=$key&gid=$gid"
+	     : "https://docs.google.com/spreadsheets/d/$key/export?format=csv&gid=$gid";
 	$rc = url_fetch($url, $csv_str);
 	if ($rc) exit("URL fetch error: $rc");
 
