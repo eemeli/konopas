@@ -260,7 +260,7 @@ function clean_name(p, span_parts) {
 			break;
 		case 4:
 			fn = p.name[2] + ' ' + p.name[0];
-			ln = p.name[1] + ', ' + p.name[3];
+			ln = p.name[1] + (p.name[3] ? ', ' + p.name[3] : '');
 			break;
 	}
 
@@ -1160,6 +1160,7 @@ function part_init() {
 	if (typeof people == 'undefined') return;
 	for (var i = 0, p; p = people[i]; ++i) {
 		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
+		if (!ko.non_ascii_people) p.sortname = p.sortname.make_ascii();
 	}
 	people.sort(ko.non_ascii_people
 		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
