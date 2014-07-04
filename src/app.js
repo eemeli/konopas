@@ -179,6 +179,7 @@ function pretty_time_diff(t) {
 }
 
 function parse_date(day_str) {
+	if (!day_str) return false;
 	var a = day_str.match(/(\d+)/g); if (a.length < 3) return false;
 	var y = parseInt(a[0], 10), m = parseInt(a[1], 10), d = parseInt(a[2], 10);
 	if (!y || !m || !d) return false;
@@ -445,7 +446,7 @@ function item_show_list(ls, show_id) {
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time)))
-				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': parse_date(ls[i].date).getDay() }));
+				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
 		}
 
 		frag.appendChild(_item_el(ls[i]));
@@ -894,7 +895,7 @@ function _prog_show_list(f) {
 				'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
 			if (f.area) { d['GOT_AREA'] = true; d['AREA'] = _a(f.area, f0, {'area':''}); }
 			if (f.query) {   d['GOT_Q'] = true;    d['Q'] = _a(f.query, f0, {'query':''}); }
-			if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(i18n_txt('weekday_n', {'N':parse_date(f.day).getDay()}), f0, {'day':'all_days'}); }
+			if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(i18n_txt('weekday_n', {'N': f.day ? parse_date(f.day).getDay() : -1 }), f0, {'day':'all_days'}); }
 			fs.innerHTML = i18n_txt('filter_sum', d);
 		}
 	}
