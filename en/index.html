@@ -32,7 +32,6 @@
 <img id="title" src="../data/title.png" style="width: 160px; margin: 20px;"></a></h1>
 
 <ul id="tabs">
-<li id="tab_next"><a href="#next" data-txt>Next</a>
 <li id="tab_star"><a href="#star" data-txt>My con</a>
 <li id="tab_prog"><a href="#" data-txt>Program</a>
 <li id="tab_part"><a href="#part" data-txt>People</a>
@@ -43,29 +42,6 @@
 </div>
 
 <div id="main">
-
-<div id="next_view" class="view">
-	<div id="next_filters" class="filters">
-
-	&raquo; <span data-txt>List items by:</span><ul id="next_type">
-	<li id="next_by_hour" data-txt>Time
-	<li id="next_by_room" data-txt>Location
-	</ul>
-
-	<div id="next_time">
-		<span data-txt>Show items starting after:</span>
-		<span>
-		<a id="next_earlier" class="next_arrow" data-txt="earlier" data-txt-attr="title">&lsaquo;</a>
-		<select id="next_time_select"></select>
-		<a id="next_later" class="next_arrow" data-txt="later" data-txt-attr="title">&rsaquo;</a>
-		</span>
-	</div>
-
-	<div id="next_start_note"></div>
-
-	</div>
-</div>
-
 
 <div id="star_view" class="view">
 	<div id="star_data"></div>
@@ -79,6 +55,7 @@
 	<div id="prog_filters" class="filters">
 	<div id="prog_lists">
 		<ul id="day">
+		<li id="now">Now
 		<li id="all_days">All days
 		<li id="d2014-07-11">Friday
 		<li id="d2014-07-12">Saturday
@@ -93,6 +70,7 @@
 		<li id="L304">L304
 		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More…</div>
 		<ul id="area2" class="popup" data-title="Room">
+			<li id="Ala-aula">Ala-aula
 			<li id="206A">206A
 			<li id="207">207
 			<li id="208">208
@@ -144,6 +122,7 @@
 	</form>
 
 	<div id="filter_sum"></div>
+	<div id="next_start_note"></div>
 	</div>
 </div>
 
@@ -201,7 +180,7 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <script> var konopas_set = {
 	'id': 'finncon2014',
 	'lc': 'en',
-	'default_duration': 60,
+	'default_duration': 0,
 	'time_show_am_pm': false,
 	'show_all_days_by_default': true,
 	'use_server': true };
@@ -209,4 +188,4 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <script src="../data/program.js"></script>
 <script src="../data/people.js"></script>
 <script src="../konopas.min.js"></script>
-<script> storage_set('lc', ko.lc); </script>
+<script> ko.storage_set('lc', ko.lc); </script>

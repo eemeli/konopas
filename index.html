@@ -55,6 +55,7 @@
 	<div id="prog_filters" class="filters">
 	<div id="prog_lists">
 		<ul id="day">
+		<li id="now">Nyt
 		<li id="all_days">Kaikki päivät
 		<li id="d2014-07-11">Perjantai
 		<li id="d2014-07-12">Lauantai
@@ -69,6 +70,7 @@
 		<li id="L304">L304
 		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">Lisää…</div>
 		<ul id="area2" class="popup" data-title="Paikka">
+			<li id="Ala-aula">Ala-aula
 			<li id="206A">206A
 			<li id="207">207
 			<li id="208">208
@@ -178,7 +180,7 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <script> var konopas_set = {
 	'id': 'finncon2014',
 	'lc': 'fi',
-	'default_duration': 60,
+	'default_duration': 0,
 	'time_show_am_pm': false,
 	'show_all_days_by_default': true,
 	'use_server': true };
@@ -186,4 +188,4 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <script src="data/program.js"></script>
 <script src="data/people.js"></script>
 <script src="konopas.min.js"></script>
-<script> storage_set('lc', ko.lc); </script>
+<script> ko.storage_set('lc', ko.lc); </script>
