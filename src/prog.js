@@ -143,14 +143,14 @@ Prog.now_list = function() {
 			d_next = Math.floor(h_next / 24);
 		if (h_next >= 1) m_next -= h_next * 60;
 		if (d_next >= 1) h_next -= d_next * 24;
-		EL("next_start_note").textContent = i18n_txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
+		EL("next_start_note").textContent = i18n.txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
 	} else {
 		var m_last = Math.floor((ms_now - ms_last) / 60000),
 		    h_last = Math.floor(m_last / 60),
 		    d_last = Math.floor(h_last / 24);
 		if (h_last >= 1) m_last -= h_last * 60;
 		if (d_last >= 1) h_last -= d_last * 24;
-		EL("next_start_note").textContent = i18n_txt('last_ended', { 'D':d_last, 'H':h_last, 'M':m_last });
+		EL("next_start_note").textContent = i18n.txt('last_ended', { 'D':d_last, 'H':h_last, 'M':m_last });
 	}
 	return now;
 }
@@ -216,11 +216,11 @@ Prog.prototype.show = function() {
 		if (qh) {
 			if (f.query) {
 				if (/[?*"]/.test(f.query)) {
-					qh.innerHTML = i18n_txt('search_hint');
+					qh.innerHTML = i18n.txt('search_hint');
 					qh.removeAttribute('onmouseup');
 					qh.style.cursor = 'auto';
 				} else {
-					qh.innerHTML = i18n_txt('search_hint') + ' ' + i18n_txt('search_example', {'X':f.query+'*'});
+					qh.innerHTML = i18n.txt('search_hint') + ' ' + i18n.txt('search_example', {'X':f.query+'*'});
 					qh.onmouseup = function() { EL('q').value = f.query + '*'; EL('q').focus(); EL('q').blur(); };
 					qh.style.cursor = 'pointer';
 				}
@@ -303,10 +303,10 @@ Prog.prototype.show = function() {
 			if (!f0['day']) f0['day'] = 'all_days';
 			var _a = function(t, f0, fx) { return '<a href="' + Prog.hash(f0, fx) + '">' + t + '</a>'; }
 			if (id_only) {
-				fs.innerHTML = i18n_txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title, f0, {}), 'ID':_a(f.id, f0, {}) });
+				fs.innerHTML = i18n.txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title, f0, {}), 'ID':_a(f.id, f0, {}) });
 			} else {
 				var d = { 'N':ls.length,
-					'ALL': f.tag || f.day || f.area || f.query ? '' : _a(i18n_txt('all'), {}, 0),
+					'ALL': f.tag || f.day || f.area || f.query ? '' : _a(i18n.txt('all'), {}, 0),
 					'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
 				if (f.area) d['AREA'] = _a(f.area, f0, {'area':''});
 				if (f.query) d['Q'] = _a(f.query, f0, {'query':''});
@@ -315,11 +315,11 @@ Prog.prototype.show = function() {
 						d['NOW'] = _a(pretty_time(new Date(), ko), f0, {'day':'all_days'});
 					} else {
 						var day = parse_date(f.day);
-						d['DAY'] = _a(i18n_txt('weekday_n', {'N': day ? day.getDay() : -1 }), f0, {'day':'all_days'});
+						d['DAY'] = _a(i18n.txt('weekday_n', {'N': day ? day.getDay() : -1 }), f0, {'day':'all_days'});
 					}
 				}
 				for (var k in d) if (k.substr(0,4) != 'GOT_') d['GOT_' + k] = true;
-				fs.innerHTML = i18n_txt('filter_sum', d);
+				fs.innerHTML = i18n.txt('filter_sum', d);
 			}
 		}
 		Item.show_list(ls, f.id);

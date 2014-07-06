@@ -1,3 +1,19 @@
+if (typeof i18n == 'undefined') i18n = {};
+i18n.txt = function(key){ return key; };
+i18n.translate_html = function(map, a) {
+	var list = document.querySelectorAll('['+a+']');
+	for (var i = 0, node; node = list[i]; ++i) {
+		var key = node.getAttribute(a) || node.textContent.trim();
+		if (key in map) {
+			var data = node.getAttribute(a + '-var');
+			var attr = node.getAttribute(a + '-attr');
+			var str = map[key](data && JSON.parse('{' + data.replace(/[^,:]+/g, '"$&"') + '}'));
+			if (attr) node.setAttribute(attr, str);
+			else node.innerHTML = str;
+		}
+	}
+}
+
 function link_to_short_url(url) {
 	var u = encodeURIComponent(url.replace(/^http:\/\//, ''));
 	return 'http://is.gd/create.php?url=' + u;
@@ -17,20 +33,6 @@ function _log(msg, lvl) {
 
 function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
 function hash_decode(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
-
-function i18n_translate_html(map, a) {
-	var list = document.querySelectorAll('['+a+']');
-	for (var i = 0, node; node = list[i]; ++i) {
-		var key = node.getAttribute(a) || node.textContent.trim();
-		if (key in map) {
-			var data = node.getAttribute(a + '-var');
-			var attr = node.getAttribute(a + '-attr');
-			var str = map[key](data && JSON.parse('{' + data.replace(/[^,:]+/g, '"$&"') + '}'));
-			if (attr) node.setAttribute(attr, str);
-			else node.innerHTML = str;
-		}
-	}
-}
 
 function GlobToRE(pat) {
 	var re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
@@ -204,13 +206,13 @@ function pretty_time(t, opt) {
 	} else return '';
 }
 
-function pretty_time_diff(t, i18n_txt) {
+function pretty_time_diff(t) {
 	var d = (Date.now() - t) / 1e3,
 	    a = Math.abs(d),
 	    s = [1, 60, 60, 24, 7, 4.333, 12, 1e9];
-	if (a < 20) return i18n_txt('just now');
+	if (a < 20) return i18n.txt('just now');
 	for (var i = 0, l = s.length; i < l; ++i) {
-		if ((a /= s[i]) < 2) return i18n_txt('time_diff', { 'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d>0 });
+		if ((a /= s[i]) < 2) return i18n.txt('time_diff', { 'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d>0 });
 	}
 }
 

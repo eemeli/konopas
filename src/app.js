@@ -1,5 +1,4 @@
 function KonOpas(set) {
-	var self = this;
 	this.id = '';
 	this.lc = 'en';
 	this.tag_categories = false;
@@ -17,13 +16,13 @@ function KonOpas(set) {
 	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 
 	if (!this.log_messages) _log = function(){};
-	if ((typeof i18n != 'undefined') && i18n[this.lc]) {
-		i18n_txt = function(key, data){ return key in i18n[self.lc] ? i18n[self.lc][key](data) : key; };
-		i18n_translate_html(i18n[this.lc], 'data-txt');
-	}
-	if (!this.id) alert(i18n_txt('no_ko_id'));
+	if (i18n[this.lc]) {
+		i18n.txt = function(key, data){ return key in i18n[this.lc] ? i18n[this.lc][key](data) : key; }.bind(this);
+		i18n.translate_html(i18n[this.lc], 'data-txt');
+	} else alert('Locale "' + this.lc + '" not found.');
+	if (!this.id) alert(i18n.txt('no_ko_id'));
 	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
-		|| !Date.now || !('localStorage' in window)) alert(i18n_txt('old_browser'));
+		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
 	this.prog = new Prog();
 	this.stars = new Stars(this.id);
@@ -31,9 +30,7 @@ function KonOpas(set) {
 	Item();
 	this.part = new Part(people, this);
 	this.info = new Info();
-
 	window.onhashchange = this.init_view.bind(this);
-
 	var pl = document.getElementsByClassName('popup-link');
 	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
 	if (EL('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
@@ -50,7 +47,7 @@ KonOpas.prototype.storage_set = function(name, value) {
 	} catch (e) {
 		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
 			this.storage_set = function(){};
-			alert(i18n_txt('private_mode'));
+			alert(i18n.txt('private_mode'));
 		} else throw e;
 	}
 }
@@ -88,7 +85,6 @@ KonOpas.prototype.refresh_cache = function() {
 	}
 }
 
-var i18n_txt = function(key){ return key; };
 var ko = new KonOpas(konopas_set);
 var server = ko.server;
 ko.init_view();

@@ -44,9 +44,9 @@ Part.prototype.show_one = function(i) {
 					break;
 				case 'img':
 					/*if (navigator.onLine) {
-						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="' + i18n_txt('Photo') + ':' + p_name + '"></a>';
+						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="' + i18n.txt('Photo') + ':' + p_name + '"></a>';
 					} else*/ {
-						links += '<dt>' + i18n_txt('Photo') + ':<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
+						links += '<dt>' + i18n.txt('Photo') + ':<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
 					}
 					break;
 				default: links += '<dt>' + type + ':<dd>' + tgt;

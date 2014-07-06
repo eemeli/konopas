@@ -24,7 +24,7 @@ Item.show_extra = function(item, id) {
 			if (o[cat]) o[cat].push(link);
 			else o[cat] = [link];
 		});
-		var a = []; for (var k in o) a.push(i18n_txt('item_tags', {'T':k}) + ': ' + o[k].join(', '));
+		var a = []; for (var k in o) a.push(i18n.txt('item_tags', {'T':k}) + ': ' + o[k].join(', '));
 		return '<div class="discreet">' + a.join('<br>') + '</div>\n';
 	}
 	function _people(it) {
@@ -39,7 +39,7 @@ Item.show_extra = function(item, id) {
 	if (EL("e" + id)) return;
 	var html = "";
 	var a = program.filter(function(el) { return el.id == id; });
-	if (a.length < 1) html = i18n_txt('item_not_found', {'ID':id});
+	if (a.length < 1) html = i18n.txt('item_not_found', {'ID':id});
 	else {
 		html = _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
@@ -71,7 +71,7 @@ Item.new = function(it) {
 	    loc   = item.appendChild(_new_elem('div', 'loc')),
 	    votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
 	if (ko.use_server) {
-		votes.textContent = i18n_txt('Votes') + ': ';
+		votes.textContent = i18n.txt('Votes') + ': ';
 		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
 		votes.appendChild(document.createTextNode(' / '));
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
@@ -107,7 +107,7 @@ Item.show_list = function(ls, show_id) {
 	var prev_date = "", prev_time = "";
 	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
-			.appendChild(_new_elem('a', 'js-link', i18n_txt('Expand all')))
+			.appendChild(_new_elem('a', 'js-link', i18n.txt('Expand all')))
 			.id = 'item_expander_link';
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
@@ -122,7 +122,7 @@ Item.show_list = function(ls, show_id) {
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time, ko)))
-				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
+				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
 		}
 		frag.appendChild(Item.new(ls[i]));
 	}
@@ -136,13 +136,13 @@ Item.show_list = function(ls, show_id) {
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
 		var items = LS.getElementsByClassName("item");
-		var exp_txt = i18n_txt('Expand all');
+		var exp_txt = i18n.txt('Expand all');
 		if (expand_all.textContent == exp_txt) {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.add("expanded");
 				Item.show_extra(items[i], items[i].id.substr(1));
 			}
-			expand_all.textContent = i18n_txt('Collapse all');
+			expand_all.textContent = i18n.txt('Collapse all');
 		} else {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.remove("expanded");
