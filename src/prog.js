@@ -272,7 +272,7 @@ Prog.prototype.show = function() {
 				fs.innerHTML = i18n_txt('filter_sum', d);
 			}
 		}
-		item_show_list(ls, f.id);
+		Item.show_list(ls, f.id);
 	}
 
 	var f = Prog.get_filters();
