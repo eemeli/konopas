@@ -36,8 +36,8 @@ Server.prototype.disconnect = function() {
 }
 
 Server.prototype.logout = function(ev) {
-	_log("server logout");
-	server.exec('/logout');
+	_log('server logout');
+	this.exec('/logout');
 	(ev || window.event).preventDefault();
 }
 
@@ -502,7 +502,7 @@ Server.prototype.cb_ok = function(v, self) {
 			if (self.stars) {
 				self.stars.data = {};
 				self.stars.write();
-				init_view();
+				ko.init_view();
 			}
 			self.exec('info');
 			_log("server ok (logout): " + JSON.stringify(v));
@@ -555,7 +555,7 @@ Server.prototype.cb_info = function(v) {
 		this.ical = this.ical || true;
 		this.show_ical_link(false);
 	}
-	document.getElementById('server_logout').onclick = this.logout;
+	document.getElementById('server_logout').onclick = this.logout.bind(this);
 	document.body.classList.add('logged-in');
 	if (typeof jsErrLog == 'object') jsErrLog.info = v.name.replace(/[ @].*/, '');
 }

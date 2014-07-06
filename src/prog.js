@@ -62,7 +62,7 @@ Prog.get_filters = function(hash_only) {
 		}
 	}
 	if (!hash_only && !h_set && !document.body.classList.contains('prog')) {
-		var store = storage_get('prog');
+		var store = ko.storage_get('prog');
 		if (store) for (var k in store) {
 			if (filters.hasOwnProperty(k)) filters[k] = store[k];
 		}
@@ -72,7 +72,7 @@ Prog.get_filters = function(hash_only) {
 
 Prog.set_filters = function(f, silent) {
 	if (silent && !(history && history.replaceState)) return false;
-	storage_set('prog', f);
+	ko.storage_set('prog', f);
 	var h = Prog.hash(f),
 	    h_cur = window.location.toString().split('#')[1] || '';
 	if (h_cur != h.substr(1)) {
@@ -326,7 +326,7 @@ Prog.prototype.show = function() {
 	}
 
 	var f = Prog.get_filters();
-	set_view("prog");
+	ko.set_view("prog");
 	if (Prog.set_filters(f)) return;
 	if (!f.day && !f.id && !ko.show_all_days_by_default) f.day = this.default_day();
 	_show_filters(f);

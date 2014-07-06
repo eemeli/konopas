@@ -48,7 +48,7 @@ Item.show_extra = function(item, id) {
 	extra.id = 'e' + id;
 	extra.innerHTML = html;
 	item.appendChild(extra);
-	if (server) server.show_extras(id, item);
+	if (ko.server) ko.server.show_extras(id, item);
 }
 
 Item.new = function(it) {
@@ -131,7 +131,7 @@ Item.show_list = function(ls, show_id) {
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
 	LS.appendChild(frag);
 
-	if (server) server.decorate_list(LS);
+	if (ko.server) ko.server.decorate_list(LS);
 
 	var expand_all = EL("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
@@ -153,10 +153,10 @@ Item.show_list = function(ls, show_id) {
 
 	var star_els = LS.getElementsByClassName("item_star");
 	for (var i = 0, l = star_els.length; i < l; ++i) {
-		star_els[i].onclick = function() { stars.toggle(this, this.id.substr(1)); return false; };
+		star_els[i].onclick = function() { ko.stars.toggle(this, this.id.substr(1)); return false; };
 	}
 
-	var star_list = stars.list();
+	var star_list = ko.stars.list();
 	for (var i = 0, l = star_list.length; i < l; ++i) {
 		var el = EL('s' + star_list[i]);
 		if (el) el.classList.add("has_star");
@@ -175,7 +175,7 @@ Item.show_list = function(ls, show_id) {
 Item.list_click = function(ev) {
 	function _set_location_id(id) {
 		var f = Prog.get_filters(true);
-		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : prog.default_day();
+		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : ko.prog.default_day();
 		f['id'] = id;
 		return Prog.set_filters(f, true);
 	}

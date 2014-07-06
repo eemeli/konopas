@@ -1,95 +1,82 @@
-var ko = {
-	// these are default values, use konopas_set to override
-	'id': '',
-	'lc': 'en',
-	'tag_categories': false,
-	'default_duration': 60,
-	'time_show_am_pm': false,
-	'abbrev_00_minutes': true, // only for am/pm time
-	'always_show_participants': false,
-	'expand_all_max_items': 100,
-	'show_all_days_by_default': false,
-	'non_ascii_people': false, // setting true enables correct but slower sort
-	'use_server': false,
-	'log_messages': true
-};
-if (typeof konopas_set == 'object') for (var i in konopas_set) ko[i] = konopas_set[i];
+function KonOpas(set) {
+	var self = this;
+	this.id = '';
+	this.lc = 'en';
+	this.tag_categories = false;
+	this.default_duration = 60;
+	this.time_show_am_pm = false;
+	this.abbrev_00_minutes = true; // only for am/pm time
+	this.always_show_participants = false;
+	this.expand_all_max_items = 100;
+	this.show_all_days_by_default = false;
+	this.non_ascii_people = false; // setting true enables correct but slower sort
+	this.use_server = false;
+	this.log_messages = true;
+	this.cache_refresh_interval_mins = 60;
+	this.views = [ "star", "prog", "part", "info" ];
+	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 
-var i18n_txt = function(key){ return key; };
-if ((typeof i18n != 'undefined') && i18n[ko.lc]) {
-	i18n_txt = function(key, data){ return key in i18n[ko.lc] ? i18n[ko.lc][key](data) : key; };
-	i18n_translate_html(i18n[ko.lc], 'data-txt');
-}
-
-if (!ko.id) alert(i18n_txt('no_ko_id'));
-if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map || !Date.now || !('localStorage' in window)) alert(i18n_txt('old_browser'));
-var stars = new Stars(ko.id);
-var server = ko.use_server && window.Server && new Server(ko.id, stars);
-
-var views = [ "star", "prog", "part", "info" ];
-function set_view(new_view) {
-	var cl = document.body.classList;
-	for (var i = 0; i < views.length; ++i) {
-		cl[new_view == views[i] ? 'add' : 'remove'](views[i]);
+	if (!this.log_messages) _log = function(){};
+	if ((typeof i18n != 'undefined') && i18n[this.lc]) {
+		i18n_txt = function(key, data){ return key in i18n[self.lc] ? i18n[self.lc][key](data) : key; };
+		i18n_translate_html(i18n[this.lc], 'data-txt');
 	}
+	if (!this.id) alert(i18n_txt('no_ko_id'));
+	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
+		|| !Date.now || !('localStorage' in window)) alert(i18n_txt('old_browser'));
+
+	this.prog = new Prog();
+	this.stars = new Stars(this.id);
+	this.server = this.use_server && window.Server && new Server(this.id, this.stars);
+	Item();
+	this.part = new Part(people, this);
+	this.info = new Info();
+
+	window.onhashchange = this.init_view.bind(this);
+
+	var pl = document.getElementsByClassName('popup-link');
+	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
+	if (EL('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
 }
 
-if (!ko.log_messages) _log = function(){};
-
-function storage_get(name) {
-	var v = sessionStorage.getItem('konopas.' + ko.id + '.' + name);
+KonOpas.prototype.storage_get = function(name) {
+	var v = sessionStorage.getItem('konopas.' + this.id + '.' + name);
 	return v ? JSON.parse(v) : v;
 }
 
-function storage_set(name, value) {
+KonOpas.prototype.storage_set = function(name, value) {
 	try {
-		sessionStorage.setItem('konopas.' + ko.id + '.' + name, JSON.stringify(value));
+		sessionStorage.setItem('konopas.' + this.id + '.' + name, JSON.stringify(value));
 	} catch (e) {
 		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
-			storage_set = function(){};
+			this.storage_set = function(){};
 			alert(i18n_txt('private_mode'));
 		} else throw e;
 	}
 }
 
-
-// ------------------------------------------------------------------------------------------------ init
-
-Item();
-
-// init prog view
-var prog = new Prog();
-
-// init part view
-var part = new Part(people, ko);
-
-// init info view
-var info = new Info();
-
-
-var pl = document.getElementsByClassName('popup-link');
-for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
-
-
-
-function init_view() {
+KonOpas.prototype.init_view = function() {
 	var opt = window.location.hash.substr(1);
 	switch (opt.substr(0,4)) {
-		case 'star': stars.show(opt.substr(4)); break;
-		case 'part': part.show(opt.substr(4)); break;
-		case 'info': info.show(); break;
-		default:     prog.show(); break;
+		case 'star': this.stars.show(opt.substr(4)); break;
+		case 'part': this.part.show(opt.substr(4)); break;
+		case 'info': this.info.show(); break;
+		default:     this.prog.show(); break;
 	}
-
 	if (EL("load_disable")) EL("load_disable").style.display = "none";
 }
 
-init_view();
-window.onhashchange = init_view;
+KonOpas.prototype.set_view = function(new_view) {
+	var cl = document.body.classList;
+	for (var i = 0; i < this.views.length; ++i) {
+		cl[new_view == this.views[i] ? 'add' : 'remove'](this.views[i]);
+	}
+}
 
-
-if (EL('refresh')) window.addEventListener('load', function() {
-	var cache = window.applicationCache;
+KonOpas.prototype.refresh_cache = function() {
+	var t_interval = this.cache_refresh_interval_mins * 60000,
+	    cache = window.applicationCache;
+	if (!t_interval || (t_interval < 0)) return;
 	cache.addEventListener('updateready', function() {
 		if (cache.status == cache.UPDATEREADY) {
 			EL('refresh').classList.add('enabled');
@@ -97,6 +84,11 @@ if (EL('refresh')) window.addEventListener('load', function() {
 		}
 	}, false);
 	if (cache.status != cache.UNCACHED) {
-		window.setInterval(function() { cache.update(); }, 3600000);
+		window.setInterval(function() { cache.update(); }, t_interval);
 	}
-}, false);
+}
+
+var i18n_txt = function(key){ return key; };
+var ko = new KonOpas(konopas_set);
+var server = ko.server;
+ko.init_view();

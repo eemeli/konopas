@@ -28,7 +28,7 @@ Info.prototype.show_updated = function() {
 }
 
 Info.prototype.show = function() {
-	set_view("info");
+	ko.set_view("info");
 	EL("prog_ls").innerHTML = "";
 	this.show_updated();
 }

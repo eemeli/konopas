@@ -92,7 +92,7 @@ Part.prototype.update_view = function(name_range, participant) {
 		participant = '';
 		this.show_list(name_range);
 	}
-	storage_set('part', { 'name_range': name_range, 'participant': participant });
+	ko.storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
 Part.prototype.show = function(hash) {
@@ -109,10 +109,10 @@ Part.prototype.show = function(hash) {
 	}
 
 	if (!this.list.length) { window.location.hash = ''; return; }
-	var store = storage_get('part') || {},
+	var store = ko.storage_get('part') || {},
 	    name_range = store.name_range || '',
 	    participant = !document.body.classList.contains('part') && store.participant || '';
-	set_view('part');
+	ko.set_view('part');
 	if (hash) {
 		var p_id = hash_decode(hash.substr(1));
 		var pa = this.list.filter(function(p) { return p.id == p_id; });
@@ -139,7 +139,7 @@ Part.filter_click = function(ev, self) {
 	var el = (ev || window.event).target;
 	if (el.parentNode.id == 'name_range') {
 		var name_range = el.getAttribute("data-range") || '';
-		storage_set('part', { 'name_range': name_range, 'participant': '' });
+		ko.storage_set('part', { 'name_range': name_range, 'participant': '' });
 		window.location.hash = '#part';
 		self.update_view(name_range, '');
 	}
