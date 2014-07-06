@@ -1,4 +1,15 @@
-var Item = {};
+function Item() {
+	EL('prog_ls').onclick = Item.list_click;
+	if (EL('scroll_link')) {
+		EL('scroll_link').onclick = function() { EL('top').scrollIntoView(); return false; };
+		if (window.navigator && navigator.userAgent.match(/Android [12]/)) {
+			EL('time').style.display = 'none';
+			EL('scroll').style.display = 'none';
+		} else {
+			window.onscroll = Item.scroll_time;
+		}
+	}
+}
 
 Item.show_extra = function(item, id) {
 	function _tags(it) {
@@ -188,3 +199,30 @@ Item.list_click = function(ev) {
 	}
 }
 
+Item.prev_scroll = { "i": 0, "top": 0 };
+Item.scroll_time = function() {
+	var st = window.pageYOffset;
+	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
+	st += 20; // to have more time for change behind new_time
+	var te = EL("time"); if (!te) return;
+	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
+	if (st < tl[0].offsetTop) {
+		Item.prev_scroll.i = 0;
+		Item.prev_scroll.top = tl[0].offsetTop;
+		te.style.display = "none";
+	} else {
+		var i = Item.prev_scroll.top ? Item.prev_scroll.i : 1;
+		if (i >= tl.length) i = tl.length - 1;
+		if (st > tl[i].offsetTop) {
+			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
+			--i;
+		} else {
+			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+		}
+		if (i < 0) i = 0;
+		Item.prev_scroll.i = i;
+		Item.prev_scroll.top = tl[i].offsetTop;
+		te.textContent = tl[i].getAttribute('data-day') + '\n' + tl[i].textContent;
+		te.style.display = "block";
+	}
+}

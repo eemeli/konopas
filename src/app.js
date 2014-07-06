@@ -2,7 +2,6 @@ var ko = {
 	// these are default values, use konopas_set to override
 	'id': '',
 	'lc': 'en',
-	'full_version': !navigator.userAgent.match(/Android [12]/),
 	'tag_categories': false,
 	'default_duration': 60,
 	'time_show_am_pm': false,
@@ -95,55 +94,13 @@ function show_info_view() {
 
 // ------------------------------------------------------------------------------------------------ init
 
-
-EL('prog_ls').onclick = Item.list_click;
+Item();
 
 // init prog view
 var prog = new Prog();
 
 // init part view
 var part = new Part(people, ko);
-
-
-// set up fixed time display
-if (EL("scroll_link")) {
-	EL("scroll_link").onclick = function() { EL("top").scrollIntoView(); return false; };
-	var prev_scroll = { "i": 0, "top": 0 };
-	var n = 0;
-	if (ko.full_version) { window.onscroll = function() {
-		var st = window.pageYOffset;
-
-		EL("scroll").style.display = (st > 0) ? 'block' : 'none';
-
-		st += 20; // to have more time for change behind new_time
-		var te = EL("time"); if (!te) return;
-		var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
-		if (st < tl[0].offsetTop) {
-			prev_scroll.i = 0;
-			prev_scroll.top = tl[0].offsetTop;
-			te.style.display = "none";
-		} else {
-			var i = prev_scroll.top ? prev_scroll.i : 1;
-			if (i >= tl.length) i = tl.length - 1;
-			if (st > tl[i].offsetTop) {
-				while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
-				--i;
-			} else {
-				while ((i >= 0) && (st < tl[i].offsetTop)) --i;
-			}
-			if (i < 0) i = 0;
-
-			prev_scroll.i = i;
-			prev_scroll.top = tl[i].offsetTop;
-			te.textContent = tl[i].getAttribute('data-day') + '\n' + tl[i].textContent;
-			te.style.display = "block";
-		}
-	};} else {
-		EL("time").style.display = "none";
-		EL("scroll").style.display = "none";
-	}
-}
-
 
 // init info view
 init_last_updated();
