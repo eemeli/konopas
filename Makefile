@@ -39,7 +39,7 @@ $(I18N_JS): $(I18N_JSON)
 
 
 $(JS_DEV): $(JS_FILES)
-	cat $^ > $@
+	echo '"use strict;"' | cat $^ > $@
 
 $(JS_MIN): $(JS_DEV)
 	curl -X POST -s --data-urlencode "input@$^" http://javascript-minifier.com/raw > $@

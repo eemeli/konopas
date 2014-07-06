@@ -19,8 +19,6 @@
  */
 
 
-"use strict";
-
 var ko = {
 	// these are default values, use konopas_set to override
 	'id': '',
