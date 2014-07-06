@@ -10,7 +10,7 @@ LC_GLOB = $(if $(findstring $(comma),$(LC)),{$(LC)},$(LC))
 I18N_JS = i18n/$(LC).js
 I18N_JSON = $(addprefix i18n/,$(addsuffix .json,$(LC_SEP)))
 
-JS_FILES = src/polyfill.js $(I18N_JS) src/server.js src/stars.js src/app.js
+JS_FILES = src/polyfill.js $(I18N_JS) src/util.js src/server.js src/stars.js src/app.js
 JS_PREFACE = src/preface.js
 JS_DEV = konopas.js
 JS_MIN = konopas.min.js
