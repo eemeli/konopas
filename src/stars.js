@@ -104,3 +104,62 @@ Stars.prototype.sync = function(new_data) {
 		}
 	}
 }
+
+Stars.prototype.show = function(hash) {
+	set_view("star");
+	var view = EL("star_data"),
+	    set_raw = (hash && (hash.substr(1,4) == 'set:')) ? hash.substr(5).split(',') : [],
+	    set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
+	    set_len = set.length,
+	    html = this.persistent() ? '' : '<p>' + i18n_txt('star_no_memory', {'SERVER': !!this.server}),
+	    star_list = this.list(),
+	    stars_len = star_list.length;
+	if (!stars_len && !set_len) {
+		EL("prog_ls").innerHTML = '';
+		view.innerHTML = html + '<p>' + i18n_txt('star_hint');
+		return;
+	}
+	set.sort();
+	star_list.sort();
+	var set_link = '#star/set:' + star_list.join(',');
+	if (set_len) {
+		if (arrays_equal(set, star_list)) {
+			html += '<p>' + i18n_txt('star_export_this', { 'THIS':set_link })
+			      + '<p>' + i18n_txt('star_export_share', { 'SHORT':link_to_short_url(location.href), 'QR':link_to_qr_code(location.href) });
+			if (this.server) this.server.show_ical_link(view);
+		} else {
+			var n_same = array_overlap(set, star_list);
+			var n_new = set_len - n_same;
+			var n_bad = set_raw.length - set_len;
+			html += '<p>' + i18n_txt('star_import_this', {'THIS':location.href})
+				+ '<p>' + i18n_txt('star_import_diff', { 'PREV':stars_len, 'NEW':n_new, 'SAME':n_same });
+			if (n_bad) html += ' ' + i18n_txt('star_import_bad', {'BAD':n_bad});
+			if (!stars_len || (n_same != stars_len)) {
+				html += '<p>&raquo; <a href="#star" id="star_set_set">' + i18n_txt('star_set') + '</a>';
+			}
+			if (stars_len) {
+				if (n_same != stars_len) {
+					var d = [];
+					if (n_new) d.push(i18n_txt('add_n', {'N':n_new}));
+					d.push(i18n_txt('discard_n', {'N':stars_len - n_same}));
+					html += ' (' + d.join(', ') + ')';
+				}
+				if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">' + i18n_txt('star_add', {'N':n_new}) + '</a>';
+			}
+			var el_set = EL('star_set_set'); if (el_set) el_set.onclick = function() { this.set(set); return true; };
+			var el_add = EL('star_set_add'); if (el_add) el_add.onclick = function() { this.add(set); return true; };
+		}
+	} else {
+		html += '<p id="star_links">&raquo; ' + i18n_txt('star_export_link', { 'URL':set_link, 'N':stars_len });
+	}
+	var ls = program.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
+	Item.show_list(ls);
+	if (set_len) {
+		document.body.classList.add("show_set");
+		for (var i = 0; i < set_len; ++i) {
+			var el = EL('s' + set[i]);
+			if (el) el.classList.add("in_set");
+		}
+	}
+	view.innerHTML = html;
+}
