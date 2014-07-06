@@ -56,66 +56,37 @@ function storage_set(name, value) {
 
 // ------------------------------------------------------------------------------------------------ items
 
-function _item_people(it) {
-	if (!it.people || !it.people.length) return '';
-	var a = it.people.map((typeof people == 'undefined') || !people.length
-		? function(p) { return p.name; }
-		: function(p) { return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>"; }
-	);
-	return '<div class="item-people">' + a.join(', ') + '</div>\n';
-}
-
-function _item_tags(it) {
-	if (!it.tags || !it.tags.length) return '';
-	var o = {};
-	it.tags.forEach(function(t) {
-		var cat = 'tags';
-		var tgt = _prog_hash({'tag': t});
-		var a = t.split(':');
-		if (a.length > 1) { cat = a.shift(); t = a.join(':'); }
-		var link = '<a href="' + tgt + '">' + t + '</a>'
-		if (o[cat]) o[cat].push(link);
-		else o[cat] = [link];
-	});
-	var a = []; for (var k in o) a.push(i18n_txt('item_tags', {'T':k}) + ': ' + o[k].join(', '));
-	return '<div class="discreet">' + a.join('<br>') + '</div>\n';
-}
-
-function _item_loc_str(it) {
-	var s = '';
-	if (it.loc && it.loc.length) {
-		s = it.loc[0];//.replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
-		if (it.loc.length > 1) s += ' (' + it.loc.slice(1).join(', ') + ')';
-	}
-	if (it.mins && (it.mins != ko.default_duration)) {
-		if (s) s += ', ';
-		s += pretty_time(it.time, ko) + ' - ' + pretty_time(time_sum(it.time, it.mins), ko);
-	}
-	return s;
-}
-
-function _item_sort(a, b) {
-	if (a.date < b.date) return -1;
-	if (a.date > b.date) return  1;
-	if (a.time < b.time) return -1;
-	if (a.time > b.time) return  1;
-	if (a.loc.length < b.loc.length) return -1;
-	if (a.loc.length > b.loc.length) return  1;
-	for (var i = a.loc.length - 1; i >= 0; --i) {
-		if (a.loc[i] < b.loc[i]) return -1;
-		if (a.loc[i] > b.loc[i]) return  1;
-	}
-	return 0;
-}
-
 function _item_show_extra(item, id) {
-	if (EL("e" + id)) return;
+	function _tags(it) {
+		if (!it.tags || !it.tags.length) return '';
+		var o = {};
+		it.tags.forEach(function(t) {
+			var cat = 'tags';
+			var tgt = _prog_hash({'tag': t});
+			var a = t.split(':');
+			if (a.length > 1) { cat = a.shift(); t = a.join(':'); }
+			var link = '<a href="' + tgt + '">' + t + '</a>'
+			if (o[cat]) o[cat].push(link);
+			else o[cat] = [link];
+		});
+		var a = []; for (var k in o) a.push(i18n_txt('item_tags', {'T':k}) + ': ' + o[k].join(', '));
+		return '<div class="discreet">' + a.join('<br>') + '</div>\n';
+	}
+	function _people(it) {
+		if (!it.people || !it.people.length) return '';
+		var a = it.people.map((typeof people == 'undefined') || !people.length
+			? function(p) { return p.name; }
+			: function(p) { return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>"; }
+		);
+		return '<div class="item-people">' + a.join(', ') + '</div>\n';
+	}
 
+	if (EL("e" + id)) return;
 	var html = "";
 	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = i18n_txt('item_not_found', {'ID':id});
 	else {
-		html = _item_tags(a[0]) + _item_people(a[0]);
+		html = _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
 	}
 	var extra = _new_elem('div', 'extra');
@@ -125,13 +96,25 @@ function _item_show_extra(item, id) {
 	if (server) server.show_extras(id, item);
 }
 
-var _item_el = (function() {
-	var frame = _new_elem('div', 'item_frame');
-	var star = frame.appendChild(_new_elem('div', 'item_star'));
-	var item = frame.appendChild(_new_elem('div', 'item'));
-	var title = item.appendChild(_new_elem('div', 'title'));
-	var loc   = item.appendChild(_new_elem('div', 'loc'));
-	var votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
+function _item_el(it) {
+	function _loc_str(it) {
+		var s = '';
+		if (it.loc && it.loc.length) {
+			s = it.loc[0];//.replace(/ \([\w\/]+\)$/, ''); // HACK for LSC extraneous info in loc[0]
+			if (it.loc.length > 1) s += ' (' + it.loc.slice(1).join(', ') + ')';
+		}
+		if (it.mins && (it.mins != ko.default_duration)) {
+			if (s) s += ', ';
+			s += pretty_time(it.time, ko) + ' - ' + pretty_time(time_sum(it.time, it.mins), ko);
+		}
+		return s;
+	}
+	var frame = _new_elem('div', 'item_frame'),
+	    star  = frame.appendChild(_new_elem('div', 'item_star')),
+	    item  = frame.appendChild(_new_elem('div', 'item')),
+	    title = item.appendChild(_new_elem('div', 'title')),
+	    loc   = item.appendChild(_new_elem('div', 'loc')),
+	    votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
 	if (ko.use_server) {
 		votes.textContent = i18n_txt('Votes') + ': ';
 		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
@@ -139,17 +122,32 @@ var _item_el = (function() {
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
 	}
 
-	return function(it) {
+	_item_el = function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
-		loc.textContent = _item_loc_str(it);
+		loc.textContent = _loc_str(it);
 		votes.id = 'v' + it.id;
 		return frame.cloneNode(true);
 	};
-})();
+	return _item_el(it);
+}
 
 function item_show_list(ls, show_id) {
+	function _sort(a, b) {
+		if (a.date < b.date) return -1;
+		if (a.date > b.date) return  1;
+		if (a.time < b.time) return -1;
+		if (a.time > b.time) return  1;
+		if (a.loc.length < b.loc.length) return -1;
+		if (a.loc.length > b.loc.length) return  1;
+		for (var i = a.loc.length - 1; i >= 0; --i) {
+			if (a.loc[i] < b.loc[i]) return -1;
+			if (a.loc[i] > b.loc[i]) return  1;
+		}
+		return 0;
+	}
+
 	var frag = document.createDocumentFragment();
 	var prev_date = "", prev_time = "";
 	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
@@ -159,21 +157,18 @@ function item_show_list(ls, show_id) {
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
-			if (ls[i].date < prev_date) { item_show_list(ls.sort(_item_sort), show_id); return; }
+			if (ls[i].date < prev_date) { item_show_list(ls.sort(_sort), show_id); return; }
 			prev_date = ls[i].date;
 			prev_time = "";
-
 			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date, ko)));
 		}
-
 		if (ls[i].time != prev_time) {
-			if (ls[i].time < prev_time) { item_show_list(ls.sort(_item_sort), show_id); return; }
+			if (ls[i].time < prev_time) { item_show_list(ls.sort(_sort), show_id); return; }
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time, ko)))
 				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
 		}
-
 		frag.appendChild(_item_el(ls[i]));
 	}
 
@@ -223,23 +218,29 @@ function item_show_list(ls, show_id) {
 }
 
 function item_list_click(ev) {
-	var el = (ev || window.event).target;
-	var is_link = false;
+	function _set_location_id(id) {
+		var f = _prog_get_filters(true);
+		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : _prog_default_day();
+		f['id'] = id;
+		return _prog_set_filters(f, true);
+	}
+
+	var el = (ev || window.event).target,
+	    is_link = false;
 	while (!/\bitem(_|$)/.test(el.className)) {
 		if (el.id == 'prog_ls') return;
 		if ((el.tagName.toLowerCase() == 'a') && el.href) is_link = true;
 		el = el.parentNode;
 	}
 	if (!el.id || el.id[0] != 'p') return;
-
-	var it_id = el.id.substr(1);
-	var in_prog_view = document.body.classList.contains('prog');
+	var it_id = el.id.substr(1),
+	    in_prog_view = document.body.classList.contains('prog');
 	if (is_link) {
-		if (in_prog_view) _prog_set_location_id(it_id);
+		if (in_prog_view) _set_location_id(it_id);
 	} else {
 		var open = el.parentNode.classList.toggle("expanded");
 		if (open) _item_show_extra(el, it_id);
-		if (in_prog_view) _prog_set_location_id(open ? it_id : '');
+		if (in_prog_view) _set_location_id(open ? it_id : '');
 	}
 }
 
@@ -500,7 +501,6 @@ function _prog_hash(f0, fx) {
 				}
 			}
 		}
-
 		p.push(k + ':' + hash_encode(f[k]));
 	}
 	return p.length > 1 ? p.join('/') : '#';
@@ -509,9 +509,8 @@ function _prog_hash(f0, fx) {
 function _prog_set_filters(f, silent) {
 	if (silent && !(history && history.replaceState)) return false;
 	storage_set('prog', f);
-
-	var h = _prog_hash(f);
-	var h_cur = window.location.toString().split('#')[1] || '';
+	var h = _prog_hash(f),
+	    h_cur = window.location.toString().split('#')[1] || '';
 	if (h_cur != h.substr(1)) {
 		if (silent) {
 			var loc = window.location.toString().split('#')[0] + h;
@@ -521,185 +520,151 @@ function _prog_set_filters(f, silent) {
 		}
 		return true;
 	}
-
 	return false;
 }
-
-function _prog_set_location_id(id) {
-	var f = _prog_get_filters(true);
-	if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : _prog_default_day();
-	f['id'] = id;
-	return _prog_set_filters(f, true);
-}
-
-
-function _prog_filter(it) {
-	if (this.day && it.date != this.day) return false;
-
-	if (this.area) {
-		if (this.area instanceof RegExp) {
-			if (!this.area.test(it.loc.join(';'))) return false;
-		} else {
-			if (!it.loc || (it.loc.indexOf(this.area) < 0)) return false;
-		}
-	}
-
-	if (this.tag) {
-		if (this.tag instanceof RegExp) {
-			if (!this.tag.test(it.title)) return false;
-		} else {
-			if (!it.tags || (it.tags.indexOf(this.tag) < 0)) return false;
-		}
-	}
-
-	if (this.query) {
-		var found = this.query.test(it.title) || this.query.test(it.desc) || (it.loc && this.query.test(it.loc[0]));
-		if (!found && it.people) {
-			for (var i = 0; i < it.people.length; ++i) {
-				if (this.query.test(it.people[i].name)) { found = true; break; }
-			}
-		}
-		if (!found) return false;
-	}
-
-	return true;
-}
-
-function _prog_show_list(f) {
-	var area_str = f.area || '';
-	if (f.area && EL(f.area)) {
-		var t = EL(f.area).getAttribute("data-regexp");
-		if (t) f.area = new RegExp(t);
-	}
-
-	var tag_str = f.tag || '';
-	if (f.tag && EL(f.tag)) {
-		var t = EL(f.tag).getAttribute("data-regexp");
-		if (t) f.tag = new RegExp(t);
-	}
-
-	var query_str = f.query || '';
-	if (f.query) f.query = GlobToRE(f.query);
-
-	var id_only = !!f.id;
-	if (id_only) for (var i in f) if ((i != 'id') && f[i]) {
-		id_only = false;
-		break;
-	}
-	var ls = program.filter(id_only ? function(it){ return it.id == f.id; } : _prog_filter, f);
-
-	if (f.id) {
-		var id_ok = false;
-		for (var i = 0, l = ls.length; i < l; ++i) if (ls[i].id == f.id) {
-			id_ok = true;
-			break;
-		}
-		if (!id_ok) {
-			f.id = '';
-			if (_prog_set_filters(f)) return;
-		}
-	}
-
-	if (f.area) f.area = area_str;
-	if (f.tag) f.tag = tag_str;
-	if (f.query) f.query = query_str;
-
-	var fs = EL('filter_sum');
-	if (fs) {
-		var f0 = {};
-		for (var k in f) f0[k] = f[k];
-		f0['id'] = '';
-		if (!f0['day']) f0['day'] = 'all_days';
-
-		var _a = function(t, f0, fx) { return '<a href="' + _prog_hash(f0, fx) + '">' + t + '</a>'; }
-		if (id_only) {
-			fs.innerHTML = i18n_txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title, f0, {}), 'ID':_a(f.id, f0, {}) });
-		} else {
-			var d = { 'N':ls.length,
-				'ALL': f.tag || f.day || f.area || f.query ? '' : _a(i18n_txt('all'), {}, 0),
-				'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
-			if (f.area) { d['GOT_AREA'] = true; d['AREA'] = _a(f.area, f0, {'area':''}); }
-			if (f.query) {   d['GOT_Q'] = true;    d['Q'] = _a(f.query, f0, {'query':''}); }
-			if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(i18n_txt('weekday_n', {'N': f.day ? parse_date(f.day).getDay() : -1 }), f0, {'day':'all_days'}); }
-			fs.innerHTML = i18n_txt('filter_sum', d);
-		}
-	}
-
-	item_show_list(ls, f.id);
-}
-
-
-function _prog_show_filters(f) {
-	var prev = EL('prog_filters').getElementsByClassName('selected');
-	if (prev) for (var i = prev.length - 1; i >= 0; --i) {
-		var cl = prev[i].classList;
-		if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
-		cl.remove('selected');
-	}
-
-	for (var k in f) {
-		if (k == 'query') {
-			var q = EL("q");
-			if (q) {
-				q.value = f.query;
-				if (f.query) q.classList.add('selected');
-			}
-		} else {
-			var id = f[k];
-			if (!id) id = 'all_' + k + 's';
-			else if (id.match(/^[^a-zA-Z]/)) id = k[0] + id;
-			var el = EL(id);
-			if (el) {
-				el.classList.add('selected');
-				if (el.parentNode.id.match(/\d+$/)) {
-					var p = el.parentNode.parentNode.firstChild;
-					p.classList.add('selected');
-					p.textContent = el.textContent;
-				}
-			}
-		}
-	}
-
-	var qh = EL('q_hint');
-	if (qh) {
-		if (f.query) {
-			if (/[?*"]/.test(f.query)) {
-				qh.innerHTML = i18n_txt('search_hint');
-				qh.removeAttribute('onmouseup');
-				qh.style.cursor = 'auto';
-			} else {
-				qh.innerHTML = i18n_txt('search_hint') + ' ' + i18n_txt('search_example', {'X':f.query+'*'});
-				qh.onmouseup = function() { EL('q').value = f.query + '*'; EL('q').focus(); EL('q').blur(); };
-				qh.style.cursor = 'pointer';
-			}
-			qh.style.display = 'block';
-		} else {
-			qh.style.display = 'none';
-		}
-	}
-}
-
-
 
 
 // hashchange -> read filters from url + store -> set filters in html + store -> list items
 function show_prog_view() {
+	function _show_filters(f) {
+		var prev = EL('prog_filters').getElementsByClassName('selected');
+		if (prev) for (var i = prev.length - 1; i >= 0; --i) {
+			var cl = prev[i].classList;
+			if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
+			cl.remove('selected');
+		}
+		for (var k in f) {
+			if (k == 'query') {
+				var q = EL("q");
+				if (q) {
+					q.value = f.query;
+					if (f.query) q.classList.add('selected');
+				}
+			} else {
+				var id = f[k];
+				if (!id) id = 'all_' + k + 's';
+				else if (id.match(/^[^a-zA-Z]/)) id = k[0] + id;
+				var el = EL(id);
+				if (el) {
+					el.classList.add('selected');
+					if (el.parentNode.id.match(/\d+$/)) {
+						var p = el.parentNode.parentNode.firstChild;
+						p.classList.add('selected');
+						p.textContent = el.textContent;
+					}
+				}
+			}
+		}
+		var qh = EL('q_hint');
+		if (qh) {
+			if (f.query) {
+				if (/[?*"]/.test(f.query)) {
+					qh.innerHTML = i18n_txt('search_hint');
+					qh.removeAttribute('onmouseup');
+					qh.style.cursor = 'auto';
+				} else {
+					qh.innerHTML = i18n_txt('search_hint') + ' ' + i18n_txt('search_example', {'X':f.query+'*'});
+					qh.onmouseup = function() { EL('q').value = f.query + '*'; EL('q').focus(); EL('q').blur(); };
+					qh.style.cursor = 'pointer';
+				}
+				qh.style.display = 'block';
+			} else {
+				qh.style.display = 'none';
+			}
+		}
+	}
+	function _filter(it) {
+		if (this.day && it.date != this.day) return false;
+		if (this.area) {
+			if (this.area instanceof RegExp) {
+				if (!this.area.test(it.loc.join(';'))) return false;
+			} else {
+				if (!it.loc || (it.loc.indexOf(this.area) < 0)) return false;
+			}
+		}
+		if (this.tag) {
+			if (this.tag instanceof RegExp) {
+				if (!this.tag.test(it.title)) return false;
+			} else {
+				if (!it.tags || (it.tags.indexOf(this.tag) < 0)) return false;
+			}
+		}
+		if (this.query) {
+			var found = this.query.test(it.title) || this.query.test(it.desc) || (it.loc && this.query.test(it.loc[0]));
+			if (!found && it.people) {
+				for (var i = 0; i < it.people.length; ++i) {
+					if (this.query.test(it.people[i].name)) { found = true; break; }
+				}
+			}
+			if (!found) return false;
+		}
+		return true;
+	}
+	function _show_list(f) {
+		var area_str = f.area || '';
+		if (f.area && EL(f.area)) {
+			var t = EL(f.area).getAttribute("data-regexp");
+			if (t) f.area = new RegExp(t);
+		}
+		var tag_str = f.tag || '';
+		if (f.tag && EL(f.tag)) {
+			var t = EL(f.tag).getAttribute("data-regexp");
+			if (t) f.tag = new RegExp(t);
+		}
+		var query_str = f.query || '';
+		if (f.query) f.query = GlobToRE(f.query);
+		var id_only = !!f.id;
+		if (id_only) for (var i in f) if ((i != 'id') && f[i]) {
+			id_only = false;
+			break;
+		}
+		var ls = program.filter(id_only ? function(it){ return it.id == f.id; } : _filter, f);
+		if (f.id) {
+			var id_ok = false;
+			for (var i = 0, l = ls.length; i < l; ++i) if (ls[i].id == f.id) {
+				id_ok = true;
+				break;
+			}
+			if (!id_ok) {
+				f.id = '';
+				if (_prog_set_filters(f)) return;
+			}
+		}
+		if (f.area) f.area = area_str;
+		if (f.tag) f.tag = tag_str;
+		if (f.query) f.query = query_str;
+		var fs = EL('filter_sum');
+		if (fs) {
+			var f0 = {};
+			for (var k in f) f0[k] = f[k];
+			f0['id'] = '';
+			if (!f0['day']) f0['day'] = 'all_days';
+			var _a = function(t, f0, fx) { return '<a href="' + _prog_hash(f0, fx) + '">' + t + '</a>'; }
+			if (id_only) {
+				fs.innerHTML = i18n_txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title, f0, {}), 'ID':_a(f.id, f0, {}) });
+			} else {
+				var d = { 'N':ls.length,
+					'ALL': f.tag || f.day || f.area || f.query ? '' : _a(i18n_txt('all'), {}, 0),
+					'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
+				if (f.area) { d['GOT_AREA'] = true; d['AREA'] = _a(f.area, f0, {'area':''}); }
+				if (f.query) {   d['GOT_Q'] = true;    d['Q'] = _a(f.query, f0, {'query':''}); }
+				if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(i18n_txt('weekday_n', {'N': f.day ? parse_date(f.day).getDay() : -1 }), f0, {'day':'all_days'}); }
+				fs.innerHTML = i18n_txt('filter_sum', d);
+			}
+		}
+		item_show_list(ls, f.id);
+	}
+
 	var f = _prog_get_filters();
 	set_view("prog");
 	if (_prog_set_filters(f)) return;
-
 	if (!f.day && !f.id && !ko.show_all_days_by_default) f.day = _prog_default_day();
-
-	_prog_show_filters(f);
-
+	_show_filters(f);
 	for (var k in f) {
 		if (!k || !f[k] || (f[k] == 'all_' + k + 's')) { delete f[k]; continue; }
 	}
-
-	_prog_show_list(f);
+	_show_list(f);
 }
-
-
 
 
 // read filters from url + ev -> set new hash
@@ -773,7 +738,7 @@ function show_participant(p) {
 		links += '</dl>';
 	}
 	EL("part_names").innerHTML = '';
-	EL("part_info").innerHTML = 
+	EL("part_info").innerHTML =
 		  '<h2 id="part_title">' + p_name + '</h2>'
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
