@@ -247,160 +247,6 @@ function show_star_view(opt) {
 
 // ------------------------------------------------------------------------------------------------ participant view
 
-function show_participant(p) {
-	var p_name = clean_name(p, false);
-	var links = '';
-	var img = '';
-	var pl = clean_links(p);
-	if (pl) {
-		links += '<dl class="linklist">';
-		for (var type in pl) {
-			var tgt = pl[type];
-			switch (type) {
-				case 'url': links += '<dt>URL:<dd>'
-					+ '<a href="' + tgt + '">' + tgt + '</a>';
-					break;
-				case 'twitter': links += '<dt>Twitter:<dd>'
-					+ '<a href="https://www.twitter.com/' + tgt + '">@' + tgt + '</a>';
-					break;
-				case 'fb': links += '<dt>Facebook:<dd>'
-					+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
-					break;
-				case 'img':
-					/*if (navigator.onLine) {
-						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="' + i18n_txt('Photo') + ':' + p_name + '"></a>';
-					} else*/ {
-						links += '<dt>' + i18n_txt('Photo') + ':<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
-					}
-					break;
-				default: links += '<dt>' + type + ':<dd>' + tgt;
-			}
-		}
-		links += '</dl>';
-	}
-	EL("part_names").innerHTML = '';
-	EL("part_info").innerHTML =
-		  '<h2 id="part_title">' + p_name + '</h2>'
-		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
-		+ links;
-	Item.show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
-
-	EL("top").scrollIntoView();
-}
-
-function _name_in_range(n0, range) {
-	switch (range.length) {
-		case 1:  return (n0 == range[0]);
-		case 2:  return ko.non_ascii_people
-			? (n0.localeCompare(range[0], ko.lc) >= 0) && (n0.localeCompare(range[1], ko.lc) <= 0)
-			: ((n0 >= range[0]) && (n0 <= range[1]));
-		default: return (range.indexOf(n0) >= 0);
-	}
-}
-
-function show_participant_list(name_range) {
-	var lp = !name_range ? people : people.filter(function(p) {
-		var n0 = p.sortname[0].toUpperCase();
-		return _name_in_range(n0, name_range);
-	});
-
-	EL('part_names').innerHTML = lp.map(function(p) {
-		return '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>';
-	}).join('');
-
-	EL('part_info').innerHTML = '';
-	EL('prog_ls').innerHTML = '';
-}
-
-function update_part_view(name_range, participant) {
-	var el_nr = EL('name_range');
-	if (el_nr) {
-		var ll = el_nr.getElementsByTagName('li');
-		for (var i = 0, l = ll.length; i < l; ++i) {
-			_set_class(ll[i], 'selected', (ll[i].getAttribute('data-range') == name_range));
-		}
-	}
-
-	var p_id = participant.substr(1);
-	var i;
-	for (i = 0, l = people.length; i < l; ++i) {
-		if (people[i].id == p_id) { show_participant(people[i]); break; }
-	}
-	if (i == people.length) {
-		participant = '';
-		show_participant_list(name_range);
-	}
-
-	storage_set('part', { 'name_range': name_range, 'participant': participant });
-}
-
-function find_name_range(name) {
-	var n0 = name[0].toUpperCase(); if (!n0) return '';
-	var par = EL('name_range'); if (!par) return '';
-	var ll = par.getElementsByTagName('li');
-	for (var i = 0, l = ll.length; i < l; ++i) {
-		var range = ll[i].getAttribute('data-range');
-		if (range && _name_in_range(n0, range)) return range;
-	}
-	return '';
-}
-
-function show_part_view(opt) {
-	if ((typeof people == 'undefined') || !people.length) window.location.hash = '';
-
-	var store = storage_get('part') || {};
-	var name_range = store.name_range || '';
-	var participant = !document.body.classList.contains('part') && store.participant || '';
-
-	set_view('part');
-
-	if (opt) {
-		var p_id = hash_decode(opt.substr(1));
-		var pa = people.filter(function(p) { return p.id == p_id; });
-		if (pa.length) {
-			participant = 'p' + pa[0].id;
-			name_range = find_name_range(pa[0].sortname);
-		} else {
-			window.location.hash = '#part';
-			return;
-		}
-	} else if (participant) {
-		window.location.hash = '#part/' + participant.substr(1);
-		return;
-	}
-
-	if (!name_range) {
-		var el_nr = EL('name_range');
-		if (el_nr) name_range = el_nr.getElementsByTagName('li')[0].getAttribute('data-range');
-	}
-
-	update_part_view(name_range, participant);
-}
-
-
-function part_filter_click(ev) {
-	var el = (ev || window.event).target;
-	if (el.parentNode.id == 'name_range') {
-		var name_range = el.getAttribute("data-range") || '';
-		storage_set('part', { 'name_range': name_range, 'participant': '' });
-		window.location.hash = '#part';
-		update_part_view(name_range, '');
-	}
-}
-
-function part_init() {
-	if (typeof people == 'undefined') return;
-	for (var i = 0, p; p = people[i]; ++i) {
-		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
-		if (!ko.non_ascii_people) p.sortname = p.sortname.make_ascii();
-	}
-	people.sort(ko.non_ascii_people
-		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
-		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
-	EL("part_filters").onclick = part_filter_click;
-}
-
-
 
 // ------------------------------------------------------------------------------------------------ info view
 
@@ -453,7 +299,7 @@ EL('next_filters').onclick = next_filter_click;
 var prog = new Prog();
 
 // init part view
-part_init();
+var part = new Part(people, ko);
 
 
 // set up fixed time display
@@ -510,7 +356,7 @@ function init_view() {
 	switch (opt.substr(0,4)) {
 		case 'next': show_next_view(); break;
 		case 'star': show_star_view(opt.substr(4)); break;
-		case 'part': show_part_view(opt.substr(4)); break;
+		case 'part': part.show(opt.substr(4)); break;
 		case 'info': show_info_view(); break;
 		default:     prog.show(); break;
 	}
