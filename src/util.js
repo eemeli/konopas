@@ -216,7 +216,7 @@ function pretty_time_diff(t, i18n_txt) {
 
 function parse_date(day_str) {
 	if (!day_str) return false;
-	var a = day_str.match(/(\d+)/g); if (a.length < 3) return false;
+	var a = day_str.match(/(\d+)/g); if (!a || (a.length < 3)) return false;
 	var y = parseInt(a[0], 10), m = parseInt(a[1], 10), d = parseInt(a[2], 10);
 	if (!y || !m || !d) return false;
 	return new Date(y, m - 1, d);

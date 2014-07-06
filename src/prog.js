@@ -118,6 +118,43 @@ Prog.filter_change = function(ev) {
 	Prog.set_filters(filters);
 }
 
+Prog.now_list = function() {
+	var ms_now = Date.now() - 60000 * (new Date()).getTimezoneOffset(), // - 168*24*60*60000,
+		ms_max = ms_now + 2 * 60 * 60000,
+	    now = [],
+		ms_last = 0, ms_next = 0;
+	for (var i = 0, l = program.length; i < l; ++i) {
+		var it = program[i],
+		    ms_start = Date.parse(it.date + 'T' + it.time + 'Z');
+		if (ms_start < ms_now) {
+			var ms_end = ms_start + 60000 * (it.mins || 0);
+			if (ms_end > ms_now) now.push(it);
+			else if (ms_end > ms_last) ms_last = ms_end;
+		} else {
+			if (!ms_next || (ms_start < ms_next)) ms_next = ms_start;
+			if (ms_start < ms_max) now.push(it);
+		}
+	}
+	if (now.length > 0) {
+		EL("next_start_note").textContent = '';
+	} else if (ms_next) {
+		var m_next = Math.floor((ms_next - ms_now) / 60000),
+		    h_next = Math.floor(m_next / 60),
+			d_next = Math.floor(h_next / 24);
+		if (h_next >= 1) m_next -= h_next * 60;
+		if (d_next >= 1) h_next -= d_next * 24;
+		EL("next_start_note").textContent = i18n_txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
+	} else {
+		var m_last = Math.floor((ms_now - ms_last) / 60000),
+		    h_last = Math.floor(m_last / 60),
+		    d_last = Math.floor(h_last / 24);
+		if (h_last >= 1) m_last -= h_last * 60;
+		if (d_last >= 1) h_last -= d_last * 24;
+		EL("next_start_note").textContent = i18n_txt('last_ended', { 'D':d_last, 'H':h_last, 'M':m_last });
+	}
+	return now;
+}
+
 
 
 // ------------------------------------------------------------------------------------------------ instance
@@ -132,7 +169,7 @@ Prog.prototype.default_day = function() {
 	}
 	for (var i = 0, l = dl.length; i < l; ++i) {
 		var d = dl[i].id.substr(1);
-		if (!d || d == 'll_days') continue;
+		if (!d || !/^[\d-]+$/.test(d)) continue;
 		if (!day_start || (d < day_start)) day_start = d;
 		if (!day_end || (d > day_end)) day_end = d;
 	}
@@ -192,9 +229,12 @@ Prog.prototype.show = function() {
 				qh.style.display = 'none';
 			}
 		}
+		EL("next_start_note").textContent = '';
 	}
 	function _filter(it) {
-		if (this.day && it.date != this.day) return false;
+		if (this.day && (this.day != 'now')) {
+			if (it.date != this.day) return false;
+		}
 		if (this.area) {
 			if (this.area instanceof RegExp) {
 				if (!this.area.test(it.loc.join(';'))) return false;
@@ -238,7 +278,9 @@ Prog.prototype.show = function() {
 			id_only = false;
 			break;
 		}
-		var ls = program.filter(id_only ? function(it){ return it.id == f.id; } : _filter, f);
+		var ls = id_only
+			? program.filter(function(it){ return it.id == f.id; })
+			: ((f.day == 'now') ? Prog.now_list() : program).filter(_filter, f);
 		if (f.id) {
 			var id_ok = false;
 			for (var i = 0, l = ls.length; i < l; ++i) if (ls[i].id == f.id) {
@@ -266,9 +308,17 @@ Prog.prototype.show = function() {
 				var d = { 'N':ls.length,
 					'ALL': f.tag || f.day || f.area || f.query ? '' : _a(i18n_txt('all'), {}, 0),
 					'TAG': f.tag ? _a(f.tag, f0, {'tag':''}) : '' };
-				if (f.area) { d['GOT_AREA'] = true; d['AREA'] = _a(f.area, f0, {'area':''}); }
-				if (f.query) {   d['GOT_Q'] = true;    d['Q'] = _a(f.query, f0, {'query':''}); }
-				if (f.day) {   d['GOT_DAY'] = true;  d['DAY'] = _a(i18n_txt('weekday_n', {'N': f.day ? parse_date(f.day).getDay() : -1 }), f0, {'day':'all_days'}); }
+				if (f.area) d['AREA'] = _a(f.area, f0, {'area':''});
+				if (f.query) d['Q'] = _a(f.query, f0, {'query':''});
+				if (f.day) {
+					if (f.day == 'now') {
+						d['NOW'] = _a(pretty_time(new Date(), ko), f0, {'day':'all_days'});
+					} else {
+						var day = parse_date(f.day);
+						d['DAY'] = _a(i18n_txt('weekday_n', {'N': day ? day.getDay() : -1 }), f0, {'day':'all_days'});
+					}
+				}
+				for (var k in d) if (k.substr(0,4) != 'GOT_') d['GOT_' + k] = true;
 				fs.innerHTML = i18n_txt('filter_sum', d);
 			}
 		}
