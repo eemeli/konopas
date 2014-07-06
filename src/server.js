@@ -264,7 +264,7 @@ Server.prototype.make_comment_div = function(c) {
 	d.appendChild(n);
 
 	var dt = new Date(1000 * c.ctime);
-	var t = _new_elem('span', 'comment-time', pretty_date(dt) + ' at ' + pretty_time(dt, false));
+	var t = _new_elem('span', 'comment-time', pretty_date(dt, ko) + ' at ' + pretty_time(dt, ko));
 	t.title = dt.toString();
 	d.appendChild(t);
 

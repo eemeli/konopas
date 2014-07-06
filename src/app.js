@@ -35,6 +35,23 @@ function set_view(new_view) {
 	}
 }
 
+if (!ko.log_messages) _log = function(){};
+
+function storage_get(name) {
+	var v = sessionStorage.getItem('konopas.' + ko.id + '.' + name);
+	return v ? JSON.parse(v) : v;
+}
+
+function storage_set(name, value) {
+	try {
+		sessionStorage.setItem('konopas.' + ko.id + '.' + name, JSON.stringify(value));
+	} catch (e) {
+		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
+			storage_set = function(){};
+			alert(i18n_txt('private_mode'));
+		} else throw e;
+	}
+}
 
 
 // ------------------------------------------------------------------------------------------------ items
@@ -72,7 +89,7 @@ function _item_loc_str(it) {
 	}
 	if (it.mins && (it.mins != ko.default_duration)) {
 		if (s) s += ', ';
-		s += pretty_time(it.time) + ' - ' + pretty_time(time_sum(it.time, it.mins));
+		s += pretty_time(it.time, ko) + ' - ' + pretty_time(time_sum(it.time, it.mins), ko);
 	}
 	return s;
 }
@@ -146,14 +163,14 @@ function item_show_list(ls, show_id) {
 			prev_date = ls[i].date;
 			prev_time = "";
 
-			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date)));
+			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date, ko)));
 		}
 
 		if (ls[i].time != prev_time) {
 			if (ls[i].time < prev_time) { item_show_list(ls.sort(_item_sort), show_id); return; }
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
-			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time)))
+			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time, ko)))
 				.setAttribute('data-day', i18n_txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
 		}
 
@@ -242,7 +259,7 @@ function update_next_select(t_off) {
 	for (var m = t_range[0]; m <= t_range[1]; m += t_step) {
 		var opt = document.createElement('option');
 		opt.value = m;
-		opt.text = i18n_txt('weekday_n', {'N':t.getDay()}) + ', ' + pretty_time(t);
+		opt.text = i18n_txt('weekday_n', {'N':t.getDay()}) + ', ' + pretty_time(t, ko);
 		if (m == t_off) opt.selected = true;
 		if (!m) opt.id = 'next_time_select_now';
 		ts.add(opt);
@@ -899,7 +916,7 @@ function init_last_updated() {
 function show_last_updated() {
 	if (!lu || !lu_time) return;
 	var span = lu.getElementsByTagName('span')[0];
-	span.textContent = pretty_time_diff(lu_time);
+	span.textContent = pretty_time_diff(lu_time, i18n_txt);
 	span.title = lu_time.toLocaleString();
 	span.onclick = function(ev) {
 		var self = (ev || window.event).target;
