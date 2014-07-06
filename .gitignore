@@ -1,6 +1,7 @@
 tmp/*
-konopas.js
+konopas.*
 i18n/*.js
+skin/skin.css
 smofcon*
 arisia*
 node_modules
