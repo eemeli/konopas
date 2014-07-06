@@ -53,45 +53,6 @@ function storage_set(name, value) {
 }
 
 
-// ------------------------------------------------------------------------------------------------ info view
-
-var lu = EL('last-updated'), lu_time = 0;
-
-function init_last_updated() {
-	var cache_manifest = document.body.parentNode.getAttribute('manifest');
-	if (lu && cache_manifest && (location.protocol == 'http:')) {
-		var x = new XMLHttpRequest();
-		x.onload = function() {
-			lu_time = new Date(this.getResponseHeader("Last-Modified"));
-			show_last_updated();
-		};
-		x.open('GET', cache_manifest, true);
-		x.send();
-	}
-}
-
-function show_last_updated() {
-	if (!lu || !lu_time) return;
-	var span = lu.getElementsByTagName('span')[0];
-	span.textContent = pretty_time_diff(lu_time, i18n_txt);
-	span.title = lu_time.toLocaleString();
-	span.onclick = function(ev) {
-		var self = (ev || window.event).target;
-		var tmp = self.title;
-		self.title = self.textContent;
-		self.textContent = tmp;
-	};
-	lu.style.display = 'inline';
-}
-
-function show_info_view() {
-	set_view("info");
-	show_last_updated();
-	EL("prog_ls").innerHTML = "";
-}
-
-
-
 // ------------------------------------------------------------------------------------------------ init
 
 Item();
@@ -103,7 +64,7 @@ var prog = new Prog();
 var part = new Part(people, ko);
 
 // init info view
-init_last_updated();
+var info = new Info();
 
 
 var pl = document.getElementsByClassName('popup-link');
@@ -116,7 +77,7 @@ function init_view() {
 	switch (opt.substr(0,4)) {
 		case 'star': stars.show(opt.substr(4)); break;
 		case 'part': part.show(opt.substr(4)); break;
-		case 'info': show_info_view(); break;
+		case 'info': info.show(); break;
 		default:     prog.show(); break;
 	}
 
