@@ -11,6 +11,7 @@ I18N_JS = i18n/$(LC).js
 I18N_JSON = $(addprefix i18n/,$(addsuffix .json,$(LC_SEP)))
 
 JS_FILES = src/polyfill.js $(I18N_JS) src/server.js src/stars.js src/app.js
+JS_PREFACE = src/preface.js
 JS_DEV = konopas.js
 JS_MIN = konopas.min.js
 
@@ -39,12 +40,13 @@ $(I18N_JS): $(I18N_JSON)
 
 
 $(JS_DEV): $(JS_FILES)
-	echo '"use strict;"' | cat $^ > $@
+	echo '\n"use strict";\n' | cat $(JS_PREFACE) - $^ > $@
 
 $(JS_MIN): $(JS_DEV)
-	curl -X POST -s --data-urlencode "input@$^" http://javascript-minifier.com/raw > $@
-	sed -i 's/\([^\w "]\)\(function\( \w\+\)\?(\)/\1\n\2/g' $@
-
+	curl -X POST -s --data-urlencode "input@$^" http://javascript-minifier.com/raw \
+	| sed 's/\([^\w "]\)\(function\( \w\+\)\?(\)/\1\n\2/g' \
+	| cat $(JS_PREFACE) - \
+	> $@
 
 precache: $(addsuffix .gz, $(PRECACHE_FILES)) ;
 
