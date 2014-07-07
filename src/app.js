@@ -24,17 +24,18 @@ function KonOpas(set) {
 	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
-	this.prog = new KonOpas.Prog();
 	this.stars = new KonOpas.Stars(this.id);
 	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
 	this.item = new KonOpas.Item();
-	this.part = new KonOpas.Part(people, this);
 	this.info = new KonOpas.Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
 	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', KonOpas.popup_open);
 	if (_el('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
 }
+
+KonOpas.prototype.set_program = function(list) { this.program = new KonOpas.Prog(list); }
+KonOpas.prototype.set_people = function(list) { this.people = new KonOpas.Part(list, this); }
 
 KonOpas.prototype.storage_get = function(name) {
 	var v = sessionStorage.getItem('konopas.' + this.id + '.' + name);
@@ -53,12 +54,13 @@ KonOpas.prototype.storage_set = function(name, value) {
 }
 
 KonOpas.prototype.set_view = function() {
-	var view = window.location.hash.substr(1, 4);
+	var view = this.program && this.program.list.length ? window.location.hash.substr(1, 4) : 'info';
 	switch (view) {
+		case 'part': if (this.people) this.people.show();
+		             else { this.program.show(); view = 'prog'; } break;
 		case 'star': this.stars.show(); break;
-		case 'part': this.part.show();  break;
 		case 'info': this.info.show();  break;
-		default:     this.prog.show();  view = 'prog';
+		default:     this.program.show(); view = 'prog';
 	}
 	for (var i = 0; i < this.views.length; ++i) {
 		document.body.classList[view == this.views[i] ? 'add' : 'remove'](this.views[i]);
@@ -82,5 +84,7 @@ KonOpas.prototype.refresh_cache = function() {
 }
 
 var ko = new KonOpas(konopas_set);
+if (typeof program != 'undefined') ko.set_program(program);
+if (typeof people != 'undefined') ko.set_people(people);
 var server = ko.server;
 ko.set_view();

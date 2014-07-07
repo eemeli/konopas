@@ -1,4 +1,5 @@
-KonOpas.Prog = function() {
+KonOpas.Prog = function(list) {
+	this.list = list || [];
 	var pf = _el('prog_filters'),
 	    pl = pf.getElementsByClassName('popup-link'),
 	    sf = _el('search');
@@ -118,13 +119,13 @@ KonOpas.Prog.filter_change = function(ev) {
 	KonOpas.Prog.set_filters(filters);
 }
 
-KonOpas.Prog.now_list = function() {
+KonOpas.Prog.prototype.now_list = function() {
 	var ms_now = Date.now() - 60000 * (new Date()).getTimezoneOffset(), // - 168*24*60*60000,
 		ms_max = ms_now + 2 * 60 * 60000,
 	    now = [],
 		ms_last = 0, ms_next = 0;
-	for (var i = 0, l = program.length; i < l; ++i) {
-		var it = program[i],
+	for (var i = 0, l = this.list.length; i < l; ++i) {
+		var it = this.list[i],
 		    ms_start = Date.parse(it.date + 'T' + it.time + 'Z');
 		if (ms_start < ms_now) {
 			var ms_end = ms_start + 60000 * (it.mins || 0);
@@ -262,7 +263,7 @@ KonOpas.Prog.prototype.show = function() {
 		}
 		return true;
 	}
-	function _show_list(f) {
+	function _show_list(f, self) {
 		var area_str = f.area || '';
 		if (f.area && _el(f.area)) {
 			var t = _el(f.area).getAttribute("data-regexp");
@@ -281,8 +282,8 @@ KonOpas.Prog.prototype.show = function() {
 			break;
 		}
 		var ls = id_only
-			? program.filter(function(it){ return it.id == f.id; })
-			: ((f.day == 'now') ? KonOpas.Prog.now_list() : program).filter(_filter, f);
+			? self.list.filter(function(it){ return it.id == f.id; })
+			: ((f.day == 'now') ? self.now_list() : self.list).filter(_filter, f);
 		if (f.id) {
 			var id_ok = false;
 			for (var i = 0, l = ls.length; i < l; ++i) if (ls[i].id == f.id) {
@@ -334,5 +335,5 @@ KonOpas.Prog.prototype.show = function() {
 	for (var k in f) {
 		if (!k || !f[k] || (f[k] == 'all_' + k + 's')) { delete f[k]; continue; }
 	}
-	_show_list(f);
+	_show_list(f, this);
 }

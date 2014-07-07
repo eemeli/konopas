@@ -1,11 +1,11 @@
-KonOpas.Part = function(list, ko) {
+KonOpas.Part = function(list, opt) {
 	this.list = list || [];
 	for (var i = 0, p; p = this.list[i]; ++i) {
 		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
-		if (!ko.non_ascii_people) p.sortname = p.sortname.make_ascii();
+		if (!opt.non_ascii_people) p.sortname = p.sortname.make_ascii();
 	}
-	this.list.sort(ko.non_ascii_people
-		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
+	this.list.sort(opt.non_ascii_people
+		? function(a, b) { return a.sortname.localeCompare(b.sortname, opt.lc); }
 		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
 	_el("part_filters").onclick = this.filter_click.bind(this);
 }
@@ -57,7 +57,7 @@ KonOpas.Part.prototype.show_one = function(i) {
 		  '<h2 id="part_title">' + p_name + '</h2>'
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
-	KonOpas.Item.show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
+	KonOpas.Item.show_list(ko.program.list.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
 	_el("top").scrollIntoView();
 }
 

@@ -39,7 +39,7 @@ KonOpas.Item.show_extra = function(item, id) {
 
 	if (_el("e" + id)) return;
 	var html = "";
-	var a = program.filter(function(el) { return el.id == id; });
+	var a = ko.program.list.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = i18n.txt('item_not_found', {'ID':id});
 	else {
 		html = _tags(a[0]) + _people(a[0]);
@@ -176,7 +176,7 @@ KonOpas.Item.show_list = function(ls, show_id) {
 KonOpas.Item.list_click = function(ev) {
 	function _set_location_id(id) {
 		var f = KonOpas.Prog.get_filters(true);
-		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : ko.prog.default_day();
+		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : ko.program.default_day();
 		f['id'] = id;
 		return KonOpas.Prog.set_filters(f, true);
 	}
