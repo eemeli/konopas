@@ -1,14 +1,14 @@
 KonOpas.Prog = function() {
-	var pf = EL('prog_filters'),
+	var pf = _el('prog_filters'),
 	    pl = pf.getElementsByClassName('popup-link'),
-	    sf = EL('search');
+	    sf = _el('search');
 	pf.onclick = KonOpas.Prog.filter_change;
 	for (var i = 0; i < pl.length; ++i){
 		pl[i].setAttribute('data-title', pl[i].textContent);
 		pl[i].nextElementSibling.onclick = KonOpas.Prog.filter_change;
 	}
 	if (sf) {
-		sf.onsubmit = EL('q').onblur = KonOpas.Prog.filter_change;
+		sf.onsubmit = _el('q').onblur = KonOpas.Prog.filter_change;
 		sf.onreset = function() { KonOpas.Prog.set_filters({}); };
 	}
 }
@@ -35,7 +35,7 @@ KonOpas.Prog.hash = function(f0, fx) {
 				}
 			}
 		}
-		p.push(k + ':' + hash_encode(f[k]));
+		p.push(k + ':' + KonOpas.hash_encode(f[k]));
 	}
 	return p.length > 1 ? p.join('/') : '#';
 }
@@ -56,7 +56,7 @@ KonOpas.Prog.get_filters = function(hash_only) {
 						break;
 					}
 				}
-				filters[s[0]] = hash_decode(s[1]);
+				filters[s[0]] = KonOpas.hash_decode(s[1]);
 				h_set = true;
 			}
 		}
@@ -108,7 +108,7 @@ KonOpas.Prog.filter_change = function(ev) {
 			// fallthrough
 		case 'blur':
 			key = 'query';
-			value = EL("q").value;
+			value = _el("q").value;
 			break;
 		default: return;
 	}
@@ -136,21 +136,21 @@ KonOpas.Prog.now_list = function() {
 		}
 	}
 	if (now.length > 0) {
-		EL("next_start_note").textContent = '';
+		_el("next_start_note").textContent = '';
 	} else if (ms_next) {
 		var m_next = Math.floor((ms_next - ms_now) / 60000),
 		    h_next = Math.floor(m_next / 60),
 			d_next = Math.floor(h_next / 24);
 		if (h_next >= 1) m_next -= h_next * 60;
 		if (d_next >= 1) h_next -= d_next * 24;
-		EL("next_start_note").textContent = i18n.txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
+		_el("next_start_note").textContent = i18n.txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
 	} else {
 		var m_last = Math.floor((ms_now - ms_last) / 60000),
 		    h_last = Math.floor(m_last / 60),
 		    d_last = Math.floor(h_last / 24);
 		if (h_last >= 1) m_last -= h_last * 60;
 		if (d_last >= 1) h_last -= d_last * 24;
-		EL("next_start_note").textContent = i18n.txt('last_ended', { 'D':d_last, 'H':h_last, 'M':m_last });
+		_el("next_start_note").textContent = i18n.txt('last_ended', { 'D':d_last, 'H':h_last, 'M':m_last });
 	}
 	return now;
 }
@@ -161,7 +161,7 @@ KonOpas.Prog.now_list = function() {
 
 KonOpas.Prog.prototype.default_day = function() {
 	var day_start = '', day_end = '',
-	    el_dl = EL("day"),
+	    el_dl = _el("day"),
 	    dl = el_dl && el_dl.getElementsByTagName("li");
 	if (!dl || !dl.length) {
 		this.default_day = function(){ return ''; };
@@ -174,7 +174,9 @@ KonOpas.Prog.prototype.default_day = function() {
 		if (!day_end || (d > day_end)) day_end = d;
 	}
 	this.default_day = function() {
-		var day_now = string_date();
+		function pre0(n) { return (n < 10 ? '0' : '') + n; }
+		var t = new Date(),
+		    day_now = t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
 		return (day_now > day_start) && (day_now <= day_end) ? day_now : day_start;
 	}
 	return this.default_day();
@@ -184,7 +186,7 @@ KonOpas.Prog.prototype.default_day = function() {
 // hashchange -> read filters from url + store -> set filters in html + store -> list items
 KonOpas.Prog.prototype.show = function() {
 	function _show_filters(f) {
-		var prev = EL('prog_filters').getElementsByClassName('selected');
+		var prev = _el('prog_filters').getElementsByClassName('selected');
 		if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 			var cl = prev[i].classList;
 			if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
@@ -192,7 +194,7 @@ KonOpas.Prog.prototype.show = function() {
 		}
 		for (var k in f) {
 			if (k == 'query') {
-				var q = EL("q");
+				var q = _el("q");
 				if (q) {
 					q.value = f.query;
 					if (f.query) q.classList.add('selected');
@@ -201,7 +203,7 @@ KonOpas.Prog.prototype.show = function() {
 				var id = f[k];
 				if (!id) id = 'all_' + k + 's';
 				else if (id.match(/^[^a-zA-Z]/)) id = k[0] + id;
-				var el = EL(id);
+				var el = _el(id);
 				if (el) {
 					el.classList.add('selected');
 					if (el.parentNode.id.match(/\d+$/)) {
@@ -212,7 +214,7 @@ KonOpas.Prog.prototype.show = function() {
 				}
 			}
 		}
-		var qh = EL('q_hint');
+		var qh = _el('q_hint');
 		if (qh) {
 			if (f.query) {
 				if (/[?*"]/.test(f.query)) {
@@ -221,7 +223,7 @@ KonOpas.Prog.prototype.show = function() {
 					qh.style.cursor = 'auto';
 				} else {
 					qh.innerHTML = i18n.txt('search_hint') + ' ' + i18n.txt('search_example', {'X':f.query+'*'});
-					qh.onmouseup = function() { EL('q').value = f.query + '*'; EL('q').focus(); EL('q').blur(); };
+					qh.onmouseup = function() { _el('q').value = f.query + '*'; _el('q').focus(); _el('q').blur(); };
 					qh.style.cursor = 'pointer';
 				}
 				qh.style.display = 'block';
@@ -229,7 +231,7 @@ KonOpas.Prog.prototype.show = function() {
 				qh.style.display = 'none';
 			}
 		}
-		EL("next_start_note").textContent = '';
+		_el("next_start_note").textContent = '';
 	}
 	function _filter(it) {
 		if (this.day && (this.day != 'now')) {
@@ -262,17 +264,17 @@ KonOpas.Prog.prototype.show = function() {
 	}
 	function _show_list(f) {
 		var area_str = f.area || '';
-		if (f.area && EL(f.area)) {
-			var t = EL(f.area).getAttribute("data-regexp");
+		if (f.area && _el(f.area)) {
+			var t = _el(f.area).getAttribute("data-regexp");
 			if (t) f.area = new RegExp(t);
 		}
 		var tag_str = f.tag || '';
-		if (f.tag && EL(f.tag)) {
-			var t = EL(f.tag).getAttribute("data-regexp");
+		if (f.tag && _el(f.tag)) {
+			var t = _el(f.tag).getAttribute("data-regexp");
 			if (t) f.tag = new RegExp(t);
 		}
 		var query_str = f.query || '';
-		if (f.query) f.query = GlobToRE(f.query);
+		if (f.query) f.query = KonOpas.glob_to_re(f.query);
 		var id_only = !!f.id;
 		if (id_only) for (var i in f) if ((i != 'id') && f[i]) {
 			id_only = false;
@@ -295,7 +297,7 @@ KonOpas.Prog.prototype.show = function() {
 		if (f.area) f.area = area_str;
 		if (f.tag) f.tag = tag_str;
 		if (f.query) f.query = query_str;
-		var fs = EL('filter_sum');
+		var fs = _el('filter_sum');
 		if (fs) {
 			var f0 = {};
 			for (var k in f) f0[k] = f[k];
@@ -312,9 +314,9 @@ KonOpas.Prog.prototype.show = function() {
 				if (f.query) d['Q'] = _a(f.query, f0, {'query':''});
 				if (f.day) {
 					if (f.day == 'now') {
-						d['NOW'] = _a(pretty_time(new Date(), ko), f0, {'day':'all_days'});
+						d['NOW'] = _a(KonOpas.pretty_time(new Date(), ko), f0, {'day':'all_days'});
 					} else {
-						var day = parse_date(f.day);
+						var day = KonOpas.parse_date(f.day);
 						d['DAY'] = _a(i18n.txt('weekday_n', {'N': day ? day.getDay() : -1 }), f0, {'day':'all_days'});
 					}
 				}

@@ -1,10 +1,10 @@
 KonOpas.Item = function() {
-	EL('prog_ls').onclick = KonOpas.Item.list_click;
-	if (EL('scroll_link')) {
-		EL('scroll_link').onclick = function() { EL('top').scrollIntoView(); return false; };
+	_el('prog_ls').onclick = KonOpas.Item.list_click;
+	if (_el('scroll_link')) {
+		_el('scroll_link').onclick = function() { _el('top').scrollIntoView(); return false; };
 		if (window.navigator && navigator.userAgent.match(/Android [12]/)) {
-			EL('time').style.display = 'none';
-			EL('scroll').style.display = 'none';
+			_el('time').style.display = 'none';
+			_el('scroll').style.display = 'none';
 		} else {
 			this.prev_scroll = { "i": 0, "top": 0 };
 			window.onscroll = this.scroll_time.bind(this);
@@ -32,12 +32,12 @@ KonOpas.Item.show_extra = function(item, id) {
 		if (!it.people || !it.people.length) return '';
 		var a = it.people.map((typeof people == 'undefined') || !people.length
 			? function(p) { return p.name; }
-			: function(p) { return "<a href=\"#part/" + hash_encode(p.id) + "\">" + p.name + "</a>"; }
+			: function(p) { return "<a href=\"#part/" + KonOpas.hash_encode(p.id) + "\">" + p.name + "</a>"; }
 		);
 		return '<div class="item-people">' + a.join(', ') + '</div>\n';
 	}
 
-	if (EL("e" + id)) return;
+	if (_el("e" + id)) return;
 	var html = "";
 	var a = program.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = i18n.txt('item_not_found', {'ID':id});
@@ -61,7 +61,7 @@ KonOpas.Item.new = function(it) {
 		}
 		if (it.mins && (it.mins != ko.default_duration)) {
 			if (s) s += ', ';
-			s += pretty_time(it.time, ko) + ' - ' + pretty_time(time_sum(it.time, it.mins), ko);
+			s += KonOpas.pretty_time(it.time, ko) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), ko);
 		}
 		return s;
 	}
@@ -116,25 +116,25 @@ KonOpas.Item.show_list = function(ls, show_id) {
 			if (ls[i].date < prev_date) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_date = ls[i].date;
 			prev_time = "";
-			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date, ko)));
+			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, ko)));
 		}
 		if (ls[i].time != prev_time) {
 			if (ls[i].time < prev_time) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
-			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time, ko)))
-				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
+			frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(ls[i].time, ko)))
+				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? KonOpas.parse_date(ls[i].date).getDay() : -1 }));
 		}
 		frag.appendChild(KonOpas.Item.new(ls[i]));
 	}
 
-	var LS = EL('prog_ls');
+	var LS = _el('prog_ls');
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
 	LS.appendChild(frag);
 
 	if (ko.server) ko.server.decorate_list(LS);
 
-	var expand_all = EL("item_expander_link");
+	var expand_all = _el("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
 		var items = LS.getElementsByClassName("item");
 		var exp_txt = i18n.txt('Expand all');
@@ -159,7 +159,7 @@ KonOpas.Item.show_list = function(ls, show_id) {
 
 	var star_list = ko.stars.list();
 	for (var i = 0, l = star_list.length; i < l; ++i) {
-		var el = EL('s' + star_list[i]);
+		var el = _el('s' + star_list[i]);
 		if (el) el.classList.add("has_star");
 	}
 
@@ -202,9 +202,9 @@ KonOpas.Item.list_click = function(ev) {
 
 KonOpas.Item.prototype.scroll_time = function() {
 	var st = window.pageYOffset;
-	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
+	_el("scroll").style.display = (st > 0) ? 'block' : 'none';
 	st += 20; // to have more time for change behind new_time
-	var te = EL("time"); if (!te) return;
+	var te = _el("time"); if (!te) return;
 	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
 	if (st < tl[0].offsetTop) {
 		this.prev_scroll.i = 0;

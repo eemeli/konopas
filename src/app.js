@@ -32,8 +32,8 @@ function KonOpas(set) {
 	this.info = new KonOpas.Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
-	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
-	if (EL('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
+	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', KonOpas.popup_open);
+	if (_el('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
 }
 
 KonOpas.prototype.storage_get = function(name) {
@@ -63,7 +63,7 @@ KonOpas.prototype.set_view = function() {
 	for (var i = 0; i < this.views.length; ++i) {
 		document.body.classList[view == this.views[i] ? 'add' : 'remove'](this.views[i]);
 	}
-	if (EL('load_disable')) EL('load_disable').style.display = 'none';
+	if (_el('load_disable')) _el('load_disable').style.display = 'none';
 }
 
 KonOpas.prototype.refresh_cache = function() {
@@ -72,8 +72,8 @@ KonOpas.prototype.refresh_cache = function() {
 	if (!t_interval || (t_interval < 0)) return;
 	cache.addEventListener('updateready', function() {
 		if (cache.status == cache.UPDATEREADY) {
-			EL('refresh').classList.add('enabled');
-			EL('refresh').onclick = function() { window.location.reload(); };
+			_el('refresh').classList.add('enabled');
+			_el('refresh').onclick = function() { window.location.reload(); };
 		}
 	}, false);
 	if (cache.status != cache.UNCACHED) {

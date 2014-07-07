@@ -122,7 +122,7 @@ KonOpas.Server.prototype.show_my_vote = function(id, v_el, v) {
 				case  1:  a.classList.add('voted');     a.classList.remove('v2');  a.title = 'good';            break;
 				default:  a.classList.remove('voted');  a.classList.remove('v2');  a.title = 'good';
 			}
-		} else _set_class(a, 'voted', (v < 0)); // v_neg
+		} else a.classList[(v < 0) ? 'add' : 'remove']('voted'); // v_neg
 	}
 }
 
@@ -178,23 +178,15 @@ KonOpas.Server.prototype.vote_click = function(ev) {
 }
 
 KonOpas.Server.prototype.show_pub_votes = function(id, v_el) {
-	v_el = v_el || document.getElementById('v' + id);
-	if (!v_el) return;
-
+	v_el = v_el || document.getElementById('v' + id); if (!v_el) return;
 	var v = this.pub_data && this.pub_data[id];
-	if (!v) {
-		v_el.classList.remove("has_votes");
-		return;
-	}
-
-	_set_class(v_el, 'has_votes', (v[0] || v[1] || v[2]));
-
+	if (!v) { v_el.classList.remove("has_votes"); return; }
+	v_el.classList[(v[0] || v[1] || v[2]) ? 'add' : 'remove']('has_votes');
 	for (var e = v_el.firstElementChild; e != null; e = e.nextElementSibling) {
 		e.textContent = e.classList.contains('v_pos')
 			? '+' + (v[1] + 2 * v[2])
 			: '-' + v[0]; // v_neg
 	}
-
 	var c = v_el.nextSibling;
 	if (!c || !c.classList.contains('num-comments')) {
 		if (v[3]) {
@@ -260,7 +252,7 @@ KonOpas.Server.prototype.make_comment_div = function(c) {
 	d.appendChild(n);
 
 	var dt = new Date(1000 * c.ctime);
-	var t = _new_elem('span', 'comment-time', pretty_date(dt, ko) + ' at ' + pretty_time(dt, ko));
+	var t = _new_elem('span', 'comment-time', KonOpas.pretty_date(dt, ko) + ' at ' + KonOpas.pretty_time(dt, ko));
 	t.title = dt.toString();
 	d.appendChild(t);
 
@@ -558,7 +550,7 @@ KonOpas.Server.prototype.cb_login = function(v) {
 		+ '<div class="popup" id="login-popup">' + i18n.txt('login_why')
 		+ "\n<ul>\n<li>" + links.join("\n<li>")
 		+ "\n</ul></div></div>";
-	EL('login-popup-link').onclick = popup_open;
+	_el('login-popup-link').onclick = KonOpas.popup_open;
 }
 
 KonOpas.Server.prototype.cb_my_prog = function(v) {

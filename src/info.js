@@ -1,5 +1,5 @@
 KonOpas.Info = function() {
-	this.lu = EL('last-updated');
+	this.lu = _el('last-updated');
 	this.lu_time = 0;
 	var self = this, cache_manifest = document.body.parentNode.getAttribute('manifest');
 	if (this.lu && cache_manifest && (location.protocol == 'http:')) {
@@ -16,7 +16,7 @@ KonOpas.Info = function() {
 KonOpas.Info.prototype.show_updated = function() {
 	if (!this.lu || !this.lu_time) return;
 	var span = this.lu.getElementsByTagName('span')[0];
-	span.textContent = pretty_time_diff(this.lu_time);
+	span.textContent = KonOpas.pretty_time_diff(this.lu_time);
 	span.title = this.lu_time.toLocaleString();
 	span.onclick = function(ev) {
 		var self = (ev || window.event).target;
@@ -28,7 +28,7 @@ KonOpas.Info.prototype.show_updated = function() {
 }
 
 KonOpas.Info.prototype.show = function() {
-	EL("prog_ls").innerHTML = "";
+	_el("prog_ls").innerHTML = "";
 	this.show_updated();
 }
 

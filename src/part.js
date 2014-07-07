@@ -7,7 +7,7 @@ KonOpas.Part = function(list, ko) {
 	this.list.sort(ko.non_ascii_people
 		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
 		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
-	EL("part_filters").onclick = this.filter_click.bind(this);
+	_el("part_filters").onclick = this.filter_click.bind(this);
 }
 
 KonOpas.Part.name_in_range = function(n0, range) {
@@ -22,10 +22,10 @@ KonOpas.Part.name_in_range = function(n0, range) {
 
 KonOpas.Part.prototype.show_one = function(i) {
 	var p = this.list[i],
-	    p_name = clean_name(p, false),
+	    p_name = KonOpas.clean_name(p, false),
 	    links = '',
 	    img = '',
-	    pl = clean_links(p);
+	    pl = KonOpas.clean_links(p);
 	if (pl) {
 		links += '<dl class="linklist">';
 		for (var type in pl) {
@@ -52,13 +52,13 @@ KonOpas.Part.prototype.show_one = function(i) {
 		}
 		links += '</dl>';
 	}
-	EL("part_names").innerHTML = '';
-	EL("part_info").innerHTML =
+	_el("part_names").innerHTML = '';
+	_el("part_info").innerHTML =
 		  '<h2 id="part_title">' + p_name + '</h2>'
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
 	KonOpas.Item.show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
-	EL("top").scrollIntoView();
+	_el("top").scrollIntoView();
 }
 
 KonOpas.Part.prototype.show_list = function(name_range) {
@@ -66,21 +66,22 @@ KonOpas.Part.prototype.show_list = function(name_range) {
 		var n0 = p.sortname[0].toUpperCase();
 		return KonOpas.Part.name_in_range(n0, name_range);
 	});
-	EL('part_names').innerHTML = lp.map(function(p) {
-		return '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>';
+	_el('part_names').innerHTML = lp.map(function(p) {
+		return '<li><a href="#part/' + KonOpas.hash_encode(p.id) + '">' + KonOpas.clean_name(p, true) + '</a></li>';
 	}).join('');
-	EL('part_info').innerHTML = '';
-	EL('prog_ls').innerHTML = '';
+	_el('part_info').innerHTML = '';
+	_el('prog_ls').innerHTML = '';
 }
 
 KonOpas.Part.prototype.update_view = function(name_range, participant) {
-	var el_nr = EL('name_range'),
+	var el_nr = _el('name_range'),
 	    p_id = participant.substr(1),
-	    i, l, ll;
+	    i, l, ll, cmd;
 	if (el_nr) {
 		ll = el_nr.getElementsByTagName('li');
 		for (i = 0, l = ll.length; i < l; ++i) {
-			_set_class(ll[i], 'selected', (ll[i].getAttribute('data-range') == name_range));
+			cmd = (ll[i].getAttribute('data-range') == name_range)? 'add' : 'remove';
+			ll[i].classList[cmd]('selected');
 		}
 	}
 	if (p_id) for (i = 0, l = this.list.length; i < l; ++i) {
@@ -96,7 +97,7 @@ KonOpas.Part.prototype.update_view = function(name_range, participant) {
 KonOpas.Part.prototype.show = function(hash) {
 	function _name_range(name) {
 		var n0 = name[0].toUpperCase(); if (!n0) return '';
-		var par = EL('name_range'); if (!par) return '';
+		var par = _el('name_range'); if (!par) return '';
 		var ll = par.getElementsByTagName('li');
 		for (var i = 0, l = ll.length; i < l; ++i) {
 			var range = ll[i].getAttribute('data-range');
@@ -111,7 +112,7 @@ KonOpas.Part.prototype.show = function(hash) {
 	    participant = !document.body.classList.contains('part') && store.participant || '',
 		hash = window.location.hash.substr(6);
 	if (hash) {
-		var p_id = hash_decode(hash);
+		var p_id = KonOpas.hash_decode(hash);
 		var pa = this.list.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;
@@ -125,7 +126,7 @@ KonOpas.Part.prototype.show = function(hash) {
 		return;
 	}
 	if (!name_range) {
-		var el_nr = EL('name_range');
+		var el_nr = _el('name_range');
 		if (el_nr) name_range = el_nr.getElementsByTagName('li')[0].getAttribute('data-range');
 	}
 	this.update_view(name_range, participant);
