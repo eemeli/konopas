@@ -1,22 +1,20 @@
-function Part(list, opt) {
+function Part(list, ko) {
 	this.list = list || [];
-	this.opt = opt || {};
 	for (var i = 0, p; p = this.list[i]; ++i) {
 		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
-		if (!this.opt.non_ascii_people) p.sortname = p.sortname.make_ascii();
+		if (!ko.non_ascii_people) p.sortname = p.sortname.make_ascii();
 	}
-	this.list.sort(this.opt.non_ascii_people
-		? function(a, b) { return a.sortname.localeCompare(b.sortname, this.opt.lc); }
+	this.list.sort(ko.non_ascii_people
+		? function(a, b) { return a.sortname.localeCompare(b.sortname, ko.lc); }
 		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
-	var self = this;
-	EL("part_filters").onclick = function(ev) { Part.filter_click(ev, self); };
+	EL("part_filters").onclick = this.filter_click.bind(this);
 }
 
-Part.prototype.name_in_range = function(n0, range) {
+Part.name_in_range = function(n0, range) {
 	switch (range.length) {
 		case 1:  return (n0 == range[0]);
-		case 2:  return this.opt.non_ascii_people
-			? (n0.localeCompare(range[0], this.opt.lc) >= 0) && (n0.localeCompare(range[1], this.opt.lc) <= 0)
+		case 2:  return ko.non_ascii_people
+			? (n0.localeCompare(range[0], ko.lc) >= 0) && (n0.localeCompare(range[1], ko.lc) <= 0)
 			: ((n0 >= range[0]) && (n0 <= range[1]));
 		default: return (range.indexOf(n0) >= 0);
 	}
@@ -64,9 +62,9 @@ Part.prototype.show_one = function(i) {
 }
 
 Part.prototype.show_list = function(name_range) {
-	var self = this, lp = !name_range ? this.list : this.list.filter(function(p) {
+	var lp = !name_range ? this.list : this.list.filter(function(p) {
 		var n0 = p.sortname[0].toUpperCase();
-		return self.name_in_range(n0, name_range);
+		return Part.name_in_range(n0, name_range);
 	});
 	EL('part_names').innerHTML = lp.map(function(p) {
 		return '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>';
@@ -96,14 +94,13 @@ Part.prototype.update_view = function(name_range, participant) {
 }
 
 Part.prototype.show = function(hash) {
-	var self = this;
 	function _name_range(name) {
 		var n0 = name[0].toUpperCase(); if (!n0) return '';
 		var par = EL('name_range'); if (!par) return '';
 		var ll = par.getElementsByTagName('li');
 		for (var i = 0, l = ll.length; i < l; ++i) {
 			var range = ll[i].getAttribute('data-range');
-			if (range && self.name_in_range(n0, range)) return range;
+			if (range && Part.name_in_range(n0, range)) return range;
 		}
 		return '';
 	}
@@ -135,12 +132,12 @@ Part.prototype.show = function(hash) {
 }
 
 
-Part.filter_click = function(ev, self) {
+Part.prototype.filter_click = function(ev) {
 	var el = (ev || window.event).target;
 	if (el.parentNode.id == 'name_range') {
 		var name_range = el.getAttribute("data-range") || '';
 		ko.storage_set('part', { 'name_range': name_range, 'participant': '' });
 		window.location.hash = '#part';
-		self.update_view(name_range, '');
+		this.update_view(name_range, '');
 	}
 }

@@ -26,7 +26,7 @@ function Server(id, stars, opt) {
 	else _log("server init failed", 'warn');
 
 	var m = /#server_error=(.+)/.exec(window.location.hash);
-	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href, this);
+	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href);
 }
 
 Server.prototype.disconnect = function() {
@@ -41,37 +41,37 @@ Server.prototype.logout = function(ev) {
 	(ev || window.event).preventDefault();
 }
 
-Server.prototype.error = function(msg, url, self) {
+Server.prototype.error = function(msg, url) {
 	_log('server error ' + msg + ', url: ' + url, 'error');
-	self = self || this;
 	if (msg =='') {
-		var cmd = url.replace(self.host, '').replace('/' + self.id + '/', '');
+		var cmd = url.replace(this.host, '').replace('/' + this.id + '/', '');
 		msg = i18n.txt('server_cmd_fail', {'CMD':'<code>'+cmd+'</code>'});
 	}
-	if (!self.err_el) {
+	if (!this.err_el) {
 		var el = document.createElement('div');
-		el.id = self.err_el_id;
+		el.id = this.err_el_id;
 		el.title = i18n.txt('Click to close');
-		el.onclick = function(ev) { self.err_el.style.display = 'none'; };
+		el.onclick = function(ev) { this.err_el.style.display = 'none'; }.bind(this);
 		document.body.appendChild(el);
-		self.err_el = el;
+		this.err_el = el;
 	}
-	self.err_el.innerHTML = '<div>' + i18n.txt('Server error') + ': <b>' + msg + '</b></div>';
-	self.err_el.style.display = 'block';
+	this.err_el.innerHTML = '<div>' + i18n.txt('Server error') + ': <b>' + msg + '</b></div>';
+	this.err_el.style.display = 'block';
 	return true;
 }
 
-Server.prototype.onmessage = function(ev, self) {
+Server.prototype.onmessage = function(ev) {
 	ev = ev || window.event;
-	if (ev.origin != self.host) {
+	if (ev.origin != this.host) {
 		_log('Got an unexpected message from ' + ev.origin, 'error');
 		_log(ev);
 		return;
 	}
+	var self = this;
 	JSON.parse(ev.data, function(k, v) {
 		switch (k) {
-			case 'ok':    self.cb_ok(v, self);      break;
-			case 'fail':  self.error('', v, self);  break;
+			case 'ok':    self.cb_ok(v);      break;
+			case 'fail':  self.error('', v);  break;
 		}
 	});
 }
@@ -126,37 +126,33 @@ Server.prototype.show_my_vote = function(id, v_el, v) {
 	}
 }
 
-Server.prototype.vote = function(id, v, self) {
-	self = self || this;
-	if (!self.connected) return false;
-
-	if (self.pub_data) {
-		var v0 = self.my_votes_data[id];
-		if (v0) --self.pub_data[id][(v0 < 0) ? 0 : v0];
+Server.prototype.vote = function(id, v) {
+	if (!this.connected) return false;
+	if (this.pub_data) {
+		var v0 = this.my_votes_data[id];
+		if (v0) --this.pub_data[id][(v0 < 0) ? 0 : v0];
 	}
-	switch (self.my_votes_data[id]) {
+	switch (this.my_votes_data[id]) {
 		case -1: if (v < 0) v = 0; break;
 		case  1: if (v > 0) v = 2; break;
 		case  2: if (v > 0) v = 0; break;
 	}
 	_log('server vote ' + id + ' ' + v);
-
-	self.my_votes_data[id] = v;
-	if (v && self.pub_data) {
-		if (!(id in self.pub_data)) self.pub_data[id] = [0, 0, 0, 0];
-		++self.pub_data[id][(v < 0) ? 0 : v];
+	this.my_votes_data[id] = v;
+	if (v && this.pub_data) {
+		if (!(id in this.pub_data)) this.pub_data[id] = [0, 0, 0, 0];
+		++this.pub_data[id][(v < 0) ? 0 : v];
 	}
-	self.show_pub_votes(id);
-	self.show_my_vote(id, null, v);
-	if (self.vote_timers[id]) window.clearTimeout(self.vote_timers[id]);
-	self.vote_timers[id] = window.setTimeout(function() {
-		self.exec('vote?v=' + v + '&id=' + id + '&t=' + self.my_votes_mtime);
-	}, 1000);
-
+	this.show_pub_votes(id);
+	this.show_my_vote(id, null, v);
+	if (this.vote_timers[id]) window.clearTimeout(this.vote_timers[id]);
+	this.vote_timers[id] = window.setTimeout(function() {
+		this.exec('vote?v=' + v + '&id=' + id + '&t=' + this.my_votes_mtime);
+	}.bind(this), 1000);
 	return true;
 }
 
-Server.prototype.vote_click = function(ev, self) {
+Server.prototype.vote_click = function(ev) {
 	ev = ev || window.event;
 
 	var bubble = false;
@@ -168,7 +164,7 @@ Server.prototype.vote_click = function(ev, self) {
 	if (v) {
 		var p = ev.target.parentNode;
 		if (p.parentNode.parentNode.classList.contains('expanded')) {
-			bubble = !self.vote(p.id.substr(1), v, self);
+			bubble = !this.vote(p.id.substr(1), v);
 		} else {
 			bubble = true;
 		}
@@ -222,7 +218,7 @@ Server.prototype.decorate_list = function(ls) {
 
 // ------------------------------------------------------------------------------------------------ comment
 
-Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) {
+Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el) {
 	ev = ev || window.event;
 	ev.cancelBubble = true;
 	ev.preventDefault();
@@ -230,7 +226,7 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 
 	var ac = ev.target;
 	if (ac.textContent.substr(0, 4) == i18n.txt('Hide comments').substr(0, 4)) {
-		var p = self.pub_data && self.pub_data[id];
+		var p = this.pub_data && this.pub_data[id];
 		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
 		ac.textContent = i18n.txt('show_comments', {'N':n_comments});
 		ac.style.display = n_comments ? 'block' : 'none';
@@ -239,13 +235,13 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el, self) 
 		f_el.style.display = 'none';
 	} else {
 		c_el.style.display = 'block';
-		if ((f_el.style.display == 'none') && self.connected) af.style.display = 'block';
-		self.show_comments(id, self);
+		if ((f_el.style.display == 'none') && this.connected) af.style.display = 'block';
+		this.show_comments(id);
 	}
 }
 
 
-Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
+Server.prototype.onclick_show_comment_form = function(ev, id, f_el) {
 	ev = ev || window.event;
 	ev.cancelBubble = true;
 	ev.preventDefault();
@@ -253,7 +249,7 @@ Server.prototype.onclick_show_comment_form = function(ev, id, f_el, self) {
 
 	var af = ev.target;
 	af.style.display = 'none';
-	self.show_comment_form(id, af, f_el, self);
+	this.show_comment_form(id, af, f_el);
 }
 
 
@@ -274,36 +270,30 @@ Server.prototype.make_comment_div = function(c) {
 	return d;
 }
 
-Server.prototype.show_comments = function(id, self) {
-	self = self || this;
-	var c_el = document.getElementById('c' + id);
-	if (!c_el) return;
-
-	var ac = c_el.previousSibling;
-	if (ac && (ac.tagName.toLowerCase() != 'a')) ac = false;
-
+Server.prototype.show_comments = function(id) {
+	var c_el = document.getElementById('c' + id); if (!c_el) return;
 	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
-
-	var c = self.pub_comments[id];
-
+	var ac = c_el.previousSibling,
+	    c = this.pub_comments[id];
+	if (ac && (ac.tagName.toLowerCase() != 'a')) ac = false;
 	if (typeof c == 'undefined') {
 		if (ac) {
 			ac.classList.remove('js-link');
 			ac.textContent = i18n.txt('Loading comments…');
 		}
-		self.exec('comments?id=' + id);
+		this.exec('comments?id=' + id);
 		return;
 	}
 
 	var n_comments = 0;
 	if (c) for (var i in c) {
 		++n_comments;
-		c_el.appendChild(self.make_comment_div(c[i]));
+		c_el.appendChild(this.make_comment_div(c[i]));
 	}
 
-	if (self.pub_data) {
-		if (self.pub_data[id]) self.pub_data[id][3] = n_comments;
-		else self.pub_data[id] = [0, 0, 0, n_comments];
+	if (this.pub_data) {
+		if (this.pub_data[id]) this.pub_data[id][3] = n_comments;
+		else this.pub_data[id] = [0, 0, 0, n_comments];
 	}
 
 	if (ac) {
@@ -322,8 +312,8 @@ Server.prototype.show_comments = function(id, self) {
 }
 
 
-Server.prototype.show_comment_form = function(id, af, f_el, self) {
-	if (!self.connected) return;
+Server.prototype.show_comment_form = function(id, af, f_el) {
+	if (!this.connected) return;
 	if (f_el.classList.contains('empty')) {
 		if (!document.getElementById('post_comment_iframe')) {
 			var fi = document.createElement('iframe');
@@ -331,13 +321,13 @@ Server.prototype.show_comment_form = function(id, af, f_el, self) {
 			fi.src = 'javascript:false';
 			fi.style.display = 'none';
 			document.body.appendChild(fi);
-			window.onmessage = function(ev) { self.onmessage(ev, self); };
+			window.onmessage = this.onmessage.bind(this);
 		}
 		f_el.method = 'post';
-		f_el.action = self.url('add_comment?id=' + encodeURIComponent(id));
+		f_el.action = this.url('add_comment?id=' + encodeURIComponent(id));
 		f_el.target = 'post_comment_iframe';
 		f_el.innerHTML =
-			  '<textarea name="text" rows="4" placeholder="' + i18n.txt('post_author', {'N':self.connected[0]}) + '"></textarea>'
+			  '<textarea name="text" rows="4" placeholder="' + i18n.txt('post_author', {'N':this.connected[0]}) + '"></textarea>'
 			+ '<input type="submit" name="submit">'
 			+ '<input type="reset" value="' + i18n.txt('Cancel') + '">'
 			+ '<label><input type="checkbox" name="anon"> ' + i18n.txt('Post anonymously') + '</label>'
@@ -392,10 +382,8 @@ Server.prototype.make_comments_wrap = function(id) {
 	f_el.style.display = 'none';
 	d.appendChild(f_el);
 
-	var self = this;
-	ac.onclick = function(ev) { self.onclick_show_comments(ev, id, c_el, af, f_el, self); };
-	af.onclick = function(ev) { self.onclick_show_comment_form(ev, id, f_el, self); };
-
+	ac.onclick = function(ev) { this.onclick_show_comments(ev, id, c_el, af, f_el); }.bind(this);
+	af.onclick = function(ev) { this.onclick_show_comment_form(ev, id, f_el); }.bind(this);
 	return d;
 }
 
@@ -404,15 +392,11 @@ Server.prototype.make_comments_wrap = function(id) {
 
 Server.prototype.show_extras = function(id, p_el) {
 	if (!this.pub_data) return;
-	var self = this;
-
 	if (!document.getElementById('c' + id)) {
-		p_el.appendChild(self.make_comments_wrap(id));
+		p_el.appendChild(this.make_comments_wrap(id));
 	}
-
-	var v_id = 'v' + id;
-	var v_el = document.getElementById(v_id);
-	if (v_el) v_el.onclick = function(ev) { self.vote_click(ev, self); };
+	var v_el = document.getElementById('v' + id);
+	if (v_el) v_el.onclick = this.vote_click.bind(this);
 	this.show_my_vote(id, v_el);
 }
 
@@ -439,8 +423,7 @@ Server.prototype.show_ical_link = function(p_el) {
 	}
 	var a = document.getElementById('ical_link');
 	if (a) {
-		var self = this;
-		a.onclick = function() { self.exec('ical_link'); };
+		a.onclick = function() { this.exec('ical_link'); }.bind(this);
 	}
 }
 
@@ -462,11 +445,10 @@ Server.prototype.exec = function(cmd) {
 
 	var script = document.createElement('script'),
 		done = false,
-		url = this.url(cmd),
-		self = this;
+		url = this.url(cmd);
 	script.src = url;
 	script.async = true;
-	script.onerror = function(ev) { self.error('', (ev || window.event).target.src, self); };
+	script.onerror = function(ev) { this.error('', (ev || window.event).target.src); }.bind(this);
 
 	script.onload = script.onreadystatechange = function() {
 		if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
@@ -485,45 +467,44 @@ Server.prototype.exec = function(cmd) {
 // ------------------------------------------------------------------------------------------------ cb ok/fail
 
 // callback for successful logout, prog, vote
-Server.prototype.cb_ok = function(v, self) {
-	self = self || this;
+Server.prototype.cb_ok = function(v) {
 	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?(.*))?/.exec(v);
 	var cmd = m[2] || '';
 	var query = m[3] || '';
 	switch (cmd) {
 		case 'logout':
-			self.disconnect();
-			self.token = false;
+			this.disconnect();
+			this.token = false;
 			localStorage.removeItem('konopas.token');
-			self.prog_data = {};
-			self.prog_server_mtime = 0;
-			self.my_votes_data = {};
-			self.my_votes_mtime = 0;
-			if (self.stars) {
-				self.stars.data = {};
-				self.stars.write();
+			this.prog_data = {};
+			this.prog_server_mtime = 0;
+			this.my_votes_data = {};
+			this.my_votes_mtime = 0;
+			if (this.stars) {
+				this.stars.data = {};
+				this.stars.write();
 				ko.init_view();
 			}
-			self.exec('info');
+			this.exec('info');
 			_log("server ok (logout): " + JSON.stringify(v));
 			break;
 
 		case 'prog':
 			var t = /&server_mtime=(\d+)/.exec(query);
-			if (t) self.prog_server_mtime = parseInt(t[1], 10);
+			if (t) this.prog_server_mtime = parseInt(t[1], 10);
 			_log("server ok (prog): " + JSON.stringify(v));
 			break;
 
 		case 'vote':
 			var t = /&server_mtime=(\d+)/.exec(query);
-			if (t) self.my_votes_mtime = parseInt(t[1], 10);
+			if (t) this.my_votes_mtime = parseInt(t[1], 10);
 			_log("server ok (vote): " + JSON.stringify(v));
 			break;
 
 		case 'add_comment':
 			var id = /\bid=([^&]+)/.exec(query);
 			if (id) {
-				self.exec('comments?id=' + id[1]);
+				this.exec('comments?id=' + id[1]);
 				var f_el = document.getElementById('f' + id[1]);
 				if (f_el) f_el.reset();
 			}
@@ -537,7 +518,7 @@ Server.prototype.cb_ok = function(v, self) {
 
 // callback for reporting server errors
 Server.prototype.cb_fail = function(v) {
-	this.error(v.msg, v.url, this);
+	this.error(v.msg, v.url);
 }
 
 
@@ -610,7 +591,7 @@ Server.prototype.cb_show_comments = function(id, c) {
 	_log("server show_comments (" + id + "): " + JSON.stringify(c));
 	c.sort(function(a, b) { return a.ctime - b.ctime; });
 	this.pub_comments[id] = c;
-	this.show_comments(id, this);
+	this.show_comments(id);
 }
 
 Server.prototype.cb_ical_link = function(url) {
