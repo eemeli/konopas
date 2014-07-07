@@ -1,4 +1,4 @@
-function Part(list, ko) {
+KonOpas.Part = function(list, ko) {
 	this.list = list || [];
 	for (var i = 0, p; p = this.list[i]; ++i) {
 		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
@@ -10,7 +10,7 @@ function Part(list, ko) {
 	EL("part_filters").onclick = this.filter_click.bind(this);
 }
 
-Part.name_in_range = function(n0, range) {
+KonOpas.Part.name_in_range = function(n0, range) {
 	switch (range.length) {
 		case 1:  return (n0 == range[0]);
 		case 2:  return ko.non_ascii_people
@@ -20,7 +20,7 @@ Part.name_in_range = function(n0, range) {
 	}
 }
 
-Part.prototype.show_one = function(i) {
+KonOpas.Part.prototype.show_one = function(i) {
 	var p = this.list[i],
 	    p_name = clean_name(p, false),
 	    links = '',
@@ -57,14 +57,14 @@ Part.prototype.show_one = function(i) {
 		  '<h2 id="part_title">' + p_name + '</h2>'
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
-	Item.show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
+	KonOpas.Item.show_list(program.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
 	EL("top").scrollIntoView();
 }
 
-Part.prototype.show_list = function(name_range) {
+KonOpas.Part.prototype.show_list = function(name_range) {
 	var lp = !name_range ? this.list : this.list.filter(function(p) {
 		var n0 = p.sortname[0].toUpperCase();
-		return Part.name_in_range(n0, name_range);
+		return KonOpas.Part.name_in_range(n0, name_range);
 	});
 	EL('part_names').innerHTML = lp.map(function(p) {
 		return '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>';
@@ -73,7 +73,7 @@ Part.prototype.show_list = function(name_range) {
 	EL('prog_ls').innerHTML = '';
 }
 
-Part.prototype.update_view = function(name_range, participant) {
+KonOpas.Part.prototype.update_view = function(name_range, participant) {
 	var el_nr = EL('name_range'),
 	    p_id = participant.substr(1),
 	    i, l, ll;
@@ -93,14 +93,14 @@ Part.prototype.update_view = function(name_range, participant) {
 	ko.storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
-Part.prototype.show = function(hash) {
+KonOpas.Part.prototype.show = function(hash) {
 	function _name_range(name) {
 		var n0 = name[0].toUpperCase(); if (!n0) return '';
 		var par = EL('name_range'); if (!par) return '';
 		var ll = par.getElementsByTagName('li');
 		for (var i = 0, l = ll.length; i < l; ++i) {
 			var range = ll[i].getAttribute('data-range');
-			if (range && Part.name_in_range(n0, range)) return range;
+			if (range && KonOpas.Part.name_in_range(n0, range)) return range;
 		}
 		return '';
 	}
@@ -132,7 +132,7 @@ Part.prototype.show = function(hash) {
 }
 
 
-Part.prototype.filter_click = function(ev) {
+KonOpas.Part.prototype.filter_click = function(ev) {
 	var el = (ev || window.event).target;
 	if (el.parentNode.id == 'name_range') {
 		var name_range = el.getAttribute("data-range") || '';

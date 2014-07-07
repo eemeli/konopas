@@ -1,4 +1,4 @@
-function Info() {
+KonOpas.Info = function() {
 	this.lu = EL('last-updated');
 	this.lu_time = 0;
 	var self = this, cache_manifest = document.body.parentNode.getAttribute('manifest');
@@ -13,7 +13,7 @@ function Info() {
 	}
 }
 
-Info.prototype.show_updated = function() {
+KonOpas.Info.prototype.show_updated = function() {
 	if (!this.lu || !this.lu_time) return;
 	var span = this.lu.getElementsByTagName('span')[0];
 	span.textContent = pretty_time_diff(this.lu_time);
@@ -27,7 +27,7 @@ Info.prototype.show_updated = function() {
 	this.lu.style.display = 'inline';
 }
 
-Info.prototype.show = function() {
+KonOpas.Info.prototype.show = function() {
 	EL("prog_ls").innerHTML = "";
 	this.show_updated();
 }

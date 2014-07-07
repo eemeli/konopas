@@ -1,4 +1,4 @@
-function Server(id, stars, opt) {
+KonOpas.Server = function(id, stars, opt) {
 	this.id = id;
 	this.stars = stars;
 
@@ -29,19 +29,19 @@ function Server(id, stars, opt) {
 	if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href);
 }
 
-Server.prototype.disconnect = function() {
+KonOpas.Server.prototype.disconnect = function() {
 	this.connected = false;
 	if (this.el) this.el.innerHTML = '<div id="server_info">' + i18n.txt('Not connected') + '</div>';
 	document.body.classList.remove('logged-in');
 }
 
-Server.prototype.logout = function(ev) {
+KonOpas.Server.prototype.logout = function(ev) {
 	_log('server logout');
 	this.exec('/logout');
 	(ev || window.event).preventDefault();
 }
 
-Server.prototype.error = function(msg, url) {
+KonOpas.Server.prototype.error = function(msg, url) {
 	_log('server error ' + msg + ', url: ' + url, 'error');
 	if (msg =='') {
 		var cmd = url.replace(this.host, '').replace('/' + this.id + '/', '');
@@ -60,7 +60,7 @@ Server.prototype.error = function(msg, url) {
 	return true;
 }
 
-Server.prototype.onmessage = function(ev) {
+KonOpas.Server.prototype.onmessage = function(ev) {
 	ev = ev || window.event;
 	if (ev.origin != this.host) {
 		_log('Got an unexpected message from ' + ev.origin, 'error');
@@ -80,7 +80,7 @@ Server.prototype.onmessage = function(ev) {
 
 // ------------------------------------------------------------------------------------------------ prog
 
-Server.prototype.prog_mtime = function() {
+KonOpas.Server.prototype.prog_mtime = function() {
 	var mtime = this.prog_server_mtime;
 	for (var id in this.prog_data) {
 		if (this.prog_data[id][1] > mtime) mtime = this.prog_data[id][1];
@@ -88,7 +88,7 @@ Server.prototype.prog_mtime = function() {
 	return mtime;
 }
 
-Server.prototype.add_prog = function(id, add_star) {
+KonOpas.Server.prototype.add_prog = function(id, add_star) {
 	if (id instanceof Array) id = id.join(',');
 	_log('server add_prog "' + id + '" ' + (add_star ? '1' : '0'));
 	var t = this.prog_mtime();
@@ -97,7 +97,7 @@ Server.prototype.add_prog = function(id, add_star) {
 		+ (t ? '&t=' + t : ''));
 }
 
-Server.prototype.set_prog = function(star_list) {
+KonOpas.Server.prototype.set_prog = function(star_list) {
 	_log('server set_prog "' + star_list);
 	var t = this.prog_mtime();
 	this.exec('prog'
@@ -109,7 +109,7 @@ Server.prototype.set_prog = function(star_list) {
 
 // ------------------------------------------------------------------------------------------------ vote
 
-Server.prototype.show_my_vote = function(id, v_el, v) {
+KonOpas.Server.prototype.show_my_vote = function(id, v_el, v) {
 	v_el = v_el || document.getElementById('v' + id);
 	if (!v_el) return;
 
@@ -126,7 +126,7 @@ Server.prototype.show_my_vote = function(id, v_el, v) {
 	}
 }
 
-Server.prototype.vote = function(id, v) {
+KonOpas.Server.prototype.vote = function(id, v) {
 	if (!this.connected) return false;
 	if (this.pub_data) {
 		var v0 = this.my_votes_data[id];
@@ -152,7 +152,7 @@ Server.prototype.vote = function(id, v) {
 	return true;
 }
 
-Server.prototype.vote_click = function(ev) {
+KonOpas.Server.prototype.vote_click = function(ev) {
 	ev = ev || window.event;
 
 	var bubble = false;
@@ -177,7 +177,7 @@ Server.prototype.vote_click = function(ev) {
 	}
 }
 
-Server.prototype.show_pub_votes = function(id, v_el) {
+KonOpas.Server.prototype.show_pub_votes = function(id, v_el) {
 	v_el = v_el || document.getElementById('v' + id);
 	if (!v_el) return;
 
@@ -206,7 +206,7 @@ Server.prototype.show_pub_votes = function(id, v_el) {
 	}
 }
 
-Server.prototype.decorate_list = function(ls) {
+KonOpas.Server.prototype.decorate_list = function(ls) {
 	var votes = ls.getElementsByClassName("votes");
 	for (var i = 0, l = votes.length; i < l; ++i) {
 		var id = votes[i].id.substr(1);
@@ -218,7 +218,7 @@ Server.prototype.decorate_list = function(ls) {
 
 // ------------------------------------------------------------------------------------------------ comment
 
-Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el) {
+KonOpas.Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el) {
 	ev = ev || window.event;
 	ev.cancelBubble = true;
 	ev.preventDefault();
@@ -241,7 +241,7 @@ Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el) {
 }
 
 
-Server.prototype.onclick_show_comment_form = function(ev, id, f_el) {
+KonOpas.Server.prototype.onclick_show_comment_form = function(ev, id, f_el) {
 	ev = ev || window.event;
 	ev.cancelBubble = true;
 	ev.preventDefault();
@@ -253,7 +253,7 @@ Server.prototype.onclick_show_comment_form = function(ev, id, f_el) {
 }
 
 
-Server.prototype.make_comment_div = function(c) {
+KonOpas.Server.prototype.make_comment_div = function(c) {
 	var d = _new_elem('div', 'comment');
 
 	var n = _new_elem('span', 'comment-author', c.name);
@@ -270,7 +270,7 @@ Server.prototype.make_comment_div = function(c) {
 	return d;
 }
 
-Server.prototype.show_comments = function(id) {
+KonOpas.Server.prototype.show_comments = function(id) {
 	var c_el = document.getElementById('c' + id); if (!c_el) return;
 	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
 	var ac = c_el.previousSibling,
@@ -312,7 +312,7 @@ Server.prototype.show_comments = function(id) {
 }
 
 
-Server.prototype.show_comment_form = function(id, af, f_el) {
+KonOpas.Server.prototype.show_comment_form = function(id, af, f_el) {
 	if (!this.connected) return;
 	if (f_el.classList.contains('empty')) {
 		if (!document.getElementById('post_comment_iframe')) {
@@ -358,7 +358,7 @@ Server.prototype.show_comment_form = function(id, af, f_el) {
 }
 
 
-Server.prototype.make_comments_wrap = function(id) {
+KonOpas.Server.prototype.make_comments_wrap = function(id) {
 	var p = this.pub_data && this.pub_data[id],
 	    n_comments = (p && (p[3] > 0)) ? p[3] : 0,
 	    d = _new_elem('div', 'comments-wrap');
@@ -390,7 +390,7 @@ Server.prototype.make_comments_wrap = function(id) {
 
 // ------------------------------------------------------------------------------------------------ item extras
 
-Server.prototype.show_extras = function(id, p_el) {
+KonOpas.Server.prototype.show_extras = function(id, p_el) {
 	if (!this.pub_data) return;
 	if (!document.getElementById('c' + id)) {
 		p_el.appendChild(this.make_comments_wrap(id));
@@ -404,7 +404,7 @@ Server.prototype.show_extras = function(id, p_el) {
 
 // ------------------------------------------------------------------------------------------------ ical
 
-Server.prototype.show_ical_link = function(p_el) {
+KonOpas.Server.prototype.show_ical_link = function(p_el) {
 	var html = '';
 	if (!this.connected) {
 		html = i18n.txt('ical_login');
@@ -431,13 +431,13 @@ Server.prototype.show_ical_link = function(p_el) {
 
 // ------------------------------------------------------------------------------------------------ exec
 
-Server.prototype.url = function(cmd) {
+KonOpas.Server.prototype.url = function(cmd) {
 	if (this.token) cmd += (cmd.indexOf('?') != -1 ? '&' : '?') + 'k=' + encodeURIComponent(this.token);
 	return this.host + (cmd[0] == '/' ? '' : '/' + this.id + '/') + cmd;
 }
 
 // based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
-Server.prototype.exec = function(cmd) {
+KonOpas.Server.prototype.exec = function(cmd) {
 	if (/^vote/.test(cmd) && !this.connected) {
 		_log('server not connected: ' + cmd, 'warn');
 		return;
@@ -467,7 +467,7 @@ Server.prototype.exec = function(cmd) {
 // ------------------------------------------------------------------------------------------------ cb ok/fail
 
 // callback for successful logout, prog, vote
-Server.prototype.cb_ok = function(v) {
+KonOpas.Server.prototype.cb_ok = function(v) {
 	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?(.*))?/.exec(v);
 	var cmd = m[2] || '';
 	var query = m[3] || '';
@@ -517,7 +517,7 @@ Server.prototype.cb_ok = function(v) {
 }
 
 // callback for reporting server errors
-Server.prototype.cb_fail = function(v) {
+KonOpas.Server.prototype.cb_fail = function(v) {
 	this.error(v.msg, v.url);
 }
 
@@ -525,7 +525,7 @@ Server.prototype.cb_fail = function(v) {
 
 // ------------------------------------------------------------------------------------------------ callback
 
-Server.prototype.cb_info = function(v) {
+KonOpas.Server.prototype.cb_info = function(v) {
 	_log("server info: " + JSON.stringify(v));
 	this.connected = [v.name, v.email];
 	this.el.innerHTML = '<div id="server_info">'
@@ -541,13 +541,13 @@ Server.prototype.cb_info = function(v) {
 	if (typeof jsErrLog == 'object') jsErrLog.info = v.name.replace(/[ @].*/, '');
 }
 
-Server.prototype.cb_token = function(token) {
+KonOpas.Server.prototype.cb_token = function(token) {
 	_log("server token: " + token);
 	this.token = token;
 	localStorage.setItem('konopas.token', token);
 }
 
-Server.prototype.cb_login = function(v) {
+KonOpas.Server.prototype.cb_login = function(v) {
 	_log("server login: " + JSON.stringify(v));
 	var links = [];
 	for (var cmd in v) {
@@ -561,7 +561,7 @@ Server.prototype.cb_login = function(v) {
 	EL('login-popup-link').onclick = popup_open;
 }
 
-Server.prototype.cb_my_prog = function(v) {
+KonOpas.Server.prototype.cb_my_prog = function(v) {
 	_log("server my_prog: " + JSON.stringify(v));
 	this.prog_data = v.prog;
 	if (v.t0) for (var id in this.prog_data) { this.prog_data[id][1] += v.t0; }
@@ -569,14 +569,14 @@ Server.prototype.cb_my_prog = function(v) {
 	else _log("Server.stars required for prog sync", 'warn');
 }
 
-Server.prototype.cb_my_votes = function(v) {
+KonOpas.Server.prototype.cb_my_votes = function(v) {
 	_log("server my_votes: " + JSON.stringify(v));
 	this.my_votes_data = v.votes;
 	this.my_votes_mtime = v.mtime;
 	for (var id in v.votes) this.show_my_vote(id);
 }
 
-Server.prototype.cb_pub_data = function(p) {
+KonOpas.Server.prototype.cb_pub_data = function(p) {
 	_log("server pub_data: " + JSON.stringify(p));
 	this.pub_data = p;
 	for (var id in p) this.show_pub_votes(id);
@@ -587,14 +587,14 @@ Server.prototype.cb_pub_data = function(p) {
 	}
 }
 
-Server.prototype.cb_show_comments = function(id, c) {
+KonOpas.Server.prototype.cb_show_comments = function(id, c) {
 	_log("server show_comments (" + id + "): " + JSON.stringify(c));
 	c.sort(function(a, b) { return a.ctime - b.ctime; });
 	this.pub_comments[id] = c;
 	this.show_comments(id);
 }
 
-Server.prototype.cb_ical_link = function(url) {
+KonOpas.Server.prototype.cb_ical_link = function(url) {
 	this.ical = url;
 	localStorage.setItem('konopas.'+this.id+'.ical_link', url);
 	this.show_ical_link(false);

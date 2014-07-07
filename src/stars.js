@@ -1,4 +1,4 @@
-function Stars(id, opt) {
+KonOpas.Stars = function(id, opt) {
 	opt = opt || {};
 	this.name = 'konopas.' + id + '.stars';
 	this.store = opt.store || localStorage || sessionStorage || (new (function() {
@@ -11,11 +11,11 @@ function Stars(id, opt) {
 	this.data = this.read();
 }
 
-Stars.prototype.read = function() {
+KonOpas.Stars.prototype.read = function() {
 	return JSON.parse(this.store && this.store.getItem(this.name) || '{}');
 }
 
-Stars.prototype.write = function() {
+KonOpas.Stars.prototype.write = function() {
 	try {
 		if (this.store) this.store.setItem(this.name, JSON.stringify(this.data));
 	} catch (e) {
@@ -23,11 +23,11 @@ Stars.prototype.write = function() {
 	}
 }
 
-Stars.prototype.persistent = function() {
+KonOpas.Stars.prototype.persistent = function() {
 	return this.store && ((this.store == localStorage) || this.server && this.server.connected);
 }
 
-Stars.prototype.list = function() {
+KonOpas.Stars.prototype.list = function() {
 	var list = [];
 	if (this.data) for (var id in this.data) {
 		if ((this.data[id].length == 2) && this.data[id][0]) list.push(id);
@@ -35,7 +35,7 @@ Stars.prototype.list = function() {
 	return list;
 }
 
-Stars.prototype.add = function(star_list, mtime) {
+KonOpas.Stars.prototype.add = function(star_list, mtime) {
 	mtime = mtime || Math.floor(Date.now()/1000);
 	star_list.forEach(function(id) { this.data[id] = [1, mtime]; }, this);
 
@@ -43,7 +43,7 @@ Stars.prototype.add = function(star_list, mtime) {
 	if (this.server) this.server.set_prog(this.list());
 }
 
-Stars.prototype.set = function(star_list) {
+KonOpas.Stars.prototype.set = function(star_list) {
 	var mtime = Math.floor(Date.now()/1000);
 	if (this.data) for (var id in this.data) {
 		this.data[id] = [0, mtime];
@@ -51,7 +51,7 @@ Stars.prototype.set = function(star_list) {
 	this.add(star_list, mtime);
 }
 
-Stars.prototype.toggle = function(el, id) {
+KonOpas.Stars.prototype.toggle = function(el, id) {
 	var add_star = !el.classList.contains(this.tag);
 	var mtime = Math.floor(Date.now()/1000);
 
@@ -63,7 +63,7 @@ Stars.prototype.toggle = function(el, id) {
 	else          el.classList.remove(this.tag);
 }
 
-Stars.prototype.sync = function(new_data) {
+KonOpas.Stars.prototype.sync = function(new_data) {
 	var local_mod = [], redraw = false;
 	for (var id in new_data) {
 		if (new_data[id].length != 2) {
@@ -105,7 +105,7 @@ Stars.prototype.sync = function(new_data) {
 	}
 }
 
-Stars.prototype.show = function() {
+KonOpas.Stars.prototype.show = function() {
 	var view = EL("star_data"),
 		hash = window.location.hash.substr(6),
 	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
@@ -153,7 +153,7 @@ Stars.prototype.show = function() {
 		html += '<p id="star_links">&raquo; ' + i18n.txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 	}
 	var ls = program.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
-	Item.show_list(ls);
+	KonOpas.Item.show_list(ls);
 	if (set_len) {
 		document.body.classList.add("show_set");
 		for (var i = 0; i < set_len; ++i) {

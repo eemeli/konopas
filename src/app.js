@@ -24,12 +24,12 @@ function KonOpas(set) {
 	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
-	this.prog = new Prog();
-	this.stars = new Stars(this.id);
-	this.server = this.use_server && window.Server && new Server(this.id, this.stars);
-	Item();
-	this.part = new Part(people, this);
-	this.info = new Info();
+	this.prog = new KonOpas.Prog();
+	this.stars = new KonOpas.Stars(this.id);
+	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
+	this.item = new KonOpas.Item();
+	this.part = new KonOpas.Part(people, this);
+	this.info = new KonOpas.Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
 	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);

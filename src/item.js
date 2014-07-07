@@ -1,23 +1,24 @@
-function Item() {
-	EL('prog_ls').onclick = Item.list_click;
+KonOpas.Item = function() {
+	EL('prog_ls').onclick = KonOpas.Item.list_click;
 	if (EL('scroll_link')) {
 		EL('scroll_link').onclick = function() { EL('top').scrollIntoView(); return false; };
 		if (window.navigator && navigator.userAgent.match(/Android [12]/)) {
 			EL('time').style.display = 'none';
 			EL('scroll').style.display = 'none';
 		} else {
-			window.onscroll = Item.scroll_time;
+			this.prev_scroll = { "i": 0, "top": 0 };
+			window.onscroll = this.scroll_time.bind(this);
 		}
 	}
 }
 
-Item.show_extra = function(item, id) {
+KonOpas.Item.show_extra = function(item, id) {
 	function _tags(it) {
 		if (!it.tags || !it.tags.length) return '';
 		var o = {};
 		it.tags.forEach(function(t) {
 			var cat = 'tags';
-			var tgt = Prog.hash({'tag': t});
+			var tgt = KonOpas.Prog.hash({'tag': t});
 			var a = t.split(':');
 			if (a.length > 1) { cat = a.shift(); t = a.join(':'); }
 			var link = '<a href="' + tgt + '">' + t + '</a>'
@@ -51,7 +52,7 @@ Item.show_extra = function(item, id) {
 	if (ko.server) ko.server.show_extras(id, item);
 }
 
-Item.new = function(it) {
+KonOpas.Item.new = function(it) {
 	function _loc_str(it) {
 		var s = '';
 		if (it.loc && it.loc.length) {
@@ -77,7 +78,7 @@ Item.new = function(it) {
 		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
 	}
 
-	Item.new = function(it) {
+	KonOpas.Item.new = function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
@@ -85,10 +86,10 @@ Item.new = function(it) {
 		votes.id = 'v' + it.id;
 		return frame.cloneNode(true);
 	};
-	return Item.new(it);
+	return KonOpas.Item.new(it);
 }
 
-Item.show_list = function(ls, show_id) {
+KonOpas.Item.show_list = function(ls, show_id) {
 	function _sort(a, b) {
 		if (a.date < b.date) return -1;
 		if (a.date > b.date) return  1;
@@ -112,19 +113,19 @@ Item.show_list = function(ls, show_id) {
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
-			if (ls[i].date < prev_date) { Item.show_list(ls.sort(_sort), show_id); return; }
+			if (ls[i].date < prev_date) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_date = ls[i].date;
 			prev_time = "";
 			frag.appendChild(_new_elem('div', 'new_day', pretty_date(ls[i].date, ko)));
 		}
 		if (ls[i].time != prev_time) {
-			if (ls[i].time < prev_time) { Item.show_list(ls.sort(_sort), show_id); return; }
+			if (ls[i].time < prev_time) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', pretty_time(ls[i].time, ko)))
 				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? parse_date(ls[i].date).getDay() : -1 }));
 		}
-		frag.appendChild(Item.new(ls[i]));
+		frag.appendChild(KonOpas.Item.new(ls[i]));
 	}
 
 	var LS = EL('prog_ls');
@@ -140,7 +141,7 @@ Item.show_list = function(ls, show_id) {
 		if (expand_all.textContent == exp_txt) {
 			for (var i = 0, l = items.length; i < l; ++i) {
 				items[i].parentNode.classList.add("expanded");
-				Item.show_extra(items[i], items[i].id.substr(1));
+				KonOpas.Item.show_extra(items[i], items[i].id.substr(1));
 			}
 			expand_all.textContent = i18n.txt('Collapse all');
 		} else {
@@ -166,18 +167,18 @@ Item.show_list = function(ls, show_id) {
 		var it = document.getElementById('p' + show_id);
 		if (it) {
 			it.parentNode.classList.add("expanded");
-			Item.show_extra(it, show_id);
+			KonOpas.Item.show_extra(it, show_id);
 			if (ls.length > 1) it.scrollIntoView();
 		}
 	}
 }
 
-Item.list_click = function(ev) {
+KonOpas.Item.list_click = function(ev) {
 	function _set_location_id(id) {
-		var f = Prog.get_filters(true);
+		var f = KonOpas.Prog.get_filters(true);
 		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : ko.prog.default_day();
 		f['id'] = id;
-		return Prog.set_filters(f, true);
+		return KonOpas.Prog.set_filters(f, true);
 	}
 
 	var el = (ev || window.event).target,
@@ -194,24 +195,23 @@ Item.list_click = function(ev) {
 		if (in_prog_view) _set_location_id(it_id);
 	} else {
 		var open = el.parentNode.classList.toggle("expanded");
-		if (open) Item.show_extra(el, it_id);
+		if (open) KonOpas.Item.show_extra(el, it_id);
 		if (in_prog_view) _set_location_id(open ? it_id : '');
 	}
 }
 
-Item.prev_scroll = { "i": 0, "top": 0 };
-Item.scroll_time = function() {
+KonOpas.Item.prototype.scroll_time = function() {
 	var st = window.pageYOffset;
 	EL("scroll").style.display = (st > 0) ? 'block' : 'none';
 	st += 20; // to have more time for change behind new_time
 	var te = EL("time"); if (!te) return;
 	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
 	if (st < tl[0].offsetTop) {
-		Item.prev_scroll.i = 0;
-		Item.prev_scroll.top = tl[0].offsetTop;
+		this.prev_scroll.i = 0;
+		this.prev_scroll.top = tl[0].offsetTop;
 		te.style.display = "none";
 	} else {
-		var i = Item.prev_scroll.top ? Item.prev_scroll.i : 1;
+		var i = this.prev_scroll.top ? this.prev_scroll.i : 1;
 		if (i >= tl.length) i = tl.length - 1;
 		if (st > tl[i].offsetTop) {
 			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
@@ -220,8 +220,8 @@ Item.scroll_time = function() {
 			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
 		}
 		if (i < 0) i = 0;
-		Item.prev_scroll.i = i;
-		Item.prev_scroll.top = tl[i].offsetTop;
+		this.prev_scroll.i = i;
+		this.prev_scroll.top = tl[i].offsetTop;
 		te.textContent = tl[i].getAttribute('data-day') + '\n' + tl[i].textContent;
 		te.style.display = "block";
 	}
