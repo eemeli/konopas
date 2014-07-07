@@ -79,7 +79,7 @@ Stars.prototype.sync = function(new_data) {
 	if (local_mod.length) {
 		_log('Stars.sync: local changes: ' + local_mod + (redraw ? ' -> redraw' : ''));
 		this.write();
-		if (redraw) ko.init_view();
+		if (redraw) ko.set_view();
 	}
 
 	if (this.server) {
@@ -105,10 +105,10 @@ Stars.prototype.sync = function(new_data) {
 	}
 }
 
-Stars.prototype.show = function(hash) {
-	ko.set_view("star");
+Stars.prototype.show = function() {
 	var view = EL("star_data"),
-	    set_raw = (hash && (hash.substr(1,4) == 'set:')) ? hash.substr(5).split(',') : [],
+		hash = window.location.hash.substr(6),
+	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
 	    set = program.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
 	    set_len = set.length,
 	    html = this.persistent() ? '' : '<p>' + i18n.txt('star_no_memory', {'SERVER': !!this.server}),

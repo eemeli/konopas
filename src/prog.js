@@ -326,7 +326,6 @@ Prog.prototype.show = function() {
 	}
 
 	var f = Prog.get_filters();
-	ko.set_view("prog");
 	if (Prog.set_filters(f)) return;
 	if (!f.day && !f.id && !ko.show_all_days_by_default) f.day = this.default_day();
 	_show_filters(f);

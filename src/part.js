@@ -108,10 +108,10 @@ Part.prototype.show = function(hash) {
 	if (!this.list.length) { window.location.hash = ''; return; }
 	var store = ko.storage_get('part') || {},
 	    name_range = store.name_range || '',
-	    participant = !document.body.classList.contains('part') && store.participant || '';
-	ko.set_view('part');
+	    participant = !document.body.classList.contains('part') && store.participant || '',
+		hash = window.location.hash.substr(6);
 	if (hash) {
-		var p_id = hash_decode(hash.substr(1));
+		var p_id = hash_decode(hash);
 		var pa = this.list.filter(function(p) { return p.id == p_id; });
 		if (pa.length) {
 			participant = 'p' + pa[0].id;

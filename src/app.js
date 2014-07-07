@@ -30,7 +30,7 @@ function KonOpas(set) {
 	Item();
 	this.part = new Part(people, this);
 	this.info = new Info();
-	window.onhashchange = this.init_view.bind(this);
+	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
 	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', popup_open);
 	if (EL('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
@@ -52,22 +52,18 @@ KonOpas.prototype.storage_set = function(name, value) {
 	}
 }
 
-KonOpas.prototype.init_view = function() {
-	var opt = window.location.hash.substr(1);
-	switch (opt.substr(0,4)) {
-		case 'star': this.stars.show(opt.substr(4)); break;
-		case 'part': this.part.show(opt.substr(4)); break;
-		case 'info': this.info.show(); break;
-		default:     this.prog.show(); break;
+KonOpas.prototype.set_view = function() {
+	var view = window.location.hash.substr(1, 4);
+	switch (view) {
+		case 'star': this.stars.show(); break;
+		case 'part': this.part.show();  break;
+		case 'info': this.info.show();  break;
+		default:     this.prog.show();  view = 'prog';
 	}
-	if (EL("load_disable")) EL("load_disable").style.display = "none";
-}
-
-KonOpas.prototype.set_view = function(new_view) {
-	var cl = document.body.classList;
 	for (var i = 0; i < this.views.length; ++i) {
-		cl[new_view == this.views[i] ? 'add' : 'remove'](this.views[i]);
+		document.body.classList[view == this.views[i] ? 'add' : 'remove'](this.views[i]);
 	}
+	if (EL('load_disable')) EL('load_disable').style.display = 'none';
 }
 
 KonOpas.prototype.refresh_cache = function() {
@@ -87,4 +83,4 @@ KonOpas.prototype.refresh_cache = function() {
 
 var ko = new KonOpas(konopas_set);
 var server = ko.server;
-ko.init_view();
+ko.set_view();

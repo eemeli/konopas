@@ -483,7 +483,7 @@ Server.prototype.cb_ok = function(v) {
 			if (this.stars) {
 				this.stars.data = {};
 				this.stars.write();
-				ko.init_view();
+				ko.set_view();
 			}
 			this.exec('info');
 			_log("server ok (logout): " + JSON.stringify(v));
