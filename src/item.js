@@ -30,7 +30,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	}
 	function _people(it) {
 		if (!it.people || !it.people.length) return '';
-		var a = it.people.map((typeof people == 'undefined') || !people.length
+		var a = it.people.map(!ko.people || !ko.people.list.length
 			? function(p) { return p.name; }
 			: function(p) { return "<a href=\"#part/" + KonOpas.hash_encode(p.id) + "\">" + p.name + "</a>"; }
 		);

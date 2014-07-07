@@ -54,13 +54,26 @@ KonOpas.prototype.storage_set = function(name, value) {
 }
 
 KonOpas.prototype.set_view = function() {
-	var view = this.program && this.program.list.length ? window.location.hash.substr(1, 4) : 'info';
-	switch (view) {
-		case 'part': if (this.people) this.people.show();
-		             else { this.program.show(); view = 'prog'; } break;
-		case 'star': this.stars.show(); break;
-		case 'info': this.info.show();  break;
-		default:     this.program.show(); view = 'prog';
+	var view = window.location.hash.substr(1, 4);
+	if (!this.program || !this.program.list.length) {
+		view = 'info';
+		_el('tabs').style.display = 'none';
+		this.info.show();
+		if (this.server) this.server.error('Programme loading failed!');
+	} else {
+		_el('tabs').style.display = 'block';
+		if (!this.people || !this.people.list.length) {
+			_el('tab_part').style.display = 'none';
+			if (view == 'part') view = '';
+		} else {
+			_el('tab_part').style.display = 'block';
+		}
+		switch (view) {
+			case 'part': this.people.show();  break;
+			case 'star': this.stars.show();   break;
+			case 'info': this.info.show();    break;
+			default:     this.program.show(); view = 'prog';
+		}
 	}
 	for (var i = 0; i < this.views.length; ++i) {
 		document.body.classList[view == this.views[i] ? 'add' : 'remove'](this.views[i]);
