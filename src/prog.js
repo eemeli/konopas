@@ -1,13 +1,26 @@
 KonOpas.Prog = function(list) {
-	this.list = list || [];
-	var pf = _el('prog_filters'),
-	    pl = pf.getElementsByClassName('popup-link'),
-	    sf = _el('search');
+	function _sort(a, b) {
+		if (a.date < b.date) return -1;
+		if (a.date > b.date) return  1;
+		if (a.time < b.time) return -1;
+		if (a.time > b.time) return  1;
+		if (a.loc.length < b.loc.length) return -1;
+		if (a.loc.length > b.loc.length) return  1;
+		for (var i = a.loc.length - 1; i >= 0; --i) {
+			if (a.loc[i] < b.loc[i]) return -1;
+			if (a.loc[i] > b.loc[i]) return  1;
+		}
+		return 0;
+	}
+	this.list = (list || []).sort(_sort);
+	var pf = _el('prog_filters');
 	pf.onclick = KonOpas.Prog.filter_change;
-	for (var i = 0; i < pl.length; ++i){
+	var pl = pf.getElementsByClassName('popup-link');
+	for (var i = 0; i < pl.length; ++i) {
 		pl[i].setAttribute('data-title', pl[i].textContent);
 		pl[i].nextElementSibling.onclick = KonOpas.Prog.filter_change;
 	}
+	var sf = _el('search');
 	if (sf) {
 		sf.onsubmit = _el('q').onblur = KonOpas.Prog.filter_change;
 		sf.onreset = function() { KonOpas.Prog.set_filters({}); };
@@ -119,11 +132,15 @@ KonOpas.Prog.filter_change = function(ev) {
 	KonOpas.Prog.set_filters(filters);
 }
 
+
+
+// ------------------------------------------------------------------------------------------------ instance
+
 KonOpas.Prog.prototype.now_list = function() {
 	var ms_now = Date.now() - 60000 * (new Date()).getTimezoneOffset(), // - 168*24*60*60000,
-		ms_max = ms_now + 2 * 60 * 60000,
+	    ms_max = ms_now + 2 * 60 * 60000,
 	    now = [],
-		ms_last = 0, ms_next = 0;
+	    ms_last = 0, ms_next = 0;
 	for (var i = 0, l = this.list.length; i < l; ++i) {
 		var it = this.list[i],
 		    ms_start = Date.parse(it.date + 'T' + it.time + 'Z');
@@ -141,7 +158,7 @@ KonOpas.Prog.prototype.now_list = function() {
 	} else if (ms_next) {
 		var m_next = Math.floor((ms_next - ms_now) / 60000),
 		    h_next = Math.floor(m_next / 60),
-			d_next = Math.floor(h_next / 24);
+		    d_next = Math.floor(h_next / 24);
 		if (h_next >= 1) m_next -= h_next * 60;
 		if (d_next >= 1) h_next -= d_next * 24;
 		_el("next_start_note").textContent = i18n.txt('next_start', { 'D':d_next, 'H':h_next, 'M':m_next });
@@ -156,9 +173,6 @@ KonOpas.Prog.prototype.now_list = function() {
 	return now;
 }
 
-
-
-// ------------------------------------------------------------------------------------------------ instance
 
 KonOpas.Prog.prototype.default_day = function() {
 	var day_start = '', day_end = '',
@@ -190,7 +204,7 @@ KonOpas.Prog.prototype.show = function() {
 		var prev = _el('prog_filters').getElementsByClassName('selected');
 		if (prev) for (var i = prev.length - 1; i >= 0; --i) {
 			var cl = prev[i].classList;
-			if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || 'More...';
+			if (cl.contains('popup-link')) prev[i].textContent = prev[i].getAttribute('data-title') || i18n.txt('More') + '…';
 			cl.remove('selected');
 		}
 		for (var k in f) {

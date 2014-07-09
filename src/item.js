@@ -90,20 +90,6 @@ KonOpas.Item.new = function(it) {
 }
 
 KonOpas.Item.show_list = function(ls, show_id) {
-	function _sort(a, b) {
-		if (a.date < b.date) return -1;
-		if (a.date > b.date) return  1;
-		if (a.time < b.time) return -1;
-		if (a.time > b.time) return  1;
-		if (a.loc.length < b.loc.length) return -1;
-		if (a.loc.length > b.loc.length) return  1;
-		for (var i = a.loc.length - 1; i >= 0; --i) {
-			if (a.loc[i] < b.loc[i]) return -1;
-			if (a.loc[i] > b.loc[i]) return  1;
-		}
-		return 0;
-	}
-
 	var frag = document.createDocumentFragment();
 	var prev_date = "", prev_time = "";
 	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
@@ -113,13 +99,11 @@ KonOpas.Item.show_list = function(ls, show_id) {
 	}
 	for (var i = 0, l = ls.length; i < l; ++i) {
 		if (ls[i].date != prev_date) {
-			if (ls[i].date < prev_date) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_date = ls[i].date;
 			prev_time = "";
 			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, ko)));
 		}
 		if (ls[i].time != prev_time) {
-			if (ls[i].time < prev_time) { KonOpas.Item.show_list(ls.sort(_sort), show_id); return; }
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
 			frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(ls[i].time, ko)))
