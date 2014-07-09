@@ -10,36 +10,51 @@ var fs = require('fs');
 
 /******* Locale processage */
 
-var locales = glob.sync("i18n/*.json").map(function(filename){return filename.split("/")[1].replace(".json", "");}).sort();
+var knownLocales = glob.sync("i18n/*.json").map(function(filename){return filename.split("/")[1].replace(".json", "");}).sort();
 var messageformatExecutable = fs.realpathSync("./node_modules/.bin/messageformat");
 
-locales.forEach(function(locale) {
-	gulp.task("i18n-js:" + locale, shell.task([messageformatExecutable + ' --locale $ --include $.json --output $.js'.replace(/\$/g, locale)], {cwd: 'i18n'}));
+knownLocales.forEach(function(l) {
+	gulp.task("i18n-js:" + l, shell.task([messageformatExecutable + ' --locale $ --include $.json --output $.js'.replace(/\$/g, l)], {cwd: 'i18n'}));
 });
 
-gulp.task("i18n-js", locales.map(function(l) { return "i18n-js:" + l; }));
+gulp.task("i18n-js", knownLocales.map(function(l) { return "i18n-js:" + l; }));
 
 /******* Javascript buildage */
 
 var locale = args.locale;
 
 if(!locale) {
-	console.error("You haven't set a locale for the build. Use --locale (" + locales.join("|") + ") to set one.");
+	console.error("You haven't set a locale for the build. Use --locale (" + knownLocales.join("|") + ") to set one.");
 	process.exit(1);
 }
 
-if(locales.indexOf(locale) == -1) {
-	console.error("I only know of locales " + locales.join(", ") + " -- your locale setting " + locale + " is not one of them.");
-	process.exit(1);
+var setLocales = locale.split(',');
+setLocales.forEach(function(l) {
+	if(knownLocales.indexOf(l) == -1) {
+		console.error("I only know of locales " + knownLocales.join(", ") + " -- your locale setting " + locale + " is not one of them.");
+		process.exit(1);
+	}
+});
+if(setLocales.length > 1) {
+	gulp.task("i18n-js:" + locale, shell.task(
+		[messageformatExecutable + ' --locale $ --include {$}.json --output $.js'.replace(/\$/g, locale)],
+		{cwd: 'i18n'}
+	));
 }
+
 
 console.log("** Locale for KonOpas build:", locale);
 
 var jsFiles = [
 	"src/polyfill.js",
 	"i18n/" + locale + ".js",
+	"src/util.js",
 	"src/server.js",
 	"src/stars.js",
+	"src/item.js",
+	"src/prog.js",
+	"src/part.js",
+	"src/info.js",
 	"src/app.js"
 ];
 
