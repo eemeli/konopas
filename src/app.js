@@ -9,6 +9,7 @@ function KonOpas(set) {
 	this.expand_all_max_items = 100;
 	this.show_all_days_by_default = false;
 	this.non_ascii_people = false; // setting true enables correct but slower sort
+	this.people_per_screen = 100;
 	this.use_server = false;
 	this.log_messages = true;
 	this.cache_refresh_interval_mins = 60;

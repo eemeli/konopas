@@ -16,10 +16,16 @@
 	list-style-type: none; margin: 0; -webkit-column-width: 260px; -moz-column-width: 260px; column-width: 260px;
 	li { cursor: auto; }
 	a { text-decoration: none; }
+	&.fn-only, &.ln-only {
+		-webkit-column-width: 180px; -moz-column-width: 180px; column-width: 180px;
+		.fn { display: none; }
+		.ln { display: inline; width: auto; float: none; }
+	}
 }
 .fn, .ln { display: block; width: 128px; width: calc(50% - 2px); min-height: 1px; float: left; }
 .fn { text-align: right; vertical-align: top; clear: both; padding-right: 2px; }
 .ln { vertical-align: bottom; padding-left: 2px; }
+
 .part_img {
 	display: block; float: right; border: @border-heavy; margin: 0 0 5px 10px;
 	img { width: 200px; }

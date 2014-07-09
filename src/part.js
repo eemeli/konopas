@@ -8,6 +8,65 @@ KonOpas.Part = function(list, opt) {
 		? function(a, b) { return a.sortname.localeCompare(b.sortname, opt.lc); }
 		: function(a, b) { return a.sortname < b.sortname ? -1 : a.sortname > b.sortname; });
 	_el("part_filters").onclick = this.filter_click.bind(this);
+	this.set_ranges(opt.people_per_screen || 0);
+}
+
+KonOpas.Part.prototype.set_ranges = function(bin_size) {
+	function _prev_matches(a, i) { return (i > 0) && (a[i - 1] == a[i]); }
+	function _next_matches(a, i) { return (i < a.length - 1) && (a[i + 1] == a[i]); }
+	function _ranges(a, bin_size) {
+		if (bin_size <= 0) return [];
+		var ends = [], n_bins = Math.round(a.length / bin_size);
+		if (n_bins > 1) {
+			for (var i = 1; i <= n_bins; ++i) {
+				var e = Math.round(i * a.length / n_bins), n_up = 0, n_down = 0;
+				if (e < 0) e = 0;
+				if (e >= a.length) e = a.length - 1;
+				while (_next_matches(a, e + n_up)) ++n_up;
+				if (n_up) while (_prev_matches(a, e - n_down)) ++n_down;
+				if (n_up <= n_down) e += n_up;
+				else if (e > n_down) e -= n_down + 1;
+				if (!ends.length || (ends[ends.length - 1] != a[e])) ends.push(a[e]);
+			}
+			var start = 'A';
+			for (var i = 0; i < ends.length; ++i) {
+				if (ends[i] < start) continue;
+				var c = ends[i].charCodeAt(0);
+				if (ends[i] > start) ends[i] = start + ends[i];
+				start = String.fromCharCode(c + 1);
+			}
+		}
+		return ends;
+	}
+
+	var fn = [], ln = [];
+	for (var i = 0; i < this.list.length; ++i) {
+		var n = this.list[i].name;
+		if (!n || !n.length) continue;
+		fn.push(n[0].trim().charAt(0).toUpperCase());
+		if (n.length >= 2) ln.push(n[1].trim().charAt(0).toUpperCase());
+	}
+	var nr = _ranges(ln.length ? ln : fn, bin_size),
+	    filters = _el('part_filters');
+	if (nr.length > 1) {
+		filters.textContent = '» ' + i18n.txt('part_filter', {'T': ln.length ? 'last' : 'first'}) + ':';
+		var ul = document.createElement('ul'); ul.id = 'name_range';
+		for (var i = 0; i < nr.length; ++i) {
+			var li = document.createElement('li');
+			li.setAttribute('data-range', nr[i]);
+			li.textContent = nr[i].charAt(0);
+			if (nr[i].length > 1) li.textContent += ' - ' + nr[i].charAt(1);
+			ul.appendChild(li);
+		}
+		filters.appendChild(ul);
+	} else {
+		filters.innerHTML = '<span>» <a href="#part">' + i18n.txt('part_filter', {'T':'all'}) + '</a></span>';
+	}
+	var nl_type =  fn.length &&  ln.length ? ''
+	            :  fn.length && !ln.length ? 'fn-only'
+	            : !fn.length &&  ln.length ? 'ln-only'
+	            : 'error';
+	if (nl_type) _el('part_names').classList.add(nl_type);
 }
 
 KonOpas.Part.name_in_range = function(n0, range) {
