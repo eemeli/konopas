@@ -1,3 +1,39 @@
+# 0.7.0
+
+2014-07-09
+
+  * New Features:
+    - Added automatic programme filter generation, set by `konopas_set.filters`
+    - Added automatic people paging, set by `konopas_set.people_per_screen`
+    - Removed Next view, added "Now" to Program view
+  * Code:
+    - Split src/app.js into multiple files
+    - Cleaned up almost all functions & data into a `KonOpas` namespace, with an
+      instance `konopas`
+    - Moved program sorting from KonOpas.Item.show_list to KonOpas.Prog
+    - Added polyfills for function.bind() & string.normalize()
+    - Removed from git tracking: konopas*.js
+  * Localization:
+    - Support for simultaneous multi-lingual use, req. supporting
+      messageformat.js (0.2.0)
+    - better localized date & weekday handling, with custom polyfill for
+      date.toLocaleDateString()
+    - Removed from git tracking: i18n/*.js
+  * Skin:
+    - Added -ms-high-contrast rule for item select boxes in IE10 & later
+    - Switched CSS compressor to clean-css (was yui-compress)
+    - Split fonts.less from main.less; cleaned up fonts.css
+    - Removed from git tracking: skin/skin.css, skin/PTSansNarrow700.ttf and
+      skin/RobotoCondensed400.ttf
+  * Util:
+    - lib/gdrive2json.php: added Google's new URL scheme (check your path for
+      either `/d/` or `/ccc?`)
+    - Reorganised everything
+    - Removed android-wrapper & config.html
+  * Updated the sample artwork
+  * Lots and lots of bugfixes, in particular increasing robustness to bad data
+
+
 # 0.6.2
 
 2014-06-04
