@@ -34,7 +34,7 @@ function KonOpas(set) {
 	if (_el('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
 }
 
-KonOpas.prototype.set_program = function(list) { this.program = new KonOpas.Prog(list); }
+KonOpas.prototype.set_program = function(list, opt) { this.program = new KonOpas.Prog(list, opt); }
 KonOpas.prototype.set_people = function(list) { this.people = new KonOpas.Part(list, this); }
 
 KonOpas.prototype.storage_get = function(name) {
@@ -97,7 +97,7 @@ KonOpas.prototype.refresh_cache = function() {
 }
 
 var ko = new KonOpas(konopas_set);
-if (typeof program != 'undefined') ko.set_program(program);
+if (typeof program != 'undefined') ko.set_program(program, ko.filters);
 if (typeof people != 'undefined') ko.set_people(people);
 var server = ko.server;
 ko.set_view();

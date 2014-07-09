@@ -70,97 +70,7 @@
 </style>
 <div id="prog_view" class="view">
 	<div id="prog_filters" class="filters">
-	<div id="prog_lists">
-		<ul id="day">
-		<li id="now">Now
-		<li id="all_days">All days
-		<li id="d2014-01-17">Friday
-		<li id="d2014-01-18">Saturday
-		<li id="d2014-01-19">Sunday
-		<li id="d2014-01-20">Monday
-		</ul>
-
-		<ul id="area">
-		<li id="all_areas">Everywhere
-		<li id="a3W">Mezzanine (3W)
-		<li id="a3E">Conference (3E)
-		<li id="a2">Lobby (2)
-		<li id="a1W">Concourse (1W)
-		<li id="a1E">Galleria (1E)
-		<li id="area2-list"><div class="popup-link" style="display: inline-block; max-width: 110px;">More…</div>
-		<ul id="area2" class="popup" data-title="Room">
-			<li id="Adams">Adams
-			<li id="Alcott">Alcott
-			<li id="Bulfinch">Bulfinch
-			<li id="Burroughs">Burroughs
-			<li id="Carlton">Carlton
-			<li id="Commonwealth Ballroom ABC">Commonwealth Ballroom
-			<li id="Douglas">Douglas
-			<li id="Executive Board Room">Executive Board Room
-			<li id="Faneuil">Faneuil
-			<li id="Galleria - Autograph Space">Galleria
-			<li id="Grand Ballroom A">Grand Ballroom A
-			<li id="Grand Ballroom AB">Grand Ballroom AB
-			<li id="Grand Ballroom B">Grand Ballroom B
-			<li id="Grand Ballroom C">Grand Ballroom C
-			<li id="Grand Ballroom DE">Grand Ballroom DE
-			<li id="Griffin">Griffin
-			<li id="Hale">Hale
-			<li id="Hancock">Hancock
-			<li id="Harbor Ballroom I">Harbor Ballroom I
-			<li id="Harbor Ballroom III">Harbor Ballroom III
-			<li id="Independence">Independence
-			<li id="Otis">Otis
-			<li id="Paine">Paine
-			<li id="Pool">Pool
-			<li id="Revere">Revere
-			<li id="Webster">Webster
-			<li id="ArisiaTV">ArisiaTV
-			<!--<li id="Other">Other-->
-		</ul></ul>
-
-		<ul id="tag" style="min-width: 140px;">
-		<li id="all_tags">All tracks &amp; types
-		<li id="Featured">Featured items
-		<li id="track-list"><div class="popup-link">Choose track…</div>
-		<ul id="tag2" class="popup" data-title="Track">
-			<li id="track:Anime">Anime
-			<li id="track:Art">Art
-			<li id="track:Comics">Comics
-			<li id="track:Communities">Communities
-			<li id="track:ConComm">ConComm
-			<li id="track:Costuming">Costuming
-			<li id="track:Fan Interest">Fan Interest
-			<li id="track:Fast Track">Fast Track
-			<li id="track:GOH">GOH
-			<li id="track:Gaming">Gaming
-			<li id="track:Literature">Literature
-			<li id="track:Maker">Maker
-			<li id="track:Media">Media
-			<li id="track:Music">Music
-			<li id="track:Science">Science
-			<li id="track:Theater">Theater
-			<li id="track:Theater & con tech">Theater &amp; con tech
-			<li id="track:Writing">Writing
-			<li id="track:Trackless events">Trackless events
-		</ul>
-		<li id="type-list"><div class="popup-link">Choose type…</div>
-		<ul id="tag3" class="popup" data-title="Type">
-			<li id="type:Concert">Concert
-			<li id="type:Drama">Drama
-			<li id="type:Lecture">Lecture
-			<li id="type:Meeting">Meeting
-			<li id="type:Open Gaming">Open Gaming
-			<li id="type:Panel">Panel
-			<li id="type:Participatory Event">Participatory Event
-			<li id="type:Projected Media">Projected Media
-			<li id="type:Reading">Reading
-			<li id="type:Scheduled Game">Scheduled Game
-			<li id="type:Signing">Signing
-			<li id="type:Workshop">Workshop
-			<!-- id="kf" data-regexp="^Kaffeeklatsch">Kaffeeklatsch -->
-		</ul></ul>
-	</div>
+	<div id="prog_lists"></div>
 
 	<form name="search" id="search">
 	<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
@@ -274,9 +184,41 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <script> var konopas_set = {
 	'id': '',
 	'default_duration': 60,
+	'tag_categories': ['track', 'type'],
 	'time_show_am_pm': true,
 	'show_all_days_by_default': false,
-	'use_server': true };
+	'use_server': true,
+	'filters': {
+		'day': {},
+		'area': {
+			'loc_level': 0,
+			'labels': {
+				'all_areas': 'Everywhere',
+				'area': 'Other location',
+				'Galleria': 'Galleria (1E)',
+				'1W': 'Concourse (1W)',
+				'2':  'Lobby (2)',
+				'3E': 'Conference (3E)',
+				'3W': 'Mezzanine (3W)',
+				'ArisiaTV': '$ArisiaTV',
+				'Commonwealth Ballroom ABC': 'Commonwealth Ballroom',
+			},
+			'regexp': { 'Galleria': '^Galleria' },
+			'promote': ['3W', '3E', '2', '1W', 'Galleria'],
+			'exclude': ['^Galleria -', '^Gaming Table', '^Grand Prefunction$']
+		},
+		'tag': {
+			'categories': ['track', 'type'],
+			'labels': {
+				'all_tags': 'All tracks & types',
+				'Featured': 'Featured items',
+				'track': 'Track',
+				'type': 'Type'
+			},
+			'promote': ['Featured'],
+		}
+	}
+};
 </script>
 <script src="data/program.js"></script>
 <script src="data/people.js"></script>
