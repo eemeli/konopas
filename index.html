@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><!-- manifest="cache.manifest" -->
+<html manifest="cache.manifest">
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="skin/skin.css">
@@ -12,50 +12,26 @@
 
 <!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--
-<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
-<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
-<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
-<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
-<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
-<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
--->
 
-<!-- Windows Phone 8.1 -->
-<!--
-<meta name="msapplication-TileColor"         content="#ffffff">
-<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
-<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
-<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
--->
-
-<title>KonOpas Sample Guide</title>
+<title>Readercon 25 Guide</title>
 
 <body><div id="top"></div>
 <div id="load_disable"></div>
-
 <div id="time"></div>
 <div id="scroll"><a href="#top" id="scroll_link" data-txt>Scroll up</a></div>
 
 <div id="banner">
-<div id="server_connect"></div>
-
-<h1><a href="#info"><!-- alt="CONVENTION" title="CONVENTION" -->
-<img id="title-small" src="data/title-small.png" style="width: 240px;">
-<img id="title" src="data/title.png" style="width: 145px; margin: 27px;"></a></h1>
-
-<ul id="tabs">
-<li id="tab_star"><a href="#star" data-txt>My con</a>
-<li id="tab_prog"><a href="#" data-txt>Program</a>
-<li id="tab_part"><a href="#part" data-txt>People</a>
-<li id="tab_info"><a href="#info" data-txt>Info</a>
-</ul>
-
-<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
+	<div id="server_connect"></div>
+	<h1><a href="#info" alt="Readercon 25" title="Readercon 25">
+	<img id="title-small" src="data/title.gif" style="width: 335px;">
+	<img id="title" src="data/title.gif" style="width: 200px; margin-bottom: 20px;"></a></h1>
+	<ul id="tabs">
+	<li id="tab_star"><a href="#star" data-txt>My con</a>
+	<li id="tab_prog"><a href="#" data-txt>Program</a>
+	<li id="tab_part"><a href="#part" data-txt>People</a>
+	<li id="tab_info"><a href="#info" data-txt>Info</a>
+	</ul>
+	<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
 </div>
 
 <div id="main">
@@ -64,51 +40,34 @@
 	<div id="star_data"></div>
 </div>
 
-
-<style>
-	@media (max-height: 450px) and (min-width: 400px) { #area2 { width: 450px; } }
-</style>
 <div id="prog_view" class="view">
-	<div id="prog_filters" class="filters">
+<div id="prog_filters" class="filters">
 	<div id="prog_lists"></div>
-
 	<form name="search" id="search">
-	<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
-	<div id="q_ctrl">
-	<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
-	<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
-	</div>
-	<div id="q_hint" class="hint"></div>
+		<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
+		<div id="q_ctrl">
+		<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+		<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+		</div>
+		<div id="q_hint" class="hint"></div>
 	</form>
-
 	<div id="filter_sum"></div>
 	<div id="next_start_note"></div>
-	</div>
 </div>
-
+</div>
 
 <div id="part_view" class="view">
-<style>
-/* customized from default, as Zambia data has badge names as a single string */
-#part_names { -webkit-column-width: 180px; -moz-column-width: 180px; column-width: 180px; }
-#part_names .fn { display: none; }
-#part_names .ln { display: inline; width: auto; float: none; }
-</style>
 	<div id="part_filters" class="filters">
-	&raquo; <span style="padding:0" data-txt data-txt-var="T:first">part_filter</span>
-	<ul id="name_range">
-		<li data-range="AD">A - D
-		<li data-range="EJ">E - J
-		<li data-range="KO">K - O
-		<li data-range="RZ">R - Z
-	</ul>
+		&raquo; <span style="padding:0" data-txt data-txt-var="T:last">part_filter</span>
+		<ul id="name_range">
+		<li data-range="AG">A - G
+		<li data-range="HM">H - M
+		<li data-range="NZ">N - Z
+		</ul>
 	</div>
-
 	<ul id="part_names"></ul>
-
 	<div id="part_info"></div>
 </div>
-
 
 <div id="info_view" class="view">
 <style>
@@ -125,7 +84,7 @@
 .quick-ref td:nth-child(3) { padding-left: 0; }
 </style>
 
-<p>This is the program guide for <a href="http://example.com/">CONVENTION</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+<p>This is the program guide for <a href="http://readercon.org/">Readercon 25</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
 
 <p>Program and participant data will be kept updated as final changes and corrections are made. <div id="last-updated">They were last updated <span></span>.</div>
 
@@ -142,6 +101,7 @@
 if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
 </script>
 
+<!--
 <h2>Maps</h2>
 <table id="map">
 <tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3W.png">Mezzanine Level&nbsp;(3W)</a>
@@ -173,6 +133,7 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 <b>Voice Auction</b>: Sunday 4:30pm<br>
 <b>Sales Pickup / Artist Checkout</b>: Monday 10am–1pm
 </dl>
+-->
 
 </div>
 
@@ -182,44 +143,45 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 </div><!-- /main -->
 
 <script> var konopas_set = {
-	'id': '',
+	'id': 'readercon25',
 	'default_duration': 60,
-	'tag_categories': ['track', 'type'],
 	'time_show_am_pm': true,
-	'show_all_days_by_default': false,
+	'show_all_days_by_default': true,
 	'use_server': true,
 	'filters': {
 		'day': {},
 		'area': {
-			'loc_level': 0,
 			'labels': {
 				'all_areas': 'Everywhere',
-				'area': 'Other location',
-				'Galleria': 'Galleria (1E)',
-				'1W': 'Concourse (1W)',
-				'2':  'Lobby (2)',
-				'3E': 'Conference (3E)',
-				'3W': 'Mezzanine (3W)',
-				'ArisiaTV': '$ArisiaTV',
-				'Commonwealth Ballroom ABC': 'Commonwealth Ballroom',
+				'area': 'Location',
+				'E':   '^Salon E',
+				'F':   '^Salon F',
+				'G':   '^Salons G, H, I & J',
+				'CO':  'Create',
+				'EM':  'Embrace/Empower',
+				'ENL': 'Enliven',
+				'ENV': 'Envison',
+				'IN':  'Inspire',
+				'CL':  '$Concierge Lounge (8th Floor)'
 			},
-			'regexp': { 'Galleria': '^Galleria' },
-			'promote': ['3W', '3E', '2', '1W', 'Galleria'],
-			'exclude': ['^Galleria -', '^Gaming Table', '^Grand Prefunction$']
+			'promote': []
 		},
 		'tag': {
-			'categories': ['track', 'type'],
 			'labels': {
-				'all_tags': 'All tracks & types',
-				'Featured': 'Featured items',
-				'track': 'Track',
-				'type': 'Type'
+				'all_tags': 'All types',
+				'tag': 'Type',
+				'Event': 'Events'
 			},
-			'promote': ['Featured'],
+			'promote': ['Event']
 		}
 	}
 };
 </script>
 <script src="data/program.js"></script>
 <script src="data/people.js"></script>
+<script>
+if ((typeof program == 'undefined') && (typeof prog != 'undefined')) {
+	var program = prog.map(function(p){ p.date = p.day; delete p.day; return p; });
+}
+</script>
 <script src="konopas.min.js"></script>
