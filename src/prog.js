@@ -188,6 +188,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		var e = document.createElement('li');
 		e.id = /^[^a-zA-Z]/.test(id) ? par.id[0] + id : id
 		if (!txt) txt = labels[id] || _txt(id);
+		if (/^\s*$/.test(txt)) return;
 		e.textContent = /^[\\^$]/.test(txt) ? txt.substr(1) : txt;
 		if (regexp[id]) e.setAttribute('data-regexp', regexp[id]);
 		par.appendChild(e);

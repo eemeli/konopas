@@ -54,19 +54,19 @@ KonOpas.prototype.storage_set = function(name, value) {
 }
 
 KonOpas.prototype.set_view = function() {
-	var view = window.location.hash.substr(1, 4);
+	var view = window.location.hash.substr(1, 4), tabs = _el('tabs');
 	if (!this.program || !this.program.list.length) {
 		view = 'info';
-		_el('tabs').style.display = 'none';
+		tabs.style.display = 'none';
 		this.info.show();
 		if (this.server) this.server.error('Programme loading failed!');
 	} else {
-		_el('tabs').style.display = 'block';
+		tabs.style.display = 'block';
 		if (!this.people || !this.people.list.length) {
-			_el('tab_part').style.display = 'none';
+			tabs.classList.add('no-people');
 			if (view == 'part') view = '';
 		} else {
-			_el('tab_part').style.display = 'block';
+			tabs.classList.remove('no-people');
 		}
 		switch (view) {
 			case 'part': this.people.show();  break;
