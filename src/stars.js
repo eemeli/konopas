@@ -79,7 +79,7 @@ KonOpas.Stars.prototype.sync = function(new_data) {
 	if (local_mod.length) {
 		_log('Stars.sync: local changes: ' + local_mod + (redraw ? ' -> redraw' : ''));
 		this.write();
-		if (redraw) ko.set_view();
+		if (redraw) konopas.set_view();
 	}
 
 	if (this.server) {
@@ -109,7 +109,7 @@ KonOpas.Stars.prototype.show = function() {
 	var view = _el("star_data"),
 		hash = window.location.hash.substr(6),
 	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
-	    set = ko.program.list.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
+	    set = konopas.program.list.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
 	    set_len = set.length,
 	    html = this.persistent() ? '' : '<p>' + i18n.txt('star_no_memory', {'SERVER': !!this.server}),
 	    star_list = this.list(),
@@ -155,7 +155,7 @@ KonOpas.Stars.prototype.show = function() {
 	} else {
 		html += '<p id="star_links">&raquo; ' + i18n.txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 	}
-	var ls = ko.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
+	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 	KonOpas.Item.show_list(ls);
 	if (set_len) {
 		document.body.classList.add("show_set");

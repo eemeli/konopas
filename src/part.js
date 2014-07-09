@@ -13,8 +13,8 @@ KonOpas.Part = function(list, opt) {
 KonOpas.Part.name_in_range = function(n0, range) {
 	switch (range.length) {
 		case 1:  return (n0 == range[0]);
-		case 2:  return ko.non_ascii_people
-			? (n0.localeCompare(range[0], ko.lc) >= 0) && (n0.localeCompare(range[1], ko.lc) <= 0)
+		case 2:  return konopas.non_ascii_people
+			? (n0.localeCompare(range[0], konopas.lc) >= 0) && (n0.localeCompare(range[1], konopas.lc) <= 0)
 			: ((n0 >= range[0]) && (n0 <= range[1]));
 		default: return (range.indexOf(n0) >= 0);
 	}
@@ -57,7 +57,7 @@ KonOpas.Part.prototype.show_one = function(i) {
 		  '<h2 id="part_title">' + p_name + '</h2>'
 		+ ((p.bio || img) ? ('<p>' + img + p.bio) : '')
 		+ links;
-	KonOpas.Item.show_list(ko.program.list.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
+	KonOpas.Item.show_list(konopas.program.list.filter(function(it) { return p.prog.indexOf(it.id) >= 0; }));
 	_el("top").scrollIntoView();
 }
 
@@ -91,7 +91,7 @@ KonOpas.Part.prototype.update_view = function(name_range, participant) {
 		participant = '';
 		this.show_list(name_range);
 	}
-	ko.storage_set('part', { 'name_range': name_range, 'participant': participant });
+	konopas.storage_set('part', { 'name_range': name_range, 'participant': participant });
 }
 
 KonOpas.Part.prototype.show = function(hash) {
@@ -107,7 +107,7 @@ KonOpas.Part.prototype.show = function(hash) {
 	}
 
 	if (!this.list.length) { window.location.hash = ''; return; }
-	var store = ko.storage_get('part') || {},
+	var store = konopas.storage_get('part') || {},
 	    name_range = store.name_range || '',
 	    participant = !document.body.classList.contains('part') && store.participant || '',
 		hash = window.location.hash.substr(6);
@@ -137,7 +137,7 @@ KonOpas.Part.prototype.filter_click = function(ev) {
 	var el = (ev || window.event).target;
 	if (el.parentNode.id == 'name_range') {
 		var name_range = el.getAttribute("data-range") || '';
-		ko.storage_set('part', { 'name_range': name_range, 'participant': '' });
+		konopas.storage_set('part', { 'name_range': name_range, 'participant': '' });
 		window.location.hash = '#part';
 		this.update_view(name_range, '');
 	}

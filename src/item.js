@@ -30,7 +30,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	}
 	function _people(it) {
 		if (!it.people || !it.people.length) return '';
-		var a = it.people.map(!ko.people || !ko.people.list.length
+		var a = it.people.map(!konopas.people || !konopas.people.list.length
 			? function(p) { return p.name; }
 			: function(p) { return "<a href=\"#part/" + KonOpas.hash_encode(p.id) + "\">" + p.name + "</a>"; }
 		);
@@ -39,7 +39,7 @@ KonOpas.Item.show_extra = function(item, id) {
 
 	if (_el("e" + id)) return;
 	var html = "";
-	var a = ko.program.list.filter(function(el) { return el.id == id; });
+	var a = konopas.program.list.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = i18n.txt('item_not_found', {'ID':id});
 	else {
 		html = _tags(a[0]) + _people(a[0]);
@@ -49,7 +49,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	extra.id = 'e' + id;
 	extra.innerHTML = html;
 	item.appendChild(extra);
-	if (ko.server) ko.server.show_extras(id, item);
+	if (konopas.server) konopas.server.show_extras(id, item);
 }
 
 KonOpas.Item.new = function(it) {
@@ -59,9 +59,9 @@ KonOpas.Item.new = function(it) {
 			s = it.loc[0];
 			if (it.loc.length > 1) s += ' (' + it.loc.slice(1).join(', ') + ')';
 		}
-		if (it.mins && (it.mins != ko.default_duration)) {
+		if (it.mins && (it.mins != konopas.default_duration)) {
 			if (s) s += ', ';
-			s += KonOpas.pretty_time(it.time, ko) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), ko);
+			s += KonOpas.pretty_time(it.time, konopas) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
 		}
 		return s;
 	}
@@ -70,8 +70,8 @@ KonOpas.Item.new = function(it) {
 	    item  = frame.appendChild(_new_elem('div', 'item')),
 	    title = item.appendChild(_new_elem('div', 'title')),
 	    loc   = item.appendChild(_new_elem('div', 'loc')),
-	    votes = ko.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
-	if (ko.use_server) {
+	    votes = konopas.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
+	if (konopas.use_server) {
 		votes.textContent = i18n.txt('Votes') + ': ';
 		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
 		votes.appendChild(document.createTextNode(' / '));
@@ -92,7 +92,7 @@ KonOpas.Item.new = function(it) {
 KonOpas.Item.show_list = function(ls, show_id) {
 	var frag = document.createDocumentFragment();
 	var prev_date = "", prev_time = "";
-	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < ko.expand_all_max_items)) {
+	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < konopas.expand_all_max_items)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
 			.appendChild(_new_elem('a', 'js-link', i18n.txt('Expand all')))
 			.id = 'item_expander_link';
@@ -101,12 +101,12 @@ KonOpas.Item.show_list = function(ls, show_id) {
 		if (ls[i].date != prev_date) {
 			prev_date = ls[i].date;
 			prev_time = "";
-			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, ko)));
+			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, konopas)));
 		}
 		if (ls[i].time != prev_time) {
 			prev_time = ls[i].time;
 			frag.appendChild(document.createElement('hr'));
-			frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(ls[i].time, ko)))
+			frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(ls[i].time, konopas)))
 				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? KonOpas.parse_date(ls[i].date).getDay() : -1 }));
 		}
 		frag.appendChild(KonOpas.Item.new(ls[i]));
@@ -116,7 +116,7 @@ KonOpas.Item.show_list = function(ls, show_id) {
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
 	LS.appendChild(frag);
 
-	if (ko.server) ko.server.decorate_list(LS);
+	if (konopas.server) konopas.server.decorate_list(LS);
 
 	var expand_all = _el("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {
@@ -138,10 +138,10 @@ KonOpas.Item.show_list = function(ls, show_id) {
 
 	var star_els = LS.getElementsByClassName("item_star");
 	for (var i = 0, l = star_els.length; i < l; ++i) {
-		star_els[i].onclick = function() { ko.stars.toggle(this, this.id.substr(1)); return false; };
+		star_els[i].onclick = function() { konopas.stars.toggle(this, this.id.substr(1)); return false; };
 	}
 
-	var star_list = ko.stars.list();
+	var star_list = konopas.stars.list();
 	for (var i = 0, l = star_list.length; i < l; ++i) {
 		var el = _el('s' + star_list[i]);
 		if (el) el.classList.add("has_star");
@@ -160,7 +160,7 @@ KonOpas.Item.show_list = function(ls, show_id) {
 KonOpas.Item.list_click = function(ev) {
 	function _set_location_id(id) {
 		var f = KonOpas.Prog.get_filters(true);
-		if (id && !f['day']) f['day'] = ko.show_all_days_by_default ? 'all_days' : ko.program.default_day();
+		if (id && !f['day']) f['day'] = konopas.show_all_days_by_default ? 'all_days' : konopas.program.default_day();
 		f['id'] = id;
 		return KonOpas.Prog.set_filters(f, true);
 	}

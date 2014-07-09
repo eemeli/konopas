@@ -96,8 +96,8 @@ KonOpas.prototype.refresh_cache = function() {
 	}
 }
 
-var ko = new KonOpas(konopas_set);
-if (typeof program != 'undefined') ko.set_program(program, ko.filters);
-if (typeof people != 'undefined') ko.set_people(people);
-var server = ko.server;
-ko.set_view();
+var konopas = new KonOpas(konopas_set);
+if (typeof program != 'undefined') konopas.set_program(program, konopas.filters);
+if (typeof people != 'undefined') konopas.set_people(people);
+var server = konopas.server;
+konopas.set_view();

@@ -252,7 +252,7 @@ KonOpas.Server.prototype.make_comment_div = function(c) {
 	d.appendChild(n);
 
 	var dt = new Date(1000 * c.ctime);
-	var t = _new_elem('span', 'comment-time', KonOpas.pretty_date(dt, ko) + ' at ' + KonOpas.pretty_time(dt, ko));
+	var t = _new_elem('span', 'comment-time', KonOpas.pretty_date(dt, konopas) + ' at ' + KonOpas.pretty_time(dt, konopas));
 	t.title = dt.toString();
 	d.appendChild(t);
 
@@ -475,7 +475,7 @@ KonOpas.Server.prototype.cb_ok = function(v) {
 			if (this.stars) {
 				this.stars.data = {};
 				this.stars.write();
-				ko.set_view();
+				konopas.set_view();
 			}
 			this.exec('info');
 			_log("server ok (logout): " + JSON.stringify(v));
