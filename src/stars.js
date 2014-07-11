@@ -119,6 +119,7 @@ KonOpas.Stars.prototype.show = function() {
 		view.innerHTML = html + '<p>' + i18n.txt('star_hint');
 		return;
 	}
+	document.body.classList.remove("show_set");
 	set.sort();
 	star_list.sort();
 	var set_link = '#star/set:' + star_list.join(',');
@@ -129,8 +130,8 @@ KonOpas.Stars.prototype.show = function() {
 					'SHORT': KonOpas.link_to_short_url(location.href),
 					'QR': KonOpas.link_to_qr_code(location.href)
 				});
-			if (this.server) this.server.show_ical_link(view);
 		} else {
+			document.body.classList.add("show_set");
 			var n_same = KonOpas.array_overlap(set, star_list);
 			var n_new = set_len - n_same;
 			var n_bad = set_raw.length - set_len;
@@ -155,14 +156,12 @@ KonOpas.Stars.prototype.show = function() {
 	} else {
 		html += '<p id="star_links">&raquo; ' + i18n.txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 	}
+	view.innerHTML = html;
+	if (this.server) this.server.show_ical_link(view);
 	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 	KonOpas.Item.show_list(ls);
-	if (set_len) {
-		document.body.classList.add("show_set");
-		for (var i = 0; i < set_len; ++i) {
-			var el = _el('s' + set[i]);
-			if (el) el.classList.add("in_set");
-		}
+	if (set_len) for (var i = 0; i < set_len; ++i) {
+		var el = _el('s' + set[i]);
+		if (el) el.classList.add("in_set");
 	}
-	view.innerHTML = html;
 }

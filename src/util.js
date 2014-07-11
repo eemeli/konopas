@@ -219,5 +219,5 @@ KonOpas.time_sum = function(t0_str, m_str) {
 	var t = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str,
 	    h = (t / 60) >> 0,
 	    m = t - 60 * h;
-	return '' + (h % 24) + ':' + m;
+	return '' + (h % 24) + ':' + (m<10?'0':'') + m;
 }
