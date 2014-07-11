@@ -63,10 +63,7 @@ KonOpas.prototype.set_view = function() {
 	} else {
 		_el('tabs').style.display = 'block';
 		if (!this.people || !this.people.list.length) {
-			_el('tab_part').style.display = 'none';
 			if (view == 'part') view = '';
-		} else {
-			_el('tab_part').style.display = 'block';
 		}
 		switch (view) {
 			case 'part': this.people.show();  break;
@@ -96,7 +93,7 @@ KonOpas.prototype.refresh_cache = function() {
 	}
 }
 
-var ko = new KonOpas(konopas_set);
+var ko = new KonOpas(konopas_set), konopas = ko;
 if (typeof program != 'undefined') ko.set_program(program);
 if (typeof people != 'undefined') ko.set_people(people);
 var server = ko.server;

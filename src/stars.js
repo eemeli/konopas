@@ -129,6 +129,7 @@ KonOpas.Stars.prototype.show = function() {
 					'SHORT': KonOpas.link_to_short_url(location.href),
 					'QR': KonOpas.link_to_qr_code(location.href)
 				});
+			view.innerHTML = html;
 			if (this.server) this.server.show_ical_link(view);
 		} else {
 			var n_same = KonOpas.array_overlap(set, star_list);
@@ -152,8 +153,11 @@ KonOpas.Stars.prototype.show = function() {
 			var el_set = _el('star_set_set'); if (el_set) el_set.onclick = function() { this.set(set); return true; };
 			var el_add = _el('star_set_add'); if (el_add) el_add.onclick = function() { this.add(set); return true; };
 		}
+		view.innerHTML = html;
 	} else {
 		html += '<p id="star_links">&raquo; ' + i18n.txt('star_export_link', { 'URL':set_link, 'N':stars_len });
+		view.innerHTML = html;
+		if (this.server) this.server.show_ical_link(view);
 	}
 	var ls = ko.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 	KonOpas.Item.show_list(ls);
@@ -164,5 +168,4 @@ KonOpas.Stars.prototype.show = function() {
 			if (el) el.classList.add("in_set");
 		}
 	}
-	view.innerHTML = html;
 }
