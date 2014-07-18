@@ -87,29 +87,14 @@ KonOpas.Part.prototype.show_one = function(i) {
 	    pl = KonOpas.clean_links(p);
 	if (pl) {
 		links += '<dl class="linklist">';
-		for (var type in pl) {
-			var tgt = pl[type];
-			switch (type) {
-				case 'url': links += '<dt>URL:<dd>'
-					+ '<a href="' + tgt + '">' + tgt + '</a>';
-					break;
-				case 'twitter': links += '<dt>Twitter:<dd>'
-					+ '<a href="https://www.twitter.com/' + tgt + '">@' + tgt + '</a>';
-					break;
-				case 'fb': links += '<dt>Facebook:<dd>'
-					+ '<a href="https://www.facebook.com/' + tgt + '">/' + tgt + '</a>';
-					break;
-				case 'img':
-					/*if (navigator.onLine) {
-						img = '<a class="part_img" href="' + tgt + '"><img src="' + tgt + '" alt="' + i18n.txt('Photo') + ':' + p_name + '"></a>';
-					} else*/ {
-						links += '<dt>' + i18n.txt('Photo') + ':<dd>' + '<a href="' + tgt + '">' + tgt + '</a>';
-					}
-					break;
-				default: links += '<dt>' + type + ':<dd>' + tgt;
-			}
+		for (var type in pl) if (type != 'img') {
+			var tgt = pl[type].tgt, txt = pl[type].txt || tgt;
+			links += '<dt>' + type + ':<dd>' + '<a href="' + tgt + '">' + txt + '</a>';
 		}
 		links += '</dl>';
+		if (pl.img && navigator.onLine) {
+			img = '<a class="part_img" href="' + pl.img.tgt + '"><img src="' + pl.img.tgt + '" alt="' + i18n.txt('Photo') + ': ' + p_name + '"></a>';
+		}
 	}
 	_el("part_names").innerHTML = '';
 	_el("part_info").innerHTML =

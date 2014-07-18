@@ -116,6 +116,7 @@ KonOpas.Prog.filter_change = function(ev) {
 			switch (key) {
 				case 'day':  value = value.replace(/^d/, ''); break;
 				case 'area': value = value.replace(/^a([^a-zA-Z])/, '$1'); break;
+				case 'tag':  value = value.replace(/^t([^a-zA-Z])/, '$1'); break;
 			}
 			break;
 		case 'submit':

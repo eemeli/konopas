@@ -88,25 +88,30 @@ KonOpas.clean_name = function(p, span_parts) {
 KonOpas.clean_links = function(p) {
 	var ok = false, o = {};
 	if (p && ('links' in p)) {
-		if (p.links.img) {
-			var img = p.links.img.trim();
+		if (p.links.img || p.links.photo) {
+			var img = (p.links.img || p.links.photo).trim();
 			if (/^www/.test(img)) img = 'http://' + img;
-			if (/:\/\//.test(img)) { o['img'] = img; ok = true; }
+			if (/:\/\//.test(img)) { o['img'] = { 'tgt': img }; ok = true; }
 		}
 		if (p.links.url) {
 			var url = p.links.url.trim();
 			if (!/:\/\//.test(url)) url = 'http://' + url;
-			o['url'] = url; ok = true;
+			o['URL'] = { 'tgt': url, 'txt': url.replace(/^https?:\/\//, '') };
+			ok = true;
 		}
 		if (p.links.fb) {
 			var fb = p.links.fb.trim().replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
+			o['Facebook'] = { 'txt': fb };
 			if (/[^a-zA-Z0-9.]/.test(fb) && !/^pages\//.test(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
-			o['fb'] = fb; ok = true;
+			o['Facebook']['tgt'] = 'https://www.facebook.com/' + fb;
+			ok = true;
 		}
 		if (p.links.twitter) {
 			var tw = p.links.twitter.trim().replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
+			o['Twitter'] = { 'txt': '@' + tw };
 			if (/[^a-zA-Z0-9_]/.test(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
-			o['twitter'] = tw; ok = true;
+			o['Twitter']['tgt'] = 'https://www.twitter.com/' + tw;
+			ok = true;
 		}
 	}
 	return ok ? o : false;
