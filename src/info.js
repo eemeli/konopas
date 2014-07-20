@@ -11,6 +11,10 @@ KonOpas.Info = function() {
 		x.open('GET', cache_manifest, true);
 		x.send();
 	}
+	var cl = _el('info_view').getElementsByClassName('collapse');
+	for (var i = 0; i < cl.length; ++i) {
+		cl[i].onclick = KonOpas.toggle_collapse;
+	}
 }
 
 KonOpas.Info.prototype.show_updated = function() {

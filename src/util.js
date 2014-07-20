@@ -167,6 +167,19 @@ KonOpas.popup_open = function(ev) {
 	if (src_el.href) ev.preventDefault();
 }
 
+KonOpas.toggle_collapse = function(ev) {
+	ev = ev || window.event;
+	var title = ev.target, body = title && title.nextElementSibling;
+	if (!body) return;
+	if (window.getComputedStyle(body).getPropertyValue('display') == 'none') {
+		title.classList.remove('collapse');
+		title.classList.add('collapse-open');
+	} else {
+		title.classList.add('collapse');
+		title.classList.remove('collapse-open');
+	}
+}
+
 
 // ------------------------------------------------------------------------------------------------ time & date
 

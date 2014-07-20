@@ -4,7 +4,15 @@
 	h3 { margin: 20px 0 5px 0; border-bottom: @border-light; padding-bottom: 2px; }
 	h3 + p { margin-top: 5px; }
 	h2 { font-size: 2.0em; margin-top: 40px; border-bottom: @border-normal; }
-	table { width: 100%; }
+	.collapse, .collapse-open {
+		cursor: pointer;
+		&:before { content: "» "; }
+	}
+	.collapse {
+		border: none;
+		& + * { display: none; }
+	}
+	table { width: 100%; border-spacing: 0; }
 	tr:hover { background: @bg-highlight; }
 	td { text-align: center; }
 	td:first-child { text-align: left; }
