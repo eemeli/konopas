@@ -234,6 +234,9 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 			var re = new RegExp(o.exclude.join('|'));
 			for (var t in items) if (re.test(t)) delete items[t];
 		}
+		if (o.min_count) {
+			for (var t in items) if (items[t] < o.min_count) delete items[t];
+		}
 		var list = Object.keys(items).sort(_compare);
 		if (o.categories) for (i = 0; i < o.categories.length; ++i) {
 			var prefix = o.categories[i] + ':',
@@ -263,8 +266,8 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 	for (var i = 0, l = this.list.length; i < l; ++i) {
 		var p = this.list[i];
 		if (opt.day && p.date) days[p.date] = 1;
-		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) areas[p.loc[lvl]] = 1;
-		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) tags[p.tags[j]] = 1;
+		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) areas[p.loc[lvl]] = (areas[p.loc[lvl]] || 0) + 1;
+		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
 	}
 	if (opt.day) {
 		var d_ul = _ul('day'),
