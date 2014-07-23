@@ -6,6 +6,19 @@
 	text-align: center;
 }
 
+.day-link {
+	display: block;
+	max-width: (@full-width - 40px);
+	padding: 10px;
+	text-align: center;
+	text-decoration: none;
+	.font-heavy;
+	cursor: pointer;
+	&:before { content: "» "; }
+	&:hover { text-decoration: underline; }
+	&:last-child { padding: 100px 10px; }
+}
+
 .item_expander {
 	width: 100%;
 	max-width: (@full-width - 20px);

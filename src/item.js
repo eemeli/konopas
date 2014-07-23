@@ -6,7 +6,12 @@ KonOpas.Item = function() {
 			_el('time').style.display = 'none';
 			_el('scroll').style.display = 'none';
 		} else {
-			this.prev_scroll = { "i": 0, "top": 0 };
+			this.scroll = {
+				'i': 0, 'top': 0,
+				'day': '', 'day_txt': '',
+				't_el': _el('time'), 's_el': _el('scroll'),
+				'times': document.getElementsByClassName('new_time')
+			};
 			window.onscroll = this.scroll_time.bind(this);
 		}
 	}
@@ -90,28 +95,68 @@ KonOpas.Item.new = function(it) {
 	return KonOpas.Item.new(it);
 }
 
-KonOpas.Item.show_list = function(ls, show_id) {
-	var frag = document.createDocumentFragment();
-	var prev_date = "", prev_time = "";
-	if ((ls.length > (show_id ? 1 : 0)) && (ls.length < konopas.expand_all_max_items)) {
+KonOpas.Item.show_list = function(ls, show_id, day, in_prog_view) {
+	if (!day || !konopas.program.days[day]) {
+		day = '';
+		for (day in konopas.program.days) break;
+	}
+	var prev_date = "", prev_time = "",
+		show_all = (ls.length <= konopas.max_items_per_page),
+	    ls_by_day = {}, ls_day_lengths = {},
+	    day_links = {},
+	    frag = document.createDocumentFragment();
+	if (day) {
+		for (var d in konopas.program.days) {
+			ls_by_day[d] = ls.filter(function(p) { return p.date == d; });
+			ls_day_lengths[d] = ls_by_day[d].length;
+		}
+	} else ls_by_day = { '': ls };
+	if (ls.length > (show_id ? 1 : 0)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
 			.appendChild(_new_elem('a', 'js-link', i18n.txt('Expand all')))
 			.id = 'item_expander_link';
 	}
-	for (var i = 0, l = ls.length; i < l; ++i) {
-		if (ls[i].date != prev_date) {
-			prev_date = ls[i].date;
-			prev_time = "";
-			frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(ls[i].date, konopas)));
+	for (var d in ls_by_day) {
+		if (!show_all && d && (d != day)) {
+			if (d < day) {
+				if (ls_day_lengths[d]) day_links['prev'] = d;
+			} else {
+				if (!day_links['next'] && ls_day_lengths[d]) day_links['next'] = d;
+			}
+			continue;
 		}
-		if (ls[i].time != prev_time) {
-			prev_time = ls[i].time;
-			frag.appendChild(document.createElement('hr'));
-			frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(ls[i].time, konopas)))
-				.setAttribute('data-day', i18n.txt('weekday_short_n', { 'N': ls[i].date ? KonOpas.parse_date(ls[i].date).getDay() : -1 }));
+		for (var i = 0, l = ls_by_day[d].length; i < l; ++i) {
+			var p = ls_by_day[d][i];
+			if (p.date != prev_date) {
+				prev_date = p.date;
+				prev_time = "";
+				frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(p.date, konopas))).id = 'dt_' + p.date;
+			}
+			if (p.time != prev_time) {
+				prev_time = p.time;
+				frag.appendChild(document.createElement('hr'));
+				frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(p.time, konopas)))
+					.setAttribute('data-day', p.date);
+			}
+			frag.appendChild(KonOpas.Item.new(p));
 		}
-		frag.appendChild(KonOpas.Item.new(ls[i]));
 	}
+	function _day_link(t) {
+		var d = day_links[t],
+		    txt = i18n.txt('day_link', {
+				'D': KonOpas.parse_date(d).getDay(),
+				'N': ls_day_lengths[d]
+			}),
+		    link = _new_elem('a', 'day-link js-link', txt);
+		link.id = t + '_day_link';
+		link.onclick = function() {
+			if (t == 'next') window.scrollTo(0, 0);
+			KonOpas.Item.show_list(ls, show_id, d, in_prog_view);
+		};
+		return link;
+	}
+	if (day_links['prev']) frag.insertBefore(_day_link('prev'), frag.firstChild);
+	if (day_links['next']) frag.appendChild(_day_link('next'));
 
 	var LS = _el('prog_ls');
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
@@ -156,6 +201,40 @@ KonOpas.Item.show_list = function(ls, show_id) {
 			if (ls.length > 1) it.scrollIntoView();
 		}
 	}
+
+	if (in_prog_view) {
+		var d_s = _el('day-sidebar'), d_n = _el('day-narrow'),
+		    d_click = function(ev) {
+				var li = (ev || window.event).target,
+				    d = li.getAttribute('data-day');
+				if (!d) return;
+				if (show_all) {
+					_el('dt_' + d).scrollIntoView();
+					KonOpas.Prog.focus_day(d);
+				} else {
+					KonOpas.Item.show_list(ls, show_id, d, true);
+				}
+			},
+		    d_set = function(div, len) {
+				var ul = document.createElement('ul');
+				ul.className = 'day-list';
+				ul.onclick = d_click;
+				for (var d in konopas.program.days) {
+					var li = document.createElement('li');
+					li.textContent = konopas.program.days[d][len] + ' (' + (ls_day_lengths[d] || 0) + ')';
+					li.setAttribute('data-day', d);
+					if (d == day) li.className = 'selected';
+					ul.appendChild(li);
+				}
+				div.innerHTML = '';
+				div.appendChild(ul);
+			};
+		if (d_s) d_set(d_s, 'long');
+		if (d_n) d_set(d_n, 'short');
+	}
+
+	konopas.item.scroll.i = 0;
+	window.onscroll && window.onscroll();
 }
 
 KonOpas.Item.list_click = function(ev) {
@@ -165,6 +244,7 @@ KonOpas.Item.list_click = function(ev) {
 		if (el.id == 'prog_ls') return;
 		if ((el.tagName.toLowerCase() == 'a') && el.href) is_link = true;
 		el = el.parentNode;
+		if (!el) return;
 	}
 	if (el && el.id && (el.id[0] == 'p') && !is_link) {
 		if (el.parentNode.classList.toggle("expanded")) {
@@ -174,28 +254,41 @@ KonOpas.Item.list_click = function(ev) {
 }
 
 KonOpas.Item.prototype.scroll_time = function() {
-	var st = window.pageYOffset;
-	_el("scroll").style.display = (st > 0) ? 'block' : 'none';
-	st += 20; // to have more time for change behind new_time
-	var te = _el("time"); if (!te) return;
-	var tl = document.getElementsByClassName("new_time"); if (!tl.length) return;
-	if (st < tl[0].offsetTop) {
-		this.prev_scroll.i = 0;
-		this.prev_scroll.top = tl[0].offsetTop;
-		te.style.display = "none";
+	var S = this.scroll,
+		st_len = S.times.length,
+	    scroll_top = window.pageYOffset + 20; // to have more time for change behind new_time
+	if (!S.t_el || !st_len) return;
+	if (scroll_top < S.times[0].offsetTop) {
+		S.i = 0;
+		S.top = S.times[0].offsetTop;
+		S.t_el.style.display = 'none';
+		var day0 = S.times[0].getAttribute('data-day');
+		if (day0 != S.day) {
+			KonOpas.Prog.focus_day(day0);
+			S.day = day0;
+		}
 	} else {
-		var i = this.prev_scroll.top ? this.prev_scroll.i : 1;
-		if (i >= tl.length) i = tl.length - 1;
-		if (st > tl[i].offsetTop) {
-			while ((i < tl.length) && (st > tl[i].offsetTop)) ++i;
+		var i = S.top ? S.i : 1;
+		if (i >= st_len) i = st_len - 1;
+		if (scroll_top > S.times[i].offsetTop) {
+			while ((i < st_len) && (scroll_top > S.times[i].offsetTop)) ++i;
 			--i;
 		} else {
-			while ((i >= 0) && (st < tl[i].offsetTop)) --i;
+			while ((i >= 0) && (scroll_top < S.times[i].offsetTop)) --i;
 		}
 		if (i < 0) i = 0;
-		this.prev_scroll.i = i;
-		this.prev_scroll.top = tl[i].offsetTop;
-		te.textContent = tl[i].getAttribute('data-day') + '\n' + tl[i].textContent;
-		te.style.display = "block";
+		if ((i == 0) || (i != S.i)) {
+			S.i = i;
+			S.top = S.times[i].offsetTop;
+			var day0 = S.times[i].getAttribute('data-day'),
+			    day1 = ((i + 1 < st_len) && S.times[i+1].getAttribute('data-day')) || day0;
+			S.t_el.textContent = konopas.program.days[day0]['short'] + '\n' + S.times[i].textContent;
+			S.t_el.style.display = 'block';
+			if (day1 != S.day) {
+				KonOpas.Prog.focus_day(day1);
+				S.day = day1;
+			}
+		}
 	}
+	if (S.s_el) S.s_el.style.display = S.t_el.style.display;
 }

@@ -29,6 +29,7 @@
 "star_no_memory": "{WHY, select, FFcookies{It looks like you're using a Firefox browser with cookies disabled, so } IOSprivate{It looks like you're using an iOS or Safari browser in private mode, so } other{For some reason,}} your <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> is not enabled, and therefore your selection will not be remembered between sessions. {SERVER, select, true{Please <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">login</span> to enable persistent storage.} other{}}",
 "filter_sum_id": "Listing {N, plural, one{one item: {TITLE}} other{# items with id {ID}}}",
 "filter_sum": "Listing {N, plural, one{one {TAG} item} other{{ALL} # {TAG} items}} {GOT_NOW, select, true{on today at {NOW} and in the next two hours} other{}} {GOT_DAY, select, true{on {DAY}} other{}} {GOT_AREA, select, true{in {AREA}} other{}} {GOT_Q, select, true{matching the query {Q}} other{}}",
+"day_link": "Show {N} matching items from {D, plural, =0{Sunday} =1{Monday} =2{Tuesday} =3{Wednesday} =4{Thursday} =5{Friday} =6{Saturday} other{???}}",
 
 "server_cmd_fail": "The command \"{CMD}\" failed.",
 "show_comments": "Show {N, plural, one{one comment} other{# comments}}",

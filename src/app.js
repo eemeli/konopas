@@ -6,14 +6,13 @@ function KonOpas(set) {
 	this.time_show_am_pm = false;
 	this.abbrev_00_minutes = true; // only for am/pm time
 	this.always_show_participants = false;
-	this.expand_all_max_items = 100;
-	this.show_all_days_by_default = false;
+	this.max_items_per_page = 200;
 	this.non_ascii_people = false; // setting true enables correct but slower sort
 	this.people_per_screen = 100;
 	this.use_server = false;
 	this.log_messages = true;
 	this.cache_refresh_interval_mins = 60;
-	this.filters = { 'day': {}, 'area': {}, 'tag': {} };
+	this.filters = { 'area': {}, 'tag': {} };
 	this.views = [ "star", "prog", "part", "info" ];
 	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 

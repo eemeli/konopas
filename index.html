@@ -50,7 +50,7 @@
 
 <ul id="tabs">
 <li id="tab_star"><a href="#star" data-txt>My con</a>
-<li id="tab_prog"><a href="#" data-txt>Program</a>
+<li id="tab_prog"><a href="#" data-txt>Program</a><div id="day-sidebar"></div>
 <li id="tab_part"><a href="#part" data-txt>People</a>
 <li id="tab_info"><a href="#info" data-txt>Info</a>
 </ul>
@@ -66,20 +66,19 @@
 
 <div id="prog_view" class="view">
 	<div id="prog_filters" class="filters">
-	<div id="prog_lists"></div>
-
-	<form name="search" id="search">
-	<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
-	<div id="q_ctrl">
-	<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
-	<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+		<div id="prog_lists"></div>
+		<form name="search" id="search">
+			<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
+			<div id="q_ctrl">
+			<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+			<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+			</div>
+			<div id="q_hint" class="hint"></div>
+		</form>
+		<div id="filter_sum"></div>
 	</div>
-	<div id="q_hint" class="hint"></div>
-	</form>
-
-	<div id="filter_sum"></div>
+	<div id="day-narrow"></div>
 	<div id="next_start_note"></div>
-	</div>
 </div>
 
 <div id="part_view" class="view">
