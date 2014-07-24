@@ -44,6 +44,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	else {
 		html = _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
+		html += '<a href="#prog/id:' + a[0].id + '" class="permalink" title="' + i18n.txt('Permalink') + '"></a>';
 	}
 	var extra = _new_elem('div', 'extra');
 	extra.id = 'e' + id;
