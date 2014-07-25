@@ -378,7 +378,10 @@ KonOpas.Prog.prototype.show = function() {
 			}
 		}
 		if (this.query) {
-			var found = this.query.test(it.title) || this.query.test(it.desc) || (it.loc && this.query.test(it.loc[0]));
+			var found = this.query.test(it.title)
+				|| this.query.test(it.desc)
+				|| (it.loc && this.query.test(it.loc.join('\t')))
+				|| (it.tags && this.query.test(it.tags.join('\t')));
 			if (!found && it.people) {
 				for (var i = 0; i < it.people.length; ++i) {
 					if (this.query.test(it.people[i].name)) { found = true; break; }
