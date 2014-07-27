@@ -159,29 +159,17 @@ KonOpas.Item.show_list = function(ls, show_id) {
 }
 
 KonOpas.Item.list_click = function(ev) {
-	function _set_location_id(id) {
-		var f = KonOpas.Prog.get_filters(true);
-		if (id && !f['day']) f['day'] = konopas.show_all_days_by_default ? 'all_days' : konopas.program.default_day();
-		f['id'] = id;
-		return KonOpas.Prog.set_filters(f, true);
-	}
-
 	var el = (ev || window.event).target,
 	    is_link = false;
-	while (!/\bitem(_|$)/.test(el.className)) {
+	while (el && !/\bitem(_|$)/.test(el.className)) {
 		if (el.id == 'prog_ls') return;
 		if ((el.tagName.toLowerCase() == 'a') && el.href) is_link = true;
 		el = el.parentNode;
 	}
-	if (!el.id || el.id[0] != 'p') return;
-	var it_id = el.id.substr(1),
-	    in_prog_view = document.body.classList.contains('prog');
-	if (is_link) {
-		if (in_prog_view) _set_location_id(it_id);
-	} else {
-		var open = el.parentNode.classList.toggle("expanded");
-		if (open) KonOpas.Item.show_extra(el, it_id);
-		if (in_prog_view) _set_location_id(open ? it_id : '');
+	if (el && el.id && (el.id[0] == 'p') && !is_link) {
+		if (el.parentNode.classList.toggle("expanded")) {
+			KonOpas.Item.show_extra(el, el.id.substr(1));
+		}
 	}
 }
 

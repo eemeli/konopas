@@ -87,6 +87,7 @@ KonOpas.Prog.get_filters = function(hash_only) {
 
 KonOpas.Prog.set_filters = function(f, silent) {
 	if (silent && !(history && history.replaceState)) return false;
+	if (f.id) f = { 'id': f.id };
 	konopas.storage_set('prog', f);
 	var h = KonOpas.Prog.hash(f),
 	    h_cur = window.location.toString().split('#')[1] || '';
