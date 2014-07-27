@@ -262,12 +262,20 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 	if (!opt || !filter_el) return;
 	while (filter_el.firstChild) filter_el.removeChild(filter_el.firstChild);
 	var days = {}, areas = {}, tags = {},
-	    lvl = (opt.area && opt.area.loc_level) || 0;
+	    lvl = (opt.area && opt.area.loc_level) || 0,
+		loncon_fix_titles = {'Artists in Residence':1,'Signing':1};
 	for (var i = 0, l = this.list.length; i < l; ++i) {
 		var p = this.list[i];
 		if (opt.day && p.date) days[p.date] = 1;
 		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) areas[p.loc[lvl]] = (areas[p.loc[lvl]] || 0) + 1;
-		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
+		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) {
+			var t_s = opt.tag.set_category && opt.tag.set_category[p.tags[j]];
+			if (t_s) p.tags[j] = t_s + ':' + p.tags[j];
+			tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
+		}
+		if (p.people.length) for (var s in loncon_fix_titles) if (p.title == s) {
+			p.title = s + ': ' + p.people.map(function(p){ return p.name; }).join(', ');
+		}
 	}
 	if (opt.day) {
 		var d_ul = _ul('day'),
