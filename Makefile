@@ -44,7 +44,7 @@ $(JS_DEV): $(JS_FILES)
 
 $(JS_MIN): $(JS_DEV)
 	curl -X POST -s --data-urlencode "input@$^" http://javascript-minifier.com/raw \
-	| sed 's/\([^\w "]\)\(function\( \w\+\)\?(\)/\1\n\2/g' \
+	| sed 's/\([^,;:?+(){}\/]*[^\w ",;{}]\)\(function\( \w\+\)\?(\)/\n\1\2/g' \
 	| cat $(JS_PREFACE) - \
 	> $@
 
