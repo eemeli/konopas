@@ -1,11 +1,13 @@
 KonOpas.Stars = function(id, opt) {
 	opt = opt || {};
 	this.name = 'konopas.' + id + '.stars';
-	this.store = opt.store || localStorage || sessionStorage || (new (function() {
+	this.make_store = function() {
 		var data = {};
 		this.getItem = function(k) { return data[k]; };
 		this.setItem = function(k, v) { data[k] = v; };
-	})());
+	};
+	try { this.store = opt.store || localStorage || sessionStorage || (new this.make_store()); }
+	catch (e) { this.store = new this.make_store(); }
 	this.tag = opt.tag || 'has_star';
 	this.server = false;
 	this.data = this.read();
