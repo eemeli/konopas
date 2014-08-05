@@ -55,6 +55,37 @@ KonOpas.glob_to_re = function(pat) {
 }
 
 
+// ------------------------------------------------------------------------------------------------ storage
+
+KonOpas.Store = function(id) {
+	try {
+		sessionStorage.setItem('konopas.test_var', '1');
+		sessionStorage.removeItem('konopas.test_var', '1');
+		this.get = function(k) {
+			var v = sessionStorage.getItem('konopas.' + id + '.' + k);
+			return v ? JSON.parse(v) : v;
+		}
+		this.set = function(k, v) {
+			sessionStorage.setItem('konopas.' + id + '.' + k, JSON.stringify(v));
+		}
+		this.limit = '';
+	} catch (e) {
+		var data = {};
+		this.get = function(k) { return data[k]; };
+		this.set = function(k, v) { data[k] = v; };
+		this.limit = (e.name == 'SecurityError') ? 'FFcookies'
+				   : ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) ? 'IOSprivate'
+				   : '?';
+	}
+}
+
+KonOpas.VarStore = function() {
+	var data = {};
+	this.getItem = function(k) { return data[k]; };
+	this.setItem = function(k, v) { data[k] = v; };
+}
+
+
 // ------------------------------------------------------------------------------------------------ string generation
 
 KonOpas.clean_name = function(p, span_parts) {

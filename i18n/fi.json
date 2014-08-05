@@ -24,7 +24,6 @@
 "part_filter": "{T, select, first{Kaikki osanottajat etunimen mukaan} last{Kaikki osanottajat sukunimen mukaan} other{Kaikki osanottajat}}",
 "no_ko_id": "Ei asetettua ID:tä. Aseta konopas_set.id uniikiksi tunnisteeksi.",
 "old_browser": "Selaimesi ei tue kaikkia KonOppaan tarvitsemia Javascript-ominaisuuksia. Ole hyvä ja kokeile toista selainta.",
-"private_mode": "Näyttää siltä, että käytät iOS- tai Safari-selainta yksityistilassa, joka estää localStoragen käytön. Tämä johtaa huonompaan KonOpas-kokemukseen.",
 "item_not_found": "Ohjelmaa <b>{ID}</b> ei löydy!",
 "item_tags": "{T, select, tags{Tägit} track{Track} type{Tyyppi} other{{T}}}",
 "last_ended": "Viimeinen ohjelma loppui {D, plural, =0{} one{päivä ja} other{# päivää ja}} {H, plural, =0{} one{tunti ja} other{# tuntia ja}} {M, plural, one{yksi minuutti} other{# minuuttia}} sitten.",
@@ -40,7 +39,7 @@
 "star_add": "Lisää {N, plural, one{uusi valinta} other{# uutta valintaa}} valintoihini",
 "star_export_link": "<a href=\"{URL}\">Jaa valinnat</a> ({N, plural, one{yksi valinta} other{# valintaa}})",
 "star_hint": "\"Tähdittääksesi\" valinnan, tökkää sen vieressä olevaa neliötä. Valintasi tallennetaan ja näytetään tässä. Et ole vielä valinnut yhtään ohjelmaa, joten lista on tyhjä.",
-"star_no_memory": "Jostain syystä <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. {SERVER, select, true{Ole hyvä ja kirjaudu sisään säilyttääksesi valintasi.} other{}}",
+"star_no_memory": "{WHY, select, FFcookies{Näyttää siltä, että Firefox-selaimessasi on evästeiden käyttö estetty, jonka takia myöskään} IOSprivate{Näyttää siltä, että käytät iOS- tai Safari-selainta yksityistilassa, jonka takia} other{Jostain syystä}} <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. {SERVER, select, true{Ole hyvä ja <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">kirjaudu sisään</span> säilyttääksesi valintasi.} other{}}",
 "filter_sum_id": "Listataan {N, plural, one{yksi ohjelma: {TITLE}} other{# ohjelmaa tunnisteella {ID}}}",
 "filter_sum": "Listataan {N, plural, one{yksi {TAG} ohjelma} other{{ALL} # {TAG} ohjelmaa}} {GOT_NOW, select, true{tänään {NOW} ja seuraavan kahden tunnin aikana} other{}} {GOT_DAY, select, true{päivänä {DAY}} other{}} {GOT_AREA, select, true{paikassa {AREA}} other{}} {GOT_Q, select, true{kyselylle {Q}} other{}}",
 

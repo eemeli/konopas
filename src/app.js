@@ -26,6 +26,7 @@ function KonOpas(set) {
 	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
+	this.store = new KonOpas.Store(this.id);
 	this.stars = new KonOpas.Stars(this.id);
 	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
 	this.item = new KonOpas.Item();
@@ -38,22 +39,6 @@ function KonOpas(set) {
 
 KonOpas.prototype.set_program = function(list, opt) { this.program = new KonOpas.Prog(list, opt); }
 KonOpas.prototype.set_people = function(list) { this.people = new KonOpas.Part(list, this); }
-
-KonOpas.prototype.storage_get = function(name) {
-	var v = sessionStorage.getItem('konopas.' + this.id + '.' + name);
-	return v ? JSON.parse(v) : v;
-}
-
-KonOpas.prototype.storage_set = function(name, value) {
-	try {
-		sessionStorage.setItem('konopas.' + this.id + '.' + name, JSON.stringify(value));
-	} catch (e) {
-		if ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) {
-			this.storage_set = function(){};
-			alert(i18n.txt('private_mode'));
-		} else throw e;
-	}
-}
 
 KonOpas.prototype.set_view = function() {
 	var view = window.location.hash.substr(1, 4), tabs = _el('tabs');

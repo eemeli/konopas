@@ -41,7 +41,7 @@ if ((function(){
 		    d = this.getDate(),
 		    m = i('month_n', { 'N': this.getMonth() }),
 		    s = w + ', ' + d + ' ' + m;
-		if (options && options.year) s += ' ' + t.getFullYear();
+		if (options && options.year) s += ' ' + this.getFullYear();
 		return s;
 	};
 }

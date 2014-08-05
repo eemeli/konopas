@@ -135,7 +135,7 @@ KonOpas.Part.prototype.update_view = function(name_range, participant) {
 		participant = '';
 		this.show_list(name_range);
 	}
-	konopas.storage_set('part', { 'name_range': name_range, 'participant': participant });
+	konopas.store.set('part', { 'name_range': name_range, 'participant': participant });
 }
 
 KonOpas.Part.prototype.show = function(hash) {
@@ -151,7 +151,7 @@ KonOpas.Part.prototype.show = function(hash) {
 	}
 
 	if (!this.list.length) { window.location.hash = ''; return; }
-	var store = konopas.storage_get('part') || {},
+	var store = konopas.store.get('part') || {},
 	    name_range = store.name_range || '',
 	    participant = !document.body.classList.contains('part') && store.participant || '',
 		hash = window.location.hash.substr(6);
@@ -181,7 +181,7 @@ KonOpas.Part.prototype.filter_click = function(ev) {
 	var el = (ev || window.event).target;
 	if (el.parentNode.id == 'name_range') {
 		var name_range = el.getAttribute("data-range") || '';
-		konopas.storage_set('part', { 'name_range': name_range, 'participant': '' });
+		konopas.store.set('part', { 'name_range': name_range, 'participant': '' });
 		window.location.hash = '#part';
 		this.update_view(name_range, '');
 	}

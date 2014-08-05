@@ -6,10 +6,11 @@ KonOpas.Server = function(id, stars, opt) {
 	this.host = opt.host ||  'https://konopas-server.appspot.com';
 	this.el_id = opt.el_id || 'server_connect';
 	this.err_el_id = opt.err_el_id || 'server_error';
+	try { this.store = localStorage; } catch (e) { this.store = new KonOpas.VarStore(); }
 
 	this.connected = false;
-	this.token = localStorage.getItem('konopas.token') || false;
-	this.ical = localStorage.getItem('konopas.'+this.id+'.ical_link') || false;
+	this.token = this.store.getItem('konopas.token') || false;
+	this.ical = this.store.getItem('konopas.'+this.id+'.ical_link') || false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
 	this.my_votes_data = {};
@@ -467,7 +468,7 @@ KonOpas.Server.prototype.cb_ok = function(v) {
 		case 'logout':
 			this.disconnect();
 			this.token = false;
-			localStorage.removeItem('konopas.token');
+			this.store.setItem('konopas.token', '');
 			this.prog_data = {};
 			this.prog_server_mtime = 0;
 			this.my_votes_data = {};
@@ -536,7 +537,7 @@ KonOpas.Server.prototype.cb_info = function(v) {
 KonOpas.Server.prototype.cb_token = function(token) {
 	_log("server token: " + token);
 	this.token = token;
-	localStorage.setItem('konopas.token', token);
+	this.store.setItem('konopas.token', token);
 }
 
 KonOpas.Server.prototype.cb_login = function(v) {
@@ -588,6 +589,6 @@ KonOpas.Server.prototype.cb_show_comments = function(id, c) {
 
 KonOpas.Server.prototype.cb_ical_link = function(url) {
 	this.ical = url;
-	localStorage.setItem('konopas.'+this.id+'.ical_link', url);
+	this.store.setItem('konopas.'+this.id+'.ical_link', url);
 	this.show_ical_link(false);
 }

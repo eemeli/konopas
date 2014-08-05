@@ -1,13 +1,8 @@
 KonOpas.Stars = function(id, opt) {
 	opt = opt || {};
 	this.name = 'konopas.' + id + '.stars';
-	this.make_store = function() {
-		var data = {};
-		this.getItem = function(k) { return data[k]; };
-		this.setItem = function(k, v) { data[k] = v; };
-	};
-	try { this.store = opt.store || localStorage || sessionStorage || (new this.make_store()); }
-	catch (e) { this.store = new this.make_store(); }
+	try { this.store = localStorage || sessionStorage || (new KonOpas.VarStore()); }
+	catch (e) { this.store = new KonOpas.VarStore(); }
 	this.tag = opt.tag || 'has_star';
 	this.server = false;
 	this.data = this.read();
@@ -23,10 +18,6 @@ KonOpas.Stars.prototype.write = function() {
 	} catch (e) {
 		if ((e.code != DOMException.QUOTA_EXCEEDED_ERR) || (this.store.length != 0)) { throw e; }
 	}
-}
-
-KonOpas.Stars.prototype.persistent = function() {
-	return this.store && ((this.store == localStorage) || this.server && this.server.connected);
 }
 
 KonOpas.Stars.prototype.list = function() {
@@ -113,7 +104,7 @@ KonOpas.Stars.prototype.show = function() {
 	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
 	    set = konopas.program.list.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
 	    set_len = set.length,
-	    html = this.persistent() ? '' : '<p>' + i18n.txt('star_no_memory', {'SERVER': !!this.server}),
+	    html = konopas.store.limit ? '<p>' + i18n.txt('star_no_memory', {'WHY': konopas.store.limit, 'SERVER': !!this.server}) : '',
 	    star_list = this.list(),
 	    stars_len = star_list.length;
 	if (!stars_len && !set_len) {
