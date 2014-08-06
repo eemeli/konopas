@@ -104,9 +104,12 @@ KonOpas.Stars.prototype.show = function() {
 	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
 	    set = konopas.program.list.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
 	    set_len = set.length,
-	    html = konopas.store.limit ? '<p>' + i18n.txt('star_no_memory', {'WHY': konopas.store.limit, 'SERVER': !!this.server}) : '',
+	    html = '',
 	    star_list = this.list(),
 	    stars_len = star_list.length;
+	if (konopas.store.limit && (!this.server || !this.server.connected)) {
+		html = '<p>' + i18n.txt('star_no_memory', {'WHY': konopas.store.limit, 'SERVER': !!this.server});
+	}
 	if (!stars_len && !set_len) {
 		_el("prog_ls").innerHTML = '';
 		view.innerHTML = html + '<p>' + i18n.txt('star_hint');
