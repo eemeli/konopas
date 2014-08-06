@@ -1,3 +1,26 @@
+# 0.7.1
+
+2014-08-06
+
+  * Code:
+    - added konopas_set.set_category as alt. for tags "type:..."
+    - added optional min_count for tag & area filters
+    - added toggle_collapse for info view
+    - Makefile: easier-to-parse minified output
+    - reverted item id setting on click -- was too slow & too unclear
+    - bugfix: search includes tags
+    - bugfix: Firefox w/ no-cookies threw error on localStorage access
+    - bugfix: numeric tags now work
+  * Interface:
+    - added item permalinks, including new icon
+    - more informative text in "My con" view
+    - import selection borders aren't as sticky
+  * Skin:
+    - info view skin fixes
+    - added @media print rules
+    - Prettified participant links & added images to default on
+
+
 # 0.7.0
 
 2014-07-09
