@@ -1,6 +1,7 @@
 {
 "Scroll up": "Bläddra upp",
 "My con": "Min konferens",
+"Program":"Program",
 "People": "Deltagare",
 "Refresh data": "Uppdatera info",
 "Search": "Sök",
@@ -21,7 +22,6 @@
 "search_hint": "<b>Tips:</b> sökning sker efter hela ord i programpunkternas titel, beskrivning, taggar, sal och deltagare. Det går att använda * och ? som jokertecken och \"citerade ord\" för exakta fraser.",
 "search_example": "Prova till exempel <b>{X}</b>",
 "part_filter": "{T, select, first{Alla deltagare efter förnamn} last{Alla deltagare efter efternamn} other{Visa alla deltagare i programmet}}",
-"last_updated": "Program- och deltagaruppgifter uppdaterades för {T}",
 "no_ko_id": "ID saknas! Ge konopas_set.id en unik identifierare.",
 "old_browser": "Tyvärr hanterar din webbläsare inte några av de JavaScript-funktioner som KonOpas behöver. Du behöver använda en annan webbläsare.",
 "item_not_found": "Hittade inte program-ID <b>{ID}</b>!",
