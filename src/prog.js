@@ -1,14 +1,18 @@
 KonOpas.Prog = function(list, opt) {
 	function _sort(a, b) {
+		if (!a.date != !b.date) return a.date ? -1 : 1;
 		if (a.date < b.date) return -1;
 		if (a.date > b.date) return  1;
+		if (!a.time != !b.time) return a.time ? 1 : -1;
 		if (a.time < b.time) return -1;
 		if (a.time > b.time) return  1;
-		if (a.loc.length < b.loc.length) return -1;
-		if (a.loc.length > b.loc.length) return  1;
-		for (var i = a.loc.length - 1; i >= 0; --i) {
-			if (a.loc[i] < b.loc[i]) return -1;
-			if (a.loc[i] > b.loc[i]) return  1;
+		if (a.loc && b.loc) {
+			if (a.loc.length < b.loc.length) return -1;
+			if (a.loc.length > b.loc.length) return  1;
+			for (var i = a.loc.length - 1; i >= 0; --i) {
+				if (a.loc[i] < b.loc[i]) return -1;
+				if (a.loc[i] > b.loc[i]) return  1;
+			}
 		}
 		return 0;
 	}
@@ -196,11 +200,21 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		par.appendChild(e);
 	}
 	function _compare(a, b) {
-		var _a = (labels[a] || a).toLowerCase(),
-		    _b = (labels[b] || b).toLowerCase();
+		var sf = function(s) { return (labels[s] || s.replace(/^[^:]+:/, '')).toLowerCase().replace(/^the /, ''); },
+			af = function(s) { return s.match(/\d+|\D+/g).map(function(v) { return Number(v) || v; }); },
+			_a = sf(a), _b = sf(b);
 		if ((_a[0] == '$') != (_b[0] == '$')) return (_a < _b) ? 1 : -1; // $ == 0x24
-		if (_a < _b) return -1;
-		if (_a > _b) return  1;
+		if (/\d/.test(_a) && /\d/.test(_b)) {
+			var aa = af(_a), bb = af(_b);
+			for (var i = 0; i < aa.length && i < bb.length; ++i) {
+				if (aa[i] < bb[i]) return -1;
+				if (aa[i] > bb[i]) return  1;
+			}
+			if (aa.length != bb.length) return aa.length < bb.length ? -1 : 1;
+		} else {
+			if (_a < _b) return -1;
+			if (_a > _b) return  1;
+		}
 		return 0;
 	}
 	function _ul2(par, id, name, prefix, list) {
