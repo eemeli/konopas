@@ -155,7 +155,7 @@ KonOpas.Stars.prototype.show = function() {
 	view.innerHTML = html;
 	if (this.server) this.server.show_ical_link(view);
 	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
-	KonOpas.Item.show_list(ls);
+	KonOpas.Item.show_list(ls, {hide_ended:true});
 	if (set_len) for (var i = 0; i < set_len; ++i) {
 		var el = _el('s' + set[i]);
 		if (el) el.classList.add("in_set");

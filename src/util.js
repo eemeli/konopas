@@ -254,6 +254,12 @@ KonOpas.parse_date = function(day_str) {
 	return new Date(y, m - 1, d, 12);
 }
 
+KonOpas.data_date = function(d) {
+	function pre0(n) { return (n < 10 ? '0' : '') + n; }
+	var t = (d instanceof Date) ? d : KonOpas.parse_date(d);
+	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
+}
+
 KonOpas.pretty_date = function(d, opt) {
 	opt = opt || {};
 	var o = { weekday: "long", month: "long", day: "numeric" },

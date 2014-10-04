@@ -95,68 +95,91 @@ KonOpas.Item.new = function(it) {
 	return KonOpas.Item.new(it);
 }
 
-KonOpas.Item.show_list = function(ls, show_id, day, in_prog_view) {
-	if (!day || !konopas.program.days[day]) {
-		day = '';
-		for (day in konopas.program.days) break;
+KonOpas.Item.show_list = function(ls, opt) {
+	var	_now = Date.now(),
+		day_lengths = {}, day_links = {},
+		frag = document.createDocumentFragment(),
+		prev_date = '', prev_time = '',
+		_list_item = function(p) {
+			if (opt.day && p.date) {
+				day_lengths[p.date] = (day_lengths[p.date] || 0) + 1;
+			}
+			if (opt.show_all || !opt.day || !p.date || (p.date == opt.day)) {
+				if (this.hide_ended && p.t1 && (p.t1 < opt.now)) { ++opt.n_hidden; return; }
+				if (p.date != prev_date) {
+					prev_date = p.date;
+					prev_time = '';
+					frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(p.t0 || p.date, konopas))).id = 'dt_' + p.date;
+				}
+				if (p.time != prev_time) {
+					prev_time = p.time;
+					frag.appendChild(document.createElement('hr'));
+					frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(p.t0 || p.time, konopas)))
+						.setAttribute('data-day', p.date);
+				}
+				frag.appendChild(KonOpas.Item.new(p));
+				++opt.n_listed;
+			}
+		};
+	if (!opt) opt = {};
+	opt.show_all = (ls.length <= konopas.max_items_per_page);
+	opt.n_hidden = 0; opt.n_listed = 0;
+	opt.now = new Date(_now + 10*60000 - _now % (10*60000));
+	if (!opt.day || !konopas.program.days[opt.day]) {
+		var day_now = KonOpas.data_date(opt.now);
+		if (konopas.program.days[day_now]) opt.day = day_now;
+		else { opt.day = ''; for (opt.day in konopas.program.days) break; }
 	}
-	var prev_date = "", prev_time = "",
-		show_all = (ls.length <= konopas.max_items_per_page),
-	    ls_by_day = {}, ls_day_lengths = {},
-	    day_links = {},
-	    frag = document.createDocumentFragment();
-	if (day) {
-		for (var d in konopas.program.days) {
-			ls_by_day[d] = ls.filter(function(p) { return p.date == d; });
-			ls_day_lengths[d] = ls_by_day[d].length;
-		}
-	} else ls_by_day = { '': ls };
-	if (ls.length > (show_id ? 1 : 0)) {
+	if (ls.length > (opt.id ? 1 : 0)) {
 		frag.appendChild(_new_elem('div', 'item_expander', '» '))
 			.appendChild(_new_elem('a', 'js-link', i18n.txt('Expand all')))
 			.id = 'item_expander_link';
 	}
-	for (var d in ls_by_day) {
-		if (!show_all && d && (d != day)) {
-			if (d < day) {
-				if (ls_day_lengths[d]) day_links['prev'] = d;
-			} else {
-				if (!day_links['next'] && ls_day_lengths[d]) day_links['next'] = d;
-			}
-			continue;
-		}
-		for (var i = 0, l = ls_by_day[d].length; i < l; ++i) {
-			var p = ls_by_day[d][i];
-			if (p.date != prev_date) {
-				prev_date = p.date;
-				prev_time = "";
-				frag.appendChild(_new_elem('div', 'new_day', KonOpas.pretty_date(p.date, konopas))).id = 'dt_' + p.date;
-			}
-			if (p.time != prev_time) {
-				prev_time = p.time;
-				frag.appendChild(document.createElement('hr'));
-				frag.appendChild(_new_elem('div', 'new_time', KonOpas.pretty_time(p.time, konopas)))
-					.setAttribute('data-day', p.date);
-			}
-			frag.appendChild(KonOpas.Item.new(p));
-		}
+	ls.forEach(_list_item, {hide_ended:opt.hide_ended});
+	if (!opt.n_listed && opt.n_hidden) {
+		day_lengths = {};
+		opt.n_hidden = 0; opt.n_listed = 0;
+		prev_date = ''; prev_time = '';
+		ls.forEach(_list_item, {hide_ended:false});
 	}
+
 	function _day_link(t) {
 		var d = day_links[t],
 		    txt = i18n.txt('day_link', {
-				'D': KonOpas.parse_date(d).getDay(),
-				'N': ls_day_lengths[d]
+				'N': day_lengths[d],
+				'D': KonOpas.parse_date(d).getDay()
 			}),
 		    link = _new_elem('a', 'day-link js-link', txt);
 		link.id = t + '_day_link';
 		link.onclick = function() {
 			if (t == 'next') window.scrollTo(0, 0);
-			KonOpas.Item.show_list(ls, show_id, d, in_prog_view);
+			opt.day = d;
+			KonOpas.Item.show_list(ls, opt);
 		};
 		return link;
 	}
-	if (day_links['prev']) frag.insertBefore(_day_link('prev'), frag.firstChild);
+	function _hidden_link() {
+		var	txt = i18n.txt('hidden_link', {
+				'N': opt.n_hidden,
+				'T': KonOpas.pretty_time(opt.now, konopas),
+				'D': opt.now.getDay()
+			}),
+		    link = _new_elem('a', 'day-link js-link', txt);
+		link.id = 'hidden_day_link';
+		link.onclick = function() {
+			opt.hide_ended = false;
+			opt.day = KonOpas.data_date(opt.now);
+			KonOpas.Item.show_list(ls, opt);
+		};
+		return link;
+	}
+	if (opt.day && !opt.show_all) for (var d in day_lengths) if (d in konopas.program.days) {
+		if (d < opt.day) day_links['prev'] = d;
+		else if ((d > opt.day) && !day_links['next']) day_links['next'] = d;
+	}
+	if (day_links['prev'] && !opt.n_hidden) frag.insertBefore(_day_link('prev'), frag.firstChild);
 	if (day_links['next']) frag.appendChild(_day_link('next'));
+	if (opt.n_hidden) frag.insertBefore(_hidden_link(), frag.firstChild);
 
 	var LS = _el('prog_ls');
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
@@ -193,26 +216,34 @@ KonOpas.Item.show_list = function(ls, show_id, day, in_prog_view) {
 		if (el) el.classList.add("has_star");
 	}
 
-	if (show_id) {
-		var it = document.getElementById('p' + show_id);
+	if (opt.id) {
+		var it = document.getElementById('p' + opt.id);
 		if (it) {
 			it.parentNode.classList.add("expanded");
-			KonOpas.Item.show_extra(it, show_id);
+			KonOpas.Item.show_extra(it, opt.id);
 			if (ls.length > 1) it.scrollIntoView();
 		}
 	}
 
-	if (in_prog_view) {
+	if (opt.prog_view) {
 		var d_s = _el('day-sidebar'), d_n = _el('day-narrow'),
 		    d_click = function(ev) {
 				var li = (ev || window.event).target,
 				    d = li.getAttribute('data-day');
 				if (!d) return;
-				if (show_all) {
-					_el('dt_' + d).scrollIntoView();
-					KonOpas.Prog.focus_day(d);
+				opt.day = d;
+				if (opt.show_all) {
+					var dt = _el('dt_' + d);
+					if (dt) {
+						dt.scrollIntoView();
+						KonOpas.Prog.focus_day(d);
+					} else if (d < KonOpas.data_date(opt.now)) {
+						opt.hide_ended = false;
+						KonOpas.Item.show_list(ls, opt);
+					}
 				} else {
-					KonOpas.Item.show_list(ls, show_id, d, true);
+					opt.hide_ended = true;
+					KonOpas.Item.show_list(ls, opt);
 				}
 			},
 		    d_set = function(div, len) {
@@ -221,9 +252,9 @@ KonOpas.Item.show_list = function(ls, show_id, day, in_prog_view) {
 				ul.onclick = d_click;
 				for (var d in konopas.program.days) {
 					var li = document.createElement('li');
-					li.textContent = konopas.program.days[d][len] + ' (' + (ls_day_lengths[d] || 0) + ')';
+					li.textContent = konopas.program.days[d][len] + ' (' + (day_lengths[d] || 0) + ')';
 					li.setAttribute('data-day', d);
-					if (d == day) li.className = 'selected';
+					if (d == opt.day) li.className = 'selected';
 					ul.appendChild(li);
 				}
 				div.innerHTML = '';
@@ -231,6 +262,7 @@ KonOpas.Item.show_list = function(ls, show_id, day, in_prog_view) {
 			};
 		if (d_s) d_set(d_s, 'long');
 		if (d_n) d_set(d_n, 'short');
+		konopas.program.show_filter_sum(ls, opt);
 	}
 
 	konopas.item.scroll.i = 0;

@@ -41,7 +41,9 @@
 "star_hint": "\"Tähdittääksesi\" valinnan, tökkää sen vieressä olevaa neliötä. Valintasi tallennetaan ja näytetään tässä. Et ole vielä valinnut yhtään ohjelmaa, joten lista on tyhjä.",
 "star_no_memory": "{WHY, select, FFcookies{Näyttää siltä, että Firefox-selaimessasi on evästeiden käyttö estetty, jonka takia myöskään} IOSprivate{Näyttää siltä, että käytät iOS- tai Safari-selainta yksityistilassa, jonka takia} other{Jostain syystä}} <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. {SERVER, select, true{Ole hyvä ja <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">kirjaudu sisään</span> säilyttääksesi valintasi.} other{}}",
 "filter_sum_id": "Listataan {N, plural, one{yksi ohjelma: {TITLE}} other{# ohjelmaa tunnisteella {ID}}}",
-"filter_sum": "Listataan {N, plural, one{yksi {TAG} ohjelma} other{{ALL} # {TAG} ohjelmaa}} {GOT_NOW, select, true{tänään {NOW} ja seuraavan kahden tunnin aikana} other{}} {GOT_DAY, select, true{päivänä {DAY}} other{}} {GOT_AREA, select, true{paikassa {AREA}} other{}} {GOT_Q, select, true{kyselylle {Q}} other{}}",
+"filter_sum": "Listataan {N, plural, one{yksi {LIVE, select, undefined{} other{tuleva}} {TAG} ohjelma} other{{ALL} # {LIVE, select, undefined{} other{tulevaa}} {TAG} ohjelmaa}} {DAY, select, undefined{} other{{DAY} {TIME, select, undefined{} other{klo {TIME} jälkeen}}}} {AREA, select, undefined{} other{paikassa {AREA}}} {Q, select, undefined{} other{kyselylle {Q}}}",
+"day_link": "Näytä {N} osumaa {D, plural, =0{sunnuntailta} =1{maanantailta} =2{tiistailta} =3{keskiviikolta} =4{torstailta} =5{perjantailta} =6{lauantailta} other{???}}",
+"hidden_link": "Näytä {N} lisää osumaa jotka ovat jo päättyneet {D, plural, =0{sunnuntaina} =1{maanantaina} =2{tiistaina} =3{keskiviikkona} =4{torstaina} =5{perjantaina} =6{lauantaina} other{???}} klo {T}",
 
 "Votes": "Äänet",
 "Not connected": "Ei yhteyttä palvelimeen",

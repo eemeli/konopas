@@ -41,7 +41,9 @@
 "star_hint": "”Stjärnmarkera” en programpunkt genom att klocka på den grå fyrkanten bredvid den. Dina markeringar lagras och visas i denna vy. Du har inte markerat några programpunkter än, så listan är för närvarande tom.",
 "star_no_memory": "{WHY, select, FFcookies{It looks like you're using a Firefox browser with cookies disabled, so } IOSprivate{It looks like you're using an iOS or Safari browser in private mode, so } other{For some reason,}} your <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> is not enabled, and therefore your selection will not be remembered between sessions. {SERVER, select, true{Please <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">login</span> to enable persistent storage.} other{}}",
 "filter_sum_id": "Visar {N, plural, one{en punkt: {TITLE}} other{# punkter med id {ID}}}",
-"filter_sum": "Visar {N, plural, one{en {TAG} punkt} other{{ALL} # {TAG} punkter}} {GOT_NOW, select, true{on today at {NOW} and in the next two hours} other{}} {GOT_DAY, select, true{på {DAY}} other{}} {GOT_AREA, select, true{i {AREA}} other{}} {GOT_Q, select, true{stämmer med sökningen {Q}} other{}}",
+"filter_sum": "Visar {N, plural, one{en} other{{ALL} #}} {LIVE, select, undefined{} other{[current and future]}} {TAG} {N, plural, one{punkt} other{punkter}} {DAY, select, undefined{} other{på {DAY} {TIME, select, undefined{} other{efter {TIME}}}}} {AREA, select, undefined{} other{i {AREA}}} {Q, select, undefined{} other{stämmer med sökningen {Q}}}",
+"day_link": "[Show {N} matching items from {D, plural, =0{Sunday} =1{Monday} =2{Tuesday} =3{Wednesday} =4{Thursday} =5{Friday} =6{Saturday} other{???}}]",
+"hidden_link": "[Show {N} more matching items with an end time before {T} on {D, plural, =0{Sunday} =1{Monday} =2{Tuesday} =3{Wednesday} =4{Thursday} =5{Friday} =6{Saturday} other{???}}]",
 
 "Votes": "Röster",
 "Not connected": "Inte ansluten",
