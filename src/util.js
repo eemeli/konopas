@@ -251,7 +251,7 @@ KonOpas.parse_date = function(day_str) {
 	var a = day_str.match(/(\d+)/g); if (!a || (a.length < 3)) return false;
 	var y = parseInt(a[0], 10), m = parseInt(a[1], 10), d = parseInt(a[2], 10);
 	if (!y || !m || !d) return false;
-	return new Date(y, m - 1, d);
+	return new Date(y, m - 1, d, 12);
 }
 
 KonOpas.pretty_date = function(d, opt) {
