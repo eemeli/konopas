@@ -42,7 +42,7 @@ $data = array(
 	)
 );
 
-$cache_manifest = '../cache.manifest';  // set to FALSE to disable
+$cache_manifest = '../konopas.appcache';  // set to FALSE to disable
 
 
 // You should not need to change anything below this line.

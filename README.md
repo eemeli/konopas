@@ -100,7 +100,7 @@ available.
 
 The HTML5 [cache manifest] is by default not enabled, as it makes testing and
 development a bit of a hassle. To enable, you should update the contents of
-`cache.manifest` to match your deployment and add a reference to it in the
+`konopas.appcache` to match your deployment and add a reference to it in the
 `<html>` tag. Do check that your server is properly serving it with the
 `text/cache-manifest` MIME type, and that the manifest doesn't include itself,
 as debugging a bad manifest can be tricky.

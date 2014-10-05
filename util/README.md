@@ -6,10 +6,10 @@ All KonOpas utilities are distributed under the same ISC license as KonOpas itse
 For more online tools to help with KonOpas, see:  http://konopas.org/util/
 
 
-KonOpas cache.manifest updater
+KonOpas cache manifest updater
 ------------------------------
 
-`update-cache-manifest.php` updates the timestamp on the `cache.manifest` file in KonOpas root. That file is used by the HTML5 cache KonOpas uses to indicate changes in data. So if your programme gets updated, you'll want to either run `update_cache_manifest(...)` directly (as `read-from-gdrive.php` does), or do an HTTP GET request for this file.
+`update-cache-manifest.php` updates the timestamp on the `konopas.appcache` file in KonOpas root. That file is used by the HTML5 cache KonOpas uses to indicate changes in data. So if your programme gets updated, you'll want to either run `update_cache_manifest(...)` directly (as `read-from-gdrive.php` does), or do an HTTP GET request for this file.
 
 
 Google Drive Spreadsheet -> KonOpas Javascript converter

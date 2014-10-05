@@ -18,7 +18,7 @@
  *
  */
 
-if (!isset($cache_manifest)) $cache_manifest = '../cache.manifest';
+if (!isset($cache_manifest)) $cache_manifest = '../konopas.appcache';
 
 if (!function_exists('file_put_contents')) {
     function file_put_contents($filename, $data) {
