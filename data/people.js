@@ -1,1 +1,0 @@
-sample/people.js

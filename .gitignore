@@ -1,8 +1,7 @@
-tmp/*
-konopas.*
+data
 i18n/*.js
-skin/skin.css
-smofcon*
-arisia*
+konopas.*
 node_modules
+skin/skin.css
+tmp
 *.log
