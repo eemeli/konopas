@@ -210,11 +210,10 @@ KonOpas.Item.show_list = function(ls, opt) {
 		star_els[i].onclick = function() { konopas.stars.toggle(this, this.id.substr(1)); return false; };
 	}
 
-	var star_list = konopas.stars.list();
-	for (var i = 0, l = star_list.length; i < l; ++i) {
-		var el = _el('s' + star_list[i]);
-		if (el) el.classList.add("has_star");
-	}
+	konopas.stars.list().forEach(function(s){
+		var el = _el('s' + s);
+		if (el) el.classList.add('has_star');
+	});
 
 	if (opt.id) {
 		var it = document.getElementById('p' + opt.id);

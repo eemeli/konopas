@@ -21,13 +21,10 @@
 
 "search_hint": "<b>Tips:</b> sökning sker efter hela ord i programpunkternas titel, beskrivning, taggar, sal och deltagare. Det går att använda * och ? som jokertecken och \"citerade ord\" för exakta fraser.",
 "search_example": "Prova till exempel <b>{X}</b>",
-"part_filter": "{T, select, first{Alla deltagare efter förnamn} last{Alla deltagare efter efternamn} other{Visa alla deltagare i programmet}}",
 "no_ko_id": "ID saknas! Ge konopas_set.id en unik identifierare.",
 "old_browser": "Tyvärr hanterar din webbläsare inte några av de JavaScript-funktioner som KonOpas behöver. Du behöver använda en annan webbläsare.",
 "item_not_found": "Hittade inte program-ID <b>{ID}</b>!",
 "item_tags": "{T, select, tags{Tags} track{Tracks} type{Types} other{{T}}}",
-"last_ended": "There last program item ended {D, plural, =0{} one{one day and} other{# days and}} {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}} ago.",
-"next_start": "Nästa programpunkt börjar om {D, plural, =0{} one{one day and} other{# day and}} {H, plural, =0{} one{en timme och} other{# timmar och}} {M, plural, one{en minut} other{# minuter}}.",
 "star_export_this": "Dina aktuella stjärnmarkeringar är lagrade i <a href=\"{THIS}\" target=\"_blank\">adressen till denna sida</a>, som du kan öppna på en annan plats och dela med dig av.",
 "star_export_share": "Dela enklare med en <a href=\"{SHORT}\">kortare länk</a> eller en <a href=\"{QR}\">QR-kod</a>.",
 "star_import_this": "Dina tidigare stjärnmarkerade punkter har ett markerat innanmäte, medan de som importerats via <a href=\"{THIS}\">denna länk</a> har en markerad kant.",

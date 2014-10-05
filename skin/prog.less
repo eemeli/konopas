@@ -4,26 +4,6 @@
 	display: none;
 	.prog & { display: block; }
 }
-#day-sidebar {
-	ul { margin: -3px 0 3px 0; font-size: 0.8em; font-weight: 400; }
-	li { border: none; padding: 3px 6px; }
-	li:after { content: " «"; }
-}
-#day-narrow {
-	display: table;
-	width: 100%;
-	ul { display: table-row; margin-top: 20px !important; padding-left: 0; }
-	li {
-		display: table-cell;
-		text-align: center;
-		text-decoration: none;
-		padding: 6px;
-		cursor: pointer;
-		&:before { content: "» "; }
-	}
-}
-@media (min-width: 700px) { #day-narrow { display: none !important; } }
-@media (max-width: 699px) { #day-sidebar { display: none !important; } }
 
 #prog_filters {
 	margin-left: (-1 * @side-margin);

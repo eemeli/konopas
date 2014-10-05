@@ -43,7 +43,7 @@ KonOpas.Prog = function(list, opt) {
 	var pt = _el('tab_prog'),
 	    pa = pt && pt.getElementsByTagName('a');
 	if (pa && pa.length) pa[0].onclick = function(ev) {
-		if (window.pageYOffset) {
+		if (window.pageYOffset && document.body.classList.contains('prog')) {
 			window.scrollTo(0, 0);
 			(ev || window.event).preventDefault();
 		}
@@ -68,25 +68,22 @@ KonOpas.Prog.hash = function(f, excl) {
 }
 
 KonOpas.Prog.get_filters = function(hash_only) {
-	var filters = { 'area':'', 'tag':'', 'query':'', 'id':'' };
-	var h = window.location.toString().split('#')[1] || '';
-	var h_set = false;
-	if (h.substr(0, 4) == 'prog') {
-		var p = h.substr(5).split('/');
-		for (var i = 0; i < p.length; ++i) {
-			var s = p[i].split(':');
+	var	filters = { 'area':'', 'tag':'', 'query':'', 'id':'' },
+		h = window.location.toString().split('#')[1] || '',
+		h_set = false,
+		tag_re = konopas.tag_categories && konopas.tag_categories.length && new RegExp('^' + konopas.tag_categories.join('|') + '$');
+	if (h.substr(0, 5) == 'prog/') {
+		h.substr(5).split('/').forEach(function(p){
+			var s = p.split(':');
 			if ((s.length == 2) && s[0] && s[1]) {
-				if (konopas.tag_categories) for (var j = 0; j < konopas.tag_categories.length; ++j) {
-					if (s[0] == konopas.tag_categories[j]) {
-						s[1] = s[0] + ':' + s[1];
-						s[0] = 'tag';
-						break;
-					}
+				if (tag_re && tag_re.test(s[0])) {
+					s[1] = p;
+					s[0] = 'tag';
 				}
 				filters[s[0]] = KonOpas.hash_decode(s[1]);
 				h_set = true;
 			}
-		}
+		});
 	}
 	if (!hash_only && !h_set && !document.body.classList.contains('prog')) {
 		var store = konopas.store.get('prog');
@@ -358,7 +355,6 @@ KonOpas.Prog.prototype.show = function() {
 				qh.style.display = 'none';
 			}
 		}
-		_el("next_start_note").textContent = '';
 	}
 	function _filter(it) {
 		if (this.area) {
@@ -379,12 +375,8 @@ KonOpas.Prog.prototype.show = function() {
 			var found = this.query.test(it.title)
 				|| this.query.test(it.desc)
 				|| (it.loc && this.query.test(it.loc.join('\t')))
-				|| (it.tags && this.query.test(it.tags.join('\t')));
-			if (!found && it.people) {
-				for (var i = 0; i < it.people.length; ++i) {
-					if (this.query.test(it.people[i].name)) { found = true; break; }
-				}
-			}
+				|| (it.tags && this.query.test(it.tags.join('\t')))
+				|| (it.people && it.people.some(function(p){ return this.query.test(p.name); }));
 			if (!found) return false;
 		}
 		return true;

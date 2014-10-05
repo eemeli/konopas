@@ -8,13 +8,10 @@
 
 "search_hint": "<b>Hint:</b> search is for full words in the item title, description, tags, location, and participants. You may use * and ? as wildcards and \"quoted words\" for exact phrases.",
 "search_example": "For example, you could try <b>{X}</b>",
-"part_filter": "{T, select, first{All participants by first name} last{All participants by last name} other{All programme participants}}",
 "no_ko_id": "No ID set! Please assign konopas_set.id a unique identifier.",
 "old_browser": "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.",
 "item_not_found": "Programme id <b>{ID}</b> not found!",
 "item_tags": "{T, select, tags{Tags} track{Track} type{Type} other{{T}}}",
-"last_ended": "There last programme item ended {D, plural, =0{} one{one day and} other{# days and}} {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}} ago.",
-"next_start": "The next programme item starts in {D, plural, =0{} one{one day and} other{# days and}} {H, plural, =0{} one{one hour and} other{# hours and}} {M, plural, one{one minute} other{# minutes}}.",
 "star_export_this": "Your current selection is encoded in <a href=\"{THIS}\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection.",
 "star_export_share": "For easier sharing, you can also generate a <a href=\"{SHORT}\">shorter link</a> or a <a href=\"{QR}\">QR code</a>.",
 "star_import_this": "Your previously selected items are shown with a highlighted interior, while those imported via <a href=\"{THIS}\">this link</a> have a highlighted border.",

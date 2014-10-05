@@ -21,13 +21,10 @@
 
 "search_hint": "<b>Vinkki:</b> Haku etsii sanoja otsikosta, tiedoista, tägeistä, paikoista ja osanottajista. Voit käyttää * ja ? -merkkejä villikortteina ja \"sanoja lainausmerkeissä\" täsmälliseen hakuun.",
 "search_example": "Esimerkiksi voisit kokeilla <b>{X}</b>",
-"part_filter": "{T, select, first{Kaikki osanottajat etunimen mukaan} last{Kaikki osanottajat sukunimen mukaan} other{Kaikki osanottajat}}",
 "no_ko_id": "Ei asetettua ID:tä. Aseta konopas_set.id uniikiksi tunnisteeksi.",
 "old_browser": "Selaimesi ei tue kaikkia KonOppaan tarvitsemia Javascript-ominaisuuksia. Ole hyvä ja kokeile toista selainta.",
 "item_not_found": "Ohjelmaa <b>{ID}</b> ei löydy!",
 "item_tags": "{T, select, tags{Tägit} track{Track} type{Tyyppi} other{{T}}}",
-"last_ended": "Viimeinen ohjelma loppui {D, plural, =0{} one{päivä ja} other{# päivää ja}} {H, plural, =0{} one{tunti ja} other{# tuntia ja}} {M, plural, one{yksi minuutti} other{# minuuttia}} sitten.",
-"next_start": "Seuraava ohjelma alkaa {D, plural, =0{} one{yhden päivän ja} other{# päivän ja}} {H, plural, =0{} one{yhden tunnin ja} other{# tunnin ja}} {M, plural, one{yhden minuutin} other{# minuutin}} kuluttua.",
 "star_export_this": "Valintasi ovat tallennettu <a href=\"{THIS}\" target=\"_blank\">sivun osoitteeseen</a>. Voit avata sen toisaalla jakaaksesi valintasi.",
 "star_export_share": "Jakamisen helpottamiseksi voit myös generoida <a href=\"{SHORT}\">lyhytlinkin</a> tai <a href=\"{QR}\">QR-koodin</a>.",
 "star_import_this": "Aiemmin valitsemillasi ohjelmilla on korostettu tausta ja <a href=\"{THIS}\">tämän linkin</a> kautta tuoduilla on korostettu reuna.",

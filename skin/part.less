@@ -8,12 +8,19 @@
 }
 
 #name_sort li { display: inline-block; padding: 0 10px; }
-#name_range {
-	display: inline-block; margin: 5px 0 20px 0; padding: 0;
-	li { display: inline-block; width: 60px; text-align: right; }
+
+.name-list {
+	display: none;
+	.part & { display: block; }
+	/*margin: 5px 0 20px 0; padding: 0;
+	li { display: inline-block; width: 60px; text-align: right; }*/
 }
+
 #part_names {
-	list-style-type: none; margin: 0; -webkit-column-width: 260px; -moz-column-width: 260px; column-width: 260px;
+	list-style-type: none;
+	margin: 20px 0 0 10px;
+	padding: 0;
+	-webkit-column-width: 260px; -moz-column-width: 260px; column-width: 260px;
 	li { cursor: auto; }
 	a { text-decoration: none; }
 	&.fn-only, &.ln-only {
