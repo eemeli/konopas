@@ -260,7 +260,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		var p = this.list[i];
 		if (p.date) days[p.date] = 1;
 		if (opt.area && (typeof p.loc == 'object') && p.loc[lvl]) areas[p.loc[lvl]] = (areas[p.loc[lvl]] || 0) + 1;
-		if (opt.tag && (typeof p.tags == 'object')) for (var j = 0; j < p.tags.length; ++j) {
+		if (opt.tag && (typeof p.tags == 'object') && p.tags !== null) for (var j = 0; j < p.tags.length; ++j) {
 			var t_s = opt.tag.set_category && opt.tag.set_category[p.tags[j]];
 			if (t_s) p.tags[j] = t_s + ':' + p.tags[j];
 			tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
