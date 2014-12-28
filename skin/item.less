@@ -100,16 +100,6 @@
 }
 
 
-.votes {
-	display: none;
-	color: @fg-lighter;
-	.font-small();
-	a { display: inline-block; color: @fg-lighter; }
-}
-.has_votes, .expanded .votes { display: inline-block; }
-.v_pos.voted { color: mix(@vote-pos, @bg-plain, @vote-fade); }
-.v_neg.voted { color: mix(@vote-neg, @bg-plain, @vote-fade); }
-
 .num-comments { display: inline-block; color: @fg-lighter; .font-small(); }
 
 .expanded {
@@ -120,27 +110,8 @@
 	.title { .font-heavy; }
 	.loc { color: @fg-light-in-box !important; }
 	.item > .item-people { display: none; }
-	.extra, .vote, .comments-wrap { display: block; }
+	.extra, .comments-wrap { display: block; }
 	.num-comments { display: none; }
-
-	.votes { color: @fg-light-in-box !important; }
-	.votes a {
-		background-repeat: no-repeat;
-		height: 15px;
-		opacity: 0.5;
-		color: @fg-plain;
-	}
-	.logged-in & .votes a {
-		background-image: @icon-url;
-		padding-left: 18px;
-		&.voted, &:hover { opacity: 1.0; }
-	}
-	.v_pos { background-position: 0 -32px; margin-left: 3px; }
-	.v_neg { background-position: 0 -48px; }
-	.v_pos.voted:hover { background-position: 0 -16px; }
-	.v_pos.v2 { background-position: 0 0 !important; }
-	.v_pos.voted { color: @vote-pos; .font-heavy(); }
-	.v_neg.voted { color: @vote-neg; .font-heavy(); }
 }
 
 .comments-wrap {

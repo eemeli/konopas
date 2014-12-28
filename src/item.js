@@ -75,21 +75,13 @@ KonOpas.Item.new = function(it) {
 	    star  = frame.appendChild(_new_elem('div', 'item_star')),
 	    item  = frame.appendChild(_new_elem('div', 'item')),
 	    title = item.appendChild(_new_elem('div', 'title')),
-	    loc   = item.appendChild(_new_elem('div', 'loc')),
-	    votes = konopas.use_server ? item.appendChild(_new_elem('div', 'votes')) : {'id':''};
-	if (konopas.use_server) {
-		votes.textContent = i18n.txt('Votes') + ': ';
-		votes.appendChild(_new_elem('a', 'v_pos', '+0')).title = 'good';
-		votes.appendChild(document.createTextNode(' / '));
-		votes.appendChild(_new_elem('a', 'v_neg', '-0')).title = 'not so good';
-	}
+	    loc   = item.appendChild(_new_elem('div', 'loc'));
 
 	KonOpas.Item.new = function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
 		loc.textContent = _loc_str(it);
-		votes.id = 'v' + it.id;
 		return frame.cloneNode(true);
 	};
 	return KonOpas.Item.new(it);
@@ -184,8 +176,6 @@ KonOpas.Item.show_list = function(ls, opt) {
 	var LS = _el('prog_ls');
 	while (LS.firstChild) LS.removeChild(LS.firstChild);
 	LS.appendChild(frag);
-
-	if (konopas.server) konopas.server.decorate_list(LS);
 
 	var expand_all = _el("item_expander_link");
 	if (expand_all) expand_all.onclick = function() {

@@ -13,9 +13,6 @@ KonOpas.Server = function(id, stars, opt) {
 	this.ical = this.store.getItem('konopas.'+this.id+'.ical_link') || false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
-	this.my_votes_data = {};
-	this.my_votes_mtime = 0;
-	this.vote_timers = {};
 	this.pub_data = false;
 	this.pub_comments = {};
 	this.el = document.getElementById(this.el_id);
@@ -106,107 +103,6 @@ KonOpas.Server.prototype.set_prog = function(star_list) {
 		+ (t ? '&t=' + t : ''));
 }
 
-
-
-// ------------------------------------------------------------------------------------------------ vote
-
-KonOpas.Server.prototype.show_my_vote = function(id, v_el, v) {
-	v_el = v_el || document.getElementById('v' + id);
-	if (!v_el) return;
-
-	if (typeof v == 'undefined') v = this.my_votes_data[id];
-
-	for (var a = v_el.firstElementChild; a != null; a = a.nextElementSibling) {
-		if (a.classList.contains('v_pos')) {
-			switch (v) {
-				case  2:  a.classList.add('voted');     a.classList.add('v2');     a.title = 'doubleplusgood';  break;
-				case  1:  a.classList.add('voted');     a.classList.remove('v2');  a.title = 'good';            break;
-				default:  a.classList.remove('voted');  a.classList.remove('v2');  a.title = 'good';
-			}
-		} else a.classList[(v < 0) ? 'add' : 'remove']('voted'); // v_neg
-	}
-}
-
-KonOpas.Server.prototype.vote = function(id, v) {
-	if (!this.connected) return false;
-	if (this.pub_data) {
-		var v0 = this.my_votes_data[id];
-		if (v0) --this.pub_data[id][(v0 < 0) ? 0 : v0];
-	}
-	switch (this.my_votes_data[id]) {
-		case -1: if (v < 0) v = 0; break;
-		case  1: if (v > 0) v = 2; break;
-		case  2: if (v > 0) v = 0; break;
-	}
-	_log('server vote ' + id + ' ' + v);
-	this.my_votes_data[id] = v;
-	if (v && this.pub_data) {
-		if (!(id in this.pub_data)) this.pub_data[id] = [0, 0, 0, 0];
-		++this.pub_data[id][(v < 0) ? 0 : v];
-	}
-	this.show_pub_votes(id);
-	this.show_my_vote(id, null, v);
-	if (this.vote_timers[id]) window.clearTimeout(this.vote_timers[id]);
-	this.vote_timers[id] = window.setTimeout(function() {
-		this.exec('vote?v=' + v + '&id=' + id + '&t=' + this.my_votes_mtime);
-	}.bind(this), 1000);
-	return true;
-}
-
-KonOpas.Server.prototype.vote_click = function(ev) {
-	ev = ev || window.event;
-
-	var bubble = false;
-	var v = 0;
-	switch (ev.target.classList[0]) {
-		case 'v_pos': v =  1; break;
-		case 'v_neg': v = -1; break;
-	}
-	if (v) {
-		var p = ev.target.parentNode;
-		if (p.parentNode.parentNode.classList.contains('expanded')) {
-			bubble = !this.vote(p.id.substr(1), v);
-		} else {
-			bubble = true;
-		}
-	}
-
-	if (!bubble) {
-		ev.cancelBubble = true;
-		ev.preventDefault();
-		ev.stopPropagation();
-	}
-}
-
-KonOpas.Server.prototype.show_pub_votes = function(id, v_el) {
-	v_el = v_el || document.getElementById('v' + id); if (!v_el) return;
-	var v = this.pub_data && this.pub_data[id];
-	if (!v) { v_el.classList.remove("has_votes"); return; }
-	v_el.classList[(v[0] || v[1] || v[2]) ? 'add' : 'remove']('has_votes');
-	for (var e = v_el.firstElementChild; e != null; e = e.nextElementSibling) {
-		e.textContent = e.classList.contains('v_pos')
-			? '+' + (v[1] + 2 * v[2])
-			: '-' + v[0]; // v_neg
-	}
-	var c = v_el.nextSibling;
-	if (!c || !c.classList.contains('num-comments')) {
-		if (v[3]) {
-			var n = _new_elem('div', 'num-comments', v[3] + (v[3] == 1 ? ' comment' : ' comments'));
-			v_el.parentNode.insertBefore(n, c);
-		}
-	} else {
-		c.textContent = v[3] + (v[3] == 1 ? ' comment' : ' comments');
-	}
-}
-
-KonOpas.Server.prototype.decorate_list = function(ls) {
-	var votes = ls.getElementsByClassName("votes");
-	for (var i = 0, l = votes.length; i < l; ++i) {
-		var id = votes[i].id.substr(1);
-		this.show_pub_votes(id, votes[i]);
-		if (id in this.my_votes_data) this.show_my_vote(id, votes[i]);
-	}
-}
 
 
 // ------------------------------------------------------------------------------------------------ comment
@@ -388,9 +284,6 @@ KonOpas.Server.prototype.show_extras = function(id, p_el) {
 	if (!document.getElementById('c' + id)) {
 		p_el.appendChild(this.make_comments_wrap(id));
 	}
-	var v_el = document.getElementById('v' + id);
-	if (v_el) v_el.onclick = this.vote_click.bind(this);
-	this.show_my_vote(id, v_el);
 }
 
 
@@ -431,11 +324,6 @@ KonOpas.Server.prototype.url = function(cmd) {
 
 // based on https://github.com/IntoMethod/Lightweight-JSONP/blob/master/jsonp.js
 KonOpas.Server.prototype.exec = function(cmd) {
-	if (/^vote/.test(cmd) && !this.connected) {
-		_log('server not connected: ' + cmd, 'warn');
-		return;
-	}
-
 	var script = document.createElement('script'),
 		done = false,
 		url = this.url(cmd);
@@ -459,7 +347,7 @@ KonOpas.Server.prototype.exec = function(cmd) {
 
 // ------------------------------------------------------------------------------------------------ cb ok/fail
 
-// callback for successful logout, prog, vote
+// callback for successful logout, prog
 KonOpas.Server.prototype.cb_ok = function(v) {
 	var m = /^(?:https?:\/\/[^\/]+)?\/?([^?\/]*)(?:\/([^?]*))(?:\?(.*))?/.exec(v);
 	var cmd = m[2] || '';
@@ -471,8 +359,6 @@ KonOpas.Server.prototype.cb_ok = function(v) {
 			this.store.setItem('konopas.token', '');
 			this.prog_data = {};
 			this.prog_server_mtime = 0;
-			this.my_votes_data = {};
-			this.my_votes_mtime = 0;
 			if (this.stars) {
 				this.stars.data = {};
 				this.stars.write();
@@ -486,12 +372,6 @@ KonOpas.Server.prototype.cb_ok = function(v) {
 			var t = /&server_mtime=(\d+)/.exec(query);
 			if (t) this.prog_server_mtime = parseInt(t[1], 10);
 			_log("server ok (prog): " + JSON.stringify(v));
-			break;
-
-		case 'vote':
-			var t = /&server_mtime=(\d+)/.exec(query);
-			if (t) this.my_votes_mtime = parseInt(t[1], 10);
-			_log("server ok (vote): " + JSON.stringify(v));
 			break;
 
 		case 'add_comment':
@@ -562,17 +442,11 @@ KonOpas.Server.prototype.cb_my_prog = function(v) {
 	else _log("Server.stars required for prog sync", 'warn');
 }
 
-KonOpas.Server.prototype.cb_my_votes = function(v) {
-	_log("server my_votes: " + JSON.stringify(v));
-	this.my_votes_data = v.votes;
-	this.my_votes_mtime = v.mtime;
-	for (var id in v.votes) this.show_my_vote(id);
-}
+KonOpas.Server.prototype.cb_my_votes = function(v) { /* obsolete */ }
 
 KonOpas.Server.prototype.cb_pub_data = function(p) {
 	_log("server pub_data: " + JSON.stringify(p));
 	this.pub_data = p;
-	for (var id in p) this.show_pub_votes(id);
 	var open_items = document.getElementsByClassName('expanded');
 	for (var i = 0; i < open_items.length; ++i) {
 		var it = open_items[i].getElementsByClassName('item');
