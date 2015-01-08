@@ -376,7 +376,7 @@ KonOpas.Prog.prototype.show = function() {
 				|| this.query.test(it.desc)
 				|| (it.loc && this.query.test(it.loc.join('\t')))
 				|| (it.tags && this.query.test(it.tags.join('\t')))
-				|| (it.people && it.people.some(function(p){ return this.query.test(p.name); }));
+				|| (it.people && it.people.some(function(p){ return this.query.test(p.name); }, this));
 			if (!found) return false;
 		}
 		return true;
