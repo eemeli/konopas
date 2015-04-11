@@ -3,19 +3,20 @@ BIN = ./node_modules/.bin
 LC ?= en
 comma := ,
 
-STATIC = dist/skin
 DEV = dist/dev.html dist/konopas.js dist/skin/konopas.css
 PROD = dist/index.html dist/konopas.min.js dist/skin/konopas.min.css
+SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
+STATIC = $(SKIN) dist/favicon.ico
 
 .PHONY: all dev clean precache watch
 
-all: $(STATIC) $(DEV) $(PROD)
-dev: $(STATIC) $(DEV)
+all: $(DEV) $(PROD) $(STATIC)
+dev: $(DEV) $(STATIC)
 
 clean: ; rm -rf tmp/ dist/
 
 
-tmp dist: ; mkdir -p $@
+tmp dist dist/skin: ; mkdir -p $@
 
 dist/dev.html: index.html | dist
 	cp $< $@
@@ -39,18 +40,20 @@ dist/konopas.min.js: src/_preface.js tmp/konopas.js | dist
 	| cat $< - \
 	> $@
 
-dist/skin: skin/favicon.ico skin/*.png skin/*.ttf
-	mkdir -p $@
-	cp $^ $@/
+dist/favicon.ico: skin/favicon.ico | dist
+	cp $< $@
 
 dist/skin/konopas.css: skin/*.less | dist/skin
 	$(BIN)/lessc skin/main.less $@
 
 dist/skin/konopas.min.css: skin/*.less | dist/skin
-	$(BIN)/lessc skin/main.less $@
+	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" $@
+
+dist/skin/%: skin/% | dist/skin
+	cp $< $@
 
 
-precache: all $(addsuffix .gz, $(PROD) $(wildcard dist/skin/*.ttf))
+precache: $(addsuffix .gz, $(PROD) $(wildcard dist/skin/*.ttf))
 %.gz: % ; gzip -c $^ > $@
 
 
