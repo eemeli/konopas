@@ -28,13 +28,18 @@ dist/index.html: index.html | dist
 tmp/i18n.js: src/i18n/*.json | tmp
 	$(BIN)/messageformat --locale $(LC) --include '@($(subst $(comma),|,$(LC))).json' src/i18n/ $@
 
-tmp/konopas.js: tmp/i18n.js src/[a-z]*.js | tmp
+tmp/preface.js: LICENSE Makefile | tmp
+	echo '/**' > $@
+	sed 's/^/ * /' $< >> $@
+	echo ' */\n\n"use strict";' >> $@
+
+tmp/konopas.js: tmp/i18n.js src/*.js | tmp
 	cat $^ > $@
 
-dist/konopas.js: src/_preface.js tmp/konopas.js | dist
+dist/konopas.js: tmp/preface.js tmp/konopas.js | dist
 	cat $^ > $@
 
-dist/konopas.min.js: src/_preface.js tmp/konopas.js | dist
+dist/konopas.min.js: tmp/preface.js tmp/konopas.js | dist
 	$(BIN)/uglifyjs $(word 2, $^) --compress --mangle \
 	| sed 's/\([^,;:?+(){}\/]*[^\w ",;{}]\)\(function\( \w\+\)\?(\)/\n\1\2/g' \
 	| cat $< - \
