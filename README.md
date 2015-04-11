@@ -3,24 +3,8 @@ KonOpas
 
 A mobile-friendly guide for conventions, with all sorts of spiffy features.
 
-
 **[KonOpas]** is free, open-source software distributed under the terms of the
-ISC license:
-
-	Copyright (c) 2013-2014 by Eemeli Aro <eemeli@gmail.com>
-
-	Permission to use, copy, modify, and/or distribute this software for
-	any purpose with or without fee is hereby granted, provided that the
-	above copyright notice and this permission notice appear in all copies.
-
-	The software is provided "as is" and the author disclaims all
-	warranties with regard to this software including all implied
-	warranties of merchantability and fitness. In no event shall the author
-	be liable for any special, direct, indirect, or consequential damages
-	or any damages whatsoever resulting from loss of use, data or profits,
-	whether in an action of contract, negligence or other tortious action,
-	arising out of or in connection with the use or performance of this
-	software.
+[ISC license](./LICENSE).
 
 
 ## Description
@@ -45,7 +29,7 @@ The open-source KonOpas client can also talk with a dedicated KonOpas server.
 The server enables item sync across different browsers, devices and calendar
 apps; item-specific voting and commenting; and allows the event organisers to
 track which items were the most popular. To enable server access for your event,
-please get in touch with us at: info@konopas.org
+please get in touch with us at info@konopas.org.
 
 For links to example instances of KonOpas, take a look at the links from our
 [website][KonOpas].
@@ -89,9 +73,8 @@ To start customizing KonOpas for your event, edit the HTML file by replacing
 stand-in phrases like `KonOpas Sample Guide` and `CONVENTION` as appropriate.
 The `title` and `title-small` images are the logo that's displayed at the top of
 the page; there are two as you may wish to use a different graphic for the wide
-and narrow-aspect layouts. Near the bottom of the file you'll find the
-definition of a Javascript object `konopas_set` that's used to [configure the
-guide][KO-cfg].
+and narrow-aspect layouts. Near the bottom of the file you'll find the KonOpas
+instantiation, with optional [customizations][KO-cfg].
 
 For more in-depth changes such as changes to the color scheme or fonts, you'll
 need to edit the `skin/*.less` files and recompile them into CSS. For
@@ -102,8 +85,8 @@ The HTML5 [cache manifest] is by default not enabled, as it makes testing and
 development a bit of a hassle. To enable, you should update the contents of
 `konopas.appcache` to match your deployment and add a reference to it in the
 `<html>` tag. Do check that your server is properly serving it with the
-`text/cache-manifest` MIME type, and that the manifest doesn't include itself,
-as debugging a bad manifest can be tricky.
+`text/cache-manifest` MIME type, and that the manifest doesn't include itself
+(debugging a bad manifest can be tricky).
 
 [KO-cfg]: http://konopas.org/config
 [KO-util]: http://konopas.org/util/
@@ -114,52 +97,47 @@ as debugging a bad manifest can be tricky.
 
 For most use cases, KonOpas should be usable directly. However, if you'd like to
 change things such as the interface language, or if you'd like to just poke
-under the hood in general, you have two options based on different **build
-environments**, [make](#user-content-make) and [gulp](#user-content-gulp).
+under the hood in general, you'll need to recompile it.
 
 For **styling**, KonOpas uses [LESS], which requires compilation into CSS if
 modified. This should make it easier for you to tune the default skin to match
-your needs.
+your needs. [`skin/main.less`](skin/main.less) is the place where the
+colourscheme is set.
 
-For **internationalization**, we use Alex Sexton's [messageformat.js]. If you'd
-like to implement your own localization, the easiest way is probably to use our
-[online i18n js generator][KO-i18n] and to save the output as `i18n/$LC.js`. So
-far localizations include English, Finnish, and Swedish. Support for multi-
-lingual instances requires messageformat.js 0.2.0 or later.
+For **internationalization**, we use [messageformat.js], which is based on 
+[ICU MessageFormat] syntax. So far [localizations](src/i18n/) include English,
+Finnish, and Swedish.
 
 [LESS]: http://lesscss.org/
 [messageformat.js]: https://github.com/SlexAxton/messageformat.js
-[KO-i18n]: http://konopas.org/util/i18n/
-
+[ICU MessageFormat]: http://userguide.icu-project.org/formatparse/messages
 
 ### make
 
-Using make will require separately installing the [LESS] and [messageformat.js]
-dependencies, but only if you intend to change the styling or localization
-source files.
+To compile KonOpas for yourself, you should clone the git repo and install the
+dependencies using [npm]. The following commands should get you set up:
+```
+git clone https://github.com/eemeli/konopas.git
+cd konopas
+npm install
+make all
+```
 
-A `Makefile` is included, with a default target `dev` for a development version
-and `prod`, which minifies the previous using the [javascript-minifier.com]
-service's HTTP API. These targets will also modify the appropriate `<script>`
-tag in `index.html` to reflect the version in use.
+The `all` and `dev` make targets will build the browser-ready KonOpas in the
+`dist/` subdirectory; `make precache` gzips some of the more compressible output
+files for use on servers that where a config
+[like this](util/apache-enable-gzip.conf) is in use. If you've [Watchman]
+installed, `make watch` will start it with triggers for automatically updating
+the JS & CSS files during development.
 
-If you've [Watchman] installed, `make watch` will start it with triggers for
-automatically updating the JS & CSS files during development.
+To change the default (English) locale of KonOpas, use the `LC` variable:
+```
+LC=en,fi make all
+```
+Once set, the same locale will be used until reset as above or by `make clean`.
 
-[javascript-minifier.com]: http://javascript-minifier.com/
+[npm]: https://www.npmjs.com/
 [Watchman]: https://github.com/facebook/watchman
-
-
-### gulp
-
-To automatically install the dependencies required by [gulp.js], run
-`npm install` in the directory in which you've installed KonOpas. Then try
-running `gulp --locale en` to get a list of the available targets.
-
-The gulp.js build system was implemented for KonOpas by [Aarni Koskela][akx].
-
-[gulp.js]: http://gulpjs.com/
-[akx]: https://github.com/akx/
 
 
 ## Discussion
