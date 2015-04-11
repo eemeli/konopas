@@ -3,7 +3,12 @@
   "version": "0.8.0",
   "author": "Eemeli Aro <eemeli@gmail.com>",
   "description": "KonOpas: A mobile-friendly guide for conventions, with all sorts of spiffy features",
-  "keywords": ["convention", "conference", "mobile guide", "programme guide"],
+  "keywords": [
+    "convention",
+    "conference",
+    "mobile guide",
+    "programme guide"
+  ],
   "homepage": "http://konopas.org/",
   "license": "ISC",
   "repository": {
@@ -14,14 +19,8 @@
     "url": "https://github.com/eemeli/konopas/issues"
   },
   "devDependencies": {
-    "glob": "^4.0.0",
-    "gulp": "^3.7.0",
-    "gulp-concat": "^2.2.0",
-    "gulp-less": "^1.2.3",
-    "gulp-minify-css": "^0.3.4",
-    "gulp-shell": "^0.2.5",
-    "gulp-uglify": "^0.3.0",
-    "messageformat": ">=0.1.8",
-    "yargs": "^1.2.2"
+    "less": "^2.5.0",
+    "messageformat": "^0.2.2",
+    "uglify-js": "^2.4.19"
   }
 }
