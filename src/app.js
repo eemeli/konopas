@@ -12,7 +12,6 @@ function KonOpas(set) {
 	this.use_server = false;
 	this.log_messages = true;
 	this.cache_refresh_interval_mins = 60;
-	this.filters = { 'area': {}, 'tag': {} };
 	this.views = [ "star", "prog", "part", "info" ];
 	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 
@@ -81,9 +80,3 @@ KonOpas.prototype.refresh_cache = function() {
 		window.setInterval(function() { cache.update(); }, t_interval);
 	}
 }
-
-var konopas = new KonOpas(konopas_set);
-if (typeof program != 'undefined') konopas.set_program(program, konopas.filters);
-if (typeof people != 'undefined') konopas.set_people(people);
-var server = konopas.server;
-konopas.set_view();

@@ -2,13 +2,13 @@
 <html><!-- manifest="konopas.appcache" -->
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="skin/skin.css">
+<link rel="stylesheet" href="skin/konopas.css">
 <meta name="HandheldFriendly" content="true">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
 
 <!-- Android + favicon -->
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="shortcut icon" sizes="196x196" href="demo/favicon.196.png">
+<link rel="shortcut icon" sizes="196x196" href="skin/favicon.196.png">
 
 <!-- iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,8 +45,8 @@
 <div id="server_connect"></div>
 
 <h1><a href="#info" alt="CONVENTION" title="CONVENTION">
-<img id="title-small" src="demo/title.png" style="width: 240px;">
-<img id="title" src="demo/title.png" style="width: 200px;"></a></h1>
+<img id="title-small" src="skin/konopas.png" style="width: 240px;">
+<img id="title" src="skin/konopas.png" style="width: 200px;"></a></h1>
 
 <ul id="tabs">
 <li id="tab_star"><a href="#star" data-txt>My con</a>
@@ -162,19 +162,22 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 
 </div><!-- /main -->
 
-<script> var konopas_set = {
+<script src="http://konopas.org/demo/data/program.js"></script>
+<script src="http://konopas.org/demo/data/people.js"></script>
+<script src="konopas.js"></script>
+<script>
+var konopas = new KonOpas({
 	'id': '',
 	'default_duration': 0,
 	'time_show_am_pm': true,
 	'show_all_days_by_default': true,
-	'use_server': false,
-	'filters': {
-		'day': {},
-		'area': {},
-		'tag': {}
-	}
-};
+	'use_server': false
+});
+konopas.set_program(program, {
+	'day': {},
+	'area': {},
+	'tag': {}
+});
+konopas.set_people(people);
+konopas.set_view();
 </script>
-<script src="demo/program.js"></script>
-<script src="demo/people.js"></script>
-<script src="konopas.min.js"></script>

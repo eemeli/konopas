@@ -1,6 +1,6 @@
 /**
  * KonOpas -- http://konopas.org/ & https://github.com/eemeli/konopas
- * Copyright (c) 2013-2014 by Eemeli Aro <eemeli@gmail.com>
+ * Copyright (c) 2013-2015 by Eemeli Aro <eemeli@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,3 +14,5 @@
  * action of contract, negligence or other tortious action, arising out of
  * or in connection with the use or performance of this software.
  */
+
+"use strict";
