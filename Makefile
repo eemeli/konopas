@@ -1,34 +1,31 @@
 BIN = ./node_modules/.bin
 
-LC ?= en
-comma := ,
-
 DEV = dist/dev.html dist/konopas.js dist/skin/konopas.css
 PROD = dist/index.html dist/konopas.min.js dist/skin/konopas.min.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
-.PHONY: all dev clean precache watch
+.PHONY: all dev LC clean precache watch
 
-all: $(DEV) $(PROD) $(STATIC)
-dev: $(DEV) $(STATIC)
+all: LC $(DEV) $(PROD) $(STATIC)
+dev: LC $(DEV) $(STATIC)
 
 clean: ; rm -rf tmp/ dist/
 
 
 tmp dist dist/skin: ; mkdir -p $@
 
-dist/dev.html: index.html | dist
-	cp $< $@
-
-dist/index.html: index.html | dist
-	sed 's/"konopas.js"/"konopas.min.js"/; \
-		 s/"skin\/konopas.css"/"skin\/konopas.min.css"/' $< > $@
+tmp/LC: | tmp ; echo 'en' > $@
+LC: | tmp/LC
+	$(eval LCprev := $(shell cat tmp/LC))
+	$(eval LC ?= $(LCprev))
+	@if [ "$(LC)" != "$(LCprev)" ]; then rm -f tmp/i18n.js; echo "$(LC)" > tmp/LC; fi
 
 tmp/i18n.js: src/i18n/*.json | tmp
-	$(BIN)/messageformat --locale $(LC) --include '@($(subst $(comma),|,$(LC))).json' src/i18n/ $@
+	$(eval LCglob := @($(shell echo $(LC) | tr ',' '|')).json)
+	$(BIN)/messageformat --locale $(LC) --include '$(LCglob)' src/i18n/ $@
 
-tmp/preface.js: LICENSE Makefile | tmp
+tmp/preface.js: LICENSE | tmp
 	echo '/**' > $@
 	sed 's/^/ * /' $< >> $@
 	echo ' */\n\n"use strict";' >> $@
@@ -44,6 +41,13 @@ dist/konopas.min.js: tmp/preface.js tmp/konopas.js | dist
 	| sed 's/\([^,;:?+(){}\/]*[^\w ",;{}]\)\(function\( \w\+\)\?(\)/\n\1\2/g' \
 	| cat $< - \
 	> $@
+
+dist/dev.html: index.html | dist
+	cp $< $@
+
+dist/index.html: index.html | dist
+	sed 's/"konopas.js"/"konopas.min.js"/; \
+		 s/"skin\/konopas.css"/"skin\/konopas.min.css"/' $< > $@
 
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
