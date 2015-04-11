@@ -5,6 +5,8 @@ PROD = dist/index.html dist/konopas.min.js dist/skin/konopas.min.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
+MAKEFLAGS += -r
+.SUFFIXES:
 .PHONY: all dev LC clean precache watch
 
 all: LC $(DEV) $(PROD) $(STATIC)
@@ -46,8 +48,7 @@ dist/dev.html: index.html | dist
 	cp $< $@
 
 dist/index.html: index.html | dist
-	sed 's/"konopas.js"/"konopas.min.js"/; \
-		 s/"skin\/konopas.css"/"skin\/konopas.min.css"/' $< > $@
+	sed 's/"konopas.js"/"konopas.min.js"/;s/"skin\/konopas.css"/"skin\/konopas.min.css"/' $< > $@
 
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
