@@ -30,7 +30,8 @@ tmp/i18n.js: src/i18n/*.json | tmp
 tmp/preface.js: LICENSE | tmp
 	echo '/**' > $@
 	sed 's/^/ * /' $< >> $@
-	echo ' */\n\n"use strict";' >> $@
+	echo ' */' >> $@
+	echo '"use strict";' >> $@
 
 tmp/konopas.js: tmp/i18n.js src/*.js | tmp
 	cat $^ > $@
