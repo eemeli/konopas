@@ -2,7 +2,7 @@ KonOpas.Info = function() {
 	this.lu = _el('last-updated');
 	this.lu_time = 0;
 	var self = this, cache_manifest = document.body.parentNode.getAttribute('manifest');
-	if (this.lu && cache_manifest && (location.protocol == 'http:')) {
+	if (this.lu && cache_manifest && ((location.protocol == 'http:') || (location.protocol == 'https:'))) {
 		var x = new XMLHttpRequest();
 		x.onload = function() {
 			self.lu_time = new Date(this.getResponseHeader("Last-Modified"));
