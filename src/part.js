@@ -13,7 +13,7 @@ KonOpas.Part = function(list, opt) {
 KonOpas.Part.prototype.set_ranges = function(bin_size) {
 	var	self = this,
 		_ranges = function(a, bin_size) {
-			var	ends = [], start = 'A',
+			var	ends = [], start = ' ',
 				n_bins = bin_size ? Math.round(a.length / bin_size) : 0,
 				_prev_matches = function(a, i) { return (i > 0) && (a[i - 1] == a[i]); },
 				_next_matches = function(a, i) { return (i < a.length - 1) && (a[i + 1] == a[i]); };
@@ -36,7 +36,9 @@ KonOpas.Part.prototype.set_ranges = function(bin_size) {
 		_range_set = function(div, nr) {
 			var ul = _new_elem('ul', 'name-list');
 			nr.forEach(function(n){
-				var li = _new_elem('li', '', n.charAt(0));
+				var startChar = n.charAt(0);
+				if (startChar == ' ') startChar = 'A';
+				var li = _new_elem('li', '', startChar);
 				if (n.length > 1) li.textContent += ' - ' + n.charAt(1);
 				li.setAttribute('data-range', n);
 				ul.appendChild(li);
