@@ -146,13 +146,13 @@ KonOpas.Stars.prototype.show = function() {
 				}
 				if (n_new) html += '<p>&raquo; <a href="#star" id="star_set_add">' + i18n.txt('star_add', {'N':n_new}) + '</a>';
 			}
-			var el_set = _el('star_set_set'); if (el_set) el_set.onclick = function() { this.set(set); return true; };
-			var el_add = _el('star_set_add'); if (el_add) el_add.onclick = function() { this.add(set); return true; };
 		}
 	} else {
 		html += '<p id="star_links">&raquo; ' + i18n.txt('star_export_link', { 'URL':set_link, 'N':stars_len });
 	}
 	view.innerHTML = html;
+	var el_set = _el('star_set_set'); if (el_set) el_set.onclick = function() { konopas.stars.set(set); return true; };
+	var el_add = _el('star_set_add'); if (el_add) el_add.onclick = function() { konopas.stars.add(set); return true; };
 	if (this.server) this.server.show_ical_link(view);
 	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
 	KonOpas.Item.show_list(ls, {hide_ended:true});

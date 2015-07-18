@@ -15,7 +15,7 @@
 "star_export_this": "Your current selection is encoded in <a href=\"{THIS}\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection.",
 "star_export_share": "For easier sharing, you can also generate a <a href=\"{SHORT}\">shorter link</a> or a <a href=\"{QR}\">QR code</a>.",
 "star_import_this": "Your previously selected items are shown with a highlighted interior, while those imported via <a href=\"{THIS}\">this link</a> have a highlighted border.",
-"star_import_diff": "Your previous selection {PREV, plural, =0{was empty} one{had one item} other{had # items}}, and the imported selection has {NEW, plural, =0{no new items} one{one new item} other{# new items}}{SAME, plural, =0{} one{and one which was already selected} other{and # which were already selected}}.",
+"star_import_diff": "Your previous selection {PREV, plural, =0{was empty} one{had one item} other{had # items}}, and the imported selection has {NEW, plural, =0{no new items} one{one new item} other{# new items}} {SAME, plural, =0{} one{and one which was already selected} other{and # which were already selected}}.",
 "star_import_bad": "{BAD, plural, =0{} one{One of the imported items had an invalid ID.} other{# of the imported items had invalid IDs.}}",
 "star_set": "Set my selection to the imported selection",
 "add_n": "add {N}",
