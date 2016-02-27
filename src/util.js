@@ -1,12 +1,12 @@
 import i18n from '../src/i18n-wrap';
 
-//function _log(msg, lvl) {
-//	if (window.console) switch (lvl) {
-//		case 'error': console.error(msg); break;
-//		case 'warn':  console.warn(msg); break;
-//		default:      console.log(msg);
-//	}
-//}
+export function log(msg, lvl) {
+	if (window.console) switch (lvl) {
+		case 'error': console.error(msg); break;
+		case 'warn':  console.warn(msg); break;
+		default:      console.log(msg);
+	}
+}
 
 //function _el(id) { return id && document.getElementById(id); }
 
@@ -18,14 +18,15 @@ import i18n from '../src/i18n-wrap';
 //	return e;
 //}
 
-//KonOpas.link_to_short_url = function(url) {
-//	var u = encodeURIComponent(url.replace(/^http:\/\//, ''));
-//	return 'http://is.gd/create.php?url=' + u;
-//}
-//KonOpas.link_to_qr_code = function(url) {
-//	var u = encodeURIComponent(url.replace(/^http:\/\//, ''));
-//	return 'http://chart.apis.google.com/chart?cht=qr&chs=350x350&chl=' + u;
-//}
+export function link_to_short_url(url) {
+	const u = encodeURIComponent(url.replace(/^http:\/\//, ''));
+	return 'http://is.gd/create.php?url=' + u;
+}
+
+export function link_to_qr_code(url) {
+	const u = encodeURIComponent(url.replace(/^http:\/\//, ''));
+	return 'http://chart.apis.google.com/chart?cht=qr&chs=350x350&chl=' + u;
+}
 
 //KonOpas.hash_encode = function(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
 //KonOpas.hash_decode = function(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
@@ -65,11 +66,11 @@ import i18n from '../src/i18n-wrap';
 //	}
 //}
 
-//KonOpas.VarStore = function() {
-//	var data = {};
-//	this.getItem = function(k) { return data[k]; };
-//	this.setItem = function(k, v) { data[k] = v; };
-//}
+export class VarStore {
+	constructor() { this.data = {}; }
+	getItem(k) { return this.data[k]; };
+	setItem(k, v) { this.data[k] = v; };
+}
 
 
 // ------------------------------------------------------------------------------------------------ string generation
@@ -137,24 +138,24 @@ import i18n from '../src/i18n-wrap';
 
 // ------------------------------------------------------------------------------------------------ array comparison
 
-//KonOpas.arrays_equal = function(a, b) {
-//	if (!a || !b) return false;
-//	if (a.length != b.length) return false;
-//	for (var i = 0; i < a.length; ++i) {
-//		if (a[i] != b[i]) return false;
-//	}
-//	return true;
-//}
+export function arrays_equal(a, b) {
+	if (!a || !b) return false;
+	if (a.length != b.length) return false;
+	for (let i = 0; i < a.length; ++i) {
+		if (a[i] != b[i]) return false;
+	}
+	return true;
+}
 
-//KonOpas.array_overlap = function(a, b) {
-//	if (!a || !b) return 0;
-//	if (a.length > b.length) return KonOpas.array_overlap(b, a);
-//	var n = 0, i, j;
-//	for (i = 0; i < a.length; ++i) {
-//		for (j = 0; j < b.length; ++j) if (a[i] == b[j]) { ++n; break; }
-//	}
-//	return n;
-//}
+export function array_overlap(a, b) {
+	if (!a || !b) return 0;
+	if (a.length > b.length) return array_overlap(b, a);
+	let n = 0, i, j;
+	for (i = 0; i < a.length; ++i) {
+		for (j = 0; j < b.length; ++j) if (a[i] == b[j]) { ++n; break; }
+	}
+	return n;
+}
 
 
 // ------------------------------------------------------------------------------------------------ DOM manipulation

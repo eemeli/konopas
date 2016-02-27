@@ -1,5 +1,6 @@
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
+import Stars from '../src/stars';
 
 export default function KonOpas(set) {
 	this.id = '';
@@ -25,7 +26,7 @@ export default function KonOpas(set) {
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
 	this.store = new KonOpas.Store(this.id);
-	this.stars = new KonOpas.Stars(this.id);
+	this.stars = new Stars(this, KonOpas.Item);
 	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
 	this.item = new KonOpas.Item();
 	this.info = new Info();
