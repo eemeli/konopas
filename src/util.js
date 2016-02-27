@@ -1,5 +1,5 @@
-if (typeof i18n == 'undefined') i18n = {};
-i18n.txt = function(key){ return key; };
+import i18n from './i18n';
+
 i18n.translate_html = function(map, a) {
 	var list = document.querySelectorAll('['+a+']');
 	for (var i = 0, node; node = list[i]; ++i) {

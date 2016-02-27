@@ -23,9 +23,9 @@ LC: | tmp/LC
 	$(eval LC ?= $(LCprev))
 	@if [ "$(LC)" != "$(LCprev)" ]; then rm -f tmp/i18n.js; echo "$(LC)" > tmp/LC; fi
 
-tmp/i18n.js: src/i18n/*.json | tmp node_modules
-	$(eval LCglob := @($(shell echo $(LC) | tr ',' '|')).json)
-	$(BIN)/messageformat --locale $(LC) --include '$(LCglob)' src/i18n/ $@
+tmp/i18n.js: src/i18n/*.json LC | tmp node_modules
+	$(eval LCsp := $(shell echo $(LC) | tr ',' ' '))
+	$(BIN)/messageformat --locale $(LC) --namespace "export default" $(LCsp:%=src/i18n/%.json) > $@
 
 tmp/preface.js: LICENSE | tmp
 	echo '/**' > $@
@@ -34,8 +34,11 @@ tmp/preface.js: LICENSE | tmp
 	echo ' */' >> $@
 	echo '"use strict";' >> $@
 
-dist/konopas.js: tmp/preface.js tmp/i18n.js src/*.js | dist
+tmp/app.js: tmp/preface.js src/*.js | tmp
 	cat $^ > $@
+
+dist/konopas.js: tmp/app.js tmp/i18n.js | dist
+	$(BIN)/browserify $< --standalone KonOpas --outfile $@
 
 dist/konopas.min.js: dist/konopas.js | node_modules
 	$(BIN)/uglifyjs $< --comments --compress --mangle --output $@ \

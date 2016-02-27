@@ -1,4 +1,4 @@
-function KonOpas(set) {
+export default function KonOpas(set) {
 	this.id = '';
 	this.lc = 'en';
 	this.tag_categories = false;
