@@ -23,9 +23,9 @@ build/LC: | build ; echo 'en' > $@
 LC: | build/LC
 	$(eval LCprev := $(shell cat build/LC))
 	$(eval LC ?= $(LCprev))
-	@if [ "$(LC)" != "$(LCprev)" ]; then rm -f build/i18n.js; echo "$(LC)" > build/LC; fi
+	@if [ "$(LC)" != "$(LCprev)" ]; then rm -f build/messages.js; echo "$(LC)" > build/LC; fi
 
-build/i18n.js: src/i18n/*.json LC | build node_modules
+build/messages.js: src/i18n/*.json LC | build node_modules
 	$(eval LCsp := $(shell echo $(LC) | tr ',' ' '))
 	$(BIN)/messageformat --locale $(LC) --namespace "export default" $(LCsp:%=src/i18n/%.json) > $@
 
@@ -39,7 +39,7 @@ build/preface.js: LICENSE | build
 build/app.js: build/preface.js src/app.js $(ES5_SRC) | build
 	cat $^ > $@
 
-dist/konopas.js: build/app.js build/i18n.js | dist
+dist/konopas.js: build/app.js build/messages.js src/*.js | dist
 	$(BIN)/browserify $< --standalone KonOpas --outfile $@
 
 dist/konopas.min.js: dist/konopas.js | node_modules
@@ -70,7 +70,7 @@ precache: $(addsuffix .gz, $(DIST) $(wildcard dist/skin/*.ttf))
 watch:
 	watchman watch $(shell pwd)
 	watchman -- trigger $(shell pwd) ko-css 'skin/*.less' -- make dist/skin/konopas.css
-	watchman -- trigger $(shell pwd) ko-lc 'src/i18n/*.json' -- LC=$(LC) make build/i18n.js dist/konopas.js
+	watchman -- trigger $(shell pwd) ko-lc 'src/i18n/*.json' -- LC=$(LC) make build/messages.js dist/konopas.js
 	watchman -- trigger $(shell pwd) ko-js 'src/*.js' -- make dist/konopas.js
 
 

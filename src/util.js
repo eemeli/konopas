@@ -1,19 +1,3 @@
-import i18n from './i18n';
-
-i18n.translate_html = function(map, a) {
-	var list = document.querySelectorAll('['+a+']');
-	for (var i = 0, node; node = list[i]; ++i) {
-		var key = node.getAttribute(a) || node.textContent.trim();
-		if (key in map) {
-			var data = node.getAttribute(a + '-var');
-			var attr = node.getAttribute(a + '-attr');
-			var str = map[key](data && JSON.parse('{' + data.replace(/[^,:]+/g, '"$&"') + '}'));
-			if (attr) node.setAttribute(attr, str);
-			else node.innerHTML = str;
-		}
-	}
-}
-
 function _log(msg, lvl) {
 	if (window.console) switch (lvl) {
 		case 'error': console.error(msg); break;
@@ -198,9 +182,8 @@ KonOpas.popup_open = function(ev) {
 	if (src_el.href) ev.preventDefault();
 }
 
-KonOpas.toggle_collapse = function(ev) {
-	ev = ev || window.event;
-	var title = ev.target, body = title && title.nextElementSibling;
+function toggle_collapse(ev = window.event) {
+	const title = ev.target, body = title && title.nextElementSibling;
 	if (!body) return;
 	if (window.getComputedStyle(body).getPropertyValue('display') == 'none') {
 		title.classList.remove('collapse');
@@ -210,7 +193,7 @@ KonOpas.toggle_collapse = function(ev) {
 		title.classList.remove('collapse-open');
 	}
 }
-
+KonOpas.toggle_collapse = toggle_collapse;
 
 // ------------------------------------------------------------------------------------------------ time & date
 
@@ -236,15 +219,16 @@ KonOpas.pretty_time = function(t, opt) {
 	} else return '';
 }
 
-KonOpas.pretty_time_diff = function(t) {
-	var d = (Date.now() - t) / 1e3,
-	    a = Math.abs(d),
-	    s = [1, 60, 60, 24, 7, 4.333, 12, 1e9];
+function pretty_time_diff(t) {
+	const d = (Date.now() - t) / 1e3;
+	const s = [1, 60, 60, 24, 7, 4.333, 12, 1e9];
+	let a = Math.abs(d);
 	if (a < 20) return i18n.txt('just now');
-	for (var i = 0, l = s.length; i < l; ++i) {
-		if ((a /= s[i]) < 2) return i18n.txt('time_diff', { 'T':~~(a *= s[i]), 'T_UNIT':i-1, 'T_PAST':d>0 });
+	for (let i = 0, l = s.length; i < l; ++i) {
+		if ((a /= s[i]) < 2) return i18n.txt('time_diff', { T: ~~(a *= s[i]), T_UNIT: i-1, T_PAST: d>0 });
 	}
 }
+KonOpas.pretty_time_diff = pretty_time_diff;
 
 KonOpas.parse_date = function(day_str) {
 	if (!day_str) return false;

@@ -1,4 +1,5 @@
-import Info from '../src/info'
+import i18n from '../src/i18n-wrap';
+import Info from '../src/info';
 
 export default function KonOpas(set) {
 	this.id = '';
@@ -18,10 +19,7 @@ export default function KonOpas(set) {
 	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 
 	if (!this.log_messages) _log = function(){};
-	if (i18n[this.lc]) {
-		i18n.txt = function(key, data){ return key in i18n[this.lc] ? i18n[this.lc][key](data) : key; }.bind(this);
-		i18n.translate_html(i18n[this.lc], 'data-txt');
-	} else alert('Locale "' + this.lc + '" not found.');
+	if (!i18n.setLocale(this.lc)) alert('Locale "' + this.lc + '" not found.');
 	if (!this.id) alert(i18n.txt('no_ko_id'));
 	if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
