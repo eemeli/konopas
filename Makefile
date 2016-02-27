@@ -1,7 +1,6 @@
 BIN = ./node_modules/.bin
 
-DEV = dist/dev.html dist/konopas.js dist/skin/konopas.css
-PROD = dist/index.html dist/konopas.min.js dist/skin/konopas.min.css
+DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
@@ -9,8 +8,7 @@ MAKEFLAGS += -r
 .SUFFIXES:
 .PHONY: all dev LC clean precache watch
 
-all: LC $(DEV) $(PROD) $(STATIC)
-dev: LC $(DEV) $(STATIC)
+all: LC $(DIST) $(STATIC)
 
 clean: ; rm -rf tmp/ dist/
 
@@ -32,41 +30,35 @@ tmp/i18n.js: src/i18n/*.json | tmp node_modules
 tmp/preface.js: LICENSE | tmp
 	echo '/**' > $@
 	sed 's/^/ * /' $< >> $@
+	echo ' * @license' >> $@
 	echo ' */' >> $@
 	echo '"use strict";' >> $@
 
-tmp/konopas.js: tmp/i18n.js src/*.js | tmp
+dist/konopas.js: tmp/preface.js tmp/i18n.js src/*.js | dist
 	cat $^ > $@
 
-dist/konopas.js: tmp/preface.js tmp/konopas.js | dist
-	cat $^ > $@
-
-dist/konopas.min.js: tmp/preface.js tmp/konopas.js | dist node_modules
-	$(BIN)/uglifyjs $(word 2, $^) --compress --mangle \
-	| sed 's/\([^,;:?+(){}\/]*[^\w ",;{}]\)\(function\( \w\+\)\?(\)/\n\1\2/g' \
-	| cat $< - \
-	> $@
+dist/konopas.min.js: dist/konopas.js | node_modules
+	$(BIN)/uglifyjs $< --comments --compress --mangle --output $@ \
+		--source-map $@.map --source-map-include-sources --source-map-url $(notdir $@.map)
 
 dist/dev.html: index.html | dist
 	cp $< $@
 
 dist/index.html: index.html | dist
-	sed 's/"konopas.js"/"konopas.min.js"/;s/"skin\/konopas.css"/"skin\/konopas.min.css"/' $< > $@
+	sed 's/"konopas.js"/"konopas.min.js"/' $< > $@
 
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
 
 dist/skin/konopas.css: skin/*.less | dist/skin node_modules
-	$(BIN)/lessc skin/main.less $@
-
-dist/skin/konopas.min.css: skin/*.less | dist/skin node_modules
-	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" $@
+	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" \
+		--source-map --source-map-less-inline $@
 
 dist/skin/%: skin/% | dist/skin
 	cp $< $@
 
 
-precache: $(addsuffix .gz, $(PROD) $(wildcard dist/skin/*.ttf))
+precache: $(addsuffix .gz, $(DIST) $(wildcard dist/skin/*.ttf))
 %.gz: % ; gzip -c $^ > $@
 
 
