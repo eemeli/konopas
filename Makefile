@@ -15,6 +15,8 @@ dev: LC $(DEV) $(STATIC)
 clean: ; rm -rf tmp/ dist/
 
 
+node_modules: ; npm install && touch $@
+
 tmp dist dist/skin: ; mkdir -p $@
 
 tmp/LC: | tmp ; echo 'en' > $@
@@ -23,7 +25,7 @@ LC: | tmp/LC
 	$(eval LC ?= $(LCprev))
 	@if [ "$(LC)" != "$(LCprev)" ]; then rm -f tmp/i18n.js; echo "$(LC)" > tmp/LC; fi
 
-tmp/i18n.js: src/i18n/*.json | tmp
+tmp/i18n.js: src/i18n/*.json | tmp node_modules
 	$(eval LCglob := @($(shell echo $(LC) | tr ',' '|')).json)
 	$(BIN)/messageformat --locale $(LC) --include '$(LCglob)' src/i18n/ $@
 
@@ -39,7 +41,7 @@ tmp/konopas.js: tmp/i18n.js src/*.js | tmp
 dist/konopas.js: tmp/preface.js tmp/konopas.js | dist
 	cat $^ > $@
 
-dist/konopas.min.js: tmp/preface.js tmp/konopas.js | dist
+dist/konopas.min.js: tmp/preface.js tmp/konopas.js | dist node_modules
 	$(BIN)/uglifyjs $(word 2, $^) --compress --mangle \
 	| sed 's/\([^,;:?+(){}\/]*[^\w ",;{}]\)\(function\( \w\+\)\?(\)/\n\1\2/g' \
 	| cat $< - \
@@ -54,10 +56,10 @@ dist/index.html: index.html | dist
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
 
-dist/skin/konopas.css: skin/*.less | dist/skin
+dist/skin/konopas.css: skin/*.less | dist/skin node_modules
 	$(BIN)/lessc skin/main.less $@
 
-dist/skin/konopas.min.css: skin/*.less | dist/skin
+dist/skin/konopas.min.css: skin/*.less | dist/skin node_modules
 	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" $@
 
 dist/skin/%: skin/% | dist/skin
