@@ -1,3 +1,5 @@
+import Info from '../src/info'
+
 export default function KonOpas(set) {
 	this.id = '';
 	this.lc = 'en';
@@ -28,7 +30,7 @@ export default function KonOpas(set) {
 	this.stars = new KonOpas.Stars(this.id);
 	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
 	this.item = new KonOpas.Item();
-	this.info = new KonOpas.Info();
+	this.info = new Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
 	for (var i = 0; i < pl.length; ++i) pl[i].addEventListener('click', KonOpas.popup_open);
