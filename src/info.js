@@ -1,4 +1,4 @@
-// import { toggle_collapse, pretty_time_diff } from '../src/util';
+import { toggle_collapse, pretty_time_diff } from '../src/util';
 
 export default class {
 	constructor() {
@@ -16,14 +16,14 @@ export default class {
 		}
 		var cl = document.getElementById('info_view').getElementsByClassName('collapse');
 		for (var i = 0; i < cl.length; ++i) {
-			cl[i].onclick = KonOpas.toggle_collapse;
+			cl[i].onclick = toggle_collapse;
 		}
 	}
 
 	show_updated() {
 		if (!this.lu || !this.lu_time) return;
 		var span = this.lu.getElementsByTagName('span')[0];
-		span.textContent = KonOpas.pretty_time_diff(this.lu_time);
+		span.textContent = pretty_time_diff(this.lu_time);
 		span.title = this.lu_time.toLocaleString();
 		span.onclick = function(ev) {
 			var self = (ev || window.event).target;
