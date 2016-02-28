@@ -1,5 +1,6 @@
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
+import Part from '../src/part';
 import Stars from '../src/stars';
 
 export default function KonOpas(set) {
@@ -37,7 +38,7 @@ export default function KonOpas(set) {
 }
 
 KonOpas.prototype.set_program = function(list, opt) { this.program = new KonOpas.Prog(list, opt); }
-KonOpas.prototype.set_people = function(list) { this.people = new KonOpas.Part(list, this); }
+KonOpas.prototype.set_people = function(list) { this.people = new Part(this, KonOpas.Item, list); }
 
 KonOpas.prototype.set_view = function() {
 	var view = window.location.hash.substr(1, 4), tabs = _el('tabs');

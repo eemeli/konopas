@@ -10,13 +10,13 @@ export function log(msg, lvl) {
 
 //function _el(id) { return id && document.getElementById(id); }
 
-//function _new_elem(tag, cl, text, hide) {
-//	var e = document.createElement(tag);
-//	if (cl) e.className = cl;
-//	if (text) e.textContent = text;
-//	if (hide) e.style.display = 'none';
-//	return e;
-//}
+export function new_elem(tag, cl, text, hide) {
+	const e = document.createElement(tag);
+	if (cl) e.className = cl;
+	if (text) e.textContent = text;
+	if (hide) e.style.display = 'none';
+	return e;
+}
 
 export function link_to_short_url(url) {
 	const u = encodeURIComponent(url.replace(/^http:\/\//, ''));
@@ -28,8 +28,8 @@ export function link_to_qr_code(url) {
 	return 'http://chart.apis.google.com/chart?cht=qr&chs=350x350&chl=' + u;
 }
 
-//KonOpas.hash_encode = function(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
-//KonOpas.hash_decode = function(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
+export function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
+export function hash_decode(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
 
 //KonOpas.glob_to_re = function(pat) {
 //	var re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
@@ -75,65 +75,65 @@ export class VarStore {
 
 // ------------------------------------------------------------------------------------------------ string generation
 
-//KonOpas.clean_name = function(p, span_parts) {
-//	var fn = '', ln = '';
-//	switch (p.name.length) {
-//		case 1:
-//			ln = p.name[0];
-//			break;
-//		case 2:
-//			if (p.name[1]) {
-//				fn = p.name[0];
-//				ln = p.name[1];
-//			} else {
-//				ln = p.name[0];
-//			}
-//			break;
-//		case 3:
-//			fn = p.name[2] + ' ' + p.name[0];
-//			ln = p.name[1];
-//			break;
-//		case 4:
-//			fn = p.name[2] + ' ' + p.name[0];
-//			ln = p.name[1] + (p.name[3] ? ', ' + p.name[3] : '');
-//			break;
-//	}
-//	return span_parts
-//		? '<span class="fn">' + fn.trim() + '</span> <span class="ln">' + ln.trim() + '</span>'
-//		: (fn + ' ' + ln).trim();
-//}
+export function clean_name(p, span_parts) {
+	let fn = '', ln = '';
+	switch (p.name.length) {
+		case 1:
+			ln = p.name[0];
+			break;
+		case 2:
+			if (p.name[1]) {
+				fn = p.name[0];
+				ln = p.name[1];
+			} else {
+				ln = p.name[0];
+			}
+			break;
+		case 3:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1];
+			break;
+		case 4:
+			fn = p.name[2] + ' ' + p.name[0];
+			ln = p.name[1] + (p.name[3] ? ', ' + p.name[3] : '');
+			break;
+	}
+	return span_parts
+		? '<span class="fn">' + fn.trim() + '</span> <span class="ln">' + ln.trim() + '</span>'
+		: (fn + ' ' + ln).trim();
+}
 
-//KonOpas.clean_links = function(p) {
-//	var ok = false, o = {};
-//	if (p && ('links' in p)) {
-//		if (p.links.img || p.links.photo) {
-//			var img = (p.links.img || p.links.photo).trim();
-//			if (/^www/.test(img)) img = 'http://' + img;
-//			if (/:\/\//.test(img)) { o['img'] = { 'tgt': img }; ok = true; }
-//		}
-//		if (p.links.url) {
-//			var url = p.links.url.trim();
-//			if (!/:\/\//.test(url)) url = 'http://' + url;
-//			o['URL'] = { 'tgt': url, 'txt': url.replace(/^https?:\/\//, '') };
-//			ok = true;
-//		}
-//		if (p.links.fb) {
-//			var fb = p.links.fb.trim().replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
-//			o['Facebook'] = { 'txt': fb };
-//			if (/[^a-zA-Z0-9.]/.test(fb) && !/^pages\//.test(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
-//			o['Facebook']['tgt'] = 'https://www.facebook.com/' + fb;
-//			ok = true;
-//		}
-//		if (p.links.twitter) {
-//			var tw = p.links.twitter.trim().replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
-//			o['Twitter'] = { 'txt': '@' + tw };
-//			if (/[^a-zA-Z0-9_]/.test(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
-//			o['Twitter']['tgt'] = 'https://www.twitter.com/' + tw;
-//			ok = true;
-//		}
-//	}
-//	return ok ? o : false;
-//}
+export function clean_links(p) {
+	if (!p || !p.links) return null;
+	const o = {};
+	let ok = false;
+	if (p.links.img || p.links.photo) {
+		let img = (p.links.img || p.links.photo).trim();
+		if (/^www/.test(img)) img = 'http://' + img;
+		if (/:\/\//.test(img)) { o.img = { tgt: img }; ok = true; }
+	}
+	if (p.links.url) {
+		let url = p.links.url.trim();
+		if (!/:\/\//.test(url)) url = 'http://' + url;
+		o.URL = { tgt: url, txt: url.replace(/^https?:\/\//, '') };
+		ok = true;
+	}
+	if (p.links.fb) {
+		let fb = p.links.fb.trim().replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
+		o.Facebook = { txt: fb };
+		if (/[^a-zA-Z0-9.]/.test(fb) && !/^pages\//.test(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
+		o.Facebook.tgt = 'https://www.facebook.com/' + fb;
+		ok = true;
+	}
+	if (p.links.twitter) {
+		let tw = p.links.twitter.trim().replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
+		o.Twitter = { txt: '@' + tw };
+		if (/[^a-zA-Z0-9_]/.test(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
+		o.Twitter.tgt = 'https://www.twitter.com/' + tw;
+		ok = true;
+	}
+	return ok ? o : null;
+}
 
 
 // ------------------------------------------------------------------------------------------------ array comparison
