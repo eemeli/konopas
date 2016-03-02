@@ -1,6 +1,7 @@
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
 import Part from '../src/part';
+import Server from '../src/server';
 import Stars from '../src/stars';
 
 export default function KonOpas(set) {
@@ -28,7 +29,7 @@ export default function KonOpas(set) {
 
 	this.store = new KonOpas.Store(this.id);
 	this.stars = new Stars(this, KonOpas.Item);
-	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
+	this.server = this.use_server && new Server(this);
 	this.item = new KonOpas.Item();
 	this.info = new Info();
 	window.onhashchange = this.set_view.bind(this);

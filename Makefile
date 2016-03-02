@@ -4,7 +4,7 @@ DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
-ES5_SRC = src/item.js src/prog.js src/server.js src/es5_util.js
+ES5_SRC = src/item.js src/prog.js src/es5_util.js
 
 MAKEFLAGS += -r
 .SUFFIXES:

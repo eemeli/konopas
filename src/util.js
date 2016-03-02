@@ -8,8 +8,6 @@ export function log(msg, lvl) {
 	}
 }
 
-//function _el(id) { return id && document.getElementById(id); }
-
 export function new_elem(tag, cl, text, hide) {
 	const e = document.createElement(tag);
 	if (cl) e.className = cl;
@@ -160,30 +158,29 @@ export function array_overlap(a, b) {
 
 // ------------------------------------------------------------------------------------------------ DOM manipulation
 
-//KonOpas.popup_open = function(ev) {
-//	ev = ev || window.event;
-//	if (ev.which != 1) return;
-//	var src_el = ev.target, pop_el = src_el.nextElementSibling;
-//	if (!pop_el || !pop_el.classList.contains('popup')) {
-//		if (src_el.href && /\.(gif|jpe?g|png)$/i.test(src_el.href)) {
-//			pop_el = _new_elem('img', 'popup');
-//			pop_el.src = src_el.href;
-//			src_el.parentNode.insertBefore(pop_el, src_el.nextSibling);
-//		} else return;
-//	}
-//	var wrap_el = _new_elem('div', 'popup-wrap');
-//	wrap_el.onclick = function() {
-//		pop_el.parentNode.removeChild(pop_el);
-//		wrap_el.parentNode.removeChild(wrap_el);
-//		src_el.parentNode.insertBefore(pop_el, src_el.nextSibling);
-//	};
-//	var pop_title = pop_el.getAttribute('data-title') || '';
-//	if (pop_title) wrap_el.appendChild(_new_elem('div', 'popup-title', pop_title));
-//	pop_el.parentNode.removeChild(pop_el);
-//	wrap_el.appendChild(pop_el);
-//	document.body.appendChild(wrap_el);
-//	if (src_el.href) ev.preventDefault();
-//}
+export function popup_open(ev = window.event) {
+	if (ev.which != 1) return;
+	const src_el = ev.target, pop_el = src_el.nextElementSibling;
+	if (!pop_el || !pop_el.classList.contains('popup')) {
+		if (src_el.href && /\.(gif|jpe?g|png)$/i.test(src_el.href)) {
+			const new_pop_el = new_elem('img', 'popup');
+			new_pop_el.src = src_el.href;
+			src_el.parentNode.insertBefore(new_pop_el, src_el.nextSibling);
+		} else return;
+	}
+	const wrap_el = new_elem('div', 'popup-wrap');
+	wrap_el.onclick = () => {
+		pop_el.parentNode.removeChild(pop_el);
+		wrap_el.parentNode.removeChild(wrap_el);
+		src_el.parentNode.insertBefore(pop_el, src_el.nextSibling);
+	};
+	const pop_title = pop_el.getAttribute('data-title');
+	if (pop_title) wrap_el.appendChild(new_elem('div', 'popup-title', pop_title));
+	pop_el.parentNode.removeChild(pop_el);
+	wrap_el.appendChild(pop_el);
+	document.body.appendChild(wrap_el);
+	if (src_el.href) ev.preventDefault();
+}
 
 export function toggle_collapse(ev = window.event) {
 	const title = ev.target, body = title && title.nextElementSibling;
@@ -200,27 +197,25 @@ export function toggle_collapse(ev = window.event) {
 
 // ------------------------------------------------------------------------------------------------ time & date
 
-//KonOpas.pretty_time = function(t, opt) {
-//	function pre0(n) { return (n < 10 ? '0' : '') + n; }
-//	function _pretty_time(h, m) {
-//		if (opt.time_show_am_pm) {
-//			var h12 = h % 12; if (h12 == 0) h12 = 12;
-//			var m_str = ((m == 0) && opt.abbrev_00_minutes ) ? '' : ':' + pre0(m);
-//			return h12 + m_str + (h < 12 ? 'am' : 'pm');
-//		} else {
-//			return pre0(h) + ':' + pre0(m);
-//		}
-//	}
-//	opt = opt || {};
-//	if (t instanceof Date) {
-//		return _pretty_time(t.getHours(), t.getMinutes());
-//	} else if (typeof t == 'string' || t instanceof String) {
-//		if (opt.time_show_am_pm) {
-//			var a = t.split(':'); // hh:mm
-//			return _pretty_time(parseInt(a[0], 10), parseInt(a[1], 10));
-//		} else return t;
-//	} else return '';
-//}
+export function pretty_time(t, { time_show_am_pm, abbrev_00_minutes } = {}) {
+	function pre0(n) { return (n < 10 ? '0' : '') + n; }
+    let h, m;
+	if (t instanceof Date) {
+        h = t.getHours();
+        m = t.getMinutes();
+	    if (!time_show_am_pm) return pre0(h) + ':' + pre0(m);
+	} else if (typeof t == 'string' || t instanceof String) {
+        // hh:mm
+	    if (!time_show_am_pm) return t;
+		const a = t.split(':');
+        h = parseInt(a[0], 10);
+        m = parseInt(a[1], 10);
+	} else return '';
+
+	let h12 = h % 12; if (h12 == 0) h12 = 12;
+	const m_str = ((m == 0) && abbrev_00_minutes ) ? '' : ':' + pre0(m);
+	return h12 + m_str + (h < 12 ? 'am' : 'pm');
+}
 
 export function pretty_time_diff(t) {
 	const d = (Date.now() - t) / 1e3;
@@ -232,13 +227,13 @@ export function pretty_time_diff(t) {
 	}
 }
 
-//KonOpas.parse_date = function(day_str) {
-//	if (!day_str) return false;
-//	var a = day_str.match(/(\d+)/g); if (!a || (a.length < 3)) return false;
-//	var y = parseInt(a[0], 10), m = parseInt(a[1], 10), d = parseInt(a[2], 10);
-//	if (!y || !m || !d) return false;
-//	return new Date(y, m - 1, d, 12);
-//}
+function parse_date(day_str) {
+    // yyyy-mm-dd
+	if (!day_str) return null;
+	const a = day_str.match(/\d+/g) || [];
+    const [y, m, d] = a.map(s => parseInt(s, 10));
+    return (y && m && d) ? new Date(y, m - 1, d, 12) : null;
+}
 
 //KonOpas.data_date = function(d) {
 //	function pre0(n) { return (n < 10 ? '0' : '') + n; }
@@ -246,15 +241,14 @@ export function pretty_time_diff(t) {
 //	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
 //}
 
-//KonOpas.pretty_date = function(d, opt) {
-//	opt = opt || {};
-//	var o = { weekday: "long", month: "long", day: "numeric" },
-//	    t = (d instanceof Date) ? d : KonOpas.parse_date(d);
-//	if (!t) return d;
-//	if (Math.abs(t - Date.now()) > 1000*3600*24*60) o.year = "numeric";
-//	var s = t.toLocaleDateString(opt.lc, o);
-//	return s.charAt(0).toUpperCase() + s.slice(1);
-//}
+export function pretty_date(d, { lc } = {}) {
+	const o = { weekday: 'long', month: 'long', day: 'numeric' };
+	const t = (d instanceof Date) ? d : parse_date(d);
+	if (!t) return d;
+	if (Math.abs(t - Date.now()) > 1000*3600*24*60) o.year = 'numeric';
+	const s = t.toLocaleDateString(lc, o);
+	return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 //KonOpas.time_sum = function(t0_str, m_str) {
 //	var t = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str,
