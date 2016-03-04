@@ -29,15 +29,27 @@ export function link_to_qr_code(url) {
 export function hash_encode(s) { return encodeURIComponent(s).replace(/%20/g, '+'); }
 export function hash_decode(s) { return decodeURIComponent(s.replace(/\+/g, '%20')); }
 
-//KonOpas.glob_to_re = function(pat) {
-//	var re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
-//	pat = pat.replace(re_re, '\\$&').replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
-//	var terms = pat.match(/"[^"]*"|'[^']*'|\S+/g).map(function(el){
-//		var t = '\\b' + el.replace(/^(['"])(.*)\1$/, '$2') + '\\b';
-//		return t; //.replace('\\b.*', '').replace('.*\\b', '');
-//	});
-//	return new RegExp(terms.join('|'), 'i');
-//}
+export function glob_to_re(pat) {
+	const re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
+	pat = pat.replace(re_re, '\\$&').replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
+	const terms = pat.match(/"[^"]*"|'[^']*'|\S+/g).map(el => '\\b' + el.replace(/^(['"])(.*)\1$/, '$2') + '\\b');
+	return new RegExp(terms.join('|'), 'i');
+}
+
+export function prog_hash(tag_categories, filters, excl) {
+	const p = [];
+	if (filters) ['id', 'area', 'tag', 'query'].forEach((k) => {
+		let v = filters[k + '_str'] || filters[k];
+		if (excl && excl[k] || !v || (v === `all_${k}s`)) return;
+		if ((k == 'tag') && tag_categories && tag_categories.length) {
+            const tag_re = new RegExp('^(' + tag_categories.join('|') + '):(.*)');
+			const m = v.match(tag_re);
+			if (m) { k = m[1]; v = m[2]; }
+		}
+		p.push(k + ':' + hash_encode(v));
+	});
+	return p.length ? '#prog/' + p.join('/') : '#';
+}
 
 
 // ------------------------------------------------------------------------------------------------ storage
@@ -227,7 +239,7 @@ export function pretty_time_diff(t) {
 	}
 }
 
-function parse_date(day_str) {
+export function parse_date(day_str) {
     // yyyy-mm-dd
 	if (!day_str) return null;
 	const a = day_str.match(/\d+/g) || [];

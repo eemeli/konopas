@@ -1,3 +1,17 @@
+import { prog_hash } from '../src/util';
+
+function focus_day(day) {
+    ['day-sidebar', 'day-narrow'].forEach(n => {
+		const el = document.getElementById(n);
+		const items = el && el.getElementsByTagName('li');
+		if (items) for (let i = 0; i < items.length; ++i) {
+			const dday = items[i].getAttribute('data-day');
+			items[i].classList[(day == dday) ? 'add' : 'remove']('selected');
+		}
+    });
+}
+
+
 KonOpas.Item = function() {
 	_el('prog_ls').onclick = KonOpas.Item.list_click;
 	if (_el('scroll_link')) {
@@ -23,7 +37,7 @@ KonOpas.Item.show_extra = function(item, id) {
 		var o = {};
 		it.tags.forEach(function(t) {
 			var cat = 'tags';
-			var tgt = KonOpas.Prog.hash({'tag': t});
+			var tgt = prog_hash(konopas.tag_categories, { tag: t });
 			var a = t.split(':');
 			if (a.length > 1) { cat = a.shift(); t = a.join(':'); }
 			var link = '<a href="' + tgt + '">' + t + '</a>'
@@ -225,7 +239,7 @@ KonOpas.Item.show_list = function(ls, opt) {
 					var dt = _el('dt_' + d);
 					if (dt) {
 						dt.scrollIntoView();
-						KonOpas.Prog.focus_day(d);
+						focus_day(d);
 					} else if (d < KonOpas.data_date(opt.now)) {
 						opt.hide_ended = false;
 						KonOpas.Item.show_list(ls, opt);
@@ -285,7 +299,7 @@ KonOpas.Item.prototype.scroll_time = function() {
 		S.t_el.style.display = 'none';
 		var day0 = S.times[0].getAttribute('data-day');
 		if (day0 != S.day) {
-			KonOpas.Prog.focus_day(day0);
+			focus_day(day0);
 			S.day = day0;
 		}
 	} else {
@@ -306,7 +320,7 @@ KonOpas.Item.prototype.scroll_time = function() {
 			S.t_el.textContent = konopas.program.days[day0]['short'] + '\n' + S.times[i].textContent;
 			S.t_el.style.display = 'block';
 			if (day1 != S.day) {
-				KonOpas.Prog.focus_day(day1);
+				focus_day(day1);
 				S.day = day1;
 			}
 		}
