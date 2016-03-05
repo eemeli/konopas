@@ -1,3 +1,5 @@
+require('classlist.js');  // polyfill
+
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
 import Item from '../src/item';
