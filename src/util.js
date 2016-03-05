@@ -271,12 +271,29 @@ export function data_date(d) {
 	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
 }
 
-export function pretty_date(d, { lc } = {}) {
-	const o = { weekday: 'long', month: 'long', day: 'numeric' };
-	const t = (d instanceof Date) ? d : parse_date(d);
-	if (!t) return d;
-	if (Math.abs(t - Date.now()) > 1000*3600*24*60) o.year = 'numeric';
-	const s = t.toLocaleDateString(lc, o);
+let toLocaleDateString = (date, options) => date.toLocaleDateString(i18n.locale, options);
+if (function(){
+	try { new Date().toLocaleDateString('i'); }
+	catch (e) { return e.name !== 'RangeError'; }
+	return true;
+}()) {
+	toLocaleDateString = (date, options) => {
+		if (!options) return date.toLocaleDateString();
+		const w = i18n.txt('weekday_n', { N: date.getDay() });
+		const d = date.getDate();
+		const m = i18n.txt('month_n', { N: date.getMonth() });
+		let s = w + ', ' + d + ' ' + m;
+		if (options && options.year) s += ' ' + date.getFullYear();
+		return s;
+	};
+}
+
+export function pretty_date(d) {
+	const options = { weekday: 'long', month: 'long', day: 'numeric' };
+	const date = (d instanceof Date) ? d : parse_date(d);
+	if (!date) return d;
+	if (Math.abs(date - Date.now()) > 1000*3600*24*60) options.year = 'numeric';
+	const s = toLocaleDateString(date, options);
 	return s.charAt(0).toUpperCase() + s.slice(1);
 }
 

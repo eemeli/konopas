@@ -34,7 +34,7 @@ build/preface.js: LICENSE | build
 	echo ' */' >> $@
 	echo '"use strict";' >> $@
 
-build/app.js: build/preface.js src/polyfill.js src/app.js | build
+build/app.js: build/preface.js src/app.js | build
 	cat $^ > $@
 
 dist/konopas.js: build/app.js build/messages.js src/*.js | dist

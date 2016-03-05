@@ -155,7 +155,7 @@ export default class Item {
 				if (it.date != prev_date) {
 					prev_date = it.date;
 					prev_time = '';
-					list.appendChild(new_elem('div', 'new_day', pretty_date(it.t0 || it.date, this.konopas))).id = 'dt_' + it.date;
+					list.appendChild(new_elem('div', 'new_day', pretty_date(it.t0 || it.date))).id = 'dt_' + it.date;
 				}
 				if (it.time != prev_time) {
 					prev_time = it.time;

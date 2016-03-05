@@ -149,7 +149,7 @@ export default class Server {
 	    const n = new_elem('span', 'comment-author', c.name);
 	    d.appendChild(n);
 	    const dt = new Date(1000 * c.ctime);
-	    const t = new_elem('span', 'comment-time', pretty_date(dt, this.konopas) + ' at ' + pretty_time(dt, this.konopas));
+	    const t = new_elem('span', 'comment-time', pretty_date(dt) + ' at ' + pretty_time(dt, this.konopas));
 	    t.title = dt.toString();
 	    d.appendChild(t);
 	    const m = new_elem('div', '', c.text);
