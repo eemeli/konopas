@@ -27,17 +27,7 @@ build/messages.js: src/i18n/*.json LC | build node_modules
 	$(eval LCsp := $(shell echo $(LC) | tr ',' ' '))
 	$(BIN)/messageformat --locale $(LC) --namespace "export default" $(LCsp:%=src/i18n/%.json) > $@
 
-build/preface.js: LICENSE | build
-	echo '/**' > $@
-	sed 's/^/ * /' $< >> $@
-	echo ' * @license' >> $@
-	echo ' */' >> $@
-	echo '"use strict";' >> $@
-
-build/app.js: build/preface.js src/app.js | build
-	cat $^ > $@
-
-dist/konopas.js: build/app.js build/messages.js src/*.js | dist
+dist/konopas.js: src/app.js build/messages.js src/*.js | dist
 	$(BIN)/browserify $< --standalone KonOpas --outfile $@
 
 dist/konopas.min.js: dist/konopas.js | node_modules
