@@ -1,5 +1,6 @@
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
+import Item from '../src/item';
 import Part from '../src/part';
 import Program from '../src/prog';
 import Server from '../src/server';
@@ -29,9 +30,10 @@ export default function KonOpas(set) {
 		|| !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
 	this.store = new KonOpas.Store(this.id);
-	this.stars = new Stars(this, KonOpas.Item);
+	this.item = new Item(this);
+	this.show_list = (ls, opt) => this.item.show_list(ls, opt);
+	this.stars = new Stars(this);
 	this.server = this.use_server && new Server(this);
-	this.item = new KonOpas.Item();
 	this.info = new Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
@@ -39,8 +41,8 @@ export default function KonOpas(set) {
 	if (_el('refresh')) window.addEventListener('load', this.refresh_cache.bind(this), false);
 }
 
-KonOpas.prototype.set_program = function(list, opt) { this.program = new Program(this, KonOpas.Item, list, opt); }
-KonOpas.prototype.set_people = function(list) { this.people = new Part(this, KonOpas.Item, list); }
+KonOpas.prototype.set_program = function(list, opt) { this.program = new Program(this, list, opt); }
+KonOpas.prototype.set_people = function(list) { this.people = new Part(this, list); }
 
 KonOpas.prototype.set_view = function() {
 	var view = window.location.hash.substr(1, 4), tabs = _el('tabs');

@@ -93,9 +93,8 @@ function set_filters(konopas, filters) {
 
 
 export default class Program {
-    constructor(konopas, Item, list = [], opt = {}) {
+    constructor(konopas, list = [], opt = {}) {
         this.konopas = konopas;
-        this.Item = Item;
 	    this.list = list.sort(sort_prog_items);
 	    this.list.forEach(p => {
 		    if (p && p.date) {
@@ -405,7 +404,7 @@ export default class Program {
 		    }
 		    filters.hide_ended = true;
 		    filters.prog_view = true;
-		    self.Item.show_list(ls, filters);
+		    self.konopas.show_list(ls, filters);
 	    }
 
 	    const filters = get_filters(this.konopas);

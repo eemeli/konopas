@@ -27,9 +27,8 @@ function bin_ranges(array, bin_size) {
 
 
 export default class Part {
-	constructor(konopas, Item, list = []) {
+	constructor(konopas, list = []) {
 		this.konopas = konopas;
-		this.Item = Item;
 		this.list = list;
 		this.list.forEach(p => {
 			p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
@@ -109,7 +108,8 @@ export default class Part {
 		document.getElementById('part_names').innerHTML = '';
 		const bio = (p.bio || img) ? ('<p>' + img + p.bio) : '';
 		document.getElementById('part_info').innerHTML = `<h2 id="part_title">${name}</h2>${bio}${links}`;
-		this.Item.show_list(this.konopas.program.list.filter(it => p.prog.indexOf(it.id) >= 0));
+        const ls = this.konopas.program.list.filter(it => p.prog.indexOf(it.id) >= 0);
+		this.konopas.show_list(ls);
 		document.getElementById('top').scrollIntoView();
 	}
 

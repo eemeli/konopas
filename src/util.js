@@ -247,11 +247,11 @@ export function parse_date(day_str) {
     return (y && m && d) ? new Date(y, m - 1, d, 12) : null;
 }
 
-//KonOpas.data_date = function(d) {
-//	function pre0(n) { return (n < 10 ? '0' : '') + n; }
-//	var t = (d instanceof Date) ? d : KonOpas.parse_date(d);
-//	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
-//}
+export function data_date(d) {
+	function pre0(n) { return (n < 10 ? '0' : '') + n; }
+	const t = (d instanceof Date) ? d : parse_date(d);
+	return t.getFullYear() + '-' + pre0(t.getMonth() + 1) + '-' + pre0(t.getDate());
+}
 
 export function pretty_date(d, { lc } = {}) {
 	const o = { weekday: 'long', month: 'long', day: 'numeric' };
@@ -262,9 +262,9 @@ export function pretty_date(d, { lc } = {}) {
 	return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-//KonOpas.time_sum = function(t0_str, m_str) {
-//	var t = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str,
-//	    h = (t / 60) >> 0,
-//	    m = t - 60 * h;
-//	return '' + (h % 24) + ':' + (m<10?'0':'') + m;
-//}
+export function time_sum(t0_str, m_str) {
+	const t = 60 * t0_str.substr(0,2) + 1 * t0_str.substr(3,2) + 1 * m_str;
+	const h = (t / 60) >> 0;
+	const m = t - 60 * h;
+	return '' + (h % 24) + ':' + (m<10?'0':'') + m;
+}

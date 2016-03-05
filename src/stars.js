@@ -1,11 +1,9 @@
 import i18n from '../src/i18n-wrap';
 import { arrays_equal, array_overlap, link_to_qr_code, link_to_short_url, log, VarStore } from '../src/util';
-// import Item from '../src/item';
 
 export default class {
-	constructor(konopas, Item, opt = {}) {
+	constructor(konopas, opt = {}) {
         this.konopas = konopas;
-        this.Item = Item;
 		this.name = 'konopas.' + konopas.id + '.stars';
 		try { this.store = localStorage || sessionStorage || (new VarStore()); }
 		catch (e) { this.store = new VarStore(); }
@@ -156,7 +154,7 @@ export default class {
 		(document.getElementById('star_set_add') || {}).onclick = () => { this.add(set); };
 		if (this.server) this.server.show_ical_link(view);
 		const ls = this.konopas.program.list.filter(it => (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0));
-		this.Item.show_list(ls, { hide_ended: true });
+		this.konopas.show_list(ls, { hide_ended: true });
 		if (set_len) for (let i = 0; i < set_len; ++i) {
 			const el = document.getElementById('s' + set[i]);
 			if (el) el.classList.add('in_set');
