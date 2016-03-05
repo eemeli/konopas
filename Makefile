@@ -33,7 +33,7 @@ dist/konopas.js: src/app.js build/messages.js src/*.js | dist
 		--uglify [ --comments --compress --mangle ] ]
 
 dist/index.html: index.html | dist
-	cp $< $@
+	sed 's/"dist\//"/g' $< > $@
 
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
