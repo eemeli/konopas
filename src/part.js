@@ -1,58 +1,19 @@
 import i18n from '../src/i18n-wrap';
+import PartData from '../src/partdata';
 import { clean_links, clean_name, hash_decode, hash_encode, new_elem } from '../src/util';
-
-
-function bin_ranges(array, bin_size) {
-	const prev_matches = (a, i) => (i > 0) && (a[i - 1] == a[i]);
-	const next_matches = (a, i) => (i < a.length - 1) && (a[i + 1] == a[i]);
-	const n_bins = bin_size ? Math.round(array.length / bin_size) : 0;
-	const ends = [];
-	for (var i = 1; i <= n_bins; ++i) {
-		var e = Math.round(i * array.length / n_bins), n_up = 0, n_down = 0;
-		if (e < 0) e = 0;
-		if (e >= array.length) e = array.length - 1;
-		while (next_matches(array, e + n_up)) ++n_up;
-		if (n_up) while (prev_matches(array, e - n_down)) ++n_down;
-		if (n_up <= n_down) e += n_up;
-		else if (e > n_down) e -= n_down + 1;
-		if (!ends.length || (ends[ends.length - 1] != array[e])) ends.push(array[e]);
-	}
-	let start = ' ';
-	ends.forEach((e, i) => {
-		if (e > start) ends[i] = start + e;
-		if (e >= start) start = String.fromCharCode(e.charCodeAt(0) + 1);
-	});
-	return ends;
-}
 
 
 export default class Part {
 	constructor(konopas, list = []) {
 		this.konopas = konopas;
-		this.list = list;
-		this.list.forEach(p => {
-			p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
-			if (!konopas.non_ascii_people) p.sortname = p.sortname.make_ascii();
-		});
-		this.list.sort(konopas.non_ascii_people
-			? (a, b) => a.sortname.localeCompare(b.sortname, konopas.lc)
-			: (a, b) => a.sortname < b.sortname ? -1 : a.sortname > b.sortname);
-		this.set_ranges(konopas.people_per_screen || 0);
+        this.data = new PartData(list, konopas);
+        this.show_ranges();
 	}
 
-	set_ranges(bin_size) {
-		const fn = [], ln = [];
-		this.list.forEach(p => {
-			if (p.name && p.name.length) {
-				fn.push(p.name[0].trim().charAt(0).toUpperCase());
-				if (p.name.length >= 2) ln.push(p.name[1].trim().charAt(0).toUpperCase());
-			}
-		});
-
-		this.ranges = bin_ranges(ln.length ? ln : fn, bin_size);
+	show_ranges() {
 		['part-sidebar', 'part-narrow'].forEach(id => {
 			const ul = new_elem('ul', 'name-list');
-			this.ranges.forEach(n => {
+			this.data.ranges.forEach(n => {
 				let startChar = n.charAt(0);
 				if (startChar == ' ') startChar = 'A';
 				const li = new_elem('li', '', startChar);
@@ -62,8 +23,8 @@ export default class Part {
 			});
 			const div = document.getElementById(id);
 			div.appendChild(ul);
-			div.onclick = ev => {
-				const name_range = (ev || window.event).target.getAttribute('data-range');
+			div.onclick = (ev = window.event) => {
+				const name_range = ev.target.getAttribute('data-range');
 				if (name_range) {
 					this.konopas.store.set('part', { name_range: name_range, participant: '' });
 					window.location.hash = '#part';
@@ -71,26 +32,15 @@ export default class Part {
 				}
 			};
 		});
-
-		if (!fn.length || !ln.length) {
-			const idx = (fn.length ? 1 : 0) + (ln.length ? 2 : 0);
-			const cls = ['error', 'fn-only', 'ln-only'][idx];
-			document.getElementById('part_names').classList.add(cls);
-		}
-	}
-
-	name_in_range(n0, range) {
-		switch (range.length) {
-			case 1:  return (n0 == range[0]);
-			case 2:  return this.konopas.non_ascii_people
-				? (n0.localeCompare(range[0], this.konopas.lc) >= 0) && (n0.localeCompare(range[1], this.konopas.lc) <= 0)
-				: ((n0 >= range[0]) && (n0 <= range[1]));
-			default: return (range.indexOf(n0) >= 0);
-		}
+        const has_ln = this.data.has_last_names();
+        const cls = this.data.has_first_names()
+                  ? (has_ln ? '' : 'fn-only')
+                  : (has_ln ? 'ln-only' : 'error');
+        if (cls) document.getElementById('part_names').classList.add(cls);
 	}
 
 	show_one(i) {
-		const p = this.list[i];
+		const p = this.data.list[i];
 		const name = clean_name(p, false);
 		const pl = clean_links(p);
 		let links = '', img = '';
@@ -114,9 +64,9 @@ export default class Part {
 	}
 
 	show_list(name_range) {
-		const lp = !name_range ? this.list : this.list.filter(p => {
+		const lp = !name_range ? this.data.list : this.data.list.filter(p => {
 			const n0 = p.sortname[0].toUpperCase();
-			return this.name_in_range(n0, name_range);
+			return this.data.name_in_range(n0, name_range);
 		});
 		document.getElementById('part_names').innerHTML = lp.map(p => '<li><a href="#part/' + hash_encode(p.id) + '">' + clean_name(p, true) + '</a></li>').join('');
 		document.getElementById('part_info').innerHTML = '';
@@ -126,12 +76,12 @@ export default class Part {
 	update_view(name_range, participant) {
 		const p_id = participant.substr(1);
 		const ll = document.querySelectorAll('.name-list > li');
-		if (!name_range) name_range = this.ranges && this.ranges[0] || '';
+		if (!name_range) name_range = this.data.ranges && this.data.ranges[0] || '';
 		for (let i = 0; i < ll.length; ++i) {
 			const cmd = (ll[i].getAttribute('data-range') == name_range) ? 'add' : 'remove';
 			ll[i].classList[cmd]('selected');
 		}
-		if (!p_id || !this.list.some((p, i) => {
+		if (!p_id || !this.data.list.some((p, i) => {
 			if (p.id == p_id) { this.show_one(i); return true; }
 		})) {
 			participant = '';
@@ -140,29 +90,28 @@ export default class Part {
 		this.konopas.store.set('part', { name_range, participant });
 	}
 
-	show(hash) {
-		if (!this.list.length) { window.location.hash = ''; return; }
-		var store = this.konopas.store.get('part') || {},
-			name_range = store.name_range || '',
-			participant = !document.body.classList.contains('part') && store.participant || '',
-			hash = window.location.hash.substr(6);
+	show() {
+		if (!this.data.list.length) { window.location.hash = ''; return; }
+        let name_range, participant;
+        const hash = window.location.hash.substr(6);
 		if (hash) {
-			const p_id = hash_decode(hash);
-			const pa = this.list.filter(p => p.id == p_id);
-			if (pa.length) {
-				participant = 'p' + pa[0].id;
-				const n0 = pa[0].sortname[0].toUpperCase();
-				if (!n0 || !this.ranges || !this.ranges.some(r => {
-					if (this.name_in_range(n0, r)) { name_range = r; return true; }
-				})) name_range = '';
+            const p = this.data.get(hash_decode(hash));
+            if (p) {
+                name_range = this.data.find_name_range(p.sortname);
+				participant = 'p' + p.id;
 			} else {
 				window.location.hash = '#part';
 				return;
 			}
-		} else if (participant) {
-			window.location.hash = '#part/' + participant.substr(1);
-			return;
-		}
+		} else {
+		    const store = this.konopas.store.get('part') || {};
+		    if (!document.body.classList.contains('part') && store.participant) {
+			    window.location.hash = '#part/' + store.participant.substr(1);
+			    return;
+            }
+			name_range = store.name_range || '';
+			participant = '';
+        }
 		this.update_view(name_range, participant);
 	}
 }

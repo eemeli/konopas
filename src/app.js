@@ -59,7 +59,7 @@ export default class KonOpas {
 		    if (this.server) this.server.error('Programme loading failed!');
 	    } else {
 		    tabs.style.display = 'block';
-		    if (!this.people || !this.people.list.length) {
+		    if (!this.people || !this.people.data.list.length) {
 			    tabs.classList.add('no-people');
 			    if (view == 'part') view = '';
 		    } else {
