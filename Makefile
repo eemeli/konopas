@@ -1,6 +1,6 @@
 BIN = ./node_modules/.bin
 
-DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
+DIST = dist/index.html dist/konopas.js dist/skin/konopas.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
@@ -28,17 +28,12 @@ build/messages.js: src/i18n/*.json LC | build node_modules
 	$(BIN)/messageformat --locale $(LC) --namespace "export default" $(LCsp:%=src/i18n/%.json) > $@
 
 dist/konopas.js: src/app.js build/messages.js src/*.js | dist
-	$(BIN)/browserify $< --standalone KonOpas --outfile $@
-
-dist/konopas.min.js: dist/konopas.js | node_modules
-	$(BIN)/uglifyjs $< --comments --compress --mangle --output $@ \
-		--source-map $@.map --source-map-include-sources --source-map-url $(notdir $@.map)
-
-dist/dev.html: index.html | dist
-	cp $< $@
+	$(BIN)/browserify $< --standalone KonOpas --debug --outfile $@ \
+		--plugin [minifyify --map $(notdir $@.map) --output $@.map \
+		--uglify [ --comments --compress --mangle ] ]
 
 dist/index.html: index.html | dist
-	sed 's/"konopas.js"/"konopas.min.js"/' $< > $@
+	cp $< $@
 
 dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
