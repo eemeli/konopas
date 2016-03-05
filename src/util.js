@@ -54,27 +54,45 @@ export function prog_hash(tag_categories, filters, excl) {
 
 // ------------------------------------------------------------------------------------------------ storage
 
-//KonOpas.Store = function(id) {
-//	try {
-//		sessionStorage.setItem('konopas.test_var', '1');
-//		sessionStorage.removeItem('konopas.test_var', '1');
-//		this.get = function(k) {
-//			var v = sessionStorage.getItem('konopas.' + id + '.' + k);
-//			return v ? JSON.parse(v) : v;
-//		}
-//		this.set = function(k, v) {
-//			sessionStorage.setItem('konopas.' + id + '.' + k, JSON.stringify(v));
-//		}
-//		this.limit = '';
-//	} catch (e) {
-//		var data = {};
-//		this.get = function(k) { return data[k]; };
-//		this.set = function(k, v) { data[k] = v; };
-//		this.limit = (e.name == 'SecurityError') ? 'FFcookies'
-//				   : ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (sessionStorage.length === 0)) ? 'IOSprivate'
-//				   : '?';
-//	}
-//}
+export class Store {
+    constructor(id) {
+        const err = Store.test();
+        if (err) {
+		    const data = {};
+		    this.get = k => data[k];
+		    this.set = (k, v) => { data[k] = v; };
+		    this.limit = (e.name == 'SecurityError') ? 'FFcookies'
+				       : ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (typeof sessionStorage != 'undefined') && (sessionStorage.length === 0)) ? 'IOSprivate'
+				       : '?';
+        } else {
+            this.id = id;
+            this.limit = '';
+        }
+    }
+
+    static test() {
+	    try {
+		    sessionStorage.setItem('konopas.test_var', '1');
+		    sessionStorage.removeItem('konopas.test_var', '1');
+            return null;
+	    } catch (e) {
+            return e;
+	    }
+    }
+
+    key(k) {
+        return `konopas.${this.id}.${k}`;
+    }
+
+	get(k) {
+		const v = sessionStorage.getItem(this.key(k));
+		return v ? JSON.parse(v) : v;
+	}
+
+	set(k, v) {
+		sessionStorage.setItem(this.key(k), JSON.stringify(v));
+	}
+}
 
 export class VarStore {
 	constructor() { this.data = {}; }

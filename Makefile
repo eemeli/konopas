@@ -4,8 +4,6 @@ DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
-ES5_SRC = src/es5_util.js
-
 MAKEFLAGS += -r
 .SUFFIXES:
 .PHONY: all dev LC clean precache watch
@@ -36,7 +34,7 @@ build/preface.js: LICENSE | build
 	echo ' */' >> $@
 	echo '"use strict";' >> $@
 
-build/app.js: build/preface.js src/polyfill.js src/app.js $(ES5_SRC) | build
+build/app.js: build/preface.js src/polyfill.js src/app.js | build
 	cat $^ > $@
 
 dist/konopas.js: build/app.js build/messages.js src/*.js | dist
