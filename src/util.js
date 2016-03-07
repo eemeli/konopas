@@ -89,12 +89,6 @@ export class Store {
 	}
 }
 
-export class VarStore {
-	constructor() { this.data = {}; }
-	getItem(k) { return this.data[k]; };
-	setItem(k, v) { this.data[k] = v; };
-}
-
 
 // ------------------------------------------------------------------------------------------------ string generation
 

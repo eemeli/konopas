@@ -1,6 +1,19 @@
 import i18n from '../src/i18n-wrap';
-import { log, new_elem, popup_open, pretty_date, pretty_time, VarStore } from '../src/util';
+import { log, new_elem, popup_open, pretty_date, pretty_time } from '../src/util';
 
+function getStore() {
+    try {
+		localStorage.setItem('konopas.test_var', '1');
+		localStorage.removeItem('konopas.test_var', '1');
+        return localStorage;
+    } catch (e) {
+		const data = {};
+        return {
+		    getItem: k => data[k],
+		    setItem: (k, v) => { data[k] = v; }
+        };
+    }
+}
 
 export default class Server {
 	constructor(konopas, opt = {}) {
@@ -10,7 +23,7 @@ export default class Server {
 	    this.host = opt.host ||  'https://konopas-server.appspot.com';
 	    this.el_id = opt.el_id || 'server_connect';
 	    this.err_el_id = opt.err_el_id || 'server_error';
-	    try { this.store = localStorage; } catch (e) { this.store = new VarStore(); }
+        this.store = getStore();
 
 	    this.connected = false;
 	    this.token = this.store.getItem('konopas.token') || false;
