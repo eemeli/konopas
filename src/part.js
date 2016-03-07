@@ -26,7 +26,7 @@ export default class Part {
 			div.onclick = (ev = window.event) => {
 				const name_range = ev.target.getAttribute('data-range');
 				if (name_range) {
-					this.konopas.store.set('part', { name_range: name_range, participant: '' });
+					this.konopas.sessionStore.set('part', { name_range, participant: '' });
 					window.location.hash = '#part';
 					this.update_view(name_range, '');
 				}
@@ -87,7 +87,7 @@ export default class Part {
 			participant = '';
 			this.show_list(name_range);
 		}
-		this.konopas.store.set('part', { name_range, participant });
+		this.konopas.sessionStore.set('part', { name_range, participant });
 	}
 
 	show() {
@@ -104,7 +104,7 @@ export default class Part {
 				return;
 			}
 		} else {
-		    const store = this.konopas.store.get('part') || {};
+		    const store = this.konopas.sessionStore.get('part') || {};
 		    if (!document.body.classList.contains('part') && store.participant) {
 			    window.location.hash = '#part/' + store.participant.substr(1);
 			    return;

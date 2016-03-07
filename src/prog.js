@@ -71,7 +71,7 @@ function get_filters(konopas) {
 		});
 	}
 	if (!hash_set && !document.body.classList.contains('prog')) {
-		const store = konopas.store.get('prog');
+		const store = konopas.sessionStore.get('prog');
 		if (store) for (let k in store) {
 			if (filters.hasOwnProperty(k)) filters[k] = store[k];
 		}
@@ -81,7 +81,7 @@ function get_filters(konopas) {
 
 function set_filters(konopas, filters) {
 	if (filters.id) filters = { id: filters.id };
-	konopas.store.set('prog', filters);
+	konopas.sessionStore.set('prog', filters);
 	const prev_hash = window.location.toString().split('#')[1] || '';
 	const hash = prog_hash(konopas.tag_categories, filters);
 	if (prev_hash !== hash.substr(1)) {

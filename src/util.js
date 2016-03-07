@@ -55,29 +55,24 @@ export function prog_hash(tag_categories, filters, excl) {
 // ------------------------------------------------------------------------------------------------ storage
 
 export class Store {
-    constructor(id) {
-        const err = Store.test();
-        if (err) {
-		    const data = {};
-		    this.get = k => data[k];
-		    this.set = (k, v) => { data[k] = v; };
-		    this.limit = (e.name == 'SecurityError') ? 'FFcookies'
+    constructor(id, type) {
+        this.id = id;
+        try {
+            this.store = (type === 'session') ? sessionStorage : localStorage;
+		    this.store.setItem('konopas.test_var', '1');
+		    this.store.removeItem('konopas.test_var', '1');
+            this.limit = '';
+        } catch (e) {
+		    this.limit = (e.name === 'SecurityError') ? 'FFcookies'
 				       : ((e.code === DOMException.QUOTA_EXCEEDED_ERR) && (typeof sessionStorage != 'undefined') && (sessionStorage.length === 0)) ? 'IOSprivate'
 				       : '?';
-        } else {
-            this.id = id;
-            this.limit = '';
+		    const data = {};
+            this.store = {
+		        getItem: k => data[k],
+		        setItem: (k, v) => { data[k] = v; }
+            };
+            return;
         }
-    }
-
-    static test() {
-	    try {
-		    sessionStorage.setItem('konopas.test_var', '1');
-		    sessionStorage.removeItem('konopas.test_var', '1');
-            return null;
-	    } catch (e) {
-            return e;
-	    }
     }
 
     key(k) {
@@ -85,12 +80,12 @@ export class Store {
     }
 
 	get(k) {
-		const v = sessionStorage.getItem(this.key(k));
+		const v = this.store.getItem(this.key(k));
 		return v ? JSON.parse(v) : v;
 	}
 
 	set(k, v) {
-		sessionStorage.setItem(this.key(k), JSON.stringify(v));
+		this.store.setItem(this.key(k), JSON.stringify(v));
 	}
 }
 

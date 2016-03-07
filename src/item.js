@@ -261,15 +261,15 @@ export default class Item {
 	    };
 
 	    const star_els = LS.getElementsByClassName('item_star');
-        const stars = this.konopas.stars;
 	    for (let i = 0, l = star_els.length; i < l; ++i) {
             const el = star_els[i];
 		    el.onclick = (ev = window.event) => {
-                stars.toggle(el, el.id.substr(1));
+                const set = this.konopas.stars.toggle(el.id.substr(1));
+                el.classList[set ? 'add' : 'remove']('has_star')
                 ev.preventDefault();
             };
 	    }
-	    stars.list().forEach(s => {
+	    this.konopas.stars.list().forEach(s => {
 		    const el = document.getElementById('s' + s);
 		    if (el) el.classList.add('has_star');
 	    });

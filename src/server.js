@@ -6,7 +6,6 @@ export default class Server {
 	constructor(konopas, opt = {}) {
 	    this.konopas = konopas;
 	    this.id = konopas.id;
-	    this.stars = konopas.stars;
 
 	    this.host = opt.host ||  'https://konopas-server.appspot.com';
 	    this.el_id = opt.el_id || 'server_connect';
@@ -24,9 +23,10 @@ export default class Server {
 	    this.err_el = false;
 
 	    this.disconnect();
-	    if (this.stars) this.stars.server = this;
 	    if (this.el && this.id) this.exec('info');
 	    else log('server init failed', 'warn');
+	    this.konopas.stars.setListeners.push(this.set_prog.bind(this));
+	    this.konopas.stars.toggleListeners.push(this.add_prog.bind(this));
 
 	    const m = /#server_error=(.+)/.exec(window.location.hash);
 	    if (m) this.error(decodeURIComponent(m[1].replace(/\+/g, ' ')), window.location.href);
@@ -351,11 +351,9 @@ export default class Server {
 			    this.store.setItem('konopas.token', '');
 			    this.prog_data = {};
 			    this.prog_server_mtime = 0;
-			    if (this.stars) {
-				    this.stars.data = {};
-				    this.stars.write();
-				    this.konopas.set_view();
-			    }
+				this.konopas.stars.data = {};
+				this.konopas.stars.write();
+				this.konopas.set_view();
 			    this.exec('info');
 			    log('server ok (logout): ' + JSON.stringify(v));
 			    break;
@@ -430,8 +428,15 @@ export default class Server {
 	    log('server my_prog: ' + JSON.stringify(v));
 	    this.prog_data = v.prog;
 	    if (v.t0) for (let id in this.prog_data) { this.prog_data[id][1] += v.t0; }
-	    if (this.stars) this.stars.sync(this.prog_data);
-	    else log('Server.stars required for prog sync', 'warn');
+        const diff = this.konopas.stars.sync(this.prog_data);
+        log('server my_prog changes: ' + JSON.stringify(diff));
+        if (diff.local.length) this.konopas.set_view();
+        if (diff.remote.length) {
+            const add = diff.remote.filter(m => m.mod[0]).map(m => m.id);
+            const rm = diff.remote.filter(m => !m.mod[0]).map(m => m.id);
+            if (add.length) this.add_prog(add, true);
+            if (rm.length) this.add_prog(rm, false);
+        }
     }
 
     cb_my_votes(v) { /* obsolete */ }

@@ -26,7 +26,8 @@ import Item from '../src/item';
 import Part from '../src/part';
 import Program from '../src/prog';
 import Server from '../src/server';
-import Stars from '../src/stars';
+import StarData from '../src/stardata';
+import showStarView from '../src/starview';
 import { popup_open, Store } from '../src/util';
 
 export default class KonOpas {
@@ -52,10 +53,11 @@ export default class KonOpas {
 	    if (!Array.prototype.indexOf || !Array.prototype.filter || !Array.prototype.map
 		    || !Date.now || !('localStorage' in window)) alert(i18n.txt('old_browser'));
 
-	    this.store = new Store(this.id);
+	    this.localStore = new Store('local', this.id);
+	    this.sessionStore = new Store('session', this.id);
 	    this.item = new Item(this);
 	    this.show_list = (ls, opt) => this.item.show_list(ls, opt);
-	    this.stars = new Stars(this);
+        this.stars = new StarData(this.localStore);
 	    this.server = this.use_server && new Server(this);
 	    this.info = new Info();
 	    window.onhashchange = () => this.set_view();
@@ -89,7 +91,7 @@ export default class KonOpas {
 		    }
 		    switch (view) {
 			    case 'part': this.people.show();  break;
-			    case 'star': this.stars.show();   break;
+			    case 'star': showStarView(this);  break;
 			    case 'info': this.info.show();    break;
 			    default:     this.program.show(); view = 'prog';
 		    }
