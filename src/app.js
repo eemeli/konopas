@@ -23,7 +23,8 @@ require('classlist.js');  // polyfill
 import i18n from '../src/i18n-wrap';
 import Info from '../src/info';
 import Item from '../src/item';
-import Part from '../src/part';
+import PartData from '../src/partdata';
+import { initPartView, showPartView } from '../src/partview';
 import Program from '../src/prog';
 import Server from '../src/server';
 import StarData from '../src/stardata';
@@ -71,7 +72,8 @@ export default class KonOpas {
     }
 
     set_people(list) {
-        this.people = new Part(this, list);
+        this.participants = new PartData(list, this);
+        initPartView(this);
     }
 
     set_view() {
@@ -83,14 +85,14 @@ export default class KonOpas {
 		    if (this.server) this.server.error('Programme loading failed!');
 	    } else {
 		    tabs.style.display = 'block';
-		    if (!this.people || !this.people.data.list.length) {
+		    if (!this.participants || !this.participants.list.length) {
 			    tabs.classList.add('no-people');
 			    if (view == 'part') view = '';
 		    } else {
 			    tabs.classList.remove('no-people');
 		    }
 		    switch (view) {
-			    case 'part': this.people.show();  break;
+			    case 'part': showPartView(this);  break;
 			    case 'star': showStarView(this);  break;
 			    case 'info': this.info.show();    break;
 			    default:     this.program.show(); view = 'prog';

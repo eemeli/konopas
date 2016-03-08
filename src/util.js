@@ -90,69 +90,6 @@ export class Store {
 }
 
 
-// ------------------------------------------------------------------------------------------------ string generation
-
-export function clean_name(p, span_parts) {
-	let fn = '', ln = '';
-	switch (p.name.length) {
-		case 1:
-			ln = p.name[0];
-			break;
-		case 2:
-			if (p.name[1]) {
-				fn = p.name[0];
-				ln = p.name[1];
-			} else {
-				ln = p.name[0];
-			}
-			break;
-		case 3:
-			fn = p.name[2] + ' ' + p.name[0];
-			ln = p.name[1];
-			break;
-		case 4:
-			fn = p.name[2] + ' ' + p.name[0];
-			ln = p.name[1] + (p.name[3] ? ', ' + p.name[3] : '');
-			break;
-	}
-	return span_parts
-		? '<span class="fn">' + fn.trim() + '</span> <span class="ln">' + ln.trim() + '</span>'
-		: (fn + ' ' + ln).trim();
-}
-
-export function clean_links(p) {
-	if (!p || !p.links) return null;
-	const o = {};
-	let ok = false;
-	if (p.links.img || p.links.photo) {
-		let img = (p.links.img || p.links.photo).trim();
-		if (/^www/.test(img)) img = 'http://' + img;
-		if (/:\/\//.test(img)) { o.img = { tgt: img }; ok = true; }
-	}
-	if (p.links.url) {
-		let url = p.links.url.trim();
-		if (!/:\/\//.test(url)) url = 'http://' + url;
-		o.URL = { tgt: url, txt: url.replace(/^https?:\/\//, '') };
-		ok = true;
-	}
-	if (p.links.fb) {
-		let fb = p.links.fb.trim().replace(/^(https?:\/\/)?(www\.)?facebook.com(\/#!)?\//, '');
-		o.Facebook = { txt: fb };
-		if (/[^a-zA-Z0-9.]/.test(fb) && !/^pages\//.test(fb)) fb = 'search.php?q=' + encodeURI(fb).replace(/%20/g, '+');
-		o.Facebook.tgt = 'https://www.facebook.com/' + fb;
-		ok = true;
-	}
-	if (p.links.twitter) {
-		let tw = p.links.twitter.trim().replace(/[@＠﹫]/g, '').replace(/^(https?:\/\/)?(www\.)?twitter.com(\/#!)?\//, '');
-		o.Twitter = { txt: '@' + tw };
-		if (/[^a-zA-Z0-9_]/.test(tw)) tw = 'search/users?q=' + encodeURI(tw).replace(/%20/g, '+');
-		o.Twitter.tgt = 'https://www.twitter.com/' + tw;
-		ok = true;
-	}
-	return ok ? o : null;
-}
-
-
 // ------------------------------------------------------------------------------------------------ array comparison
 
 export function arrays_equal(a, b) {

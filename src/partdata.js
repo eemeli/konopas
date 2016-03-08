@@ -60,7 +60,7 @@ export default class PartData {
 
     get(id) {
         const len = this.list.length;
-        for (let i = 0; i < len; ++i) {
+        if (id) for (let i = 0; i < len; ++i) {
             const p = this.list[i];
             if (p.id == id) return p;
         }

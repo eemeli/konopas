@@ -53,7 +53,7 @@ export default class Item {
 	    };
         const people_html = it => {
 		    if (!it.people || !it.people.length) return '';
-		    const a = it.people.map(!this.konopas.people || !this.konopas.people.data.list.length
+		    const a = it.people.map(!this.konopas.participants || !this.konopas.participants.list.length
 			        ? p => p.name
 			        : p => `<a href="#part/${hash_encode(p.id)}">${p.name}</a>`);
 		    return '<div class="item-people">' + a.join(', ') + '</div>\n';
