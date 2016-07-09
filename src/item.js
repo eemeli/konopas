@@ -89,9 +89,11 @@ KonOpas.Item.new = function(it) {
 	    loc   = item.appendChild(_new_elem('div', 'loc'));
 
 	KonOpas.Item.new = function(it) {
+		var tagclass = it.tags.map(function(x) { return "tag_" + x.replace(" ", "") }).join(" ");
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
+		title.className = "title " + tagclass;
 		loc.textContent = _loc_str(it);
 		return frame.cloneNode(true);
 	};
