@@ -67,7 +67,18 @@ KonOpas.Item.new = function(it) {
 		}
 		if (it.mins && (it.mins != konopas.default_duration)) {
 			if (s) s += ', ';
-			s += KonOpas.pretty_time(it.time, konopas) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			//Check whether (long) program continues on next day and add weekday name
+			if ((it.mins > 480 && KonOpas.time_sum(it.time, it.mins) < it.time) || it.mins > 1440) {
+				var o  = { weekday: "short" };
+				var wdstart, wdend, day;
+				wdstart = KonOpas.parse_date(it.date).toLocaleDateString(konopas.lc, o);
+
+				day = new Date(KonOpas.parse_date(it.date).getTime() + it.mins * 60000);
+				wdend = day.toLocaleDateString(konopas.lc, o);
+				s += wdstart + ' ' + KonOpas.pretty_time(it.time, konopas) + ' - ' + wdend + ' ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			} else {
+				s += KonOpas.pretty_time(it.time, konopas) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			}
 		}
 		return s;
 	}
