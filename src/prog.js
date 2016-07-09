@@ -249,7 +249,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 			list = list_out;
 		}
 		if (list.length < 4) for (i = 0; i < list.length; ++i) _li(ul, list[i]);
-		else _ul2(ul, id + i, id, '', list);
+		else _ul2(ul, id + i, "Choose " + id, '', list);
 		filter_el.appendChild(ul);
 	}
 	if (!opt || !filter_el) return;
