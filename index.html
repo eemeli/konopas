@@ -51,7 +51,6 @@
 <ul id="tabs">
 <li id="tab_star"><a href="#star" data-txt>My con</a>
 <li id="tab_prog"><a href="#" data-txt>Program</a><div id="day-sidebar" class="sub-side"></div>
-<li id="tab_part"><a href="#part" data-txt>People</a><div id="part-sidebar" class="sub-side"></div>
 <li id="tab_info"><a href="#info" data-txt>Info</a>
 </ul>
 
@@ -162,14 +161,14 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 
 </div><!-- /main -->
 
-<script src="http://konopas.org/demo/data/program.js"></script>
-<script src="http://konopas.org/demo/data/people.js"></script>
+<script src="program.js"></script>
 <script src="konopas.js"></script>
 <script>
 var konopas = new KonOpas({
-	'id': '',
+	'id': 'ropecon2016',
+  'lc': 'fi',
 	'default_duration': 0,
-	'time_show_am_pm': true,
+	'time_show_am_pm': false,
 	'show_all_days_by_default': true,
 	'use_server': false
 });
@@ -178,6 +177,5 @@ konopas.set_program(program, {
 	'area': {},
 	'tag': {}
 });
-konopas.set_people(people);
 konopas.set_view();
 </script>
