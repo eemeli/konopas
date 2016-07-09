@@ -262,7 +262,7 @@ KonOpas.data_date = function(d) {
 
 KonOpas.pretty_date = function(d, opt) {
 	opt = opt || {};
-	var o = { weekday: "long", month: "long", day: "numeric" },
+	var o = { weekday: "short", month: "numeric", day: "numeric" },
 	    t = (d instanceof Date) ? d : KonOpas.parse_date(d);
 	if (!t) return d;
 	if (Math.abs(t - Date.now()) > 1000*3600*24*60) o.year = "numeric";
