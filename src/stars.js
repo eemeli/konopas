@@ -102,7 +102,7 @@ KonOpas.Stars.prototype.show = function() {
 	var view = _el("star_data"),
 		hash = window.location.hash.substr(6),
 	    set_raw = (hash && (hash.substr(0,4) == 'set:')) ? hash.substr(4).split(',') : [],
-	    set = konopas.program.list.filter(function(p) { return (set_raw.indexOf(p.id) >= 0); }).map(function(p) { return p.id; }),
+	    set = konopas.program.list.filter(function(p) { return (set_raw.indexOf(p.id.toString()) >= 0); }).map(function(p) { return p.id; }),
 	    set_len = set.length,
 	    html = '',
 	    star_list = this.list(),
@@ -154,7 +154,8 @@ KonOpas.Stars.prototype.show = function() {
 	var el_set = _el('star_set_set'); if (el_set) el_set.onclick = function() { konopas.stars.set(set); return true; };
 	var el_add = _el('star_set_add'); if (el_add) el_add.onclick = function() { konopas.stars.add(set); return true; };
 	if (this.server) this.server.show_ical_link(view);
-	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id) >= 0) || (set.indexOf(it.id) >= 0); });
+	var ls = konopas.program.list.filter(function(it) { return (star_list.indexOf(it.id.toString()) >= 0) || (set.indexOf(it.id.toString()) >= 0); });
+
 	KonOpas.Item.show_list(ls, {hide_ended:true});
 	if (set_len) for (var i = 0; i < set_len; ++i) {
 		var el = _el('s' + set[i]);
