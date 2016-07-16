@@ -18,6 +18,9 @@
 "Choose area":"Valitse alue",
 "Choose tag":"Valitse tägi",
 
+"Attendance": "Osallistujamäärä",
+"Attributes": "Attribuutit",
+
 "weekday_n": "{N, plural, =0{sunnuntai} =1{maanantai} =2{tiistai} =3{keskiviikko} =4{torstai} =5{perjantai} =6{lauantai} other{???}}",
 "weekday_short_n": "{N, plural, =0{Su} =1{Ma} =2{Ti} =3{Ke} =4{To} =5{Pe} =6{La} other{???}}",
 "month_n": "{N, plural, =0{tammikuuta} =1{helmikuuta} =2{maaliskuuta} =3{huhtikuuta} =4{toukokuuta} =5{kesäkuuta} =6{heinäkuuta} =7{elokuuta} =8{syyskuuta} =9{lokakuuta} =10{marraskuuta} =11{joulukuuta} other{???}}",
