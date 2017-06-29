@@ -49,6 +49,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	else {
 		html = _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
+		if (a[0].notes) html += "<p class='notes'>" + a[0].notes;
 		html += '<a href="#prog/id:' + a[0].id + '" class="permalink" title="' + i18n.txt('Permalink') + '"></a>';
 		if (a[0].attendance) html += "<p>" + i18n.txt('Attendance') + ': ' + a[0].attendance;
 		if (a[0].attributes) html += "<p>" + i18n.txt('Attributes') + ': ' + a[0].attributes.join(', ');
