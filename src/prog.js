@@ -374,8 +374,10 @@ KonOpas.Prog.prototype.show = function() {
 		if (this.query) {
 			var found = this.query.test(it.title)
 				|| this.query.test(it.desc)
+				|| (it.notes && this.query.test(it.notes))
 				|| (it.loc && this.query.test(it.loc.join('\t')))
 				|| (it.tags && this.query.test(it.tags.join('\t')))
+				|| (it.attributes && this.query.test(it.attributes.join('\t')))
 				|| (it.people && it.people.some(function(p){ return this.query.test(p.name); }, this));
 			if (!found) return false;
 		}
