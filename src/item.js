@@ -49,7 +49,10 @@ KonOpas.Item.show_extra = function(item, id) {
 	else {
 		html = _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
+		if (a[0].notes) html += "<p class='notes'>" + a[0].notes;
 		html += '<a href="#prog/id:' + a[0].id + '" class="permalink" title="' + i18n.txt('Permalink') + '"></a>';
+		if (a[0].attendance) html += "<p>" + i18n.txt('Attendance') + ': ' + a[0].attendance;
+		if (a[0].attributes) html += "<p>" + i18n.txt('Attributes') + ': ' + a[0].attributes.join(', ');
 	}
 	var extra = _new_elem('div', 'extra');
 	extra.id = 'e' + id;
@@ -67,7 +70,18 @@ KonOpas.Item.new = function(it) {
 		}
 		if (it.mins && (it.mins != konopas.default_duration)) {
 			if (s) s += ', ';
-			s += KonOpas.pretty_time(it.time, konopas) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			//Check whether (long) program continues on next day and add weekday name
+			if ((it.mins > 480 && KonOpas.time_sum(it.time, it.mins) < it.time) || it.mins > 1440) {
+				var o  = { weekday: "short" };
+				var wdstart, wdend, day;
+				wdstart = KonOpas.parse_date(it.date).toLocaleDateString(konopas.lc, o);
+
+				day = new Date(KonOpas.parse_date(it.date).getTime() + it.mins * 60000);
+				wdend = day.toLocaleDateString(konopas.lc, o);
+				s += wdstart + ' ' + KonOpas.pretty_time(it.time, konopas) + ' - ' + wdend + ' ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			} else {
+				s += KonOpas.pretty_time(it.time, konopas) + ' - ' + KonOpas.pretty_time(KonOpas.time_sum(it.time, it.mins), konopas);
+			}
 		}
 		return s;
 	}
@@ -78,9 +92,11 @@ KonOpas.Item.new = function(it) {
 	    loc   = item.appendChild(_new_elem('div', 'loc'));
 
 	KonOpas.Item.new = function(it) {
+		var tagclass = it.tags.map(function(x) { return "tag_" + x.replace(" ", "") }).join(" ");
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
+		title.className = "title " + tagclass;
 		loc.textContent = _loc_str(it);
 		return frame.cloneNode(true);
 	};

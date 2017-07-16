@@ -13,6 +13,13 @@
 "Collapse all":"Sulje kaikki",
 "all":"kaikki",
 "Photo":"Kuva",
+"All areas":"Paikka",
+"All tags":"Kategoria",
+"Choose area":"Valitse paikka",
+"Choose tag":"Valitse kategoria",
+
+"Attendance": "Osallistujamäärä",
+"Attributes": "Attribuutit",
 
 "weekday_n": "{N, plural, =0{sunnuntai} =1{maanantai} =2{tiistai} =3{keskiviikko} =4{torstai} =5{perjantai} =6{lauantai} other{???}}",
 "weekday_short_n": "{N, plural, =0{Su} =1{Ma} =2{Ti} =3{Ke} =4{To} =5{Pe} =6{La} other{???}}",
@@ -24,7 +31,7 @@
 "no_ko_id": "Ei asetettua ID:tä. Aseta konopas_set.id uniikiksi tunnisteeksi.",
 "old_browser": "Selaimesi ei tue kaikkia KonOppaan tarvitsemia Javascript-ominaisuuksia. Ole hyvä ja kokeile toista selainta.",
 "item_not_found": "Ohjelmaa <b>{ID}</b> ei löydy!",
-"item_tags": "{T, select, tags{Tägit} track{Track} type{Tyyppi} other{{T}}}",
+"item_tags": "{T, select, tags{Kategoriat} track{Track} type{Tyyppi} other{{T}}}",
 "star_export_this": "Valintasi ovat tallennettu <a href=\"{THIS}\" target=\"_blank\">sivun osoitteeseen</a>. Voit avata sen toisaalla jakaaksesi valintasi.",
 "star_export_share": "Jakamisen helpottamiseksi voit myös generoida <a href=\"{SHORT}\">lyhytlinkin</a> tai <a href=\"{QR}\">QR-koodin</a>.",
 "star_import_this": "Aiemmin valitsemillasi ohjelmilla on korostettu tausta ja <a href=\"{THIS}\">tämän linkin</a> kautta tuoduilla on korostettu reuna.",
@@ -37,8 +44,8 @@
 "star_export_link": "<a href=\"{URL}\">Jaa valinnat</a> ({N, plural, one{yksi valinta} other{# valintaa}})",
 "star_hint": "\"Tähdittääksesi\" valinnan, tökkää sen vieressä olevaa neliötä. Valintasi tallennetaan ja näytetään tässä. Et ole vielä valinnut yhtään ohjelmaa, joten lista on tyhjä.",
 "star_no_memory": "{WHY, select, FFcookies{Näyttää siltä, että Firefox-selaimessasi on evästeiden käyttö estetty, jonka takia myöskään} IOSprivate{Näyttää siltä, että käytät iOS- tai Safari-selainta yksityistilassa, jonka takia} other{Jostain syystä}} <a href=\"http://en.wikipedia.org/wiki/Web_storage\">localStorage</a> -välimuisti ei nyt toimi, joten valintasi eivät säily seuraavaan istuntoon. {SERVER, select, true{Ole hyvä ja <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">kirjaudu sisään</span> säilyttääksesi valintasi.} other{}}",
-"filter_sum_id": "Listataan {N, plural, one{yksi ohjelma: {TITLE}} other{# ohjelmaa tunnisteella {ID}}}",
-"filter_sum": "Listataan {N, plural, one{yksi {LIVE, select, undefined{} other{tuleva}} {TAG} ohjelma} other{{ALL} # {LIVE, select, undefined{} other{tulevaa}} {TAG} ohjelmaa}} {DAY, select, undefined{} other{{DAY} {TIME, select, undefined{} other{klo {TIME} jälkeen}}}} {AREA, select, undefined{} other{paikassa {AREA}}} {Q, select, undefined{} other{kyselylle {Q}}}",
+"filter_sum_id": "{N, plural, one{yksi ohjelma: {TITLE}} other{# ohjelmaa tunnisteella {ID}}}",
+"filter_sum": "{N, plural, one{yksi {LIVE, select, undefined{} other{tuleva}} {TAG} ohjelma} other{{ALL} # {LIVE, select, undefined{} other{tulevaa}} {TAG} ohjelmaa}} {DAY, select, undefined{} other{{DAY}na {TIME, select, undefined{} other{klo {TIME} jälkeen}}}} {AREA, select, undefined{} other{paikassa {AREA}}} {Q, select, undefined{} other{kyselylle {Q}}}",
 "day_link": "Näytä {N} osumaa {D, plural, =0{sunnuntailta} =1{maanantailta} =2{tiistailta} =3{keskiviikolta} =4{torstailta} =5{perjantailta} =6{lauantailta} other{???}}",
 "hidden_link": "Näytä {N} lisää osumaa jotka ovat jo päättyneet {D, plural, =0{sunnuntaina} =1{maanantaina} =2{tiistaina} =3{keskiviikkona} =4{torstaina} =5{perjantaina} =6{lauantaina} other{???}} klo {T}",
 

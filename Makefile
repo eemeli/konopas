@@ -1,6 +1,6 @@
 BIN = ./node_modules/.bin
 
-DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
+DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css dist/program.js
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
@@ -17,7 +17,7 @@ node_modules: ; npm install && touch $@
 
 tmp dist dist/skin: ; mkdir -p $@
 
-tmp/LC: | tmp ; echo 'en' > $@
+tmp/LC: | tmp ; echo 'fi' > $@
 LC: | tmp/LC
 	$(eval LCprev := $(shell cat tmp/LC))
 	$(eval LC ?= $(LCprev))
@@ -57,6 +57,8 @@ dist/skin/konopas.css: skin/*.less | dist/skin node_modules
 dist/skin/%: skin/% | dist/skin
 	cp $< $@
 
+dist/program.js: | dist
+	curl -o $@ https://2016.ropecon.fi/konopas/ropecon/program.js
 
 precache: $(addsuffix .gz, $(DIST) $(wildcard dist/skin/*.ttf))
 %.gz: % ; gzip -c $^ > $@
