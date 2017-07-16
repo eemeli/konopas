@@ -1,7 +1,7 @@
 BIN = ./node_modules/.bin
 
 DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css
-SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
+SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.svg skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
 MAKEFLAGS += -r
@@ -51,8 +51,7 @@ dist/favicon.ico: skin/favicon.ico | dist
 	cp $< $@
 
 dist/skin/konopas.css: skin/*.less | dist/skin node_modules
-	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" \
-		--source-map --source-map-less-inline $@
+	$(BIN)/lessc skin/main.less --clean-css="--s0 --advanced --compatibility=ie8" $@
 
 dist/skin/%: skin/% | dist/skin
 	cp $< $@
@@ -67,5 +66,3 @@ watch:
 	watchman -- trigger $(shell pwd) ko-css 'skin/*.less' -- make dist/skin/konopas.css
 	watchman -- trigger $(shell pwd) ko-lc 'src/i18n/*.json' -- LC=$(LC) make tmp/i18n.js dist/konopas.js
 	watchman -- trigger $(shell pwd) ko-js 'src/*.js' -- make dist/konopas.js
-
-
