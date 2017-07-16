@@ -36,7 +36,7 @@ KonOpas.Prog = function(list, opt) {
 	}
 	var sf = _el('search');
 	if (sf) {
-		sf.onsubmit = _el('q').onblur = KonOpas.Prog.filter_change;
+		sf.onsubmit = _el('q').oninput = KonOpas.Prog.filter_change;
 		sf.onreset = function() { KonOpas.Prog.set_filters({}); };
 	}
 	this.init_filters(opt);
@@ -131,7 +131,7 @@ KonOpas.Prog.filter_change = function(ev) {
 		case 'submit':
 			ev.preventDefault();
 			// fallthrough
-		case 'blur':
+		case 'input':
 			key = 'query';
 			value = _el("q").value;
 			break;
@@ -339,23 +339,6 @@ KonOpas.Prog.prototype.show = function() {
 						p.textContent = el.textContent;
 					}
 				}
-			}
-		}
-		var qh = _el('q_hint');
-		if (qh) {
-			if (f.query) {
-				if (/[?*"]/.test(f.query)) {
-					qh.innerHTML = i18n.txt('search_hint');
-					qh.removeAttribute('onmouseup');
-					qh.style.cursor = 'auto';
-				} else {
-					qh.innerHTML = i18n.txt('search_hint') + ' ' + i18n.txt('search_example', {'X':f.query+'*'});
-					qh.onmouseup = function() { _el('q').value = f.query + '*'; _el('q').focus(); _el('q').blur(); };
-					qh.style.cursor = 'pointer';
-				}
-				qh.style.display = 'block';
-			} else {
-				qh.style.display = 'none';
 			}
 		}
 	}

@@ -48,8 +48,7 @@ KonOpas.glob_to_re = function(pat) {
 	var re_re = new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]', 'g');
 	pat = pat.replace(re_re, '\\$&').replace(/\\\*/g, '.*').replace(/\\\?/g, '.');
 	var terms = pat.match(/"[^"]*"|'[^']*'|\S+/g).map(function(el){
-		var t = '\\b' + el.replace(/^(['"])(.*)\1$/, '$2') + '\\b';
-		return t; //.replace('\\b.*', '').replace('.*\\b', '');
+		return '\\b' + el.replace(/^(['"])(.*)\1$/, '$2\\b');
 	});
 	return new RegExp(terms.join('|'), 'i');
 }

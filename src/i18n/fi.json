@@ -19,7 +19,6 @@
 "month_n": "{N, plural, =0{tammikuuta} =1{helmikuuta} =2{maaliskuuta} =3{huhtikuuta} =4{toukokuuta} =5{kesäkuuta} =6{heinäkuuta} =7{elokuuta} =8{syyskuuta} =9{lokakuuta} =10{marraskuuta} =11{joulukuuta} other{???}}",
 "time_diff": "{T} {T_UNIT, plural, =0{sekuntia} =1{minuuttia} =2{tuntia} =3{päivää} =4{viikkoa} =5{kuukautta} =6{vuotta} other{???}} {T_PAST, select, true{sitten} other{tästä hetkestä}}",
 
-"search_hint": "<b>Vinkki:</b> Haku etsii sanoja otsikosta, tiedoista, tägeistä, paikoista ja osanottajista. Voit käyttää * ja ? -merkkejä villikortteina ja \"sanoja lainausmerkeissä\" täsmälliseen hakuun.",
 "search_example": "Esimerkiksi voisit kokeilla <b>{X}</b>",
 "no_ko_id": "Ei asetettua ID:tä. Aseta konopas_set.id uniikiksi tunnisteeksi.",
 "old_browser": "Selaimesi ei tue kaikkia KonOppaan tarvitsemia Javascript-ominaisuuksia. Ole hyvä ja kokeile toista selainta.",

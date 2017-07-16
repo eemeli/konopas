@@ -21,12 +21,8 @@
 	input { margin: 0 4px 0 0; }
 }
 
-#q, #q_ctrl { display: inline-block; }
-#q { max-width: 150px; }
-#q_ctrl input, #q_fix { cursor: pointer; }
+#q { display: inline-block; max-width: 150px; }
 #q:valid { background: @bg-highlight; }
-#q:valid + #q_ctrl input { border-color: @fg-highlight; }
-#q_fix b { color: @fg-highlight; }
 
 #q_clear { float: right; }
 #q_clear:disabled { visibility: hidden; }
