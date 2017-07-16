@@ -46,23 +46,15 @@
 "Not connected": "Inte ansluten",
 "Click to close": "Klicka och stäng",
 "Server error": "Serverfel",
-"Hide comments": "Göm kommentarer",
-"Loading comments…": "Läser in kommentarer…",
 "Cancel": "Avbryt",
-"Post anonymously": "Skicka anonymt",
-"Hide from public": "Göm från allmänheten",
-"Posting…": "Skickar…",
-"Post comment": "Skicka kommentar",
-"Add a comment": "Lägg till kommentar",
 "Login to sync your data": "Logga in och synka dina data",
 "Logout": "Logga ut",
 
 "server_cmd_fail": "Kommandot \"{CMD}\" fallerade.",
-"show_comments": "Visa {N, plural, one{en kommentar} other{# kommentarer}}",
 "post_author": "{N} skrev…",
 "ical_login": "<span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">Logga in</span> och visa fler exportalternativ.",
 "ical_link": "Dina val finns som en iCal-kalender (.ics) på:",
 "ical_hint": "Märk att det kan dröja innan ändringar du gör i denna guide visas i din externa kalenderprogramvara.",
 "ical_make": "Du kan även visa dina val i din kalenderapp genom att {A_TAG}göra den tillgänglig</a> i iCals kalenderformat (.ics)",
-"login_why": "När du har bekräftat din e-postadress kan du synka dina uppgifter mellan olika klienter (även externa kalendrar) samt rösta på och kommentera programpunkter."
+"login_why": "När du har bekräftat din e-postadress kan du synka dina uppgifter mellan olika klienter (även externa kalendrar)."
 }

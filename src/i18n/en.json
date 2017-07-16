@@ -30,11 +30,10 @@
 "hidden_link": "Show {N} more matching items with an end time before {T} on {D, plural, =0{Sunday} =1{Monday} =2{Tuesday} =3{Wednesday} =4{Thursday} =5{Friday} =6{Saturday} other{???}}",
 
 "server_cmd_fail": "The command \"{CMD}\" failed.",
-"show_comments": "Show {N, plural, one{one comment} other{# comments}}",
 "post_author": "{N} posted…",
 "ical_login": "To make your selection available in external calendars, please <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">login</span>.",
 "ical_link": "Your selection is available as an iCal (.ics) calendar at:",
 "ical_hint": "Note that changes you make in this guide may not show up immediately in your external calendar software.",
 "ical_make": "To view your selection in your calendar app, you may also <br class=\"wide-only\">{A_TAG}make it available</a> in iCal (.ics) calendar format",
-"login_why": "Once you've verified your e-mail address, you'll be able to sync your data between different clients (including external calendars), as well as vote & comment on items. After signing in, no information will be transmitted to these external services."
+"login_why": "Once you've verified your e-mail address, you'll be able to sync your data between different clients (including external calendars). After signing in, no information will be transmitted to these external services."
 }

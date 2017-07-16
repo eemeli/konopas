@@ -55,7 +55,6 @@ KonOpas.Item.show_extra = function(item, id) {
 	extra.id = 'e' + id;
 	extra.innerHTML = html;
 	item.appendChild(extra);
-	if (konopas.server) konopas.server.show_extras(id, item);
 }
 
 KonOpas.Item.new = function(it) {

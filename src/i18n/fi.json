@@ -46,23 +46,15 @@
 "Not connected": "Ei yhteyttä palvelimeen",
 "Click to close": "Klikkaa sulkeaksesi",
 "Server error": "Palvelinvirhe",
-"Hide comments": "Piilota kommentit",
-"Loading comments…": "Lataa kommentteja…",
 "Cancel": "Peruuta",
-"Post anonymously": "Jätä kommentti anonyymisti",
-"Hide from public": "Piilota kommentti",
-"Posting…": "Lähettämässä…",
-"Post comment": "Lähetä kommentti",
-"Add a comment": "Lisää kommentti",
 "Login to sync your data": "Kirjaudu sisään",
 "Logout": "Kirjaudu ulos",
 
 "server_cmd_fail": "Komento \"{CMD}\" epäonnistui.",
-"show_comments": "Näytä {N, plural, one{yksi kommentti} other{# kommenttia}}",
 "post_author": "{N} kirjoitti…",
 "ical_login": "Ole hyvä ja <span class=\"js-link\" onclick=\"var e=_el('login-popup-link');if(e)e.click();\">kirjaudu sisään</span> saadaksesi valintasi näkyville ulkopuolisissa kalenteriohjelmissa.",
 "ical_link": "Valintasi on saatavilla iCal (.ics) -kalenterina osoitteessa:",
 "ical_hint": "Huomaa että oppaassa tekemäsi muutokset saattavat päivittyä ulkopuolisiin kalenteriohjelmiin viiveellä.",
 "ical_make": "Katsellaaksesi valintojasi kalenteriohjelmassasi, voit myös <br class=\"wide-only\">{A_TAG}saada sen saataville</a> iCal (.ics) -muodossa.",
-"login_why": "Vahvistettuasi sähköpostiosoitteesi voit synkronoida valintasi eri päätelaitteiden (mukaanlukien kalenteriohjelmien) kanssa sekä äänestää ja kommentoida ohjelmia. Ulkoisille palveluille ei kirjautumisen jälkeen lähetetä mitään tietoja."
+"login_why": "Vahvistettuasi sähköpostiosoitteesi voit synkronoida valintasi eri päätelaitteiden (mukaanlukien kalenteriohjelmien). Ulkoisille palveluille ei kirjautumisen jälkeen lähetetä mitään tietoja."
 }

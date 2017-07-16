@@ -13,8 +13,6 @@ KonOpas.Server = function(id, stars, opt) {
 	this.ical = this.store.getItem('konopas.'+this.id+'.ical_link') || false;
 	this.prog_data = {};
 	this.prog_server_mtime = 0;
-	this.pub_data = false;
-	this.pub_comments = {};
 	this.el = document.getElementById(this.el_id);
 	this.err_el = false;
 
@@ -105,189 +103,6 @@ KonOpas.Server.prototype.set_prog = function(star_list) {
 
 
 
-// ------------------------------------------------------------------------------------------------ comment
-
-KonOpas.Server.prototype.onclick_show_comments = function(ev, id, c_el, af, f_el) {
-	ev = ev || window.event;
-	ev.cancelBubble = true;
-	ev.preventDefault();
-	ev.stopPropagation();
-
-	var ac = ev.target;
-	if (ac.textContent.substr(0, 4) == i18n.txt('Hide comments').substr(0, 4)) {
-		var p = this.pub_data && this.pub_data[id];
-		var n_comments = (p && (p[3] > 0)) ? p[3] : 0;
-		ac.textContent = i18n.txt('show_comments', {'N':n_comments});
-		ac.style.display = n_comments ? 'block' : 'none';
-		c_el.style.display = 'none';
-		af.style.display = n_comments ? 'none' : 'block';
-		f_el.style.display = 'none';
-	} else {
-		c_el.style.display = 'block';
-		if ((f_el.style.display == 'none') && this.connected) af.style.display = 'block';
-		this.show_comments(id);
-	}
-}
-
-
-KonOpas.Server.prototype.onclick_show_comment_form = function(ev, id, f_el) {
-	ev = ev || window.event;
-	ev.cancelBubble = true;
-	ev.preventDefault();
-	ev.stopPropagation();
-
-	var af = ev.target;
-	af.style.display = 'none';
-	this.show_comment_form(id, af, f_el);
-}
-
-
-KonOpas.Server.prototype.make_comment_div = function(c) {
-	var d = _new_elem('div', 'comment');
-
-	var n = _new_elem('span', 'comment-author', c.name);
-	d.appendChild(n);
-
-	var dt = new Date(1000 * c.ctime);
-	var t = _new_elem('span', 'comment-time', KonOpas.pretty_date(dt, konopas) + ' at ' + KonOpas.pretty_time(dt, konopas));
-	t.title = dt.toString();
-	d.appendChild(t);
-
-	var m = _new_elem('div', '', c.text);
-	d.appendChild(m);
-
-	return d;
-}
-
-KonOpas.Server.prototype.show_comments = function(id) {
-	var c_el = document.getElementById('c' + id); if (!c_el) return;
-	while (c_el.firstChild) c_el.removeChild(c_el.firstChild);
-	var ac = c_el.previousSibling,
-	    c = this.pub_comments[id];
-	if (ac && (ac.tagName.toLowerCase() != 'a')) ac = false;
-	if (typeof c == 'undefined') {
-		if (ac) {
-			ac.classList.remove('js-link');
-			ac.textContent = i18n.txt('Loading comments…');
-		}
-		this.exec('comments?id=' + id);
-		return;
-	}
-
-	var n_comments = 0;
-	if (c) for (var i in c) {
-		++n_comments;
-		c_el.appendChild(this.make_comment_div(c[i]));
-	}
-
-	if (this.pub_data) {
-		if (this.pub_data[id]) this.pub_data[id][3] = n_comments;
-		else this.pub_data[id] = [0, 0, 0, n_comments];
-	}
-
-	if (ac) {
-		ac.textContent = i18n.txt('Hide comments');
-		ac.classList.add('js-link');
-		ac.style.display = n_comments ? 'block' : 'none';
-	}
-
-	if (!n_comments) {
-		var f_el = document.getElementById('f' + id);
-		if (f_el && (f_el.style.display == 'none')) {
-			var af = f_el.previousSibling;
-			if (af && (af.tagName.toLowerCase() == 'a')) af.style.display = 'block';
-		}
-	}
-}
-
-
-KonOpas.Server.prototype.show_comment_form = function(id, af, f_el) {
-	if (!this.connected) return;
-	if (f_el.classList.contains('empty')) {
-		if (!document.getElementById('post_comment_iframe')) {
-			var fi = document.createElement('iframe');
-			fi.id = fi.name = 'post_comment_iframe';
-			fi.src = 'javascript:false';
-			fi.style.display = 'none';
-			document.body.appendChild(fi);
-			window.onmessage = this.onmessage.bind(this);
-		}
-		f_el.method = 'post';
-		f_el.action = this.url('add_comment?id=' + encodeURIComponent(id));
-		f_el.target = 'post_comment_iframe';
-		f_el.innerHTML =
-			  '<textarea name="text" rows="4" placeholder="' + i18n.txt('post_author', {'N':this.connected[0]}) + '"></textarea>'
-			+ '<input type="submit" name="submit">'
-			+ '<input type="reset" value="' + i18n.txt('Cancel') + '">'
-			+ '<label><input type="checkbox" name="anon"> ' + i18n.txt('Post anonymously') + '</label>'
-			+ '<label><input type="checkbox" name="hide"> ' + i18n.txt('Hide from public') + '</label>';
-		f_el.onclick = function(ev) {
-			ev = ev || window.event;
-			ev.cancelBubble = true;
-			ev.stopPropagation();
-		};
-		f_el.onsubmit = function(ev) {
-			f_el.submit.value = i18n.txt('Posting…');
-			f_el.submit.disabled = true;
-			if (f_el.anon.checked) { f_el.action += '&anon=1'; f_el.anon.disabled = true; }
-			if (f_el.hide.checked) { f_el.action += '&hide=1'; f_el.hide.disabled = true; }
-		};
-		f_el.onreset = function(ev) {
-			af.style.display = 'block';
-			f_el.style.display = 'none';
-		};
-		f_el.classList.remove('empty');
-	} else {
-		f_el.submit.disabled = false;
-		f_el.anon.disabled = false;
-		f_el.hide.disabled = false;
-	}
-	f_el.submit.value = i18n.txt('Post comment');
-	f_el.style.display = 'block';
-}
-
-
-KonOpas.Server.prototype.make_comments_wrap = function(id) {
-	var p = this.pub_data && this.pub_data[id],
-	    n_comments = (p && (p[3] > 0)) ? p[3] : 0,
-	    d = _new_elem('div', 'comments-wrap');
-
-	var ac = _new_elem('a', 'js-link discreet');
-	ac.textContent = i18n.txt('show_comments', {'N':n_comments});
-	ac.style.display = n_comments ? 'block' : 'none';
-	d.appendChild(ac);
-
-	var c_el = _new_elem('div', 'comments');
-	c_el.id = 'c' + id;
-	c_el.style.display = 'none';
-	d.appendChild(c_el);
-
-	var af = _new_elem('a', 'js-link discreet', i18n.txt('Add a comment'));
-	af.style.display = n_comments || !this.connected ? 'none' : 'block';
-	d.appendChild(af);
-
-	var f_el = _new_elem('form', 'empty');
-	f_el.id = 'f' + id;
-	f_el.style.display = 'none';
-	d.appendChild(f_el);
-
-	ac.onclick = function(ev) { this.onclick_show_comments(ev, id, c_el, af, f_el); }.bind(this);
-	af.onclick = function(ev) { this.onclick_show_comment_form(ev, id, f_el); }.bind(this);
-	return d;
-}
-
-
-// ------------------------------------------------------------------------------------------------ item extras
-
-KonOpas.Server.prototype.show_extras = function(id, p_el) {
-	if (!this.pub_data) return;
-	if (!document.getElementById('c' + id)) {
-		p_el.appendChild(this.make_comments_wrap(id));
-	}
-}
-
-
-
 // ------------------------------------------------------------------------------------------------ ical
 
 KonOpas.Server.prototype.show_ical_link = function(p_el) {
@@ -374,16 +189,6 @@ KonOpas.Server.prototype.cb_ok = function(v) {
 			_log("server ok (prog): " + JSON.stringify(v));
 			break;
 
-		case 'add_comment':
-			var id = /\bid=([^&]+)/.exec(query);
-			if (id) {
-				this.exec('comments?id=' + id[1]);
-				var f_el = document.getElementById('f' + id[1]);
-				if (f_el) f_el.reset();
-			}
-			_log("server ok (add_comment): " + JSON.stringify(v));
-			break;
-
 		default:
 			_log("server ok (???): " + JSON.stringify(v), 'warn');
 	}
@@ -443,23 +248,8 @@ KonOpas.Server.prototype.cb_my_prog = function(v) {
 }
 
 KonOpas.Server.prototype.cb_my_votes = function(v) { /* obsolete */ }
-
-KonOpas.Server.prototype.cb_pub_data = function(p) {
-	_log("server pub_data: " + JSON.stringify(p));
-	this.pub_data = p;
-	var open_items = document.getElementsByClassName('expanded');
-	for (var i = 0; i < open_items.length; ++i) {
-		var it = open_items[i].getElementsByClassName('item');
-		if (it) this.show_extras(it[0].id.substr(1), it[0]);
-	}
-}
-
-KonOpas.Server.prototype.cb_show_comments = function(id, c) {
-	_log("server show_comments (" + id + "): " + JSON.stringify(c));
-	c.sort(function(a, b) { return a.ctime - b.ctime; });
-	this.pub_comments[id] = c;
-	this.show_comments(id);
-}
+KonOpas.Server.prototype.cb_pub_data = function(p) { /* obsolete */ }
+KonOpas.Server.prototype.cb_show_comments = function(id, c) { /* obsolete */ }
 
 KonOpas.Server.prototype.cb_ical_link = function(url) {
 	this.ical = url;
