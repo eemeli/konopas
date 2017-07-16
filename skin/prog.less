@@ -27,9 +27,11 @@
 #q:valid { background: @bg-highlight; }
 #q:valid + #q_ctrl input { border-color: @fg-highlight; }
 #q_fix b { color: @fg-highlight; }
-#q_clear { margin-left: 14px !important; }
 
-#filter_sum {
+#q_clear { float: right; }
+#q_clear:disabled { visibility: hidden; }
+
+#filter_sum_wrap {
 	clear: left;
 	max-width: (@full-width - 24px);
 	margin: @side-margin 0 0 @side-margin;

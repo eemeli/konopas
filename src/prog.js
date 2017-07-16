@@ -285,12 +285,14 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 
 KonOpas.Prog.prototype.show_filter_sum = function(ls, f) {
 	var fs = _el('filter_sum'); if (!fs) return;
+	var cb = _el('q_clear');
 	var _a = function(txt, unset) {
 		var excl = {id:1}; if (unset) excl[unset] = 1;
 		return '<a href="' + KonOpas.Prog.hash(f, excl) + '">' + txt + '</a>';
 	}
 	if (f.id_only) {
 		fs.innerHTML = i18n.txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title), 'ID':_a(f.id) });
+		if (cb) cb.disabled = false;
 	} else {
 		var d = { 'N': f.n_listed,
 			'ALL': !f.show_all || f.tag_str || f.area_str || f.query_str ? '' : _a(i18n.txt('all'), {}, 0),
@@ -304,6 +306,7 @@ KonOpas.Prog.prototype.show_filter_sum = function(ls, f) {
 		if (f.area_str) d['AREA'] = _a(f.area_str, 'area');
 		if (f.query_str) d['Q'] = _a(f.query_str, 'query');
 		fs.innerHTML = i18n.txt('filter_sum', d);
+		if (cb) cb.disabled = !f.area_str && !f.tag_str && !f.query_str;
 	}
 }
 
