@@ -116,6 +116,7 @@ KonOpas.Prog.set_filters = function(f, silent) {
 KonOpas.Prog.filter_change = function(ev) {
 	ev = ev || window.event;
 	var key, value;
+	var silent = false;
 	switch (ev.type) {
 		case 'click':
 			if (ev.target.tagName.toLowerCase() != 'li') return;
@@ -134,13 +135,14 @@ KonOpas.Prog.filter_change = function(ev) {
 		case 'input':
 			key = 'query';
 			value = _el("q").value;
+			silent = value.length > 1;
 			break;
 		default: return;
 	}
 	var filters = KonOpas.Prog.get_filters();
 	filters[key] = value;
 	if (filters['id'] && (key != 'id')) filters['id'] = '';
-	KonOpas.Prog.set_filters(filters);
+	KonOpas.Prog.set_filters(filters, silent);
 }
 
 KonOpas.Prog.focus_day = function(d) {
