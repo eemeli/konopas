@@ -1,6 +1,7 @@
 BIN = ./node_modules/.bin
 
 DIST = dist/index.html dist/konopas.min.js dist/skin/konopas.css dist/program.js
+DIST += dist/index-rcon.html dist/skin/ropecon.css
 SKIN = $(addprefix dist/, $(wildcard skin/*.png skin/*.ttf))
 STATIC = $(SKIN) dist/favicon.ico
 
@@ -62,6 +63,15 @@ dist/program.js: | dist
 
 precache: $(addsuffix .gz, $(DIST) $(wildcard dist/skin/*.ttf))
 %.gz: % ; gzip -c $^ > $@
+
+
+dist/index-rcon.html: index.html.rcon2017 | dist
+	cp $< $@
+	sed 's/"konopas.js"/"konopas.min.js"/' $< > $@
+
+dist/skin/ropecon.css: skin/ropecon.less | dist/skin node_modules
+	$(BIN)/lessc skin/ropecon.less --clean-css="--s0 --advanced --compatibility=ie8" \
+		--source-map --source-map-less-inline $@
 
 
 watch:
