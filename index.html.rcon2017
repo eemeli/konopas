@@ -54,7 +54,30 @@
 <li id="tab_star"><a href="#star" data-txt>My con</a>
 <li id="tab_prog"><a href="#" data-txt>Program</a><div id="day-sidebar" class="sub-side"></div>
 <li id="tab_info"><a href="#info" data-txt>Info</a>
+<div class="sub-side infonav">
+<ul>
+<li><a href="#info-saapuminen">Saapuminen</a></li>
+<li><a href="#info-kartat">Kartat</a></li>
+<li><a href="#info-ruoka">Ruoka ja majoitus</a></li>
+<li><a href="#info-lapset">Lasten Ropecon</a></li>
+<li><a href="#info-este">Esteettömyys</a></li>
+<li><a href="#info-turva">Turvallisuus ja viihtyvyys</a></li>
 </ul>
+</div>
+</ul>
+
+<div class="sub-narrow infonav">
+<ul>
+<li><a href="#info-saapuminen">Saapuminen</a></li>
+<li><a href="#info-kartat">Kartat</a></li>
+<li><a href="#info-ruoka">Ruoka ja majoitus</a></li>
+</ul>
+<ul>
+<li><a href="#info-lapset">Lasten Ropecon</a></li>
+<li><a href="#info-este">Esteettömyys</a></li>
+<li><a href="#info-turva">Turvallisuus ja viihtyvyys</a></li>
+</ul>
+</div>
 
 <p style="padding-top: 2em; margin: auto; width: 70%; font-size: 90%;">
 Ohjelma täydentyy ennen tapahtumaa. Muutokset
@@ -108,56 +131,442 @@ yksittäisiin ohjelma&shy;numeroihin ja aika&shy;tauluihin ovat mahdollisia.
 if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
 </script>
 
-<!--
+<br />
 
-<style>
-#map { width: 100% !important; }
-#map td { text-align: center !important; padding: 6px 32px; }
-#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
-#map a:hover, #map span:hover { text-decoration: underline; }
-#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
-.quick-ref dt { margin: 6px 0 3px; }
-.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
-.quick-ref td { text-align: left !important; }
-#info_view .quick-ref td.c { text-align: center !important; }
-.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
-.quick-ref td:nth-child(3) { padding-left: 0; }
-</style>
 
-<h2>Sample Maps</h2>
-<table id="map">
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3W.png">Mezzanine Level&nbsp;(3W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-3E.png">Conference Level&nbsp;(3E)</a>
-<tr><td colspan="2"><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-2.png">Lobby Level&nbsp;(2)</a>
-<tr><td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1W.png">Concourse Level&nbsp;(1W)</a>
-    <td><a class="popup-link" href="http://guide.2014.arisia.org/data/arisia-westin-1E.png">Galleria Level&nbsp;(1E)</a>
-</table>
+<h2 id="info-saapuminen">Saapuminen</h2>
+<p>
+<b>Ropecon 2017 | 28.–30.7.2017 | Messukeskus Helsinki</b><br />
+Messuaukio 1, 00520 Helsinki
+</p>
+<p>
+Messuparkki: Ratapihantie 17<br />
+Kokoustamon parkki: Ratamestarinkatu 13
+</p>
 
-<h2>Sample Links</h2>
+<p>
+Messukeskus sijaitsee Helsingin Pasilassa, erinomaisten liikenneyhteyksien keskellä. Pasilan juna-asema on 300 metrin kävelymatkan päässä.
+</p>
+
+<p>
+Tapahtumassa on kaksi sisäänkäyntiä: eteläinen sisäänkäynti Messuaukion puolella ja pohjoinen sisäänkäynti Messuparkin puolella.
+
 <ul>
-<li><a href="http://example.com/">Newsletter</a>
-<li><a href="http://example.com/">Restaurant Guide</a> (PDF, 6MB)
-<li><a href="http://example.com/">Progress Report 5</a> (web page)
-<li><a href="http://example.com/">Code of Conduct</a> (PDF)
+<li><a href="http://objects.fi-1.nebulacloud.fi/messukeskus/wp-content/uploads/2016/04/53d3/Lahestymiskartta.pdf">Lähestymiskartta</a><br />
+<li><a href="http://objects.fi-1.nebulacloud.fi/messukeskus/wp-content/uploads/2016/04/009d/Aluekartta.pdf">Aluekartta</a>
+<li><a href="https://www.google.fi/maps/place/Messukeskus/@60.2032528,24.9342749,17z/data=!3m1!4b1!4m12!1m6!3m5!1s0x46920991bdcb5c15:0x6acc65ed8b99050b!2sMessukeskus!8m2!3d60.2032502!4d24.9364637!3m4!1s0x46920991bdcb5c15:0x6acc65ed8b99050b!8m2!3d60.2032502!4d24.9364637">Google maps</a>
+</ul>
+</p>
+
+
+<h3>Julkinen liikenne</h3>
+<ul>
+<li><b>Raitiovaunut</b>: 7A, 7B ja 9
+<li><b>Bussit</b>: Pasilan asemalle tulevat bussit
+<li><b>Junat</b>: kaikki lähi- ja kaukojunat (lukuunottamatta Allegro-junia) pysähtyvät Pasilan asemalla, josta pääset alikulkutunnelin kautta suoraan Messukeskukseen.
+<li><b>Polkupyörä</b>: Pyörätelineitä on eteläisen sisäänkäynnin ja Kokoustamon edessä.
+<li><b>Taksi</b>: Taksiasema sijaitsee Messukeskuksen eteläisen sisäänkäynnin edustalla. Taksit voivat ajaa suoraan sisäänkäynneille.
+<li><b>Lentokenttä</b>: I- ja P-junat liikennöivät lentokentältä läheiselle Pasilan asemalle. Matka-aika junalla on noin puoli tuntia ja junien vuoroväli päiväliikenteessä noin 10 minuuttia. Matka-aika lentokentältä Messukeskukseen taksilla on noin 15 minuuttia.
+</ul>
+<p>
+Junien ja bussien hintavertailun tueksi suosittelemme <a href="https://www.matkakeisari.fi/">Matkakeisari-palvelua</a>.
+</p>
+
+<p>
+<a href="https://www.reittiopas.fi/">Reittiopas</a><br/>
+<a href="https://www.hsl.fi/reitit-ja-aikataulut">HSL-aikataulut</a><br/>
+<a href="https://www.vr.fi/cs/vr/fi/lahiliikenne-aikataulut">Lähiliikenteen juna-aikataulut</a><br/>
+</p>
+
+<h3>Pasilan rakennusaikaiset kulkureitit</h3>
+<p>
+Keski-Pasilan uuden keskuksen Triplan rakentaminen vaikuttaa kulkureitteihin ja palveluihin aseman sisätiloissa ja sen lähiympäristössä. Reittinä asemalta Messukeskukseen suosittelemme käyttämään alikulkutunneleita (asemalta pohjoissuuntaan). Niiden kautta kierrät rakennustyöt ja pääset Messukeskukseen nopeammin. Rakennustöiden aikaiset järjestelyt Pasilan asemalla on hyvin opastettu.
+</p>
+<p>
+Ajantasaiset tiedot liikennejärjestelyistä ja kulkureiteistä löytyvät HSL:n Pasila-sivulta <a href="https://www.hsl.fi/pasila">www.hsl.fi/pasila</a>. Palvelut Pasilan asemalla rakennustöiden aikana löytyvät Pasilan aseman sivuilta <a href="http://www.pasilanasema.fi/">www.pasilanasema.fi</a>.
+</p>
+
+<h3>Pysäköinti</h3>
+<p>
+Messukeskuksen aina avoinna oleva pysäköintitalo Messuparkki sijaitsee Messukeskukseen pohjoisen sisäänkäynnin puolella, osoite navigaattoriin: Ratapihantie 17.
+</p>
+<p>
+Käytössä on myös Kokoustamon pysäköintialue, joka sijaitsee Ratamestarinkadun päässä, osoite navigaattoriin: Ratamestarinkatu 13.
+</p>
+
+<p>
+<b>Tapahtumanaikainen pysäköintilippu:</b><br />
+24 € pysäköinti koko tapahtuman ajan (pe-su).<br />
+Ajaessasi pysäköintiin ota normaalisti puomilta lipuke ja pysäköi auto. Osta tapahtumanaikainen pysäköintilippu Ropeconin lipunmyyntitiskiltä. Maksuvälineinä käyvät käteinen ja yleisimmät maksukortit.
+</p>
+
+</p>
+<b>Muut pysäköintimaksut:</b><br />
+12 € oikeuttaa kertapysäköintiin yhden vuorokauden (24 h) aikana.<br />
+Pysäköintimaksu maksetaan automaattiin. Maksuvälineinä käyvät käteinen ja yleisimmät maksukortit.
+</p>
+
+<p>
+Vammaisen pysäköintiluvalla voi pysäköidä mihin tahansa ruutuun maksutta. Messuparkissa alimmalla P1-tasolla ja pohjoisen sisäänkäynnin läheisyydessä on 20 merkittyä pysäköintipaikkaa.
+</p>
+
+<p>
+Tesla-sähköautojen maksuttomat latauspisteet (20A 13,8 kW) sijaitsevat pysäköintitalon kerroksessa P2. Pysäköinnistä peritään normaali pysäköintimaksu.
+</p>
+
+<p>
+Muistathan, että kaikissa ajoneuvoissa, myös asuntoautossa tai -vaunussa yöpyminen on kielletty kaikilla Messukeskuksen pysäköintialueilla.
+</p>
+
+<h3>Tavarasäilö ja löytötavarat</h3>
+<p>
+Pientavaranarikka palvelee kävijöitä koko tapahtuman ajan eteläisellä sisäänkäynnillä. Patjat, makuupussit ja muut suuremmat tavarat säilytetään isotavaranarikassa Lasigallerian länsipäädyssä. Löytötavaroita voi kysellä infosta tai tapahtuman jälkeen sähköpostitse loytotavarat@ropecon.fi.
+</p>
+
+<h2 id="info-kartat">Kartat</h2>
+<p>
+Ropecon 2017 järjestetään Helsingin Messukeskuksessa. Tapahtuman käytössä ovat Kokoustamon tilat kolmessa kerroksessa, Talvipuutarha, messuhallit 2 ja 5 sekä avointa galleriatilaa näiden läheisyydessä.
+</p>
+
+<ul>
+<li><a href="maps/Ropecon2017_kartat-tapahtuma-alue-net.jpg">Koko tapahtuma-alue</a>
+<li><a href="maps/Ropecon2017_kartat-halli5-net.jpg">Halli 5</a>
+<li><a href="maps/Ropecon2017_kartat-Kokoustamo-net.jpg">Kokoustamo</a>
+<li>Halutessasi voit tutustua tiloihin myös <a href="https://messukeskus.visualizer360.com/tilat">virtuaaliesittelyn avulla</a>.
 </ul>
 
-<h2>Sample Quick Reference</h2>
-<dl class="quick-ref">
-<dt><b>Access/Handicapped Services</b>: see Info Desk near elevators
+<h3>Käsiohjelma</h3>
+<p>
+Tapahtumapaikalla on jaossa paperisia käsiohjelmia. Käsiohjelman voit ladata myös sähköisenä oheisista linkeistä.
+</p>
+<ul>
+<li><a href="https://2017.ropecon.fi/wp-content/uploads/2017/07/Ropecon2017-kasiohjelma-net.pdf">Käsiohjelma 2017 (pdf)</a>
+<li><a href="https://2017.ropecon.fi/wp-content/uploads/2017/07/Ropecon2017-ohjelmaliite-net.pdf">Ohjelmaliite 2017 (pdf)</a>
+</ul>
 
-<dt><b>Art Show</b>: Harbor Ballroom II/III (3E)
-<dd><table>
-<tr><td>Friday<td>6pm–<td>9pm
-<tr><td>Saturday<td>10am–<td>6pm, 8pm–10pm
-<tr><td>Sunday<td>10am–<td>1:30pm
+
+<h2 id="info-ruoka">Ruoka ja majoitus</h2>
+<p>
+Messukeskuksen ravintoloista ja kahviloista löytyy helpotusta kaikenkokoiseen nälkään.
+</p>
+
+<table class="restaurants">
+<tr><th style="text-align: left">Ravintola</th><th>Pe</th><th>La</th><th>Su</th></tr>
+<tr><td>Eat &amp; Meet</td><td>14-18</td><td>12-16</td><td>12-16</td></tr>
+<tr><td>Terra Nova</td><td>14-04 (*)</td><td>14-04 (*)</td><td>17-23</td></tr>
+<tr><td>Pizza &amp; Grill</td><td>15-24</td><td>10-24</td><td>10-18</td></tr>
+<tr><td>Hesburger</td><td>15-06</td><td>08-06</td><td>08-18</td></tr>
+<tr><td>Fazer Café</td><td>14:30-21</td><td>9:30-17</td><td>9:30-17</td></tr>
+<tr><td>Olohuone: puuroaamiainen</td><td>-</td><td>8-11</td><td>8-11</td></tr>
+<tr><td>Olohuone: kahvila</td><td>13-23</td><td>15-23</td><td>11-16</td></tr>
+<tr><td>Myyntikärry hallissa 5 ja salissa 103</td><td>15-22</td><td>15-22</td><td>11-15</td></tr>
+<tr><td>Lakumyyjä halli 5 sisäänkäynnin kulmalla</td><td>15-20</td><td>10-20</td><td>10-16</td></tr>
 </table>
-<b>Sales Pickup / Artist Checkout</b>: Sunday 3:30pm–7:30pm<br>
-<b>Voice Auction</b>: Sunday 4:30pm<br>
-<b>Sales Pickup / Artist Checkout</b>: Monday 10am–1pm
 
-<dt><b>...</b>
-</dl>
--->
+<p>
+(*) Terra Novan keittiö auki vain klo 01 asti perjantaina ja lauantaina
+</p>
+
+<p>
+Pasilan aseman läheisyydestä löytyy ravintoloita ja kauppoja tapahtumapaikan tarjontaan vaihtelua kaipaaville.
+</p>
+<p>
+<b>Lähialueen ravintolat:</b><br />
+<ul>
+<li>Subway Pasilan asema, Ratapihantie 6
+<li>Mero-Himal, Veturitori 2
+<li>Pasilan Pizza Palvelu, Asemapäällikönkatu 3
+<li>Thai Asia Take-Away, Ratamestarinkatu 3
+<li>Mala, Opastinsilta 10
+</ul>
+</p>
+
+<p>
+<b>Lähialueen kaupat:</b><br />
+<ul>
+<li>Lidl, Ratapihantie 3
+<li>K-market Pasaati, Asemapäällikönkatu 3
+<li>R-kioski Pasilan asema, Ratapihantie 6
+</ul>
+</p>
+
+<p>
+Katso liikkeiden ja ravintoloiden aukioloajat netistä.
+</p>
+
+<h3>Vesipisteet</h3>
+<p>
+Tapahtumapaikalla on kolme vesipistettä. Yksi sijaitsee Kokoustamon aulassa vahtimestarien koppia vastapäätä, toinen hallissa 5 kahvilan alapuolella ja kolmas Ylä-Galleriassa portaikon ja halli 5 ovien läheisyydessä.
+</p>
+<p>
+Vesipisteillä ei ole juoma-astioita. Jos sinulla ei ole mukana omaa juoma-astiaa, voit ostaa täytettävän Ropecon-vesipullon vaikkapa Ropecon Shopista (myyntialue, halli 5).
+</p>
+
+<h3>Myyntialue</h3>
+<p>
+Myyntialueelta löydät paljon erilaisia pelejä ja peliaiheista esineistöä. Hyödynnä hyvät messutarjoukset ja osta käsityötä, jota on vaikea saada muualta! Myyntialueen löydät hallista 5. 
+</p>
+
+<p>
+<b>Aukioloajat</b> pe 15–21, la 10–18 ja su 10–15.
+</p>
+
+<h3>Majoitus</h3>
+
+<p>
+Ropecon tarjoaa kävijöille ilmaisen 24h-lattiamajoituksen koko tapahtuman ajaksi. Tilaa on runsaasti, mutta kuitenkin rajoitetusti. Majoitustila on yöpyjien vapaassa käytössä vuorokauden ympäri koko tapahtuman ajan. Viikonloppurannekkeella voit siis tulla nukkumaan ja lähteä pois koska haluat aina perjantai-illasta sunnuntai-iltapäivään asti.
+</p>
+
+<p>
+Päivälippu oikeuttaa yhden yön viettämiseen majoituksessa. Oikeus tapahtuma-alueella ja majoitustiloissa oleskeluun päättyy lipunostoa seuraavana aamuna klo 9. Muistathan, että voit halutessasi päivittää lipun viikonloppurannekkeeksi 12 euron hintaan.
+</p>
+
+<h4>Majoitustila</h4>
+<p>
+Majoitustila sijaitsee Messukeskuksen hallissa 2. Sisäänkäynti on Messukeskuksen eteläisen sisäänkäynnin viereisen Lasigallerian länsipäädystä. Kulje isotavaranarikan ohitse, väliovista sisään ja portaat alas.
+</p>
+
+<p>
+Saapuessasi sinulle osoitetaan hallista tila, johon voit majoittua. Tapahtuman puolesta ei ole tarjolla yöpymistarpeita, joten tuo lämmin patja sekä peite ja tyyny tai makuupussi viileähkön betonilattian päällä nukkumista varten. Muistathan, että majoitustila on tarkoitettu vain nukkumiseen, ei tavaroiden säilytykseen. Oma yöpymispaikka on siivottava tavaroista, kun lopetat nukkumisen ja lähdet majoitustilasta. Patjojen ja vastaavien tavaroiden säilönä toimii isotavaranarikka.
+</p>
+<p>
+Majoitus avataan perjantaina noin klo 21. Tilasta on poistuttava viimeistään sunnuntaina klo 15. Majoituksessa on koko ajan paikalla majoitusvahteja, jotka avustavat majoittumisessa ja valvovat tilaa.
+</p>
+
+<h4>Peseytyminen ja maskeeraus</h4>
+<p>
+Majoituksen suihkutilat ovat avoinna vuorokauden ympäri. Suihkutilojen yhteydessä sijaitsevat myös maskeeraustilat. Toivomme, että kaikki tavallista nenän puuterointia raskaampi maskeeraus tapahtuu maskeeraustilassa.
+</p>
+
+<h3>Tavarasäilö ja löytötavarat</h3>
+<p>
+Pientavaranarikka palvelee kävijöitä koko tapahtuman ajan eteläisellä sisäänkäynnillä. Patjat, makuupussit ja muut suuremmat tavarat säilytetään isotavaranarikassa Lasigallerian länsipäädyssä. Löytötavaroita voi kysellä infosta tai tapahtuman jälkeen sähköpostitse loytotavarat@ropecon.fi.
+</p>
+
+
+<h2 id="info-lapset">Lasten Ropecon</h2>
+<p>
+Ropecon sopii erinomaisesti koko perheelle. Aloittelijoille, lapsille ja perheille soveltuvaa pelattavaa löytyy erityisesti Kokemuspisteeltä. Messuhallin 5 ohjelmalavalla, näyttelyalueella sekä bofferi- ja teräsalueella tapahtuu lähes koko ajan jotain jännittävää. Pelitiskien ja myyntialueen työntekijät kertovat mielellään lisää lapsiystävällisistä peleistä.
+</p>
+
+<h3>Lastenhoito</h3>
+
+<p>
+Lastenhoitohuone löytyy hallista 5, kahvilan alapuolelta. Lastenhoitotasoja on myös Kokoustamon 1. ja 2. kerroksen inva-WC:ssä sekä pohjoisen sisäänkäynnin WC:ssä. Potat löytyvät Kokoustamon molemmista inva-WC:stä.
+</p>
+
+<h3>Lastenhuone</h3>
+
+<p>
+Lastenhuone sijaitsee käytävämaisen Ylä-Gallerian puolivälissä. Lastenhuoneessa lapset voivat huoltajiensa valvonnassa leikkiä, syödä tai rauhoittua. Huoneesta löytyy vesipiste, mikroaaltouuni, jääkaappi sekä WC hoitotasolla. Tilassa on työntekijä, mutta lapset ovat aina huoltajiensa vastuulla – kyseessä ei siis ole lapsiparkki.</p>
+
+<p>
+<b>Aukioloajat</b>: pe 16–22 / la 10–22 / su 10–16
+</p>
+
+<h3>Lastenvaunut</h3>
+
+<p>
+Tapahtumaan voi osallistua lastenvaunujen kanssa. Kulku eri kerrosten välillä onnistuu hissillä. Ohjelmasaleissa ja käytävillä voi kuitenkin olla ajoittain ruuhkaa, jolloin liikkuminen vaunujen kanssa saattaa olla hankalaa. Lastenvaunuparkki sijaitsee Lasigalleriassa isotavaranarikan päädyssä.
+</p>
+
+<h3>Lapsiystävälinen ohjelma</h3>
+
+<p>
+Lapset voivat osallistua miltei kaikkeen ohjelmaan. Mukana on muutamia ohjelmanumeroita, jotka on kielletty alaikäisiltä tai alle 15-vuotiailta. Ikäsuositukset löytyvät ohjelmaoppaasta kyseisten ohjelmanumeroiden kuvauksista.
+</p>
+
+<p>
+Pelit ja ohjelmanumerot, joita suosittelemme erityisesti lapsille, löytyvät Ropeconin ohjelmaopaasta hakukategorialla ”Lapsiystävällinen”. Voit tallentaa mielenkiintoiset ohjelmanumerot klikkaamalla tähtikuvaketta, jolloin suosikkisi näkyvät aikataululistauksena ”Omat suosikit” -sivulla.
+</p>
+
+
+<h2 id="info-este">Esteettömyys</h2>
+<p>
+Ropeconille on tärkeää, että tapahtumasta pääsevät nauttimaan kaikki, joita roolipeliharrastus kiinnostaa. Tilat Helsingin Messukeskuksessa soveltuvat hyvin liikunta- tai toimintarajoitteisille kävijöille.
+</p>
+
+<p>
+Sekä eteläiseltä että pohjoiselta sisäänkäynniltä löytyy oviautomatiikka. Kokoustamossa toimintaa on kolmessa kerroksessa, joiden välillä pääsee kulkemaan hissillä.
+</p>
+
+<p>
+Käytössämme olevissa WC-tiloissa on myös esteettömät WC:t. Kaikkiin tapahtuman aikana auki oleviin kahviloihin ja ravintoloihin pääsee kulkemaan esteettömästi.
+</p>
+
+<p>
+Puheohjelmasaleihin saa pyydettäessä induktiosilmukan infosta – pyydäthän infoa järjestämään asian vähintään tuntia ennen ohjelman alkua. Voit tutustua tiloihin etukäteen <a href="https://messukeskus.visualizer360.com/tilat">virtuaaliesittelyn</a> avulla.
+</p>
+
+<p>
+Avustajat pääsevät luonnollisesti ilmaiseksi sisään tapahtumaan. Lemmikkieläimet on tapahtumassa kielletty, mutta opaskoirat ovat työtehtävissään tervetulleita.
+</p>
+
+<h3>Esteetön pysäköinti</h3>
+<p>
+Vammaisen pysäköintitunnuksella voi pysäköidä mihin tahansa ruutuun maksutta. Pysäköintitalossa alimmalla P1-tasolla ja pohjoisen sisäänkäynnin läheisyydessä on 20 merkittyä pysäköintipaikkaa. Ulosajettaessa näytä vammaisen pysäköintilupaa puomilla kameralle.
+</p>
+
+<p>
+Myös Kokoustamon pysäköintialueella on merkittyjä paikkoja, mutta suosittelemme niitä vain toissijaisesti, sillä reitillä eteläiselle sisäänkäynnille on nousua ja jyrkähkö mäki.
+</p>
+
+<h2 id="info-turva">Turvallisuus ja viihtyvyys</h2>
+<h3>Hätäturvallisuus</h3>
+<ul>
+<li>Selvitä hätäpoistumistiet etukäteen.
+<li>Hätätilanteessa poistu lähimmän hätäpoistumistien kautta ulos tilasta.
+<li>Pysy poissa autotieltä, jotta pelastushenkilökunta pääsee paikalle.
+<li>Noudata järjestyksenvalvojien ohjeita, kehotuksia ja käskyjä.
+</ul>
+
+<h3>Ensiapu</h3>
+<p>
+SPR:n päivystyshuone sijaitsee pohjoisen sisäänkäynnin läheisyydessä. Lähin apteekki on Pasilan Apteekki (Ratapihantie 9), joka on avoinna vain arkipäivisin. Yliopiston Apteekki (Mannerheimintie 96) palvelee joka päivä vuorokauden ympäri.</p>
+<p>
+Yleinen hätänumero on 112.
+</p>
+
+<h3>Info 24 h tapahtuman aikana</h3>
+<p>
+<b>Info 045 136 2946</b><br/>
+Järjestyksenvalvojiin saat yhteyden infosta.<br/>
+Info sijaitsee eteläisen sisäänkäynnin aulassa.<br/>
+</p>
+<p>
+<b>Häirintäyhdyshenkilöt:</b><br/>
+044 781 5518 (Mari)<br/>
+044 781 5519 (Eino)
+</p>
+
+<p>
+Häirintäyhdyshenkilöille voi lähettää sähköpostia myös tapahtuman jälkeen osoitteeseen hairinta@ropecon.fi.
+</p>
+
+<h3>Järjestyssäännöt</h3>
+<p>
+Tapahtumassa noudatetaan Suomen lakia ja sen lisäksi muutamia yleisiä järjestyssääntöjä, joiden tarkoituksena on luoda kaikille osallistujille turvallinen ja onnistunut tapahtuma.
+</p>
+<p>
+Turvallisuutta ja järjestystä tapahtumassa valvovat poliisin hyväksymät järjestyksenvalvojat. Heidän sekä järjestäjien antamia ohjeita tulee noudattaa.
+</p>
+<p>
+Yksinkertaisuudessaan säännöt voidaan tiivistää muutamaan kohtaan:
+<ul>
+<li>Noudata lakia ja järjestyssääntöjä.
+<li>Käytä järkeä.
+<li>Ota muut huomioon.
+</ul>
+</p>
+
+<h3>Asejäljitelmät</h3>
+<p>
+Tapahtumassa ei käytetä aseita eikä asejäljitelmiä.
+</p>
+<p>
+Jos pukuusi sellainen oleellisena osana kuuluu, sen on pysyttävä kiinni puvussa. Minkään kättäpidemmän heiluttelu tapahtumassa ei ole sallittua.
+</p>
+<p>
+Lisäksi on huomioitava, että mikään miekkaa tai muuta teräasetta jäljittelevä puvun osa ei saa olla teroitettu. Ampuma-asejäljitelmien tulee olla selkeästi merkittyjä (ks. ohjeet alla). Muovikuula-aseiden lippaiden tulee olla tyhjiä ja aseiden ilman akkuja tai kaasuja.
+</p>
+<p>
+Pehmomiekkailulle ja muulle tämän kaltaiselle toiminnalle on varattu aikaa ja paikka ohjelmassa. Boffereitakaan ei siis heilutella vapaasti missään.
+</p>
+
+<h3>Aseiden merkintä</h3>
+<p>
+Ampuma-asejäljitelmien tulee olla selkeästi merkittyjä seuraavalla tavalla:
+</p>
+<ul>
+<li>Piippu on teipattu umpeen punaisella teipillä vähintään 2 cm:n matkalta.
+<li>Kahvassa tai perässä on selkeä punainen teippaus, joka erottuu myös aseen ollessa kiinni puvussa.
+</ul>
+
+<p>
+Mikäli merkitsemistavassa on jotain epäselvää tai sinulla on kysyttävää, tiedustele apua lähimmältä järjestyksenvalvojalta tai infosta. Infosta löytyy myös punaista teippiä aseiden merkitsemistä varten.
+</p>
+
+<h3>Päihteet</h3>
+<p>
+Tapahtuma on päihteetön.
+</p>
+<p>
+Tapahtuma-alueella on alkoholin hallussapito kielletty eikä päihtynyt henkilö ole tervetullut tapahtumaan. Ystävälliset järjestyksenvalvojat ohjaavat päihtyneet asiakkaat pois tapahtuma-alueelta ja ovat velvoitettuja tarvittaessa takavarikoimaan kielletyt aineet. Laittomat päihteet ilmoitamme aina poliisille.
+</p>
+
+<p>
+Ravintola Terra Nova palvelee täysi-ikäisiä asiakkaita anniskeluoikeuksiensa puitteissa. Muistathan kuitenkin, että päihtyneenä et ole tervetullut takaisin tapahtuma-alueelle.
+</p>
+<p>
+Tupakointi, myös sähköinen versio, on sallittua ainoastaan ulkotiloissa, merkityillä alueilla.
+</p>
+
+<h3>Kulkureitit ja avoimet tilat</h3>
+
+<p>
+Kulkureiteille leiriytyminen ei ole toivottavaa.
+</p>
+<p>
+Portaikot eivät ole istumista varten, eikä aulatiloihin sovi levittää piknik-vilttiä.
+</p>
+<p>
+Nukkuminen on sallittua ainoastaan nukkumakäyttöön varatulla alueella Halli 2:ssa.
+</p>
+
+<h3>Spontaani ohjelma</h3>
+<p>
+Spontaanit esitykset ovat suotavia, mutta muista olla häiritsemättä muita ihmisiä tai Ropeconin ohjelmaa esimerkiksi estämällä läpikulkua tai pitämällä melua luentosalien läheisyydessä.
+</p>
+<p>
+Koska Ropeconin ohjelma on maksutonta, ei spontaaneistakaan ohjelmanumeroista saa vaatia rahaa.
+</p>
+<p>
+HUOMIO: Tulennielentä ja vastaavat ohjelmanumerot voivat vaatia erillisiä lupia tai vakuutuksia, eivätkä ole mahdollisia järjestää ilman etukäteiskeskustelua järjestäjien kanssa.
+</p>
+
+<h3>Vaatetus</h3>
+<p>
+Tapahtumassa asu on vapaa, mutta pakollinen. Vaikka onkin kesä, on syytä pukeutua rantapukua peittävämpään asuun.
+</p>
+<p>
+Pukeutuminen erilaisiin rooliasuihin on jopa toivottavaa, mutta yleisin ja tehokkain naamioitumiskeino on jo vuosia ollut farkut ja t-paita.
+</p>
+<p>
+Suihkutiloissa mikään asu ei ole pakollinen. Asun poistamista peseytymisen ajaksi ja vaihtamista peseytymisen jälkeen jopa suositellaan.
+</p>
+
+<h3>Pomppulinna</h3>
+<p>
+Tapahtuma-alueella on pomppulinna, johon pätee pari lisäsääntöä:
+</p>
+<ul>
+<li>Ei kengät jalassa
+<li>Korkeintaan 7 ihmistä kerralla pomppimassa
+<li>Varo pienempiäsi
+<li>Älä töni toisia
+</ul>
+
+<h3>Muuta huomionarvoista</h3>
+<p>
+Lemmikkieläimiä ei valitettavasti voi tapahtumaan tuoda. Eläimiä ei myöskään saa jättää yksin odottamaan tapahtuma-alueen välittömään läheisyyteen, vaikka eläin olisikin tällaiseen tottunut. Opas- ja avustajakoirat luonnollisesti ovat tervetulleita myös sisätiloihin.
+</p>
+<p>
+Mainosten, esitteiden tai kavereiden kiinnittäminen tapahtuma-alueen seiniin tai muihin pintoihin teipillä tai millään muullakaan keinoin on kiellettyä.
+</p>
+<p>
+Kaupallisen toiminnan harjoittaminen tapahtumassa on rajoitettua, tarvittaessa ota yhteyttä järjestäjiin.
+</p>
+<p>
+Pidetään tapahtuma siistinä ja viedään omat roskat niille kuuluville paikoille, roska-astioihin.
+</p>
+<p>
+Messukeskus on keskellä Helsinkiä – otathan alueen asukkaat huomioon, myös tapahtuma-alueen ulkopuolella.
+Turvataan yhdessä hyvä kokemus kaikille
+</p>
+<p>
+Ropeconin järjestäjät haluavat taata kaikille osallistujille turvallisen tilan ja sitä kautta mukavan kokemuksen. Kiusaaminen ja häirintä eivät kuulu Ropeconiin, joten muistathan käyttäytyä kaikkia kohtaan kunnioittavasti koko viikonlopun ajan. Tutustu Ropeconin <a href="https://2017.ropecon.fi/kavijalle/hairinta/">häirinnänvastaiseen linjaukseen</a>.
+</p>
+
 
 </div>
 
