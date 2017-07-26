@@ -104,6 +104,7 @@ KonOpas.Prog.set_filters = function(f, silent) {
 		if (silent) {
 			var loc = window.location.toString().split('#')[0] + h;
 			history.replaceState({}, document.title, loc);
+			window.onhashchange()
 		} else {
 			window.location.hash = h;
 		}
