@@ -79,10 +79,12 @@
 </ul>
 </div>
 
+<!--
 <p style="padding-top: 2em; margin: auto; width: 70%; font-size: 90%;">
 Ohjelma täydentyy ennen tapahtumaa. Muutokset
 yksittäisiin ohjelma&shy;numeroihin ja aika&shy;tauluihin ovat mahdollisia.
 </p>
+-->
 
 <div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
 </div>
@@ -291,7 +293,8 @@ Pasilan aseman läheisyydestä löytyy ravintoloita ja kauppoja tapahtumapaikan 
 </p>
 
 <p>
-Katso liikkeiden ja ravintoloiden aukioloajat netistä.
+Katso liikkeiden ja ravintoloiden aukioloajat netistä.<br />
+<a href="https://www.google.com/maps/d/viewer?mid=1PJ5i8oCB6g7kjuXp35negHPstBM&ll=60.20041038864151%2C24.938503383868465&z=16">Lähialueen ravintolat ja palvelut kartalla</a>
 </p>
 
 <h3>Vesipisteet</h3>
