@@ -1,7 +1,7 @@
 KonOpas.Part = function(list, opt) {
 	this.list = list || [];
 	this.list.forEach(function(p){
-		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^ +/, '');
+		p.sortname = ((p.name[1] || '') + '  ' + p.name[0]).toLowerCase().replace(/^[\s/()]+/, '');
 		if (!opt.non_ascii_people) p.sortname = p.sortname.make_ascii();
 	});
 	this.list.sort(opt.non_ascii_people
@@ -52,13 +52,17 @@ KonOpas.Part.prototype.set_ranges = function(bin_size) {
 					this.update_view(name_range, '');
 				}
 			}).bind(self);
-		};
+		},
+		_firstletter = function(name) {
+			return name.replace(/^[\s/(]+/, '').charAt(0).toUpperCase()
+		}
 
 	var fn = [], ln = [];
+
 	this.list.forEach(function(p){
 		if (p.name && p.name.length) {
-			fn.push(p.name[0].trim().charAt(0).toUpperCase());
-			if (p.name.length >= 2) ln.push(p.name[1].trim().charAt(0).toUpperCase());
+			fn.push(_firstletter(p.name[0]));
+			if (p.name.length >= 2) ln.push(_firstletter(p.name[1]) || _firstletter(p.name[0]));
 		}
 	});
 
