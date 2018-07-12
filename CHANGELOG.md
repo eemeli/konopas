@@ -1,3 +1,15 @@
+# 0.9.0 (2018-07-12)
+
+  * Interface:
+    - Drop support for comments
+    - Fix search, make it auto-refresh
+  * Code:
+    - Simplify build setup
+    - Reorganise repo file structure
+    - Bugfixes
+  * Util:
+    - Add `apache-enable-gzip.conf`
+
 # 0.8.0 (2014-10-05)
 
   * Interface:

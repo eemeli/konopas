@@ -62,6 +62,8 @@ compile the code yourself---instructions for that are in the following section.
 [KO-latest]: https://github.com/eemeli/konopas/releases/latest
 [KO-repo]: https://github.com/eemeli/konopas
 
+In the zip file, you'll find the distribution version of KonOpas in the `dist/`
+folder; this is what you'll need to deploy on your own server.
 
 Once you've got your programme data in the [proper format][KO-fmt], you should
 just change the `<script>` tags at the bottom of `index.html` to point to your
@@ -104,7 +106,7 @@ modified. This should make it easier for you to tune the default skin to match
 your needs. [`skin/main.less`](skin/main.less) is the place where the
 colourscheme is set.
 
-For **internationalization**, we use [messageformat.js], which is based on 
+For **internationalization**, we use [messageformat.js], which is based on
 [ICU MessageFormat] syntax. So far [localizations](src/i18n/) include English,
 Finnish, and Swedish.
 
