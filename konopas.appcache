@@ -2,16 +2,17 @@ CACHE MANIFEST
 # [insert mod-timestamp here]
 
 CACHE:
-data/program.js
-data/people.js
+http://konopas.org/demo/data/program.js
+http://konopas.org/demo/data/people.js
 konopas.min.js
-skin/skin.css
+skin/favicon.196.png
 skin/icons.png
+skin/konopas.css
+skin/konopas.png
+skin/Oswald400.ttf
 skin/Roboto300.ttf
 skin/Roboto500.ttf
-skin/Oswald400.ttf
 favicon.ico
-data/title.png
 
 NETWORK:
 *
