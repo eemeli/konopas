@@ -12,7 +12,7 @@ function KonOpas(set) {
 	this.use_server = false;
 	this.log_messages = true;
 	this.cache_refresh_interval_mins = 60;
-	this.views = [ "star", "prog", "part", "info" ];
+	this.views = [ "star", "prog", "part", "chgs", "info" ];
 	if (typeof set == 'object') for (var i in set) this[i] = set[i];
 
 	if (!this.log_messages) _log = function(){};
@@ -28,6 +28,7 @@ function KonOpas(set) {
 	this.stars = new KonOpas.Stars(this.id);
 	this.server = this.use_server && KonOpas.Server && new KonOpas.Server(this.id, this.stars);
 	this.item = new KonOpas.Item();
+	this.chgs = new KonOpas.Chgs();
 	this.info = new KonOpas.Info();
 	window.onhashchange = this.set_view.bind(this);
 	var pl = document.getElementsByClassName('popup-link');
@@ -57,6 +58,7 @@ KonOpas.prototype.set_view = function() {
 			case 'part': this.people.show();  break;
 			case 'star': this.stars.show();   break;
 			case 'info': this.info.show();    break;
+			case 'chgs': this.chgs.show();    break;
 			default:     this.program.show(); view = 'prog';
 		}
 	}
