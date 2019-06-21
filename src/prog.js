@@ -55,7 +55,7 @@ KonOpas.Prog = function(list, opt) {
 
 KonOpas.Prog.hash = function(f, excl) {
 	var p = ['#prog'];
-	if (f) ['id', 'area', 'tag', 'query'].forEach(function(k){
+	if (f) ['id', 'area', 'cat', 'tag', 'query'].forEach(function(k){
 		var v = f[k + '_str'] || f[k];
 		if (excl && excl[k] || !v || (v == 'all_' + k + 's')) return;
 		if ((k == 'tag') && konopas.tag_categories) {
@@ -68,7 +68,7 @@ KonOpas.Prog.hash = function(f, excl) {
 }
 
 KonOpas.Prog.get_filters = function(hash_only) {
-	var	filters = { 'area':'', 'tag':'', 'query':'', 'id':'' },
+	var	filters = { 'area':'', 'cat':'', 'tag':'', 'query':'', 'id':'' },
 		h = window.location.toString().split('#')[1] || '',
 		h_set = false,
 		tag_re = konopas.tag_categories && konopas.tag_categories.length && new RegExp('^' + konopas.tag_categories.join('|') + '$');
@@ -125,6 +125,7 @@ KonOpas.Prog.filter_change = function(ev) {
 			value = ev.target.id;
 			switch (key) {
 				case 'area': value = value.replace(/^a([^a-zA-Z])/, '$1'); break;
+				case 'cat':  value = value.replace(/^c([^a-zA-Z])/, '$1'); break;
 				case 'tag':  value = value.replace(/^t([^a-zA-Z])/, '$1'); break;
 			}
 			break;
@@ -254,7 +255,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 	}
 	if (!opt || !filter_el) return;
 	while (filter_el.firstChild) filter_el.removeChild(filter_el.firstChild);
-	var days = {}, areas = {}, tags = {},
+	var days = {}, areas = {}, tags = {}, cats = {},
 	    lvl = (opt.area && opt.area.loc_level) || 0;
 	for (var i = 0, l = this.list.length; i < l; ++i) {
 		var p = this.list[i];
@@ -265,6 +266,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 			if (t_s) p.tags[j] = t_s + ':' + p.tags[j];
 			tags[p.tags[j]] = (tags[p.tags[j]] || 0) + 1;
 		}
+		if (opt.cat && p.cat) cats[p.cat] = (cats[p.cat] || 0) + 1;
 	}
 	if (opt.day && opt.day.exclude) {
 		var d_re = new RegExp(opt.day.exclude.join('|'));
@@ -279,6 +281,7 @@ KonOpas.Prog.prototype.init_filters = function(opt) {
 		};
 	}
 	if (opt.area) _fill('area', areas);
+	if (opt.cat) _fill('cat', cats);
 	if (opt.tag) _fill('tag', tags);
 }
 
@@ -293,7 +296,7 @@ KonOpas.Prog.prototype.show_filter_sum = function(ls, f) {
 		fs.innerHTML = i18n.txt('filter_sum_id', { 'N':ls.length, 'TITLE':_a(ls[0].title), 'ID':_a(f.id) });
 	} else {
 		var d = { 'N': f.n_listed,
-			'ALL': !f.show_all || f.tag_str || f.area_str || f.query_str ? '' : _a(i18n.txt('all'), {}, 0),
+			'ALL': !f.show_all || f.tag_str || f.cat_str || f.area_str || f.query_str ? '' : _a(i18n.txt('all'), {}, 0),
 			'TAG': f.tag_str ? _a(f.tag_str, 'tag') : '' };
 		if (f.day && !f.show_all) {
 			d['DAY'] = i18n.txt('weekday_n', {'N': KonOpas.parse_date(f.day).getDay() });
@@ -302,6 +305,7 @@ KonOpas.Prog.prototype.show_filter_sum = function(ls, f) {
 			if (f.n_hidden) d['LIVE'] = true;
 		}
 		if (f.area_str) d['AREA'] = _a(f.area_str, 'area');
+		if (f.cat_str) d['CAT'] = _a(f.cat_str, 'cat');
 		if (f.query_str) d['Q'] = _a(f.query_str, 'query');
 		fs.innerHTML = i18n.txt('filter_sum', d);
 	}
@@ -364,6 +368,13 @@ KonOpas.Prog.prototype.show = function() {
 				if (!it.loc || (it.loc.indexOf(this.area) < 0)) return false;
 			}
 		}
+		if (this.cat) {
+			if (this.cat instanceof RegExp) {
+				if (!this.cat.test(it.cat)) return false;
+			} else {
+				if (it.cat != this.cat) return false;
+			}
+		}
 		if (this.tag) {
 			if (this.tag instanceof RegExp) {
 				if (!this.tag.test(it.title)) return false;
@@ -376,6 +387,7 @@ KonOpas.Prog.prototype.show = function() {
 				|| this.query.test(it.desc)
 				|| (it.notes && this.query.test(it.notes))
 				|| (it.loc && this.query.test(it.loc.join('\t')))
+				|| (it.cat && this.query.test(it.cat))
 				|| (it.tags && this.query.test(it.tags.join('\t')))
 				|| (it.attributes && this.query.test(it.attributes.join('\t')))
 				|| (it.people && it.people.some(function(p){ return this.query.test(p.name); }, this));
@@ -388,6 +400,11 @@ KonOpas.Prog.prototype.show = function() {
 		if (f.area && _el(f.area)) {
 			var t = _el(f.area).getAttribute("data-regexp");
 			if (t) f.area = new RegExp(t);
+		}
+		f.cat_str = f.cat || '';
+		if (f.cat && _el(f.cat)) {
+			var t = _el(f.cat).getAttribute("data-regexp");
+			if (t) f.cat = new RegExp(t);
 		}
 		f.tag_str = f.tag || '';
 		if (f.tag && _el(f.tag)) {

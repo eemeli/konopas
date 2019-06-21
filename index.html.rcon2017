@@ -592,7 +592,8 @@ var konopas = new KonOpas({
 konopas.set_program(program, {
 	'day': {},
 	'area': {},
-	'tag': {}
+	'tag': {},
+  'cat': {}
 });
 konopas.set_view();
 </script>

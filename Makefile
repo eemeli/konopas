@@ -59,7 +59,7 @@ dist/skin/%: skin/% | dist/skin
 	cp $< $@
 
 dist/program.js: | dist
-	curl -o $@ https://2016.ropecon.fi/konopas/ropecon/program.js
+	curl -o $@ https://2019.ropecon.fi/opas/program.js
 
 precache: $(addsuffix .gz, $(DIST) $(wildcard dist/skin/*.ttf))
 %.gz: % ; gzip -c $^ > $@

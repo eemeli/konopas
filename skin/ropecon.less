@@ -91,6 +91,7 @@ hr {
 }
 
 /*
+2018
 Aloittelijaystävällinen
 Eisovellulapsille
 Englanninkielinen
@@ -110,20 +111,17 @@ Pöytäpelit		0,168,228
 Soveltuu lapsille
 Tanssiohjelma		169,167,181
 Työpaja			96,187,70
+
 */
 
-.tag_Esitelmä	{ border-image: linear-gradient(to right, rgba(244,121,33,1) 0%, rgba(244,121,33,0) 20%) 1 10%; }
-.tag_Paneeli	{ border-image: linear-gradient(to right, rgba(244,121,33,1) 0%, rgba(244,121,33,0) 20%) 1 10%; }
-.tag_Keskustelu	{ border-image: linear-gradient(to right, rgba(244,121,33,1) 0%, rgba(244,121,33,0) 20%) 1 10%; }
-.tag_Figupelit	{ border-image: linear-gradient(to right, rgba(0,179,189,1) 0%, rgba(0,179,189,0) 20%) 1 10%; }
-.tag_Freeform	{ border-image: linear-gradient(to right, rgba(0,168,228,1) 0%, rgba(0,168,228,0) 20%) 1 10%; }
-.tag_Pöytäpelit	{ border-image: linear-gradient(to right, rgba(0,168,228,1) 0%, rgba(0,168,228,0) 20%) 1 10%; }
-.tag_Kokemuspiste	{ border-image: linear-gradient(to right, rgba(220,193,105,1) 0%, rgba(220,193,105,0) 20%) 1 10%; }
-.tag_Korttipelit	{ border-image: linear-gradient(to right, rgba(239,77,53,1) 0%, rgba(239,77,53,0) 20%) 1 10%; }
-.tag_Larp   	{ border-image: linear-gradient(to right, rgba(238,54,137,1) 0%, rgba(238,54,137,0) 20%) 1 10%; }
-.tag_Lautapelit	{ border-image: linear-gradient(to right, rgba(138,106,174,1) 0%, rgba(138,106,174,0) 20%) 1 10%; }
-.tag_Tanssiohjelma	{ border-image: linear-gradient(to right, rgba(169,167,181,1) 0%, rgba(169,167,181,0) 20%) 1 10%; }
-.tag_Työpaja	{ border-image: linear-gradient(to right, rgba(96,187,70,1) 0%, rgba(96,187,70,0) 20%) 1 10%; }
+.cat_Muuohjelma, .cat_Noneoftheabove { border-image: linear-gradient(to right, rgba(110,13,178,1) 0%, rgba(110,13,178,0) 20%) 1 10%; }
+.cat_Puheohjelmaesitelmä, .cat_Presentation { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
+.cat_Puheohjelmakeskustelu, .cat_Discussiongroup { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
+.cat_Puheohjelmapaneeli, .cat_Paneldiscussion { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
+.cat_Roolipeli, .catPenPaperRPG { border-image: linear-gradient(to right, rgba(146,38,131,1) 0%, rgba(146,38,131,0) 20%) 1 10%; }
+.cat_Työpajafigut, .cat_Minitaturefigurines { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
+.cat_Työpajakäsityö, .cat_Crafts { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
+.cat_Työpajamuu, .cat_Otherworkshop { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
 
 ul.popup {
   width: 390px;
@@ -137,18 +135,16 @@ ul.popup li {
   padding-bottom: 2px;
 }
 
-.popup #Esitelmä	{ border-left: 5px solid rgba(244,121,33,1);}
-.popup #Paneeli 	{ border-left: 5px solid rgba(244,121,33,1);}
-.popup #Keskustelu	{ border-left: 5px solid rgba(244,121,33,1);}
-.popup #Figupelit { border-left: 5px solid rgba(0,179,189,1);}
-.popup #Freeform	{ border-left: 5px solid rgba(0,168,228,1);}
-.popup #Pöytäpelit	{ border-left: 5px solid rgba(0,168,228,1);}
-.popup #Kokemuspiste	{ border-left: 5px solid rgba(220,193,105,1);}
-.popup #Korttipelit	{ border-left: 5px solid rgba(239,77,53,1);}
-.popup #Larp    	{ border-left: 5px solid rgba(238,54,137,1);}
-.popup #Lautapelit	{ border-left: 5px solid rgba(138,106,174,1);}
-.popup #Tanssiohjelma	{ border-left: 5px solid rgba(169,167,181,1);}
-.popup #Työpaja 	{ border-left: 5px solid rgba(96,187,70,1);}
+.popup {
+  #Muu\ ohjelma, #None\ of\ the\ above { border-left: 5px solid rgba(110,13,178,1);}
+  #Puheohjelma\:\ esitelmä, #Presentation { border-left: 5px solid rgba(17,105,178,1);}
+  #Puheohjelma\:\ keskustelu, #Discussion\ group { border-left: 5px solid rgba(17,105,178,1);}
+  #Puheohjelma\:\ paneeli, #Panel\ discussion { border-left: 5px solid rgba(17,105,178,1);}
+  #Roolipeli, #Pen\ \&\ Paper\ RPG { border-left: 5px solid rgba(146,38,131,1);}
+  #Työpaja\:\ figut, #Miniature\ figurines { border-left: 5px solid rgba(248,153,96,1);}
+  #Työpaja\:\ käsityö, #Crafts { border-left: 5px solid rgba(248,153,96,1);}
+  #Työpaja\:\ muu, #Other\ workshop { border-left: 5px solid rgba(248,153,96,1);}
+}
 
 .popup-title {
   font-family: 'Lato', sans-serif;
@@ -160,7 +156,7 @@ ul.popup li {
   border: none;
 }
 
-#all_areas, #all_tags {
+#all_areas, #all_tags, #all_cats {
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   font-weight: 700;

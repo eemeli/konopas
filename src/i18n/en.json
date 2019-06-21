@@ -1,6 +1,7 @@
 {
 "Program": "Programme",
 "Info":"Info & maps",
+"All cats": "All categories",
 
 "weekday_n": "{N, plural, =0{Sunday} =1{Monday} =2{Tuesday} =3{Wednesday} =4{Thursday} =5{Friday} =6{Saturday} other{???}}",
 "weekday_short_n": "{N, plural, =0{Sun} =1{Mon} =2{Tue} =3{Wed} =4{Thu} =5{Fri} =6{Sat} other{???}}",
@@ -12,6 +13,7 @@
 "no_ko_id": "No ID set! Please assign konopas_set.id a unique identifier.",
 "old_browser": "Unfortunately, your browser doesn't support some of the Javascript features required by KonOpas. To use, please try a different browser.",
 "item_not_found": "Programme id <b>{ID}</b> not found!",
+"item_cat": "Category",
 "item_tags": "{T, select, tags{Tags} track{Track} type{Type} other{{T}}}",
 "star_export_this": "Your current selection is encoded in <a href=\"{THIS}\" target=\"_blank\">this page's URL</a>, which you may open elsewhere to share your selection.",
 "star_export_share": "For easier sharing, you can also generate a <a href=\"{SHORT}\">shorter link</a> or a <a href=\"{QR}\">QR code</a>.",

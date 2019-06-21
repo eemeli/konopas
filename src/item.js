@@ -18,6 +18,10 @@ KonOpas.Item = function() {
 }
 
 KonOpas.Item.show_extra = function(item, id) {
+	function _cat(it) {
+		if (!it.cat) return '';
+		return '<div class="item-cat">' + i18n.txt('item_cat') + ': ' + it.cat + '</div>\n';
+	}
 	function _tags(it) {
 		if (!it.tags || !it.tags.length) return '';
 		var o = {};
@@ -47,7 +51,7 @@ KonOpas.Item.show_extra = function(item, id) {
 	var a = konopas.program.list.filter(function(el) { return el.id == id; });
 	if (a.length < 1) html = i18n.txt('item_not_found', {'ID':id});
 	else {
-		html = _tags(a[0]) + _people(a[0]);
+		html = _cat(a[0]) + _tags(a[0]) + _people(a[0]);
 		if (a[0].desc) html += "<p>" + a[0].desc;
 		if (a[0].notes) html += "<p class='notes'>" + a[0].notes;
 		html += '<a href="#prog/id:' + a[0].id + '" class="permalink" title="' + i18n.txt('Permalink') + '"></a>';
@@ -96,7 +100,7 @@ KonOpas.Item.new = function(it) {
 		star.id = 's' + it.id;
 		item.id = 'p' + it.id;
 		title.textContent = it.title;
-		title.className = "title " + tagclass;
+		title.className = "title cat_" + it.cat.replace(" ", "").replace(":", "").replace("&", "") + " " + tagclass;
 		loc.textContent = _loc_str(it);
 		return frame.cloneNode(true);
 	};
