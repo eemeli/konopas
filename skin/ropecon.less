@@ -114,14 +114,33 @@ Työpaja			96,187,70
 
 */
 
-.cat_Muuohjelma, .cat_Noneoftheabove { border-image: linear-gradient(to right, rgba(110,13,178,1) 0%, rgba(110,13,178,0) 20%) 1 10%; }
-.cat_Puheohjelmaesitelmä, .cat_Presentation { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
-.cat_Puheohjelmakeskustelu, .cat_Discussiongroup { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
-.cat_Puheohjelmapaneeli, .cat_Paneldiscussion { border-image: linear-gradient(to right, rgba(17,105,178,1) 0%, rgba(17,105,178,0) 20%) 1 10%; }
-.cat_Roolipeli, .catPenPaperRPG { border-image: linear-gradient(to right, rgba(146,38,131,1) 0%, rgba(146,38,131,0) 20%) 1 10%; }
-.cat_Työpajafigut, .cat_Minitaturefigurines { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
-.cat_Työpajakäsityö, .cat_Crafts { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
-.cat_Työpajamuu, .cat_Otherworkshop { border-image: linear-gradient(to right, rgba(248,153,96,1) 0%, rgba(248,153,96,0) 20%) 1 10%; }
+@muu: rgba(43,5,67,1);
+@puhepuhe: rgba(7,1,42,1);
+@paneeli: rgba(2,25,43,1);
+@roolipeli: rgba(137,56,136,1);
+@paja: rgba(6,55,80,1);
+@figut: rgba(40,155,146,1);
+@kokemus: rgba(243,230,55,1);
+@korttipeli: rgba(196,47,52,1);
+@lautapeli: rgba(220,146,55,1);
+@larp: rgba(90,10,87,1);
+
+.cat_Muuohjelma, .cat_Noneoftheabove { border-image: linear-gradient(to right, @muu 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Puheohjelmaesitelmä, .cat_Presentation { border-image: linear-gradient(to right, @puhepuhe 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Puheohjelmakeskustelu, .cat_Discussiongroup { border-image: linear-gradient(to right, @puhepuhe 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Puheohjelmapaneeli, .cat_Paneldiscussion { border-image: linear-gradient(to right, @puhepuhe 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Roolipeli, .catPenPaperRPG { border-image: linear-gradient(to right, @roolipeli 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Työpajafigut, .cat_Minitaturefigurines { border-image: linear-gradient(to right, @paja 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Työpajakäsityö, .cat_Crafts { border-image: linear-gradient(to right, @paja 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Työpajamuu, .cat_Otherworkshop { border-image: linear-gradient(to right, @paja 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_Työpajamusiikki, .cat_Music { border-image: linear-gradient(to right, @paja 0%, rgba(0,0,0,0) 20%) 1 10%; }
+
+.cat_PelitiskiFigupeli, .cat_Miniaturefigurines { border-image: linear-gradient(to right, @figut 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_PelitiskiKokemuspiste, .cat_ExperiencePoint { border-image: linear-gradient(to right, @kokemus 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_PelitiskiKorttipeli, .cat_Cardgame { border-image: linear-gradient(to right, @korttipeli 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_PelitiskiLautapeli, .cat_Boardgame { border-image: linear-gradient(to right, @lautapeli 0%, rgba(0,0,0,0) 20%) 1 10%; }
+.cat_LARP { border-image: linear-gradient(to right, @larp 0%, rgba(0,0,0,0) 20%) 1 10%; }
+
 
 ul.popup {
   width: 390px;
@@ -136,14 +155,21 @@ ul.popup li {
 }
 
 .popup {
-  #Muu\ ohjelma, #None\ of\ the\ above { border-left: 5px solid rgba(110,13,178,1);}
-  #Puheohjelma\:\ esitelmä, #Presentation { border-left: 5px solid rgba(17,105,178,1);}
-  #Puheohjelma\:\ keskustelu, #Discussion\ group { border-left: 5px solid rgba(17,105,178,1);}
-  #Puheohjelma\:\ paneeli, #Panel\ discussion { border-left: 5px solid rgba(17,105,178,1);}
-  #Roolipeli, #Pen\ \&\ Paper\ RPG { border-left: 5px solid rgba(146,38,131,1);}
-  #Työpaja\:\ figut, #Miniature\ figurines { border-left: 5px solid rgba(248,153,96,1);}
-  #Työpaja\:\ käsityö, #Crafts { border-left: 5px solid rgba(248,153,96,1);}
-  #Työpaja\:\ muu, #Other\ workshop { border-left: 5px solid rgba(248,153,96,1);}
+  #Muu\ ohjelma, #None\ of\ the\ above { border-left: 5px solid @muu;}
+  #Puheohjelma\:\ esitelmä, #Presentation { border-left: 5px solid @puhepuhe;}
+  #Puheohjelma\:\ keskustelu, #Discussion\ group { border-left: 5px solid @puhepuhe;}
+  #Puheohjelma\:\ paneeli, #Panel\ discussion { border-left: 5px solid @puhepuhe;}
+  #Roolipeli, #Pen\ \&\ Paper\ RPG { border-left: 5px solid @roolipeli;}
+  #Työpaja\:\ figut, #Miniature\ figurines { border-left: 5px solid @paja;}
+  #Työpaja\:\ käsityö, #Crafts { border-left: 5px solid @paja;}
+  #Työpaja\:\ muu, #Other\ workshop { border-left: 5px solid @paja;}
+  #Työpaja\:\ musiikki, #Music { border-left: 5px solid @paja;}
+
+  #Pelitiski\:\ Figupeli, #Miniature\ figurines { border-left: 5px solid @figut;}
+  #Pelitiski\:\ Kokemuspiste, #Experience\ Point { border-left: 5px solid @kokemus;}
+  #Pelitiski\:\ Korttipeli, #Cardgame { border-left: 5px solid @korttipeli;}
+  #Pelitiski\:\ Lautapeli, #Boardgame { border-left: 5px solid @lautapeli;}
+  #LARP { border-left: 5px solid @larp;}
 }
 
 .popup-title {
