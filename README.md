@@ -34,7 +34,7 @@ please get in touch with us at info@konopas.org.
 For links to example instances of KonOpas, take a look at the links from our
 [website][KonOpas].
 
-[KonOpas]: http://konopas.org/
+[KonOpas]: https://konopas.github.io/
 
 
 ## Getting Started
@@ -48,7 +48,7 @@ it to the [KonOpas format][KO-fmt].
 
 [Conference Planner]: http://sourceforge.net/projects/conferenceplan/
 [Grenadine]: http://events.grenadine.co/
-[Zambia]: http://sourceforge.net/projects/zambia/
+[Zambia]: https://github.com/olszowka/Zambia
 [PHP script]: https://github.com/eemeli/konopas/tree/master/util/gdrive2js
 [KO-fmt]: http://konopas.org/data-fmt
 
@@ -90,8 +90,8 @@ development a bit of a hassle. To enable, you should update the contents of
 `text/cache-manifest` MIME type, and that the manifest doesn't include itself
 (debugging a bad manifest can be tricky).
 
-[KO-cfg]: http://konopas.org/config
-[KO-util]: http://konopas.org/util/
+[KO-cfg]: https://konopas.github.io/config
+[KO-util]: https://konopas.github.io/util/
 [cache manifest]: http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5
 
 
